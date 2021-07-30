@@ -1,0 +1,15 @@
+{
+    "directories": [
+        "src"
+    ],
+    "finder": [
+        {
+            "name": "*.php",
+            "exclude": ["Tests"],
+            "in": "vendor"
+        }
+    ],
+    "git-version": "package_version",
+    "main": "bin/akeneo-etl.php",
+    "output": "akeneo-etl.phar"
+}
