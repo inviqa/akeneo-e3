@@ -10,16 +10,15 @@ use App\Infrastructure\EtlFactory;
 use App\Infrastructure\Loader\LoaderError;
 use Closure;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Helper\ProgressBar;
-use Symfony\Component\Console\Helper\ProgressIndicator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 class TransformProductsCommand extends Command
 {
-    protected static $defaultName = 'data';
+    protected static $defaultName = 'etl:product';
 
     private EtlFactory $factory;
 
@@ -87,13 +86,21 @@ class TransformProductsCommand extends Command
     {
         $profileFileName = $input->getOption('connection-profile');
 
+        if ($profileFileName === null) {
+            throw new LogicException('--connection-profile option is required.');
+        }
+
         return $this->connectionProfileReader->read($profileFileName);
     }
 
     private function getEtlProfile(InputInterface $input): EtlProfile
     {
-        $profilesFileName = $input->getOption('etl-profile');
+        $profileFileName = $input->getOption('etl-profile');
 
-        return $this->etlProfileReader->read($profilesFileName);
+        if ($profileFileName === null) {
+            throw new LogicException('--etl-profile option is required.');
+        }
+
+        return $this->etlProfileReader->read($profileFileName);
     }
 }
