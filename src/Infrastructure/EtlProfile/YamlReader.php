@@ -10,25 +10,26 @@ use Symfony\Component\Yaml\Yaml;
 
 class YamlReader
 {
-    private TransformerStepFactory $transformerFactory;
+    private TransformerStepFactory $stepFactory;
 
-    public function __construct(TransformerStepFactory $transformerFactory)
+    public function __construct(TransformerStepFactory $stepFactory)
     {
-        $this->transformerFactory = $transformerFactory;
+        $this->stepFactory = $stepFactory;
     }
 
     public function read(string $fileName): EtlProfile
     {
         $profileData = Yaml::parseFile($fileName);
 
-        $transformers = [];
-        foreach ($profileData['transform']['transformations'] ?? [] as $transformationData) {
+        $steps = [];
+        foreach ($profileData['transform']['steps'] ?? [] as $stepData) {
+            // @todo: throw exception if no name
 
-            $transformerName = $transformationData['name'];
-            $transformers[] = $this->transformerFactory->create($transformerName, $transformationData);
+            $stepName = $stepData['name'];
+            $steps[] = $this->stepFactory->create($stepName, $stepData);
         }
 
-        $transformProfile = new EtlTransformProfile($transformers);
+        $transformProfile = new EtlTransformProfile($steps);
 
         $loaderProfile = new EtlLoadProfile();
         $loaderProfile->isDryRun = ($profileData['load']['mode'] ?? '') === 'dry-run';
