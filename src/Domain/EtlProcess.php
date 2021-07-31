@@ -30,6 +30,8 @@ class EtlProcess
 
         foreach ($products as $product) {
             $patch = $this->transformer->transform($product);
+            // @todo: in no patch method, then merge to $product
+
             $this->loader->addToBatch($patch);
 
             $progressCallback($index++, $count);

@@ -8,14 +8,14 @@ use LogicException;
 
 class TransformerStepFactory
 {
-    public function create(string $name, array $options): TransformerStep
+    public function create(string $type, array $options): TransformerStep
     {
         // if deps needed, then clone from registry
-        switch ($name) {
+        switch ($type) {
             case 'slug':
                 return new Transformers\Slugger($options);
         }
 
-        throw new LogicException(sprintf('No registered transformer with the name %s', $name));
+        throw new LogicException(sprintf('No registered transformer with the name %s', $type));
     }
 }

@@ -34,6 +34,8 @@ class Slugger implements TransformerStep
         $slug = $this->slugger->slug(trim($title['data'] ?? ''), '-');
         $slug = $slug->lower()->toString();
 
+        // if provided scope and locale then array
+        // otherwise: simple value
         return TransformerUtils::createAttributeValues($this->destination, $slug);
     }
 }

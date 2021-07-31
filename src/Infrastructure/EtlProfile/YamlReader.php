@@ -23,10 +23,10 @@ class YamlReader
 
         $steps = [];
         foreach ($profileData['transform']['steps'] ?? [] as $stepData) {
-            // @todo: throw exception if no name
+            // @todo: throw exception if no type
 
-            $stepName = $stepData['name'];
-            $steps[] = $this->stepFactory->create($stepName, $stepData);
+            $stepType = $stepData['type'];
+            $steps[] = $this->stepFactory->create($stepType, $stepData);
         }
 
         $transformProfile = new EtlTransformProfile($steps);
