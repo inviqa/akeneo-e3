@@ -20,6 +20,12 @@ class Transformer
 
         foreach ($this->steps as $step) {
             $transformationResult = $step->transform($item);
+
+            // @todo: or SkipException? NonProcessableItemException?
+            if ($transformationResult === null) {
+                continue;
+            }
+
             $patch = array_merge_recursive($patch, $transformationResult);
         }
 

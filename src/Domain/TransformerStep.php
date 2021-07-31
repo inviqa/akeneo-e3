@@ -6,5 +6,5 @@ interface TransformerStep
 {
     public function getType(): string;
 
-    public function transform(array $item): array;
+    public function transform(array $item): ?array;
 }

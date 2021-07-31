@@ -18,6 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class TransformProductsCommand extends Command
 {
+
     protected static $defaultName = 'etl:product';
 
     private EtlFactory $factory;
@@ -46,6 +47,11 @@ class TransformProductsCommand extends Command
     {
         $this
             ->addOption('connection-profile', 'c', InputOption::VALUE_REQUIRED)
+            ->addOption(
+                'destination-connection-profile',
+                'd',
+                InputOption::VALUE_REQUIRED
+            )
             ->addOption('etl-profile', 'p', InputOption::VALUE_REQUIRED);
     }
 
@@ -53,13 +59,25 @@ class TransformProductsCommand extends Command
         InputInterface $input,
         OutputInterface $output
     ): int {
-        $connectionProfile = $this->getConnectionProfile($input);
+        $sourceConnectionProfile = $this->getConnectionProfile($input);
+        $destinationConnectionProfile = $this->getDestinationConnectionProfile(
+                $input
+            ) ?? $sourceConnectionProfile;
 
         $etlProfile = $this->getEtlProfile($input);
 
-        $etl = $this->factory->createEtlProcess($connectionProfile, $etlProfile,
+        $etl = $this->factory->createEtlProcess(
+            $sourceConnectionProfile,
+            $destinationConnectionProfile,
+            $etlProfile,
             function (array $item, LoaderError $error) use ($output) {
-                $output->writeln(sprintf('[%s] %s', $error->getIdentifier(), $error->getErrorMessage()));
+                $output->writeln(
+                    sprintf(
+                        '[%s] %s',
+                        $error->getIdentifier(),
+                        $error->getErrorMessage()
+                    )
+                );
             }
         );
 
@@ -75,19 +93,33 @@ class TransformProductsCommand extends Command
                 }
 
                 $progress->advance();
-        });
+            }
+        );
 
         $progress->finish();
 
         return Command::SUCCESS;
     }
 
-    private function getConnectionProfile(InputInterface $input): ConnectionProfile
-    {
+    private function getConnectionProfile(InputInterface $input
+    ): ConnectionProfile {
         $profileFileName = $input->getOption('connection-profile');
 
         if ($profileFileName === null) {
-            throw new LogicException('--connection-profile option is required.');
+            throw new LogicException(
+                '--connection-profile option is required.'
+            );
+        }
+
+        return $this->connectionProfileReader->read($profileFileName);
+    }
+
+    private function getDestinationConnectionProfile(InputInterface $input
+    ): ?ConnectionProfile {
+        $profileFileName = $input->getOption('destination-connection-profile');
+
+        if ($profileFileName === null) {
+            return null;
         }
 
         return $this->connectionProfileReader->read($profileFileName);

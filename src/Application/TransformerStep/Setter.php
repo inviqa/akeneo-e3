@@ -25,7 +25,7 @@ class Setter implements TransformerStep
         return 'expression';
     }
 
-    public function transform(array $item): array
+    public function transform(array $item): ?array
     {
         $expression = $this->options['value'];
 

@@ -26,7 +26,7 @@ class Slugger implements TransformerStep
         return 'slug';
     }
 
-    public function transform(array $item): array
+    public function transform(array $item): ?array
     {
         //$locale = 'pt_PT';
         $title = TransformerUtils::getAttributeValue($item, $this->source);  // $this->getAttributeValue($item['values']['name'], null, $locale);

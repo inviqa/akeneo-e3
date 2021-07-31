@@ -17,6 +17,8 @@ class TransformerStepFactory
                 return new Transformers\Slugger($options);
             case 'set':
                 return new Transformers\Setter(new ExpressionLanguage(), $options);
+            case 'copy-all':
+                return new Transformers\CopyAll($options);
         }
 
         throw new LogicException(sprintf('No registered transformer with the name %s', $type));

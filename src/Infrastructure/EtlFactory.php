@@ -20,13 +20,14 @@ class EtlFactory
     private array $clients = [];
 
     public function createEtlProcess(
-        ConnectionProfile $connectionProfile,
+        ConnectionProfile $sourceConnectionProfile,
+        ConnectionProfile $destinationConnectionProfile,
         EtlProfile $etlProfile,
         Closure $errorCallback
     ): EtlProcess {
 
         $extractor = $this->createExtractor(
-            $connectionProfile,
+            $sourceConnectionProfile,
             $etlProfile->getExtractorQuery()
         );
 
@@ -35,7 +36,7 @@ class EtlFactory
         );
 
         $loader = $this->createLoader(
-            $connectionProfile,
+            $destinationConnectionProfile,
             $etlProfile->getLoadProfile(),
             $errorCallback
         );
