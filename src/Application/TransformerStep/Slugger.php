@@ -21,7 +21,7 @@ class Slugger implements TransformerStep
         $this->slugger = new AsciiSlugger();
     }
 
-    public function getName(): string
+    public function getType(): string
     {
         return 'slug';
     }
