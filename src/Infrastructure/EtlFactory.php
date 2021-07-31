@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Infrastructure;
+namespace AkeneoEtl\Infrastructure;
 
 use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientBuilder;
-use App\Domain\ConnectionProfile;
-use App\Domain\EtlLoadProfile;
-use App\Domain\EtlProcess;
-use App\Domain\EtlProfile;
-use App\Domain\EtlTransformProfile;
-use App\Domain\Loader;
-use App\Domain\Transformer;
-use App\Infrastructure\Loader\ApiLoader;
-use App\Infrastructure\Loader\DryRunLoader;
+use AkeneoEtl\Domain\ConnectionProfile;
+use AkeneoEtl\Domain\EtlLoadProfile;
+use AkeneoEtl\Domain\EtlProcess;
+use AkeneoEtl\Domain\EtlProfile;
+use AkeneoEtl\Domain\EtlTransformProfile;
+use AkeneoEtl\Domain\Loader;
+use AkeneoEtl\Domain\Transformer;
+use AkeneoEtl\Infrastructure\Loader\ApiLoader;
+use AkeneoEtl\Infrastructure\Loader\DryRunLoader;
 use Closure;
 
 class EtlFactory

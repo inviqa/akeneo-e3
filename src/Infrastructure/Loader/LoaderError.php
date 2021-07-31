@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\Loader;
+namespace AkeneoEtl\Infrastructure\Loader;
 
 class LoaderError
 {

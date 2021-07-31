@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Infrastructure\Loader;
+namespace AkeneoEtl\Infrastructure\Loader;
 
 use Akeneo\Pim\ApiClient\Api\Operation\UpsertableResourceListInterface;
-use App\Domain\Loader;
+use AkeneoEtl\Domain\Loader;
 use Closure;
 use Exception;
 use Traversable;

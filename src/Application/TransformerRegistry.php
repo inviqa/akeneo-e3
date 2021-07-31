@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Application;
+namespace AkeneoEtl\Application;
 
-use App\Domain\TransformerStep;
+use AkeneoEtl\Domain\TransformerStep;
 
 class TransformerRegistry
 {

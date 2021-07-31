@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Infrastructure\Loader;
+namespace AkeneoEtl\Infrastructure\Loader;
 
-use App\Domain\Loader;
+use AkeneoEtl\Domain\Loader;
 
 class DryRunLoader implements Loader
 {

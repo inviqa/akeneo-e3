@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Application\TransformerStep;
+namespace AkeneoEtl\Application\TransformerStep;
 
-use App\Domain\TransformerStep;
+use AkeneoEtl\Domain\TransformerStep;
 
 class CopyAll implements TransformerStep
 {

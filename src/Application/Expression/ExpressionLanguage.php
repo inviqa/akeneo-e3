@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Expression;
+namespace AkeneoEtl\Application\Expression;
 
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage as BaseExpressionLanguage;
@@ -13,7 +13,7 @@ class ExpressionLanguage extends BaseExpressionLanguage
     {
         parent::__construct();
 
-        $namespace = '\App\Application\Expression\Functions\\';
+        $namespace = '\AkeneoEtl\Application\Expression\Functions\\';
 
         $functionMap = [
             // 'trim' => 'trim', // can register simple php functions

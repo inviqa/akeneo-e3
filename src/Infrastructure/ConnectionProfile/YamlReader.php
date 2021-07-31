@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Infrastructure\ConnectionProfile;
+namespace AkeneoEtl\Infrastructure\ConnectionProfile;
 
-use App\Domain\ConnectionProfile;
+use AkeneoEtl\Domain\ConnectionProfile;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlReader

@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Application;
+namespace AkeneoEtl\Application;
 
-use App\Domain\TransformerStep;
-use App\Application\TransformerStep as Transformers;
+use AkeneoEtl\Domain\TransformerStep;
+use AkeneoEtl\Application\TransformerStep as Transformers;
 use LogicException;
-use App\Application\Expression\ExpressionLanguage;
+use AkeneoEtl\Application\Expression\ExpressionLanguage;
 
 class TransformerStepFactory
 {

@@ -3,15 +3,15 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
-use App\Infrastructure\Command;
+use AkeneoEtl\Infrastructure\Command;
 use Symfony\Component\Console\Application;
 
-$stepFactory = new \App\Application\TransformerStepFactory();
+$stepFactory = new \AkeneoEtl\Application\TransformerStepFactory();
 
-$factory = new \App\Infrastructure\EtlFactory();
-$connectionProfileReader = new \App\Infrastructure\ConnectionProfile\YamlReader();
-$etlProfileReader = new \App\Infrastructure\EtlProfile\YamlReader($stepFactory);
+$factory = new \AkeneoEtl\Infrastructure\EtlFactory();
+$connectionProfileReader = new \AkeneoEtl\Infrastructure\ConnectionProfile\YamlReader();
+$etlProfileReader = new \AkeneoEtl\Infrastructure\EtlProfile\YamlReader($stepFactory);
 
-$application = new Application('Cliph', '0.1-dev');
-$application->add(new Command\TransformProductsCommand($factory, $connectionProfileReader, $etlProfileReader, '.'));
+$application = new Application('AkeneoEtl', 'git_version');
+$application->add(new Command\TransformProductsCommand($factory, $connectionProfileReader, $etlProfileReader));
 $application->run();

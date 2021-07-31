@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Infrastructure\Command;
+namespace AkeneoEtl\Infrastructure\Command;
 
-use App\Domain\ConnectionProfile;
-use App\Domain\EtlProfile;
-use App\Infrastructure\ConnectionProfile\YamlReader as ConnectionProfileReader;
-use App\Infrastructure\EtlProfile\YamlReader as EtlProfileReader;
-use App\Infrastructure\EtlFactory;
-use App\Infrastructure\Loader\LoaderError;
+use AkeneoEtl\Domain\ConnectionProfile;
+use AkeneoEtl\Domain\EtlProfile;
+use AkeneoEtl\Infrastructure\ConnectionProfile\YamlReader as ConnectionProfileReader;
+use AkeneoEtl\Infrastructure\EtlProfile\YamlReader as EtlProfileReader;
+use AkeneoEtl\Infrastructure\EtlFactory;
+use AkeneoEtl\Infrastructure\Loader\LoaderError;
 use Closure;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;
@@ -23,8 +23,6 @@ class TransformProductsCommand extends Command
 
     private EtlFactory $factory;
 
-    private string $projectDir;
-
     private ConnectionProfileReader $connectionProfileReader;
 
     private EtlProfileReader $etlProfileReader;
@@ -32,13 +30,11 @@ class TransformProductsCommand extends Command
     public function __construct(
         EtlFactory $factory,
         ConnectionProfileReader $connectionProfileReader,
-        EtlProfileReader $etlProfileReader,
-        string $projectDir
+        EtlProfileReader $etlProfileReader
     ) {
         $this->factory = $factory;
         $this->connectionProfileReader = $connectionProfileReader;
         $this->etlProfileReader = $etlProfileReader;
-        $this->projectDir = $projectDir;
 
         parent::__construct();
     }

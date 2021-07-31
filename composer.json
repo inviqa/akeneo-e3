@@ -22,12 +22,12 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/"
+            "AkeneoEtl\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/"
+            "AkeneoEtl\\Tests\\": "tests/"
         }
     }
 }

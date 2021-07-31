@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Infrastructure\EtlProfile;
+namespace AkeneoEtl\Infrastructure\EtlProfile;
 
-use App\Application\TransformerStepFactory;
-use App\Domain\EtlLoadProfile;
-use App\Domain\EtlProfile;
-use App\Domain\EtlTransformProfile;
+use AkeneoEtl\Application\TransformerStepFactory;
+use AkeneoEtl\Domain\EtlLoadProfile;
+use AkeneoEtl\Domain\EtlProfile;
+use AkeneoEtl\Domain\EtlTransformProfile;
 use Symfony\Component\Yaml\Yaml;
 
 class YamlReader

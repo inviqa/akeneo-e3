@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Expression\Functions;
+namespace AkeneoEtl\Application\Expression\Functions;
 
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;

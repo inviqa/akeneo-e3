@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Infrastructure;
+namespace AkeneoEtl\Infrastructure;
 
 use Akeneo\Pim\ApiClient\Api\Operation\ListableResourceInterface;
-use App\Domain\Extractor as DomainExtractor;
+use AkeneoEtl\Domain\Extractor as DomainExtractor;
 use Generator;
 
 class Extractor implements DomainExtractor
