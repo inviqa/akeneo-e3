@@ -4,7 +4,7 @@ namespace App\Application\TransformerStep;
 
 class TransformerUtils
 {
-    public static function getFieldValue(array $data, string $name, ?string $channel,?string $locale): array
+    public static function getFieldValue(array $data, string $name, ?string $channel, ?string $locale): array
     {
         foreach ($data['values'][$name] as $attributeValue) {
             if ($attributeValue['scope'] === $channel &&
@@ -19,7 +19,7 @@ class TransformerUtils
     /**
      * @param mixed $data
      */
-    public static function createFieldArray(string $field, $data, ?string $channel,?string $locale): array
+    public static function createFieldArray(string $field, $data, ?string $channel, ?string $locale): array
     {
         return [
             'values' => [

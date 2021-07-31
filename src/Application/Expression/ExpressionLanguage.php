@@ -13,9 +13,21 @@ class ExpressionLanguage extends BaseExpressionLanguage
     {
         parent::__construct();
 
-        $this->addFunction(ExpressionFunction::fromPhp('strtoupper', 'uppercase'));
-        $this->addFunction(ExpressionFunction::fromPhp('strtolower', 'lowercase'));
-        $this->addFunction(ExpressionFunction::fromPhp('trim', 'trim'));
-        $this->addFunction(ExpressionFunction::fromPhp('\App\Application\Expression\Functions\slug', 'slug'));
+        $namespace = '\App\Application\Expression\Functions\\';
+
+        $functionMap = [
+            // 'trim' => 'trim', // can register simple php functions
+            $namespace.'trim'  => 'trim',
+            $namespace.'slug'  => 'slug',
+            $namespace.'lowercase'  => 'lowercase',
+            $namespace.'uppercase'  => 'uppercase',
+            $namespace.'camelcase'  => 'camelcase',
+            $namespace.'snakecase'  => 'snakecase',
+            $namespace.'value'  => 'value',
+        ];
+
+        foreach ($functionMap as $phpFunction => $expressionFunction) {
+            $this->addFunction(ExpressionFunction::fromPhp($phpFunction, $expressionFunction));
+        }
     }
 }

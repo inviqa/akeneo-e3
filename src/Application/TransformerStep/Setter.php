@@ -33,8 +33,9 @@ class Setter implements TransformerStep
 
         return TransformerUtils::createFieldArray(
             $this->options['field'],
+            $finalValue,
             $this->options['scope'],
-            $this->options['locale'],
-            $finalValue);
+            $this->options['locale']
+        );
     }
 }
