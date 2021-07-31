@@ -5,7 +5,7 @@ namespace App\Application;
 use App\Domain\TransformerStep;
 use App\Application\TransformerStep as Transformers;
 use LogicException;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
+use App\Application\Expression\ExpressionLanguage;
 
 class TransformerStepFactory
 {
