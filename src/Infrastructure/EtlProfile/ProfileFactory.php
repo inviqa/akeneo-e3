@@ -8,7 +8,7 @@ use AkeneoEtl\Domain\EtlProfile;
 use AkeneoEtl\Domain\EtlTransformProfile;
 use Symfony\Component\Yaml\Yaml;
 
-class YamlReader
+class ProfileFactory
 {
     private TransformerStepFactory $stepFactory;
 
@@ -17,7 +17,7 @@ class YamlReader
         $this->stepFactory = $stepFactory;
     }
 
-    public function read(string $fileName): EtlProfile
+    public function fromFile(string $fileName): EtlProfile
     {
         $profileData = Yaml::parseFile($fileName);
 

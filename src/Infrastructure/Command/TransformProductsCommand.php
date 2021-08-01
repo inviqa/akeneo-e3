@@ -5,7 +5,7 @@ namespace AkeneoEtl\Infrastructure\Command;
 use AkeneoEtl\Domain\ConnectionProfile;
 use AkeneoEtl\Domain\EtlProfile;
 use AkeneoEtl\Infrastructure\ConnectionProfile\YamlReader as ConnectionProfileReader;
-use AkeneoEtl\Infrastructure\EtlProfile\YamlReader as EtlProfileReader;
+use AkeneoEtl\Infrastructure\EtlProfile\ProfileFactory as EtlProfileFactory;
 use AkeneoEtl\Infrastructure\EtlFactory;
 use AkeneoEtl\Infrastructure\Loader\LoaderError;
 use Closure;
@@ -25,16 +25,16 @@ class TransformProductsCommand extends Command
 
     private ConnectionProfileReader $connectionProfileReader;
 
-    private EtlProfileReader $etlProfileReader;
+    private EtlProfileFactory $etlProfileFactory;
 
     public function __construct(
         EtlFactory $factory,
         ConnectionProfileReader $connectionProfileReader,
-        EtlProfileReader $etlProfileReader
+        EtlProfileFactory $etlProfileFactory
     ) {
         $this->factory = $factory;
         $this->connectionProfileReader = $connectionProfileReader;
-        $this->etlProfileReader = $etlProfileReader;
+        $this->etlProfileFactory = $etlProfileFactory;
 
         parent::__construct();
     }
@@ -129,6 +129,6 @@ class TransformProductsCommand extends Command
             throw new LogicException('--etl-profile option is required.');
         }
 
-        return $this->etlProfileReader->read($profileFileName);
+        return $this->etlProfileFactory->fromFile($profileFileName);
     }
 }
