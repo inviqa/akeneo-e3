@@ -72,7 +72,7 @@ class EtlFactory
 
     public function createTransformer(EtlTransformProfile $transformProfile): Transformer
     {
-        return new Transformer($transformProfile->transformerSteps);
+        return new Transformer($transformProfile->getActions());
     }
 
     public function createLoader(

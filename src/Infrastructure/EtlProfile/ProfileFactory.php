@@ -59,7 +59,7 @@ class ProfileFactory
             $steps[] = $this->stepFactory->create($stepType, $stepData);
         }
 
-        return new EtlTransformProfile($steps);
+        return EtlTransformProfile::fromActions($steps);
     }
 
     private function validate(array $profileData): void
