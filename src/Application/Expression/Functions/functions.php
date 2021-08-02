@@ -49,6 +49,7 @@ function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}")
 
 function value(array $values, string $name, ?string $channel, ?string $locale, $defaultValue = null)
 {
+    // @todo: use TransformerUtils to make it consistent
     foreach ($values[$name] ?? [] as $attributeValue) {
         if ($attributeValue['scope'] === $channel &&
             $attributeValue['locale'] === $locale) {

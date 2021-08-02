@@ -4,6 +4,7 @@ namespace AkeneoEtl\Infrastructure\Command;
 
 use AkeneoEtl\Domain\ConnectionProfile;
 use AkeneoEtl\Domain\EtlProfile;
+use AkeneoEtl\Domain\TransformerStepTrace;
 use AkeneoEtl\Infrastructure\ConnectionProfile\YamlReader as ConnectionProfileReader;
 use AkeneoEtl\Infrastructure\EtlProfile\ProfileFactory as EtlProfileFactory;
 use AkeneoEtl\Infrastructure\EtlFactory;
@@ -89,6 +90,15 @@ class TransformProductsCommand extends Command
                 }
 
                 $progress->advance();
+            },
+            function (TransformerStepTrace $stepTrace) use ($output, $progress) {
+
+                $progress->clear();
+                $output->writeln(sprintf('[[ %s ]] %s -> %s',
+                    $stepTrace->getIdentifier(),
+                    $stepTrace->getBefore(),
+                    $stepTrace->getAfter()));
+                $progress->display();
             }
         );
 

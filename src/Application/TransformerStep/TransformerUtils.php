@@ -6,7 +6,10 @@ class TransformerUtils
 {
     public static function getFieldValue(array $data, string $name, ?string $channel, ?string $locale): array
     {
-        foreach ($data['values'][$name] as $attributeValue) {
+        // @todo: check if it is a top level field first
+        // @todo: check if values exist
+
+        foreach ($data['values'][$name] ?? [] as $attributeValue) {
             if ($attributeValue['scope'] === $channel &&
                 $attributeValue['locale'] === $locale) {
                 return $attributeValue;

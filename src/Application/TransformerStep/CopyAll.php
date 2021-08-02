@@ -3,6 +3,7 @@
 namespace AkeneoEtl\Application\TransformerStep;
 
 use AkeneoEtl\Domain\TransformerStep;
+use Closure;
 
 class CopyAll implements TransformerStep
 {
@@ -15,7 +16,7 @@ class CopyAll implements TransformerStep
         return 'copy-all';
     }
 
-    public function transform(array $item): ?array
+    public function transform(array $item, Closure $traceCallBack = null): ?array
     {
         if (isset($item['parent']) === true) {
             return null;

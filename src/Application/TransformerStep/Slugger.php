@@ -3,6 +3,7 @@
 namespace AkeneoEtl\Application\TransformerStep;
 
 use AkeneoEtl\Domain\TransformerStep;
+use Closure;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class Slugger implements TransformerStep
@@ -26,7 +27,7 @@ class Slugger implements TransformerStep
         return 'slug';
     }
 
-    public function transform(array $item): ?array
+    public function transform(array $item, Closure $traceCallBack = null): ?array
     {
         //$locale = 'pt_PT';
         $title = TransformerUtils::getAttributeValue($item, $this->source);  // $this->getAttributeValue($item['values']['name'], null, $locale);

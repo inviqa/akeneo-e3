@@ -19,7 +19,7 @@ class EtlProcess
         $this->loader = $loader;
     }
 
-    public function execute(Closure $progressCallback)
+    public function execute(Closure $progressCallback, Closure $traceCallBack)
     {
         $index = 0;
         $count = $this->extractor->count();
@@ -29,10 +29,12 @@ class EtlProcess
         $products = $this->extractor->extract();
 
         foreach ($products as $product) {
-            $patch = $this->transformer->transform($product);
+            $patch = $this->transformer->transform($product, $traceCallBack);
             // @todo: in no patch method, then merge to $product
 
-            $this->loader->addToBatch($patch);
+            if ($patch !== null) {
+                $this->loader->addToBatch($patch);
+            }
 
             $progressCallback($index++, $count);
         }

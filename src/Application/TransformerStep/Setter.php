@@ -3,6 +3,8 @@
 namespace AkeneoEtl\Application\TransformerStep;
 
 use AkeneoEtl\Domain\TransformerStep;
+use AkeneoEtl\Domain\TransformerStepTrace;
+use Closure;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class Setter implements TransformerStep
@@ -25,17 +27,48 @@ class Setter implements TransformerStep
         return 'expression';
     }
 
-    public function transform(array $item): ?array
+    public function transform(array $item, Closure $traceCallBack = null): ?array
     {
-        $expression = $this->options['value'];
+        $beforeValue = TransformerUtils::getFieldValue(
+            $item,
+            $this->options['field'],
+            $this->options['scope'],
+            $this->options['locale']
+        )['data'] ?? '';
 
-        $finalValue = $this->expressionLanguage->evaluate($expression, $item);
+        $expression = $this->options['value'];
+        $resultValue = $this->expressionLanguage->evaluate($expression, $item);
+
+        if ($resultValue === $beforeValue) {
+            return null;
+        }
+
+        $this->notify($traceCallBack, $item['identifier'] ?? '', $beforeValue, $resultValue);
 
         return TransformerUtils::createFieldArray(
             $this->options['field'],
-            $finalValue,
+            $resultValue,
             $this->options['scope'],
             $this->options['locale']
+        );
+    }
+
+    /**
+     * @param mixed $beforeValue
+     * @param mixed $resultValue
+     */
+    protected function notify(
+        Closure $traceCallBack,
+        string $itemIdentifier,
+        string $beforeValue,
+        $resultValue
+    ): void {
+        $traceCallBack(
+            new TransformerStepTrace(
+                $itemIdentifier,
+                $beforeValue,
+                $resultValue
+            )
         );
     }
 }
