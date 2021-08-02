@@ -1,13 +1,13 @@
 <?php
 
-namespace AkeneoEtl\Application\TransformerStep;
+namespace AkeneoEtl\Application\Action;
 
-use AkeneoEtl\Domain\TransformerStep;
-use AkeneoEtl\Domain\TransformerStepTrace;
+use AkeneoEtl\Domain\Action;
+use AkeneoEtl\Domain\ActtionTrace;
 use Closure;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-class Set implements TransformerStep
+class Set implements Action
 {
     private ExpressionLanguage $expressionLanguage;
 
@@ -27,7 +27,7 @@ class Set implements TransformerStep
         return 'expression';
     }
 
-    public function transform(array $item, Closure $traceCallback = null): ?array
+    public function execute(array $item, Closure $traceCallback = null): ?array
     {
         $beforeValue = TransformerUtils::getFieldValue(
             $item,
@@ -66,7 +66,7 @@ class Set implements TransformerStep
         $resultValue
     ): void {
         $traceCallBack(
-            new TransformerStepTrace(
+            new ActtionTrace(
                 $itemIdentifier,
                 $beforeValue,
                 $resultValue

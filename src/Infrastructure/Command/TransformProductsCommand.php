@@ -4,7 +4,7 @@ namespace AkeneoEtl\Infrastructure\Command;
 
 use AkeneoEtl\Domain\ConnectionProfile;
 use AkeneoEtl\Domain\EtlProfile;
-use AkeneoEtl\Domain\TransformerStepTrace;
+use AkeneoEtl\Domain\ActtionTrace;
 use AkeneoEtl\Infrastructure\ConnectionProfile\ProfileFactory as ConnectionProfileFactory;
 use AkeneoEtl\Infrastructure\EtlProfile\ProfileFactory as EtlProfileFactory;
 use AkeneoEtl\Infrastructure\EtlFactory;
@@ -87,23 +87,23 @@ class TransformProductsCommand extends Command
         $progress = new ProgressBar($output);
 
         $etl->execute(
-            function (int $stepIndex, int $stepCount) use ($progress) {
+            function (int $actionIndex, int $actionCount) use ($progress) {
 
-                if ($stepIndex === 0) {
-                    $progress->start($stepCount);
+                if ($actionIndex === 0) {
+                    $progress->start($actionCount);
 
                     return;
                 }
 
                 $progress->advance();
             },
-            function (TransformerStepTrace $stepTrace) use ($output, $progress) {
+            function (ActtionTrace $trace) use ($output, $progress) {
 
                 $progress->clear();
                 $output->writeln(sprintf('[[ %s ]] %s -> %s',
-                    $stepTrace->getIdentifier(),
-                    $stepTrace->getBefore(),
-                    $stepTrace->getAfter()));
+                    $trace->getIdentifier(),
+                    $trace->getBefore(),
+                    $trace->getAfter()));
                 $progress->display();
             }
         );

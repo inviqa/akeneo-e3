@@ -1,11 +1,11 @@
 <?php
 
-namespace AkeneoEtl\Application\TransformerStep;
+namespace AkeneoEtl\Application\Action;
 
-use AkeneoEtl\Domain\TransformerStep;
+use AkeneoEtl\Domain\Action;
 use Closure;
 
-class CopyAll implements TransformerStep
+class CopyAll implements Action
 {
     private array $options;
 
@@ -19,7 +19,7 @@ class CopyAll implements TransformerStep
         return 'copy-all';
     }
 
-    public function transform(array $item, Closure $traceCallback = null): ?array
+    public function execute(array $item, Closure $traceCallback = null): ?array
     {
         if (isset($item['parent']) === true) {
             return null;

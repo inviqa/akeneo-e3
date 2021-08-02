@@ -3,7 +3,7 @@
 namespace AkeneoEtl\Tests\Unit\Domain;
 
 use AkeneoEtl\Domain\Transformer;
-use AkeneoEtl\Domain\TransformerStep;
+use AkeneoEtl\Domain\Action;
 use Closure;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
@@ -13,7 +13,7 @@ class TransformerTest extends TestCase
 {
     public function test_it_transforms()
     {
-        $transform = new Transformer([new TransformerFakeStep()]);
+        $transform = new Transformer([new FakeAction()]);
 
         $result = $transform->transform(['identifier' => 123], null);
 
@@ -23,19 +23,18 @@ class TransformerTest extends TestCase
         ], $result);
     }
 
-    public function test_it_throws_an_exception_if_step_fails()
+    public function test_it_throws_an_exception_if_action_fails()
     {
         $this->expectException(RuntimeException::class);
 
-        $transform = new Transformer([new TransformerFailingStep()]);
+        $transform = new Transformer([new FailAction()]);
 
         $transform->transform(['identifier' => 123], null);
     }
 
-
-    public function test_it_returns_null_if_no_steps_executed()
+    public function test_it_returns_null_if_no_actions_executed()
     {
-        $transform = new Transformer([new TransformerNullStep()]);
+        $transform = new Transformer([new NullAction()]);
 
         $result = $transform->transform(['identifier' => 123], null);
 
@@ -43,41 +42,40 @@ class TransformerTest extends TestCase
     }
 }
 
-class TransformerFakeStep implements TransformerStep
+class FakeAction implements Action
 {
-
     public function getType(): string
     {
         return 'fake';
     }
 
-    public function transform(array $item, Closure $traceCallback = null): ?array
+    public function execute(array $item, Closure $traceCallback = null): ?array
     {
         return ['data' => 'fake'];
     }
 }
 
-class TransformerFailingStep implements TransformerStep
+class FailAction implements Action
 {
     public function getType(): string
     {
-        return 'fake';
+        return 'fail';
     }
 
-    public function transform(array $item, Closure $traceCallback = null): ?array
+    public function execute(array $item, Closure $traceCallback = null): ?array
     {
         throw new RuntimeException('Ooops!');
     }
 }
 
-class TransformerNullStep implements TransformerStep
+class NullAction implements Action
 {
     public function getType(): string
     {
-        return 'fake';
+        return 'null';
     }
 
-    public function transform(array $item, Closure $traceCallback = null): ?array
+    public function execute(array $item, Closure $traceCallback = null): ?array
     {
         return null;
     }

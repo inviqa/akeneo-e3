@@ -7,7 +7,7 @@ use phpDocumentor\Reflection\Types\Array_;
 class EtlTransformProfile
 {
     /**
-     * @var iterable|TransformerStep[]
+     * @var iterable|Action[]
      */
     private iterable $actions;
 
@@ -17,7 +17,7 @@ class EtlTransformProfile
     }
 
     /**
-     * @param iterable|TransformerStep[] $actions
+     * @param iterable|Action[] $actions
      */
     public static function fromActions(iterable $actions): self
     {
@@ -25,7 +25,7 @@ class EtlTransformProfile
     }
 
     /**
-     * @return iterable|TransformerStep[]
+     * @return iterable|Action[]
      */
     public function getActions(): iterable
     {

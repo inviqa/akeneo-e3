@@ -1,6 +1,6 @@
 <?php
 
-namespace AkeneoEtl\Application\TransformerStep;
+namespace AkeneoEtl\Application\Action;
 
 class TransformerUtils
 {

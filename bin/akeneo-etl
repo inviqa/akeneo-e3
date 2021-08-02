@@ -3,7 +3,7 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
-use AkeneoEtl\Application\TransformerStepFactory;
+use AkeneoEtl\Application\ActionFactory;
 use AkeneoEtl\Infrastructure\Command;
 use AkeneoEtl\Infrastructure\ConnectionProfile\ProfileFactory as ConnectionProfileFactory;
 use AkeneoEtl\Infrastructure\EtlFactory;
@@ -11,10 +11,8 @@ use AkeneoEtl\Infrastructure\EtlProfile\ProfileFactory as EtlProfileFactory;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Validator\ValidatorBuilder;
 
-$stepFactory = new TransformerStepFactory();
-
+$stepFactory = new ActionFactory();
 $validatorBuilder = new ValidatorBuilder();
-
 
 $etlFactory = new EtlFactory();
 $connectionProfileFactory = new ConnectionProfileFactory();

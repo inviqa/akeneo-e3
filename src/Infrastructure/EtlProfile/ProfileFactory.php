@@ -2,7 +2,7 @@
 
 namespace AkeneoEtl\Infrastructure\EtlProfile;
 
-use AkeneoEtl\Application\TransformerStepFactory;
+use AkeneoEtl\Application\ActionFactory;
 use AkeneoEtl\Domain\EtlExtractProfile;
 use AkeneoEtl\Domain\EtlLoadProfile;
 use AkeneoEtl\Domain\EtlProfile;
@@ -13,13 +13,13 @@ use Symfony\Component\Yaml\Yaml;
 
 class ProfileFactory
 {
-    private TransformerStepFactory $stepFactory;
+    private ActionFactory $actionFactory;
 
     private ValidatorInterface $validator;
 
-    public function __construct(TransformerStepFactory $stepFactory, ValidatorInterface $validator)
+    public function __construct(ActionFactory $actionFactory, ValidatorInterface $validator)
     {
-        $this->stepFactory = $stepFactory;
+        $this->actionFactory = $actionFactory;
         $this->validator = $validator;
     }
 
@@ -51,15 +51,15 @@ class ProfileFactory
 
     private function createTransformProfile(array $profileData): EtlTransformProfile
     {
-        $steps = [];
-        foreach ($profileData['transform']['steps'] ?? [] as $stepData) {
+        $actions = [];
+        foreach ($profileData['transform']['actions'] ?? [] as $actionData) {
             // @todo: throw exception if no type
 
-            $stepType = $stepData['type'];
-            $steps[] = $this->stepFactory->create($stepType, $stepData);
+            $type = $actionData['type'];
+            $actions[] = $this->actionFactory->create($type, $actionData);
         }
 
-        return EtlTransformProfile::fromActions($steps);
+        return EtlTransformProfile::fromActions($actions);
     }
 
     private function validate(array $profileData): void
@@ -79,7 +79,7 @@ class ProfileFactory
                 ]),
             ]),
             'transform' => new Assert\Collection([
-                'steps' => new Assert\Optional([
+                'actions' => new Assert\Optional([
                     new Assert\Type('array'),
                     new Assert\Count(['min' => 1]),
                 ]),

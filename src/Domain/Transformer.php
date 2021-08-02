@@ -8,23 +8,23 @@ use Exception;
 class Transformer
 {
     /**
-     * @var iterable|TransformerStep[]
+     * @var iterable|Action[]
      */
-    private iterable $steps;
+    private iterable $actions;
 
-    public function __construct(iterable $transformerSteps)
+    public function __construct(iterable $actions)
     {
-        $this->steps = $transformerSteps;
+        $this->actions = $actions;
     }
 
     public function transform(array $item, Closure $traceCallBack = null): ?array
     {
         $patch = [];
-        $stepsExecuted = 0;
+        $actionsExecuted = 0;
 
-        foreach ($this->steps as $step) {
+        foreach ($this->actions as $action) {
             try {
-                $transformationResult = $step->transform($item, $traceCallBack);
+                $transformationResult = $action->execute($item, $traceCallBack);
             } catch (Exception $e) {
                 // @todo: skip if configured to skip exceptions
                 throw($e);
@@ -35,12 +35,12 @@ class Transformer
                 continue;
             }
 
-            $stepsExecuted++;
+            $actionsExecuted++;
             $patch = array_merge_recursive($patch, $transformationResult);
         }
 
         // if no changes - skip
-        if ($stepsExecuted === 0) {
+        if ($actionsExecuted === 0) {
             return null;
         }
 
