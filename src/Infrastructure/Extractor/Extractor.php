@@ -1,6 +1,6 @@
 <?php
 
-namespace AkeneoEtl\Infrastructure;
+namespace AkeneoEtl\Infrastructure\Extractor;
 
 use Akeneo\Pim\ApiClient\Api\Operation\ListableResourceInterface;
 use AkeneoEtl\Domain\Extractor as DomainExtractor;

@@ -14,6 +14,7 @@ use AkeneoEtl\Domain\Profile\TransformProfile;
 use AkeneoEtl\Domain\Loader;
 use AkeneoEtl\Domain\Transformer;
 use AkeneoEtl\Infrastructure\Api\ApiSelector;
+use AkeneoEtl\Infrastructure\Extractor\Extractor;
 use AkeneoEtl\Infrastructure\Loader\ApiLoader;
 use AkeneoEtl\Infrastructure\Loader\DryRunLoader;
 use Closure;
