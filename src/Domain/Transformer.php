@@ -17,7 +17,7 @@ class Transformer
         $this->steps = $transformerSteps;
     }
 
-    public function transform(array $item, Closure $traceCallBack): ?array
+    public function transform(array $item, Closure $traceCallBack = null): ?array
     {
         $patch = [];
         $stepsExecuted = 0;

@@ -27,7 +27,7 @@ class Setter implements TransformerStep
         return 'expression';
     }
 
-    public function transform(array $item, Closure $traceCallBack = null): ?array
+    public function transform(array $item, Closure $traceCallback = null): ?array
     {
         $beforeValue = TransformerUtils::getFieldValue(
             $item,
@@ -43,7 +43,9 @@ class Setter implements TransformerStep
             return null;
         }
 
-        $this->notify($traceCallBack, $item['identifier'] ?? '', $beforeValue, $resultValue);
+        if ($traceCallback !== null) {
+            $this->notify($traceCallback, $item['identifier'] ?? '', $beforeValue, $resultValue);
+        }
 
         return TransformerUtils::createFieldArray(
             $this->options['field'],

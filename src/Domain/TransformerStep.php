@@ -8,5 +8,5 @@ interface TransformerStep
 {
     public function getType(): string;
 
-    public function transform(array $item, Closure $traceCallBack = null): ?array;
+    public function transform(array $item, Closure $traceCallback = null): ?array;
 }

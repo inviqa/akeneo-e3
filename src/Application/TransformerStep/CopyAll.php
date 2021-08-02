@@ -16,7 +16,7 @@ class CopyAll implements TransformerStep
         return 'copy-all';
     }
 
-    public function transform(array $item, Closure $traceCallBack = null): ?array
+    public function transform(array $item, Closure $traceCallback = null): ?array
     {
         if (isset($item['parent']) === true) {
             return null;
