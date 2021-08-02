@@ -68,7 +68,6 @@ class TransformProductsCommand extends Command
             // if null, throw an exception
         }
 
-
         $etl = $this->factory->createEtlProcess(
             $dataType,
             $sourceConnectionProfile,

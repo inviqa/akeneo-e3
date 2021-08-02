@@ -3,6 +3,7 @@
 namespace AkeneoEtl\Infrastructure\EtlProfile;
 
 use AkeneoEtl\Application\TransformerStepFactory;
+use AkeneoEtl\Domain\EtlExtractProfile;
 use AkeneoEtl\Domain\EtlLoadProfile;
 use AkeneoEtl\Domain\EtlProfile;
 use AkeneoEtl\Domain\EtlTransformProfile;
@@ -27,14 +28,20 @@ class ProfileFactory
         $profileData = Yaml::parseFile($fileName);
         $this->validate($profileData);
 
+        $extractProfile = $this->createExtractProfile($profileData);
         $transformProfile = $this->createTransformProfile($profileData);
         $loadProfile = $this->createLoadProfile($profileData);
 
         return new EtlProfile(
-            $profileData['extract']['query'] ?? [],
+            $extractProfile,
             $transformProfile,
             $loadProfile
         );
+    }
+
+    private function createExtractProfile(array $profileData): EtlExtractProfile
+    {
+        return EtlExtractProfile::fromArray($profileData['extract'] ?? []);
     }
 
     private function createLoadProfile(array $profileData): EtlLoadProfile
@@ -59,17 +66,14 @@ class ProfileFactory
     {
         $constraint = new Assert\Collection([
             'extract' => new Assert\Collection([
-                'query' => new Assert\Collection([
-                    'filters' => new Assert\Optional([
-                        new Assert\Type('array'),
-                        new Assert\Count(['min' => 1]),
-                        new Assert\All([
-                            new Assert\Collection([
-                                'property' => new Assert\Type('string'),
-                                'operator' => new Assert\Type('string'),
-                                'value' => new Assert\Optional(),
-                                'options' => new Assert\Optional(),
-                            ]),
+                'conditions' => new Assert\Optional([
+                    new Assert\Type('array'),
+                    new Assert\Count(['min' => 1]),
+                    new Assert\All([
+                        new Assert\Collection([
+                            'field' => new Assert\Type('string'),
+                            'operator' => new Assert\Type('string'),
+                            'value' => new Assert\Optional(),
                         ]),
                     ]),
                 ]),

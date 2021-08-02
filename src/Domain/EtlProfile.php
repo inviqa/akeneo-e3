@@ -4,22 +4,20 @@ namespace AkeneoEtl\Domain;
 
 class EtlProfile
 {
-    private array $extractorQuery;
-
+    private EtlExtractProfile $extractProfile;
+    private EtlTransformProfile $transformProfile;
     private EtlLoadProfile $loadProfile;
 
-    private EtlTransformProfile $transformProfile;
-
-    public function __construct(array $extractorQuery, EtlTransformProfile $transformProfile, EtlLoadProfile $loadProfile)
+    public function __construct(EtlExtractProfile $extractProfile, EtlTransformProfile $transformProfile, EtlLoadProfile $loadProfile)
     {
-        $this->extractorQuery = $extractorQuery;
+        $this->extractProfile = $extractProfile;
         $this->transformProfile = $transformProfile;
         $this->loadProfile = $loadProfile;
     }
 
-    public function getExtractorQuery(): array
+    public function getExtractProfile(): EtlExtractProfile
     {
-        return $this->extractorQuery;
+        return $this->extractProfile;
     }
 
     public function getLoadProfile(): EtlLoadProfile

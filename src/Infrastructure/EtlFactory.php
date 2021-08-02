@@ -3,8 +3,10 @@
 namespace AkeneoEtl\Infrastructure;
 
 use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
+use Akeneo\Pim\ApiClient\Search\SearchBuilder;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientBuilder;
 use AkeneoEtl\Domain\ConnectionProfile;
+use AkeneoEtl\Domain\EtlExtractProfile;
 use AkeneoEtl\Domain\EtlLoadProfile;
 use AkeneoEtl\Domain\EtlProcess;
 use AkeneoEtl\Domain\EtlProfile;
@@ -38,7 +40,7 @@ class EtlFactory
         $extractor = $this->createExtractor(
             $dataType,
             $sourceConnectionProfile,
-            $etlProfile->getExtractorQuery()
+            $etlProfile->getExtractProfile()
         );
 
         $transformer = $this->createTransformer(
@@ -58,18 +60,18 @@ class EtlFactory
     public function createExtractor(
         string $dataType,
         ConnectionProfile $profile,
-        array $query
+        EtlExtractProfile $extractProfile
     ): Extractor {
         $client = $this->getClient($profile);
 
         return new Extractor(
             $this->apiSelector->getApi($client, $dataType),
-            $this->buildQuery($query)
+            $this->buildQuery($extractProfile->getConditions())
         );
     }
 
-    public function createTransformer(EtlTransformProfile $transformProfile
-    ): Transformer {
+    public function createTransformer(EtlTransformProfile $transformProfile): Transformer
+    {
         return new Transformer($transformProfile->transformerSteps);
     }
 
@@ -101,8 +103,8 @@ class EtlFactory
         return $this->clients[$profileKey];
     }
 
-    private function createClient(ConnectionProfile $profile
-    ): AkeneoPimClientInterface {
+    private function createClient(ConnectionProfile $profile): AkeneoPimClientInterface
+    {
         $clientBuilder = new AkeneoPimEnterpriseClientBuilder($profile->host);
 
         return $clientBuilder->buildAuthenticatedByPassword(
@@ -113,17 +115,16 @@ class EtlFactory
         );
     }
 
-    private function buildQuery(array $query): array
+    private function buildQuery(array $conditions): array
     {
-        $searchBuilder = new \Akeneo\Pim\ApiClient\Search\SearchBuilder();
+        $searchBuilder = new SearchBuilder();
 
-        foreach ($query['filters'] ?? [] as $filter) {
+        foreach ($conditions as $condition) {
             $searchBuilder
                 ->addFilter(
-                    $filter['property'],
-                    $filter['operator'],
-                    $filter['value'],
-                    $filter['options']
+                    $condition['field'],
+                    $condition['operator'],
+                    $condition['value']
                 );
         }
 
