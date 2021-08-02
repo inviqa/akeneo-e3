@@ -6,21 +6,47 @@ use AkeneoEtl\Application\TransformerStepFactory;
 use AkeneoEtl\Domain\EtlLoadProfile;
 use AkeneoEtl\Domain\EtlProfile;
 use AkeneoEtl\Domain\EtlTransformProfile;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class ProfileFactory
 {
     private TransformerStepFactory $stepFactory;
 
-    public function __construct(TransformerStepFactory $stepFactory)
+    private ValidatorInterface $validator;
+
+    public function __construct(TransformerStepFactory $stepFactory, ValidatorInterface $validator)
     {
         $this->stepFactory = $stepFactory;
+        $this->validator = $validator;
     }
 
     public function fromFile(string $fileName): EtlProfile
     {
         $profileData = Yaml::parseFile($fileName);
+        $this->validate($profileData);
 
+        $transformProfile = $this->createTransformProfile($profileData);
+        $loadProfile = $this->createLoadProfile($profileData);
+
+        return new EtlProfile(
+            $profileData['extract']['query'] ?? [],
+            $transformProfile,
+            $loadProfile
+        );
+    }
+
+    private function createLoadProfile($profileData): EtlLoadProfile
+    {
+        $loaderProfile = new EtlLoadProfile();
+        $loaderProfile->isDryRun = ($profileData['load']['mode'] ?? '') === 'dry-run';
+
+        return $loaderProfile;
+    }
+
+    private function createTransformProfile($profileData): EtlTransformProfile
+    {
         $steps = [];
         foreach ($profileData['transform']['steps'] ?? [] as $stepData) {
             // @todo: throw exception if no type
@@ -29,15 +55,45 @@ class ProfileFactory
             $steps[] = $this->stepFactory->create($stepType, $stepData);
         }
 
-        $transformProfile = new EtlTransformProfile($steps);
+        return new EtlTransformProfile($steps);
+    }
 
-        $loaderProfile = new EtlLoadProfile();
-        $loaderProfile->isDryRun = ($profileData['load']['mode'] ?? '') === 'dry-run';
+    private function validate(array $profileData): void
+    {
+        $constraint = new Assert\Collection([
+            'extract' => new Assert\Collection([
+                'query' => new Assert\Collection([
+                    'filters' => new Assert\Optional([
+                        new Assert\Type('array'),
+                        new Assert\Count(['min' => 1]),
+                        new Assert\All([
+                            new Assert\Collection([
+                                'property' => new Assert\Type('string'),
+                                'operator' => new Assert\Type('string'),
+                                'value' => new Assert\Optional(),
+                                'options' => new Assert\Optional(),
+                            ]),
+                        ]),
+                    ]),
+                ]),
+            ]),
+            'transform' => new Assert\Collection([
+                'steps' => new Assert\Optional([
+                    new Assert\Type('array'),
+                    new Assert\Count(['min' => 1]),
+                ]),
+            ]),
+            'load' => new Assert\Collection([
+                'type' => new Assert\Optional([
+                    new Assert\Type('string'),
+                ]),
+            ]),
+        ]);
 
-        return new EtlProfile(
-            $profileData['extract']['query'] ?? [],
-            $transformProfile,
-            $loaderProfile
-        );
+        $violations = $this->validator->validate($profileData, $constraint);
+
+        // check violations and throw exception
+        // for details create a separate command profile:etl:validate
+        // (as profile:etl:create)
     }
 }
