@@ -60,11 +60,10 @@ class EtlFactory
         return new Transformer($transformProfile->transformerSteps);
     }
 
-
     public function createLoader(
         ConnectionProfile $connectionProfile,
         EtlLoadProfile $loadProfile,
-        callable $errorCallback
+        Closure $errorCallback
     ): Loader {
         if ($loadProfile->isDryRun) {
             return new DryRunLoader();

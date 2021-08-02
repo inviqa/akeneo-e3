@@ -18,7 +18,7 @@ class ApiLoader implements Loader
 
     private array $buffer = [];
 
-    public function __construct(UpsertableResourceListInterface $api, Closure $errorCallback, $batchSize = 100)
+    public function __construct(UpsertableResourceListInterface $api, Closure $errorCallback, int $batchSize = 100)
     {
         $this->api = $api;
         $this->errorCallback = $errorCallback;

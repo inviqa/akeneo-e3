@@ -23,7 +23,7 @@ class Extractor implements DomainExtractor
 
     public function count(): int
     {
-        return $this->api
+        return (int)$this->api
             ->listPerPage(1, true, $this->query)
             ->getCount();
     }
