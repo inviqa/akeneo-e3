@@ -50,5 +50,5 @@ load:
 
 Step 4. Run the script
 ```bash
-bin/akeneo-etl.php e:p --connection-profile=connection.yaml --etl-profile=etl.yaml
+bin/akeneo-etl transform --data-type=product --connection-profile=connection.yaml --etl-profile=etl.yaml
 ```
