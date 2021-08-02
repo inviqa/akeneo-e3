@@ -62,7 +62,7 @@ class Setter implements TransformerStep
     protected function notify(
         Closure $traceCallBack,
         string $itemIdentifier,
-        string $beforeValue,
+        $beforeValue,
         $resultValue
     ): void {
         $traceCallBack(

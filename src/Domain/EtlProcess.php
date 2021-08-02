@@ -19,7 +19,7 @@ class EtlProcess
         $this->loader = $loader;
     }
 
-    public function execute(Closure $progressCallback, Closure $traceCallBack)
+    public function execute(Closure $progressCallback, Closure $traceCallBack): void
     {
         $index = 0;
         $count = $this->extractor->count();

@@ -47,6 +47,11 @@ function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}")
     return $unicodeString->trim($chars);
 }
 
+/**
+ * @param mixed|null $defaultValue
+ *
+ * @return mixed|null
+ */
 function value(array $values, string $name, ?string $channel, ?string $locale, $defaultValue = null)
 {
     // @todo: use TransformerUtils to make it consistent

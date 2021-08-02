@@ -7,8 +7,11 @@ use Closure;
 
 class CopyAll implements TransformerStep
 {
+    private array $options;
+
     public function __construct(array $options)
     {
+        $this->options = $options;
     }
 
     public function getType(): string
