@@ -13,8 +13,6 @@ class TransformerStepFactory
     {
         // if deps needed, then clone from registry
         switch ($type) {
-            case 'slug':
-                return new Transformers\Slugger($options);
             case 'set':
                 return new Transformers\Set(new ExpressionLanguage(), $options);
             case 'copy-all':
