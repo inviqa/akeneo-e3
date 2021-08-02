@@ -7,7 +7,7 @@ use AkeneoEtl\Domain\TransformerStepTrace;
 use Closure;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
-class Setter implements TransformerStep
+class Set implements TransformerStep
 {
     private ExpressionLanguage $expressionLanguage;
 
