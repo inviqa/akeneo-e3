@@ -5,11 +5,10 @@ namespace AkeneoEtl\Infrastructure\Command;
 use AkeneoEtl\Domain\ConnectionProfile;
 use AkeneoEtl\Domain\EtlProfile;
 use AkeneoEtl\Domain\TransformerStepTrace;
-use AkeneoEtl\Infrastructure\ConnectionProfile\YamlReader as ConnectionProfileReader;
+use AkeneoEtl\Infrastructure\ConnectionProfile\ProfileFactory as ConnectionProfileFactory;
 use AkeneoEtl\Infrastructure\EtlProfile\ProfileFactory as EtlProfileFactory;
 use AkeneoEtl\Infrastructure\EtlFactory;
 use AkeneoEtl\Infrastructure\Loader\LoaderError;
-use Closure;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -21,17 +20,17 @@ class TransformProductsCommand extends Command
 {
     private EtlFactory $factory;
 
-    private ConnectionProfileReader $connectionProfileReader;
+    private ConnectionProfileFactory $connectionProfileFactory;
 
     private EtlProfileFactory $etlProfileFactory;
 
     public function __construct(
         EtlFactory $factory,
-        ConnectionProfileReader $connectionProfileReader,
+        ConnectionProfileFactory $connectionProfileFactory,
         EtlProfileFactory $etlProfileFactory
     ) {
         $this->factory = $factory;
-        $this->connectionProfileReader = $connectionProfileReader;
+        $this->connectionProfileFactory = $connectionProfileFactory;
         $this->etlProfileFactory = $etlProfileFactory;
 
         parent::__construct();
@@ -125,7 +124,7 @@ class TransformProductsCommand extends Command
             );
         }
 
-        return $this->connectionProfileReader->read($profileFileName);
+        return $this->connectionProfileFactory->read($profileFileName);
     }
 
     private function getDestinationConnectionProfile(InputInterface $input
@@ -136,7 +135,7 @@ class TransformProductsCommand extends Command
             return null;
         }
 
-        return $this->connectionProfileReader->read($profileFileName);
+        return $this->connectionProfileFactory->read($profileFileName);
     }
 
     private function getEtlProfile(InputInterface $input): EtlProfile
