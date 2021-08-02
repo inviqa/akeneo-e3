@@ -47,14 +47,14 @@ function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}")
     return $unicodeString->trim($chars);
 }
 
-function value(array $values, string $name, ?string $channel, ?string $locale)
+function value(array $values, string $name, ?string $channel, ?string $locale, $defaultValue = null)
 {
-    foreach ($values[$name] as $attributeValue) {
+    foreach ($values[$name] ?? [] as $attributeValue) {
         if ($attributeValue['scope'] === $channel &&
             $attributeValue['locale'] === $locale) {
             return $attributeValue['data'];
         }
     }
 
-    return null;
+    return $defaultValue;
 }

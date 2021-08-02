@@ -2,6 +2,8 @@
 
 namespace AkeneoEtl\Domain;
 
+use Exception;
+
 class Transformer
 {
     /**
@@ -19,7 +21,11 @@ class Transformer
         $patch = [];
 
         foreach ($this->steps as $step) {
-            $transformationResult = $step->transform($item);
+            try {
+                $transformationResult = $step->transform($item);
+            } catch (Exception $e) {
+                throw($e);
+            }
 
             // @todo: or SkipException? NonProcessableItemException?
             if ($transformationResult === null) {
