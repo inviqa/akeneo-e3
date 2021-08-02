@@ -11,6 +11,7 @@ use AkeneoEtl\Domain\EtlProfile;
 use AkeneoEtl\Domain\EtlTransformProfile;
 use AkeneoEtl\Domain\Loader;
 use AkeneoEtl\Domain\Transformer;
+use AkeneoEtl\Infrastructure\Api\ApiSelector;
 use AkeneoEtl\Infrastructure\Loader\ApiLoader;
 use AkeneoEtl\Infrastructure\Loader\DryRunLoader;
 use Closure;
@@ -19,7 +20,15 @@ class EtlFactory
 {
     private array $clients = [];
 
+    private ApiSelector $apiSelector;
+
+    public function __construct()
+    {
+        $this->apiSelector = new ApiSelector();
+    }
+
     public function createEtlProcess(
+        string $dataType,
         ConnectionProfile $sourceConnectionProfile,
         ConnectionProfile $destinationConnectionProfile,
         EtlProfile $etlProfile,
@@ -27,6 +36,7 @@ class EtlFactory
     ): EtlProcess {
 
         $extractor = $this->createExtractor(
+            $dataType,
             $sourceConnectionProfile,
             $etlProfile->getExtractorQuery()
         );
@@ -36,6 +46,7 @@ class EtlFactory
         );
 
         $loader = $this->createLoader(
+            $dataType,
             $destinationConnectionProfile,
             $etlProfile->getLoadProfile(),
             $errorCallback
@@ -45,13 +56,15 @@ class EtlFactory
     }
 
     public function createExtractor(
+        string $dataType,
         ConnectionProfile $profile,
         array $query
     ): Extractor {
         $client = $this->getClient($profile);
 
         return new Extractor(
-            $client->getProductApi(), $this->buildQuery($query)
+            $this->apiSelector->getApi($client, $dataType),
+            $this->buildQuery($query)
         );
     }
 
@@ -61,6 +74,7 @@ class EtlFactory
     }
 
     public function createLoader(
+        string $dataType,
         ConnectionProfile $connectionProfile,
         EtlLoadProfile $loadProfile,
         Closure $errorCallback
@@ -71,7 +85,9 @@ class EtlFactory
 
         $client = $this->getClient($connectionProfile);
 
-        return new ApiLoader($client->getProductApi(), $errorCallback);
+        return new ApiLoader(
+            $this->apiSelector->getApi($client, $dataType),
+            $errorCallback);
     }
 
     private function getClient(ConnectionProfile $profile

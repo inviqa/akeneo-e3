@@ -19,9 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class TransformProductsCommand extends Command
 {
-
-    protected static $defaultName = 'etl:product';
-
     private EtlFactory $factory;
 
     private ConnectionProfileReader $connectionProfileReader;
@@ -43,6 +40,8 @@ class TransformProductsCommand extends Command
     protected function configure(): void
     {
         $this
+            ->setName('transform')
+            ->addOption('data-type', 't', InputOption::VALUE_REQUIRED)
             ->addOption('connection-profile', 'c', InputOption::VALUE_REQUIRED)
             ->addOption(
                 'destination-connection-profile',
@@ -63,7 +62,16 @@ class TransformProductsCommand extends Command
 
         $etlProfile = $this->getEtlProfile($input);
 
+        $dataType = $input->getOption('data-type');
+
+        if ($dataType === null) {
+            // @todo: read from etl profile
+            // if null, throw an exception
+        }
+
+
         $etl = $this->factory->createEtlProcess(
+            $dataType,
             $sourceConnectionProfile,
             $destinationConnectionProfile,
             $etlProfile,
@@ -107,8 +115,8 @@ class TransformProductsCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function getConnectionProfile(InputInterface $input
-    ): ConnectionProfile {
+    private function getConnectionProfile(InputInterface $input): ConnectionProfile
+    {
         $profileFileName = $input->getOption('connection-profile');
 
         if ($profileFileName === null) {
