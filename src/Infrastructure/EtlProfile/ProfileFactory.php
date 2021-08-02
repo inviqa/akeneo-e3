@@ -39,10 +39,7 @@ class ProfileFactory
 
     private function createLoadProfile(array $profileData): EtlLoadProfile
     {
-        $loaderProfile = new EtlLoadProfile();
-        $loaderProfile->isDryRun = ($profileData['load']['mode'] ?? '') === 'dry-run';
-
-        return $loaderProfile;
+        return EtlLoadProfile::fromArray($profileData['load'] ?? []);
     }
 
     private function createTransformProfile(array $profileData): EtlTransformProfile

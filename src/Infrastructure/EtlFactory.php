@@ -79,7 +79,7 @@ class EtlFactory
         EtlLoadProfile $loadProfile,
         Closure $errorCallback
     ): Loader {
-        if ($loadProfile->isDryRun) {
+        if ($loadProfile->isDryRun() === true) {
             return new DryRunLoader();
         }
 
