@@ -1,6 +1,6 @@
 <?php
 
-namespace AkeneoEtl\Domain;
+namespace AkeneoEtl\Domain\Profile;
 
 class ConnectionProfile
 {

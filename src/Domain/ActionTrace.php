@@ -5,7 +5,7 @@ namespace AkeneoEtl\Domain;
 use DateTimeImmutable;
 use DateTimeInterface;
 
-class ActtionTrace
+class ActionTrace
 {
     private DateTimeInterface $dateTime;
 

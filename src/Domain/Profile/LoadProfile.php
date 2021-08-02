@@ -1,8 +1,8 @@
 <?php
 
-namespace AkeneoEtl\Domain;
+namespace AkeneoEtl\Domain\Profile;
 
-class EtlLoadProfile
+class LoadProfile
 {
     private bool $isDryRun;
 

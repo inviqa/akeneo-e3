@@ -1,10 +1,10 @@
 <?php
 
-namespace AkeneoEtl\Domain;
+namespace AkeneoEtl\Domain\Profile;
 
-use phpDocumentor\Reflection\Types\Array_;
+use AkeneoEtl\Domain\Action;
 
-class EtlTransformProfile
+class TransformProfile
 {
     /**
      * @var iterable|Action[]

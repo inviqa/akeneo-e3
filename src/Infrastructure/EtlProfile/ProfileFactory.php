@@ -3,10 +3,10 @@
 namespace AkeneoEtl\Infrastructure\EtlProfile;
 
 use AkeneoEtl\Application\ActionFactory;
-use AkeneoEtl\Domain\EtlExtractProfile;
-use AkeneoEtl\Domain\EtlLoadProfile;
-use AkeneoEtl\Domain\EtlProfile;
-use AkeneoEtl\Domain\EtlTransformProfile;
+use AkeneoEtl\Domain\Profile\ExtractProfile;
+use AkeneoEtl\Domain\Profile\LoadProfile;
+use AkeneoEtl\Domain\Profile\EtlProfile;
+use AkeneoEtl\Domain\Profile\TransformProfile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -39,17 +39,17 @@ class ProfileFactory
         );
     }
 
-    private function createExtractProfile(array $profileData): EtlExtractProfile
+    private function createExtractProfile(array $profileData): ExtractProfile
     {
-        return EtlExtractProfile::fromArray($profileData['extract'] ?? []);
+        return ExtractProfile::fromArray($profileData['extract'] ?? []);
     }
 
-    private function createLoadProfile(array $profileData): EtlLoadProfile
+    private function createLoadProfile(array $profileData): LoadProfile
     {
-        return EtlLoadProfile::fromArray($profileData['load'] ?? []);
+        return LoadProfile::fromArray($profileData['load'] ?? []);
     }
 
-    private function createTransformProfile(array $profileData): EtlTransformProfile
+    private function createTransformProfile(array $profileData): TransformProfile
     {
         $actions = [];
         foreach ($profileData['transform']['actions'] ?? [] as $actionData) {
@@ -59,7 +59,7 @@ class ProfileFactory
             $actions[] = $this->actionFactory->create($type, $actionData);
         }
 
-        return EtlTransformProfile::fromActions($actions);
+        return TransformProfile::fromActions($actions);
     }
 
     private function validate(array $profileData): void

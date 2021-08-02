@@ -3,7 +3,7 @@
 namespace AkeneoEtl\Application\Action;
 
 use AkeneoEtl\Domain\Action;
-use AkeneoEtl\Domain\ActtionTrace;
+use AkeneoEtl\Domain\ActionTrace;
 use Closure;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
@@ -66,7 +66,7 @@ class Set implements Action
         $resultValue
     ): void {
         $traceCallBack(
-            new ActtionTrace(
+            new ActionTrace(
                 $itemIdentifier,
                 $beforeValue,
                 $resultValue

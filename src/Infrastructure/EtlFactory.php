@@ -5,12 +5,12 @@ namespace AkeneoEtl\Infrastructure;
 use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\Pim\ApiClient\Search\SearchBuilder;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientBuilder;
-use AkeneoEtl\Domain\ConnectionProfile;
-use AkeneoEtl\Domain\EtlExtractProfile;
-use AkeneoEtl\Domain\EtlLoadProfile;
+use AkeneoEtl\Domain\Profile\ConnectionProfile;
+use AkeneoEtl\Domain\Profile\ExtractProfile;
+use AkeneoEtl\Domain\Profile\LoadProfile;
 use AkeneoEtl\Domain\EtlProcess;
-use AkeneoEtl\Domain\EtlProfile;
-use AkeneoEtl\Domain\EtlTransformProfile;
+use AkeneoEtl\Domain\Profile\EtlProfile;
+use AkeneoEtl\Domain\Profile\TransformProfile;
 use AkeneoEtl\Domain\Loader;
 use AkeneoEtl\Domain\Transformer;
 use AkeneoEtl\Infrastructure\Api\ApiSelector;
@@ -60,7 +60,7 @@ class EtlFactory
     public function createExtractor(
         string $dataType,
         ConnectionProfile $profile,
-        EtlExtractProfile $extractProfile
+        ExtractProfile $extractProfile
     ): Extractor {
         $client = $this->getClient($profile);
 
@@ -70,7 +70,7 @@ class EtlFactory
         );
     }
 
-    public function createTransformer(EtlTransformProfile $transformProfile): Transformer
+    public function createTransformer(TransformProfile $transformProfile): Transformer
     {
         return new Transformer($transformProfile->getActions());
     }
@@ -78,7 +78,7 @@ class EtlFactory
     public function createLoader(
         string $dataType,
         ConnectionProfile $connectionProfile,
-        EtlLoadProfile $loadProfile,
+        LoadProfile $loadProfile,
         Closure $errorCallback
     ): Loader {
         if ($loadProfile->isDryRun() === true) {

@@ -2,7 +2,7 @@
 
 namespace AkeneoEtl\Infrastructure\ConnectionProfile;
 
-use AkeneoEtl\Domain\ConnectionProfile;
+use AkeneoEtl\Domain\Profile\ConnectionProfile;
 use Symfony\Component\Yaml\Yaml;
 
 class ProfileFactory

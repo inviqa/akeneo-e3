@@ -2,15 +2,15 @@
 
 namespace AkeneoEtl\Tests\Unit\Application;
 
-use AkeneoEtl\Domain\EtlLoadProfile;
+use AkeneoEtl\Domain\Profile\LoadProfile;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
-class EtlLoadProfileTest extends TestCase
+class LoadProfileTest extends TestCase
 {
     public function test_profile_is_created_from_array()
     {
-        $profile = EtlLoadProfile::fromArray([
+        $profile = LoadProfile::fromArray([
             'type' => 'dry-run',
         ]);
 

@@ -2,9 +2,9 @@
 
 namespace AkeneoEtl\Infrastructure\Command;
 
-use AkeneoEtl\Domain\ConnectionProfile;
-use AkeneoEtl\Domain\EtlProfile;
-use AkeneoEtl\Domain\ActtionTrace;
+use AkeneoEtl\Domain\Profile\ConnectionProfile;
+use AkeneoEtl\Domain\Profile\EtlProfile;
+use AkeneoEtl\Domain\ActionTrace;
 use AkeneoEtl\Infrastructure\ConnectionProfile\ProfileFactory as ConnectionProfileFactory;
 use AkeneoEtl\Infrastructure\EtlProfile\ProfileFactory as EtlProfileFactory;
 use AkeneoEtl\Infrastructure\EtlFactory;
@@ -97,7 +97,7 @@ class TransformProductsCommand extends Command
 
                 $progress->advance();
             },
-            function (ActtionTrace $trace) use ($output, $progress) {
+            function (ActionTrace $trace) use ($output, $progress) {
 
                 $progress->clear();
                 $output->writeln(sprintf('[[ %s ]] %s -> %s',
