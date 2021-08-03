@@ -25,7 +25,7 @@ class ActionTrace
      * @param mixed $before
      * @param mixed $after
      */
-    public function __construct(string $identifier, $before, $after)
+    private function __construct(string $identifier, $before, $after)
     {
         $this->dateTime = new DateTimeImmutable();
         $this->identifier = $identifier;

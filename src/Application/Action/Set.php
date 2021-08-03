@@ -45,11 +45,7 @@ class Set implements Action
         }
 
         if ($tracer !== null) {
-            $tracer->onAction(new ActionTrace(
-                $item['identifier'],
-                $beforeValue,
-                $resultValue
-            ));
+            $tracer->onAction(ActionTrace::create($item['identifier'], $beforeValue, $resultValue));
         }
 
         return TransformerUtils::createFieldArray(
