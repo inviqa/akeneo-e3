@@ -32,6 +32,7 @@
         }
     },
     "require-dev": {
+        "phpmd/phpmd": "^2.10",
         "phpstan/phpstan": "^0.12.94",
         "phpunit/phpunit": "^9"
     },
