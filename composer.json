@@ -44,6 +44,7 @@
         ],
         "test-quality": [
             "find src/ | xargs -n 1 -P 8 -i php -l {} | grep -v 'No syntax errors detected' || echo 'OK'",
+            "php-cs-fixer fix",
             "phpmd ./src text ./phpmd.xml",
             "phpstan analyse"
         ],
