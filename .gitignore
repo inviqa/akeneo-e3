@@ -10,3 +10,4 @@
 ###< symfony/framework-bundle ###
 /.idea
 /profiles
+.php-cs-fixer.cache

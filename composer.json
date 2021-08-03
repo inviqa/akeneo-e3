@@ -14,6 +14,12 @@
         "symfony/validator": "^5.3",
         "symfony/yaml": "5.3.*"
     },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.0",
+        "phpmd/phpmd": "^2.10",
+        "phpstan/phpstan": "^0.12.94",
+        "phpunit/phpunit": "^9"
+    },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": {
@@ -30,11 +36,6 @@
         "psr-4": {
             "AkeneoEtl\\Tests\\": "tests/"
         }
-    },
-    "require-dev": {
-        "phpmd/phpmd": "^2.10",
-        "phpstan/phpstan": "^0.12.94",
-        "phpunit/phpunit": "^9"
     },
     "scripts": {
         "test": [
