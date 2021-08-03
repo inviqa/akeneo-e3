@@ -58,30 +58,34 @@ class ProfileFactory
     private function validate(array $profileData): void
     {
         $constraint = new Assert\Collection([
-            'extract' => new Assert\Collection([
-                'conditions' => new Assert\Optional([
-                    new Assert\Type('array'),
-                    new Assert\Count(['min' => 1]),
-                    new Assert\All([
-                        new Assert\Collection([
-                            'field' => new Assert\Type('string'),
-                            'operator' => new Assert\Type('string'),
-                            'value' => new Assert\Optional(),
+            'extract' => new Assert\Optional(
+                new Assert\Collection([
+                    'conditions' => new Assert\Optional([
+                        new Assert\Type('array'),
+                        new Assert\Count(['min' => 1]),
+                        new Assert\All([
+                            new Assert\Collection([
+                                'field' => new Assert\Type('string'),
+                                'operator' => new Assert\Type('string'),
+                                'value' => new Assert\Optional(),
+                            ]),
                         ]),
                     ]),
                 ]),
-            ]),
+            ),
             'transform' => new Assert\Collection([
                 'actions' => new Assert\Optional([
                     new Assert\Type('array'),
                     new Assert\Count(['min' => 1]),
                 ]),
             ]),
-            'load' => new Assert\Collection([
-                'type' => new Assert\Optional([
-                    new Assert\Type('string'),
+            'load' => new Assert\Optional(
+                new Assert\Collection([
+                    'type' => new Assert\Optional([
+                        new Assert\Type('string'),
+                    ]),
                 ]),
-            ]),
+            ),
         ]);
 
         $violations = $this->validator->validate($profileData, $constraint);
