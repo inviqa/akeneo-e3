@@ -34,12 +34,12 @@ class EtlProcess
             // @todo: in no patch method, then merge to $product
 
             if ($patch !== null) {
-                $this->loader->addToBatch($patch);
+                $this->loader->queue($patch);
             }
 
             $this->hooks->onActionProgress(ActionProgress::create($index++, $count));
         }
 
-        $this->loader->flushBatch();
+        $this->loader->load();
     }
 }

@@ -6,12 +6,12 @@ use AkeneoEtl\Domain\Loader;
 
 class DryRunLoader implements Loader
 {
-    public function addToBatch(array $item, bool $flush = false): void
+    public function queue(array $item): void
     {
-        //var_dump($item);
+        // dry run
     }
 
-    public function flushBatch(): void
+    public function load(): void
     {
         // dry run
     }

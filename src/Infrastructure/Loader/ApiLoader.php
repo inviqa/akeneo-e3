@@ -26,17 +26,17 @@ class ApiLoader implements Loader
         $this->onError = $onError;
     }
 
-    public function addToBatch(array $item, bool $flush = false): void
+    public function queue(array $item): void
     {
         $id = $item['identifier'];
         $this->buffer[$id] = $item;
 
-        if ($flush === true || count($this->buffer) >= $this->batchSize) {
-            $this->flushBatch();
+        if (count($this->buffer) >= $this->batchSize) {
+            $this->load();
         }
     }
 
-    public function flushBatch(): void
+    public function load(): void
     {
         if (count($this->buffer) === 0) {
             return;
