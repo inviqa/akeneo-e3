@@ -35,7 +35,7 @@ Create a file etl.yaml, e.g. like this:
 extract:
 # How to transform data
 transform:
-    steps:
+    actions:
         # Set a value of a `slug` field with a slugified lowercased value of the name field from the de_DE locale 
         -
             type: set
