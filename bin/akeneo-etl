@@ -19,5 +19,5 @@ $connectionProfileFactory = new ConnectionProfileFactory();
 $etlProfileFactory = new EtlProfileFactory($stepFactory, $validatorBuilder->getValidator());
 
 $application = new Application('AkeneoEtl', 'git_version');
-$application->add(new Command\TransformProductsCommand($etlFactory, $connectionProfileFactory, $etlProfileFactory));
+$application->add(new Command\TransformCommand($etlFactory, $connectionProfileFactory, $etlProfileFactory));
 $application->run();
