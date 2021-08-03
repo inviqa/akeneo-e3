@@ -99,7 +99,7 @@ class EtlFactory
 
     private function getClient(ConnectionProfile $profile
     ): AkeneoPimClientInterface {
-        $profileKey = $profile->host;
+        $profileKey = $profile->getHost().$profile->getUserName();
 
         if (isset($this->clients[$profileKey]) === false) {
             $this->clients[$profileKey] = $this->createClient($profile);
@@ -110,13 +110,13 @@ class EtlFactory
 
     private function createClient(ConnectionProfile $profile): AkeneoPimClientInterface
     {
-        $clientBuilder = new AkeneoPimEnterpriseClientBuilder($profile->host);
+        $clientBuilder = new AkeneoPimEnterpriseClientBuilder($profile->getHost());
 
         return $clientBuilder->buildAuthenticatedByPassword(
-            $profile->clientId,
-            $profile->clientSecret,
-            $profile->userName,
-            $profile->userPassword
+            $profile->getClientId(),
+            $profile->getClientSecret(),
+            $profile->getUserName(),
+            $profile->getUserPassword()
         );
     }
 

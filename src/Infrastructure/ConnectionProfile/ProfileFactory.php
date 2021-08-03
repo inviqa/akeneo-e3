@@ -11,7 +11,7 @@ class ProfileFactory
     {
         $profileData = Yaml::parseFile($fileName);
 
-        return ConnectionProfile::fromUserNameAndPassword(
+        return ConnectionProfile::fromUser(
             $profileData['host'],
             $profileData['clientId'],
             $profileData['clientSecret'],

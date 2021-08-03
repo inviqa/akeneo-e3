@@ -4,31 +4,57 @@ namespace AkeneoEtl\Domain\Profile;
 
 class ConnectionProfile
 {
-    public string $host;
+    private string $host;
+    private string $clientId;
+    private string $clientSecret;
+    private string $userName;
+    private string $userPassword;
 
-    public string $clientId;
-
-    public string $clientSecret;
-
-    public string $userName;
-
-    public string $userPassword;
-
-    public static function fromUserNameAndPassword(
+    private function __construct (
+        string $host,
+        string $clientId,
+        string $clientSecret,
+        string $userName,
+        string $userPassword
+    ) {
+        $this->host = $host;
+        $this->clientId = $clientId;
+        $this->clientSecret = $clientSecret;
+        $this->userName = $userName;
+        $this->userPassword = $userPassword;
+    }
+    public static function fromUser(
         string $host,
         string $clientId,
         string $clientSecret,
         string $userName,
         string $userPassword
     ): self {
-        $profile = new self();
+        return new self($host, $clientId, $clientSecret, $userName, $userPassword);
+    }
 
-        $profile->host = $host;
-        $profile->clientId = $clientId;
-        $profile->clientSecret = $clientSecret;
-        $profile->userName = $userName;
-        $profile->userPassword = $userPassword;
+    public function getHost(): string
+    {
+        return $this->host;
+    }
 
-        return $profile;
+    public function getClientId(): string
+    {
+        return $this->clientId;
+    }
+
+    public function getClientSecret(): string
+    {
+        return $this->clientSecret;
+    }
+
+    public function getUserName(): string
+    {
+        return $this->userName;
+    }
+
+    public function getUserPassword(): string
+    {
+        return $this->userPassword;
     }
 }
