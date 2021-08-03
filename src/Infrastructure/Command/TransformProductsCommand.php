@@ -52,8 +52,8 @@ class TransformProductsCommand extends Command
     ): int {
         $sourceConnectionProfile = $this->getConnectionProfile($input);
         $destinationConnectionProfile = $this->getDestinationConnectionProfile(
-                $input
-            ) ?? $sourceConnectionProfile;
+            $input
+        ) ?? $sourceConnectionProfile;
 
         $etlProfile = $this->getEtlProfile($input);
 

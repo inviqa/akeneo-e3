@@ -39,7 +39,6 @@ class EtlFactory
         EtlProfile $etlProfile,
         Hooks $hooks
     ): EtlProcess {
-
         $extractor = $this->createExtractor(
             $dataType,
             $sourceConnectionProfile,
@@ -97,7 +96,8 @@ class EtlFactory
         );
     }
 
-    private function getClient(ConnectionProfile $profile
+    private function getClient(
+        ConnectionProfile $profile
     ): AkeneoPimClientInterface {
         $profileKey = $profile->getHost().$profile->getUserName();
 

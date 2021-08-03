@@ -80,4 +80,3 @@ class NullAction implements Action
         return null;
     }
 }
-

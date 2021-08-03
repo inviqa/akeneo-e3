@@ -10,7 +10,7 @@ class ConnectionProfile
     private string $userName;
     private string $userPassword;
 
-    private function __construct (
+    private function __construct(
         string $host,
         string $clientId,
         string $clientSecret,

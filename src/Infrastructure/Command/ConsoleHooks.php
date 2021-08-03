@@ -23,10 +23,12 @@ class ConsoleHooks implements Hooks
     public function onAction(ActionTrace $trace): void
     {
         $this->progress->clear();
-        $this->output->writeln(sprintf('[[ %s ]] %s -> %s',
+        $this->output->writeln(sprintf(
+            '[[ %s ]] %s -> %s',
             $trace->getIdentifier(),
             $trace->getBefore(),
-            $trace->getAfter()));
+            $trace->getAfter()
+        ));
         $this->progress->display();
     }
 
@@ -38,7 +40,8 @@ class ConsoleHooks implements Hooks
                 $error->getIdentifier(),
                 $error->getErrorMessage()
             )
-        );    }
+        );
+    }
 
     public function onActionProgress(ActionProgress $actionProgress): void
     {

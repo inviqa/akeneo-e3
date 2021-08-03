@@ -21,7 +21,8 @@ class LoaderError
         $messages = [$this->data['message'] ?? ''];
 
         foreach ($this->data['errors'] ?? [] as $error) {
-            $messages[] = sprintf(' - property: %s, attribute: %s, %s',
+            $messages[] = sprintf(
+                ' - property: %s, attribute: %s, %s',
                 $error['property'] ?? '?',
                 $error['attribute'] ?? '?',
                 $error['message'] ?? '?',
@@ -30,5 +31,4 @@ class LoaderError
 
         return implode(PHP_EOL, $messages);
     }
-
 }
