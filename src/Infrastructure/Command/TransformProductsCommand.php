@@ -4,11 +4,9 @@ namespace AkeneoEtl\Infrastructure\Command;
 
 use AkeneoEtl\Domain\Profile\ConnectionProfile;
 use AkeneoEtl\Domain\Profile\EtlProfile;
-use AkeneoEtl\Domain\ActionTrace;
 use AkeneoEtl\Infrastructure\ConnectionProfile\ProfileFactory as ConnectionProfileFactory;
 use AkeneoEtl\Infrastructure\EtlProfile\ProfileFactory as EtlProfileFactory;
 use AkeneoEtl\Infrastructure\EtlFactory;
-use AkeneoEtl\Infrastructure\Loader\LoaderError;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -19,9 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class TransformProductsCommand extends Command
 {
     private EtlFactory $factory;
-
     private ConnectionProfileFactory $connectionProfileFactory;
-
     private EtlProfileFactory $etlProfileFactory;
 
     public function __construct(
@@ -68,45 +64,18 @@ class TransformProductsCommand extends Command
             // if null, throw an exception
         }
 
+        $progress = new ProgressBar($output);
+        $consoleHooks = new ConsoleHooks($output, $progress);
+
         $etl = $this->factory->createEtlProcess(
             $dataType,
             $sourceConnectionProfile,
             $destinationConnectionProfile,
             $etlProfile,
-            function (array $item, LoaderError $error) use ($output) {
-                $output->writeln(
-                    sprintf(
-                        '[%s] %s',
-                        $error->getIdentifier(),
-                        $error->getErrorMessage()
-                    )
-                );
-            }
+            $consoleHooks
         );
 
-        $progress = new ProgressBar($output);
-
-        $etl->execute(
-            function (int $actionIndex, int $actionCount) use ($progress) {
-
-                if ($actionIndex === 0) {
-                    $progress->start($actionCount);
-
-                    return;
-                }
-
-                $progress->advance();
-            },
-            function (ActionTrace $trace) use ($output, $progress) {
-
-                $progress->clear();
-                $output->writeln(sprintf('[[ %s ]] %s -> %s',
-                    $trace->getIdentifier(),
-                    $trace->getBefore(),
-                    $trace->getAfter()));
-                $progress->display();
-            }
-        );
+        $etl->execute();
 
         $progress->finish();
 
@@ -126,8 +95,8 @@ class TransformProductsCommand extends Command
         return $this->connectionProfileFactory->read($profileFileName);
     }
 
-    private function getDestinationConnectionProfile(InputInterface $input
-    ): ?ConnectionProfile {
+    private function getDestinationConnectionProfile(InputInterface $input): ?ConnectionProfile
+    {
         $profileFileName = $input->getOption('destination-connection-profile');
 
         if ($profileFileName === null) {

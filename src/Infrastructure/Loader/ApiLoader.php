@@ -3,8 +3,8 @@
 namespace AkeneoEtl\Infrastructure\Loader;
 
 use Akeneo\Pim\ApiClient\Api\Operation\UpsertableResourceListInterface;
+use AkeneoEtl\Domain\Hook\LoaderErrorHook;
 use AkeneoEtl\Domain\Loader;
-use Closure;
 use Exception;
 use Traversable;
 
@@ -12,17 +12,17 @@ class ApiLoader implements Loader
 {
     private UpsertableResourceListInterface $api;
 
-    private Closure $errorCallback;
-
     private int $batchSize;
 
     private array $buffer = [];
 
-    public function __construct(UpsertableResourceListInterface $api, Closure $errorCallback, int $batchSize = 100)
+    private LoaderErrorHook $onError;
+
+    public function __construct(UpsertableResourceListInterface $api, LoaderErrorHook $onError, int $batchSize = 100)
     {
         $this->api = $api;
-        $this->errorCallback = $errorCallback;
         $this->batchSize = $batchSize;
+        $this->onError = $onError;
     }
 
     public function addToBatch(array $item, bool $flush = false): void
@@ -49,14 +49,12 @@ class ApiLoader implements Loader
 
     private function processResponse(Traversable $result): void
     {
-        $errorCallbackClosure = $this->errorCallback;
-
         foreach ($result as $line) {
             if ($line['status_code'] === 422) {
                 $initialItem = $this->buffer[$line['identifier']];
 
                 try {
-                    $errorCallbackClosure($initialItem, new LoaderError($line));
+                    $this->onError->onLoaderError($initialItem, new LoaderError($line));
                 } catch (Exception $e) {
                     // @todo: log exceptions
                 }

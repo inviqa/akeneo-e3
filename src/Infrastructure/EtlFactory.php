@@ -5,6 +5,9 @@ namespace AkeneoEtl\Infrastructure;
 use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\Pim\ApiClient\Search\SearchBuilder;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientBuilder;
+use AkeneoEtl\Domain\Hook\ActionTraceHook;
+use AkeneoEtl\Domain\Hook\Hooks;
+use AkeneoEtl\Domain\Hook\LoaderErrorHook;
 use AkeneoEtl\Domain\Profile\ConnectionProfile;
 use AkeneoEtl\Domain\Profile\ExtractProfile;
 use AkeneoEtl\Domain\Profile\LoadProfile;
@@ -17,7 +20,6 @@ use AkeneoEtl\Infrastructure\Api\ApiSelector;
 use AkeneoEtl\Infrastructure\Extractor\Extractor;
 use AkeneoEtl\Infrastructure\Loader\ApiLoader;
 use AkeneoEtl\Infrastructure\Loader\DryRunLoader;
-use Closure;
 
 class EtlFactory
 {
@@ -35,7 +37,7 @@ class EtlFactory
         ConnectionProfile $sourceConnectionProfile,
         ConnectionProfile $destinationConnectionProfile,
         EtlProfile $etlProfile,
-        Closure $errorCallback
+        Hooks $hooks
     ): EtlProcess {
 
         $extractor = $this->createExtractor(
@@ -45,17 +47,18 @@ class EtlFactory
         );
 
         $transformer = $this->createTransformer(
-            $etlProfile->getTransformProfile()
+            $etlProfile->getTransformProfile(),
+            $hooks
         );
 
         $loader = $this->createLoader(
             $dataType,
             $destinationConnectionProfile,
             $etlProfile->getLoadProfile(),
-            $errorCallback
+            $hooks
         );
 
-        return new EtlProcess($extractor, $transformer, $loader);
+        return new EtlProcess($extractor, $transformer, $loader, $hooks);
     }
 
     public function createExtractor(
@@ -71,16 +74,16 @@ class EtlFactory
         );
     }
 
-    public function createTransformer(TransformProfile $transformProfile): Transformer
+    public function createTransformer(TransformProfile $transformProfile, ActionTraceHook $traceHook): Transformer
     {
-        return new Transformer($transformProfile->getActions());
+        return new Transformer($transformProfile->getActions(), $traceHook);
     }
 
     public function createLoader(
         string $dataType,
         ConnectionProfile $connectionProfile,
         LoadProfile $loadProfile,
-        Closure $errorCallback
+        LoaderErrorHook $onLoaderError
     ): Loader {
         if ($loadProfile->isDryRun() === true) {
             return new DryRunLoader();
@@ -90,7 +93,8 @@ class EtlFactory
 
         return new ApiLoader(
             $this->apiSelector->getApi($client, $dataType),
-            $errorCallback);
+            $onLoaderError
+        );
     }
 
     private function getClient(ConnectionProfile $profile

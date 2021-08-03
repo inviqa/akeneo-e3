@@ -3,8 +3,8 @@
 namespace AkeneoEtl\Application\Action;
 
 use AkeneoEtl\Domain\Action;
-use AkeneoEtl\Domain\ActionTrace;
-use Closure;
+use AkeneoEtl\Domain\Hook\ActionTrace;
+use AkeneoEtl\Domain\Hook\ActionTraceHook;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class Set implements Action
@@ -27,7 +27,7 @@ class Set implements Action
         return 'expression';
     }
 
-    public function execute(array $item, Closure $traceCallback = null): ?array
+    public function execute(array $item, ActionTraceHook $tracer = null): ?array
     {
         $beforeValue = TransformerUtils::getFieldValue(
             $item,
@@ -43,8 +43,12 @@ class Set implements Action
             return null;
         }
 
-        if ($traceCallback !== null) {
-            $this->notify($traceCallback, $item['identifier'] ?? '', $beforeValue, $resultValue);
+        if ($tracer !== null) {
+            $tracer->onAction(new ActionTrace(
+                $item['identifier'],
+                $beforeValue,
+                $resultValue
+            ));
         }
 
         return TransformerUtils::createFieldArray(
@@ -52,25 +56,6 @@ class Set implements Action
             $resultValue,
             $this->options['scope'],
             $this->options['locale']
-        );
-    }
-
-    /**
-     * @param mixed $beforeValue
-     * @param mixed $resultValue
-     */
-    protected function notify(
-        Closure $traceCallBack,
-        string $itemIdentifier,
-        $beforeValue,
-        $resultValue
-    ): void {
-        $traceCallBack(
-            new ActionTrace(
-                $itemIdentifier,
-                $beforeValue,
-                $resultValue
-            )
         );
     }
 }

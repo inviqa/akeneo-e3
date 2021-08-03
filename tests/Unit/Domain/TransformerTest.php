@@ -2,9 +2,9 @@
 
 namespace AkeneoEtl\Tests\Unit\Domain;
 
+use AkeneoEtl\Domain\Hook\ActionTraceHook;
 use AkeneoEtl\Domain\Transformer;
 use AkeneoEtl\Domain\Action;
-use Closure;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -15,7 +15,7 @@ class TransformerTest extends TestCase
     {
         $transform = new Transformer([new FakeAction()]);
 
-        $result = $transform->transform(['identifier' => 123], null);
+        $result = $transform->transform(['identifier' => 123]);
 
         Assert::assertEquals([
             'data' => 'fake',
@@ -29,14 +29,14 @@ class TransformerTest extends TestCase
 
         $transform = new Transformer([new FailAction()]);
 
-        $transform->transform(['identifier' => 123], null);
+        $transform->transform(['identifier' => 123]);
     }
 
     public function test_it_returns_null_if_no_actions_executed()
     {
         $transform = new Transformer([new NullAction()]);
 
-        $result = $transform->transform(['identifier' => 123], null);
+        $result = $transform->transform(['identifier' => 123]);
 
         Assert::assertNull($result);
     }
@@ -49,7 +49,7 @@ class FakeAction implements Action
         return 'fake';
     }
 
-    public function execute(array $item, Closure $traceCallback = null): ?array
+    public function execute(array $item, ActionTraceHook $tracer = null): ?array
     {
         return ['data' => 'fake'];
     }
@@ -62,7 +62,7 @@ class FailAction implements Action
         return 'fail';
     }
 
-    public function execute(array $item, Closure $traceCallback = null): ?array
+    public function execute(array $item, ActionTraceHook $tracer = null): ?array
     {
         throw new RuntimeException('Ooops!');
     }
@@ -75,7 +75,7 @@ class NullAction implements Action
         return 'null';
     }
 
-    public function execute(array $item, Closure $traceCallback = null): ?array
+    public function execute(array $item, ActionTraceHook $tracer = null): ?array
     {
         return null;
     }
