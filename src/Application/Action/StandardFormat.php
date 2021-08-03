@@ -21,20 +21,17 @@ class StandardFormat
      *
      * @return mixed
      */
-    public function getByOptions(array $options, $default = null)
+    public function get(Field $field, $default = null)
     {
-        $field = $options['field'] ?? null;
+        $fieldName = $field->getName();
 
-        if (isset($this->data[$field]) === true) {
-            return $this->data[$field];
+        if (isset($this->data[$fieldName]) === true) {
+            return $this->data[$fieldName];
         }
 
-        $scope = $options['scope'] ?? null;
-        $locale = $options['locale'] ?? null;
-
-        foreach ($this->data['values'][$field] ?? [] as $attribute) {
-            if ($attribute['scope'] === $scope &&
-                $attribute['locale'] === $locale) {
+        foreach ($this->data['values'][$fieldName] ?? [] as $attribute) {
+            if ($attribute['scope'] === $field->getScope() &&
+                $attribute['locale'] === $field->getLocale()) {
                 return $attribute['data'] ?? $default;
             }
         }
@@ -51,16 +48,15 @@ class StandardFormat
     /**
      * @param mixed $newValue
      */
-    public function makeValueArray(array $options, $newValue, bool $isAttribute)
+    public function makeValueArray(Field $field, $newValue, bool $isAttribute): array
     {
-        // @todo: what if field is not set?
         if ($isAttribute === true) {
             return [
                 'values' => [
-                    $options['field'] => [
+                    $field->getName() => [
                         [
-                            'scope' => $options['scope'] ?? null,
-                            'locale' => $options['locale'] ?? null,
+                            'scope' => $field->getScope(),
+                            'locale' => $field->getLocale(),
                             'data' => $newValue
                         ]
                     ]
@@ -68,6 +64,6 @@ class StandardFormat
             ];
         }
 
-        return [$options['field'] => $newValue];
+        return [$field->getName() => $newValue];
     }
 }

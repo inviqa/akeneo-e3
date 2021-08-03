@@ -28,11 +28,9 @@ class Set implements Action
     public function execute(array $item, ActionTraceHook $tracer = null): ?array
     {
         $standardFormat = new StandardFormat($item);
+        $field = Field::create($this->options['field'], $this->options);
 
-        $beforeValue = $standardFormat->getByOptions(
-            $this->options,
-            null
-        );
+        $beforeValue = $standardFormat->get($field, );
 
         $resultValue = $this->evaluateValue($item);
 
@@ -47,7 +45,7 @@ class Set implements Action
 
         $isAttribute = $standardFormat->isAttribute($this->options['field']);
 
-        return $standardFormat->makeValueArray($this->options, $resultValue, $isAttribute);
+        return $standardFormat->makeValueArray($field, $resultValue, $isAttribute);
     }
 
     /**
