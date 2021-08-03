@@ -28,7 +28,7 @@ class Set implements Action
     public function execute(array $item, ActionTraceHook $tracer = null): ?array
     {
         $standardFormat = new StandardFormat($item);
-        $field = Field::create($this->options['field'], $this->options);
+        $field = Field::fromOptions($this->options);
 
         $beforeValue = $standardFormat->get($field, );
 

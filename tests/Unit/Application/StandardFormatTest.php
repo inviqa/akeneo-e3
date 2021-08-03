@@ -15,7 +15,7 @@ class StandardFormatTest extends TestCase
     public function test_it_gets_values_from_data_by_option(array $options, $default, $expectedValue)
     {
         $accessor = new StandardFormat($this->getProductData());
-        $value = $accessor->get(Field::create($options['field'], $options), $default);
+        $value = $accessor->get(Field::fromOptions($options), $default);
 
         Assert::assertEquals($expectedValue, $value);
     }
@@ -26,7 +26,7 @@ class StandardFormatTest extends TestCase
     public function test_it_generates_a_patch_array_from_options(array $options, $newValue, bool $isAttribute, array $expectedValueArray)
     {
         $accessor = new StandardFormat([]);
-        $field = Field::create($options['field'], $options);
+        $field = Field::fromOptions($options);
         $data = $accessor->makeValueArray($field, $newValue, $isAttribute);
 
         Assert::assertEquals($expectedValueArray, $data);

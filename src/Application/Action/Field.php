@@ -20,6 +20,11 @@ class Field
         return new self($name, $options['scope'] ?? null, $options['locale'] ?? null);
     }
 
+    public static function fromOptions(array $options): self
+    {
+        return new self($options['field'] ?? '', $options['scope'] ?? null, $options['locale'] ?? null);
+    }
+
     public function getName(): string
     {
         return $this->name;
