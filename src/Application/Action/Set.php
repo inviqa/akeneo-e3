@@ -10,10 +10,6 @@ use AkeneoEtl\Domain\Hook\ActionTraceHook;
 class Set implements Action
 {
     private ExpressionLanguage $expressionLanguage;
-
-    /**
-     * @var array
-     */
     private array $options;
 
     public function __construct(ExpressionLanguage $expressionLanguage, array $options)
@@ -31,15 +27,16 @@ class Set implements Action
 
     public function execute(array $item, ActionTraceHook $tracer = null): ?array
     {
-        $beforeValue = TransformerUtils::getFieldValue(
-            $item,
-            $this->options['field'],
-            $this->options['scope'],
-            $this->options['locale']
-        )['data'] ?? '';
+        $standardFormat = new StandardFormat($item);
 
-        $resultValue = $this->resolveValue($item);
+        $beforeValue = $standardFormat->getByOptions(
+            $this->options,
+            null
+        );
 
+        $resultValue = $this->evaluateValue($item);
+
+        // skip if same value
         if ($resultValue === $beforeValue) {
             return null;
         }
@@ -48,18 +45,15 @@ class Set implements Action
             $tracer->onAction(ActionTrace::create($item['identifier'], $beforeValue, $resultValue));
         }
 
-        return TransformerUtils::createFieldArray(
-            $this->options['field'],
-            $resultValue,
-            $this->options['scope'],
-            $this->options['locale']
-        );
+        $isAttribute = $standardFormat->isAttribute($this->options['field']);
+
+        return $standardFormat->makeValueArray($this->options, $resultValue, $isAttribute);
     }
 
     /**
      * @return mixed
      */
-    protected function resolveValue(array $item)
+    protected function evaluateValue(array $item)
     {
         if (isset($this->options['value'])) {
             return $this->options['value'];
