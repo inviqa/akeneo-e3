@@ -1,19 +1,19 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Domain;
+namespace AkeneoEtl\Tests\Unit\Application;
 
+use AkeneoEtl\Application\SequentialTransformer;
 use AkeneoEtl\Domain\Hook\ActionTraceHook;
-use AkeneoEtl\Domain\Transformer;
 use AkeneoEtl\Domain\Action;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
-class TransformerTest extends TestCase
+class SequentialTransformerTest extends TestCase
 {
     public function test_it_transforms()
     {
-        $transform = new Transformer([new FakeAction()]);
+        $transform = new SequentialTransformer([new FakeAction()]);
 
         $result = $transform->transform(['identifier' => 123]);
 
@@ -27,14 +27,14 @@ class TransformerTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
 
-        $transform = new Transformer([new FailAction()]);
+        $transform = new SequentialTransformer([new FailAction()]);
 
         $transform->transform(['identifier' => 123]);
     }
 
     public function test_it_returns_null_if_no_actions_executed()
     {
-        $transform = new Transformer([new NullAction()]);
+        $transform = new SequentialTransformer([new NullAction()]);
 
         $result = $transform->transform(['identifier' => 123]);
 
