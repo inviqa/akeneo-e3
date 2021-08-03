@@ -3,7 +3,6 @@
 namespace AkeneoEtl\Tests\Unit\Application;
 
 use AkeneoEtl\Application\SequentialTransformer;
-use AkeneoEtl\Domain\Hook\ActionTraceHook;
 use AkeneoEtl\Domain\Action;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
@@ -49,7 +48,7 @@ class FakeAction implements Action
         return 'fake';
     }
 
-    public function execute(array $item, ActionTraceHook $tracer = null): ?array
+    public function execute(array $item): ?array
     {
         return ['data' => 'fake'];
     }
@@ -62,7 +61,7 @@ class FailAction implements Action
         return 'fail';
     }
 
-    public function execute(array $item, ActionTraceHook $tracer = null): ?array
+    public function execute(array $item): ?array
     {
         throw new RuntimeException('Ooops!');
     }
@@ -75,7 +74,7 @@ class NullAction implements Action
         return 'null';
     }
 
-    public function execute(array $item, ActionTraceHook $tracer = null): ?array
+    public function execute(array $item): ?array
     {
         return null;
     }

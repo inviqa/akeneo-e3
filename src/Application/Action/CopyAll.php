@@ -3,7 +3,6 @@
 namespace AkeneoEtl\Application\Action;
 
 use AkeneoEtl\Domain\Action;
-use AkeneoEtl\Domain\Hook\ActionTraceHook;
 
 class CopyAll implements Action
 {
@@ -19,7 +18,7 @@ class CopyAll implements Action
         return 'copy-all';
     }
 
-    public function execute(array $item, ActionTraceHook $tracer = null): ?array
+    public function execute(array $item): ?array
     {
         if (isset($item['parent']) === true) {
             return null;

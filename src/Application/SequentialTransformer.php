@@ -3,8 +3,6 @@
 namespace AkeneoEtl\Application;
 
 use AkeneoEtl\Domain\Action;
-use AkeneoEtl\Domain\Hook\ActionTraceHook;
-use AkeneoEtl\Domain\Hook\EmptyHooks;
 use AkeneoEtl\Domain\Transformer;
 use Exception;
 
@@ -15,12 +13,9 @@ class SequentialTransformer implements Transformer
      */
     private iterable $actions;
 
-    private ActionTraceHook $traceHook;
-
-    public function __construct(iterable $actions, ActionTraceHook $traceHook = null)
+    public function __construct(iterable $actions)
     {
         $this->actions = $actions;
-        $this->traceHook = $traceHook ?? new EmptyHooks();
     }
 
     public function transform(array $item): ?array
@@ -30,7 +25,7 @@ class SequentialTransformer implements Transformer
 
         foreach ($this->actions as $action) {
             try {
-                $transformationResult = $action->execute($item, $this->traceHook);
+                $transformationResult = $action->execute($item);
             } catch (Exception $e) {
                 // @todo: skip if configured to skip exceptions
                 throw($e);

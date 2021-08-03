@@ -5,6 +5,7 @@ namespace AkeneoEtl\Infrastructure;
 use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\Pim\ApiClient\Search\SearchBuilder;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientBuilder;
+use AkeneoEtl\Application\ActionFactory;
 use AkeneoEtl\Application\SequentialTransformer;
 use AkeneoEtl\Domain\Hook\ActionTraceHook;
 use AkeneoEtl\Domain\Hook\Hooks;
@@ -28,9 +29,12 @@ class EtlFactory
 
     private ApiSelector $apiSelector;
 
+    private ActionFactory $actionFactory;
+
     public function __construct()
     {
         $this->apiSelector = new ApiSelector();
+        $this->actionFactory = new ActionFactory();
     }
 
     public function createEtlProcess(
@@ -76,7 +80,9 @@ class EtlFactory
 
     public function createTransformer(TransformProfile $transformProfile, ActionTraceHook $traceHook): Transformer
     {
-        return new SequentialTransformer($transformProfile->getActions(), $traceHook);
+        $actions = $this->actionFactory->createActions($transformProfile, $traceHook);
+
+        return new SequentialTransformer($actions);
     }
 
     public function createLoader(

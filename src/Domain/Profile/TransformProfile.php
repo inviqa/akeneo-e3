@@ -6,28 +6,19 @@ use AkeneoEtl\Domain\Action;
 
 class TransformProfile
 {
-    /**
-     * @var iterable|Action[]
-     */
-    private iterable $actions;
+    private array $actions;
 
-    private function __construct(iterable $actions)
+    private function __construct(array $data)
     {
-        $this->actions = $actions;
+        $this->actions = $data['actions'] ?? [];
     }
 
-    /**
-     * @param iterable|Action[] $actions
-     */
-    public static function fromActions(iterable $actions): self
+    public static function fromArray(array $data): self
     {
-        return new self($actions);
+        return new self($data);
     }
 
-    /**
-     * @return iterable|Action[]
-     */
-    public function getActions(): iterable
+    public function getActions(): array
     {
         return $this->actions;
     }

@@ -52,15 +52,7 @@ class ProfileFactory
 
     private function createTransformProfile(array $profileData): TransformProfile
     {
-        $actions = [];
-        foreach ($profileData['transform']['actions'] ?? [] as $actionData) {
-            // @todo: throw exception if no type
-
-            $type = $actionData['type'];
-            $actions[] = $this->actionFactory->create($type, $actionData);
-        }
-
-        return TransformProfile::fromActions($actions);
+        return TransformProfile::fromArray($profileData['transform']);
     }
 
     private function validate(array $profileData): void

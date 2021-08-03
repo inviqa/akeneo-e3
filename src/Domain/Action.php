@@ -8,5 +8,5 @@ interface Action
 {
     public function getType(): string;
 
-    public function execute(array $item, ActionTraceHook $tracer = null): ?array;
+    public function execute(array $item): ?array;
 }
