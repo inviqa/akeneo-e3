@@ -2,10 +2,10 @@
 
 namespace AkeneoEtl\Application\Action;
 
+use AkeneoEtl\Application\Expression\ExpressionLanguage;
 use AkeneoEtl\Domain\Action;
 use AkeneoEtl\Domain\Hook\ActionTrace;
 use AkeneoEtl\Domain\Hook\ActionTraceHook;
-use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class Set implements Action
 {
@@ -20,6 +20,8 @@ class Set implements Action
     {
         $this->expressionLanguage = $expressionLanguage;
         $this->options = $options;
+
+        // @todo: check that value or expression are set
     }
 
     public function getType(): string
@@ -36,8 +38,7 @@ class Set implements Action
             $this->options['locale']
         )['data'] ?? '';
 
-        $expression = $this->options['value'];
-        $resultValue = $this->expressionLanguage->evaluate($expression, $item);
+        $resultValue = $this->resolveValue($item);
 
         if ($resultValue === $beforeValue) {
             return null;
@@ -57,5 +58,19 @@ class Set implements Action
             $this->options['scope'],
             $this->options['locale']
         );
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function resolveValue(array $item)
+    {
+        if (isset($this->options['value'])) {
+            return $this->options['value'];
+        }
+
+        $expression = $this->options['expression'];
+
+        return $this->expressionLanguage->evaluate($expression, $item);
     }
 }
