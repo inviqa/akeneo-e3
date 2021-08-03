@@ -36,7 +36,7 @@ class Set implements Action, ActionTraceHookAware
         $standardFormat = new StandardFormat($item);
         $field = Field::fromOptions($this->options);
 
-        $beforeValue = $standardFormat->get($field, );
+        $beforeValue = $standardFormat->get($field);
 
         $resultValue = $this->evaluateValue($item);
 
