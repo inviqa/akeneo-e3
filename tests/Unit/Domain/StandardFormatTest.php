@@ -2,8 +2,8 @@
 
 namespace AkeneoEtl\Tests\Unit\Application;
 
-use AkeneoEtl\Application\Action\Field;
-use AkeneoEtl\Application\Action\StandardFormat;
+use AkeneoEtl\Domain\Field;
+use AkeneoEtl\Domain\StandardFormat;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 

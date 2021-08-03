@@ -2,8 +2,8 @@
 
 namespace AkeneoEtl\Application\Expression\Functions;
 
-use AkeneoEtl\Application\Action\Field;
-use AkeneoEtl\Application\Action\StandardFormat;
+use AkeneoEtl\Domain\Field;
+use AkeneoEtl\Domain\StandardFormat;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 

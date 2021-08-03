@@ -1,6 +1,6 @@
 <?php
 
-namespace AkeneoEtl\Application\Action;
+namespace AkeneoEtl\Domain;
 
 class Field
 {
