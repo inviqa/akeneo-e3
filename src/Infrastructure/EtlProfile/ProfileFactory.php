@@ -7,6 +7,7 @@ use AkeneoEtl\Domain\Profile\ExtractProfile;
 use AkeneoEtl\Domain\Profile\LoadProfile;
 use AkeneoEtl\Domain\Profile\EtlProfile;
 use AkeneoEtl\Domain\Profile\TransformProfile;
+use RuntimeException;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -93,8 +94,8 @@ class ProfileFactory
 
         $violations = $this->validator->validate($profileData, $constraint);
 
-        // check violations and throw exception
-        // for details create a separate command profile:etl:validate
-        // (as profile:etl:create)
+        if ($violations->count() > 0) {
+            throw new RuntimeException('ETL profile (transformation actions) is not valid.');
+        }
     }
 }
