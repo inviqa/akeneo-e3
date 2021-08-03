@@ -25,30 +25,23 @@ userName: ' {{ Username }}'
 userPassword: '{{ Password }}'
 ```
 
-Step 3. Generate an ETL profile (specification of your transformations).
+Step 3. Generate an ETL profile (specification of how to manipulate your data).
 
-Create a file etl.yaml, e.g. like this:
+Create a file `etl.yaml`, e.g. this configuration allows to trim values of the `name` attribute for the `en_GB` locale:
 
 ```yaml
-
-# How to retrieve data from Akeneo
-extract:
-# How to transform data
 transform:
     actions:
-        # Set a value of a `slug` field with a slugified lowercased value of the name field from the de_DE locale 
         -
             type: set
-            field: slug
-            locale: de_DE
+            field: name
+            locale: en_GB
             scope: null
-            value: 'lowercase(slug(value(values, "name", null, "de_DE")))'
-
-# How to save data
-load:
+            expression: 'trim(value(values, "name", null, "en_GB", ""))'
 ```
+See [How to configure data manipulation (ETL)](docs/configure-etl.md)
 
-Step 4. Run the script
+Step 4. Run the script:
 ```bash
 bin/akeneo-etl transform --data-type=product --connection-profile=connection.yaml --etl-profile=etl.yaml
 ```
