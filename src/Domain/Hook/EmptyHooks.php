@@ -2,8 +2,6 @@
 
 namespace AkeneoEtl\Domain\Hook;
 
-use AkeneoEtl\Infrastructure\Loader\LoaderError;
-
 class EmptyHooks implements Hooks
 {
     public function onActionProgress(ActionProgress $actionProgress): void {}

@@ -1,6 +1,6 @@
 <?php
 
-namespace AkeneoEtl\Infrastructure\Loader;
+namespace AkeneoEtl\Domain\Hook;
 
 class LoaderError
 {

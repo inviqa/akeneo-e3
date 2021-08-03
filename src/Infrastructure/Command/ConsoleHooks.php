@@ -5,7 +5,7 @@ namespace AkeneoEtl\Infrastructure\Command;
 use AkeneoEtl\Domain\Hook\ActionTrace;
 use AkeneoEtl\Domain\Hook\ActionProgress;
 use AkeneoEtl\Domain\Hook\Hooks;
-use AkeneoEtl\Infrastructure\Loader\LoaderError;
+use AkeneoEtl\Domain\Hook\LoaderError;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 

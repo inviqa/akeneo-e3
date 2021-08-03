@@ -3,6 +3,7 @@
 namespace AkeneoEtl\Infrastructure\Loader;
 
 use Akeneo\Pim\ApiClient\Api\Operation\UpsertableResourceListInterface;
+use AkeneoEtl\Domain\Hook\LoaderError;
 use AkeneoEtl\Domain\Hook\LoaderErrorHook;
 use AkeneoEtl\Domain\Loader;
 use Exception;
