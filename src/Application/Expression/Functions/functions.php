@@ -3,7 +3,7 @@
 namespace AkeneoEtl\Application\Expression\Functions;
 
 use AkeneoEtl\Domain\Field;
-use AkeneoEtl\Domain\StandardFormat;
+use AkeneoEtl\Domain\Resource;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 
@@ -56,11 +56,11 @@ function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}")
  */
 function value(array $values, string $name, ?string $channel, ?string $locale, $defaultValue = null)
 {
-    $standardFormat = StandardFormat::fromValues($values);
+    $resource = Resource::fromValues($values);
     $field = Field::create($name, [
         'scope' => $channel,
         'locale' => $locale,
     ]);
 
-    return $standardFormat->get($field, $defaultValue);
+    return $resource->get($field, $defaultValue);
 }

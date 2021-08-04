@@ -2,7 +2,7 @@
 
 namespace AkeneoEtl\Domain;
 
-class StandardFormat
+class Resource
 {
     private array $data;
 

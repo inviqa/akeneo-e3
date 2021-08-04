@@ -9,7 +9,7 @@ use AkeneoEtl\Domain\Hook\ActionTrace;
 use AkeneoEtl\Domain\Hook\ActionTraceHook;
 use AkeneoEtl\Domain\Hook\ActionTraceHookAware;
 use AkeneoEtl\Domain\Hook\EmptyHooks;
-use AkeneoEtl\Domain\StandardFormat;
+use AkeneoEtl\Domain\Resource;
 
 class Set implements Action, ActionTraceHookAware
 {
@@ -33,7 +33,7 @@ class Set implements Action, ActionTraceHookAware
 
     public function execute(array $item): ?array
     {
-        $standardFormat = new StandardFormat($item);
+        $standardFormat = new Resource($item);
         $field = $this->getField();
 
         $beforeValue = $standardFormat->get($field);

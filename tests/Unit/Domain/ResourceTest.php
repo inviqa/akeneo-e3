@@ -3,19 +3,19 @@
 namespace AkeneoEtl\Tests\Unit\Domain;
 
 use AkeneoEtl\Domain\Field;
-use AkeneoEtl\Domain\StandardFormat;
+use AkeneoEtl\Domain\Resource;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
-class StandardFormatTest extends TestCase
+class ResourceTest extends TestCase
 {
     /**
      * @dataProvider valueProviders
      */
-    public function test_it_gets_values_from_data_by_option(array $options, $default, $expectedValue)
+    public function test_it_retrieves_values(array $options, $default, $expectedValue)
     {
-        $accessor = new StandardFormat($this->getProductData());
-        $value = $accessor->get(Field::fromOptions($options), $default);
+        $resource = new Resource($this->getProductData());
+        $value = $resource->get(Field::fromOptions($options), $default);
 
         Assert::assertEquals($expectedValue, $value);
     }
@@ -23,11 +23,11 @@ class StandardFormatTest extends TestCase
     /**
      * @dataProvider patchArrayProviders
      */
-    public function test_it_generates_a_patch_array_from_options(array $options, $newValue, bool $isAttribute, array $expectedValueArray)
+    public function test_it_generates_patches(array $options, $newValue, bool $isAttribute, array $expectedValueArray)
     {
-        $accessor = new StandardFormat([]);
+        $resource = new Resource([]);
         $field = Field::fromOptions($options);
-        $data = $accessor->makeValueArray($field, $newValue, $isAttribute);
+        $data = $resource->makeValueArray($field, $newValue, $isAttribute);
 
         Assert::assertEquals($expectedValueArray, $data);
     }
