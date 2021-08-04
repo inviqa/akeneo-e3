@@ -36,7 +36,7 @@ class TransformCommand extends Command
     {
         $this
             ->setName('transform')
-            ->addOption('data-type', 't', InputOption::VALUE_REQUIRED)
+            ->addOption('resource-type', 'r ', InputOption::VALUE_REQUIRED)
             ->addOption('connection-profile', 'c', InputOption::VALUE_REQUIRED)
             ->addOption(
                 'destination-connection-profile',
@@ -57,9 +57,9 @@ class TransformCommand extends Command
 
         $etlProfile = $this->getEtlProfile($input);
 
-        $dataType = $input->getOption('data-type');
+        $resourceType = $input->getOption('resource-type');
 
-        if ($dataType === null) {
+        if ($resourceType === null) {
             // @todo: read from etl profile
             // if null, throw an exception
         }
@@ -68,7 +68,7 @@ class TransformCommand extends Command
         $consoleHooks = new ConsoleHooks($output, $progress);
 
         $etl = $this->factory->createEtlProcess(
-            $dataType,
+            $resourceType,
             $sourceConnectionProfile,
             $destinationConnectionProfile,
             $etlProfile,

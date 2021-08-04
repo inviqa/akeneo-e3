@@ -3,6 +3,7 @@
 namespace AkeneoEtl\Application;
 
 use AkeneoEtl\Domain\Action;
+use AkeneoEtl\Domain\Resource;
 use AkeneoEtl\Domain\Transformer;
 use Exception;
 
@@ -18,14 +19,14 @@ class SequentialTransformer implements Transformer
         $this->actions = $actions;
     }
 
-    public function transform(array $item): ?array
+    public function transform(Resource $resource): ?array
     {
         $patch = [];
         $actionsExecuted = 0;
 
         foreach ($this->actions as $action) {
             try {
-                $transformationResult = $action->execute($item);
+                $transformationResult = $action->execute($resource);
             } catch (Exception $e) {
                 // @todo: skip if configured to skip exceptions
                 throw($e);
@@ -45,7 +46,8 @@ class SequentialTransformer implements Transformer
             return null;
         }
 
-        $patch['identifier'] = $item['identifier'];
+        // @todo: store to 'code' if not product
+        $patch['identifier'] = $resource->getCodeOrIdentifier();
 
         return $patch;
     }

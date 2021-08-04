@@ -4,19 +4,20 @@ namespace AkeneoEtl\Infrastructure\Extractor;
 
 use Akeneo\Pim\ApiClient\Api\Operation\ListableResourceInterface;
 use AkeneoEtl\Domain\Extractor as DomainExtractor;
+use AkeneoEtl\Domain\Resource;
 use Generator;
 
 class Extractor implements DomainExtractor
 {
     private ListableResourceInterface $api;
 
-    /**
-     * @var array
-     */
     private array $query;
 
-    public function __construct(ListableResourceInterface $api, array $query)
+    private string $resourceType;
+
+    public function __construct(string $resourceType, ListableResourceInterface $api, array $query)
     {
+        $this->resourceType = $resourceType;
         $this->api = $api;
         $this->query = $query;
     }
@@ -28,12 +29,15 @@ class Extractor implements DomainExtractor
             ->getCount();
     }
 
+    /**
+     * @return Generator|Resource[]
+     */
     public function extract(): Generator
     {
         $cursor = $this->api->all(100, $this->query);
 
-        foreach ($cursor as $product) {
-            yield $product;
+        foreach ($cursor as $resource) {
+            yield Resource::fromArray($resource, $this->resourceType);
         }
     }
 }

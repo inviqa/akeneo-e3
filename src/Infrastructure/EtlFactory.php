@@ -38,14 +38,14 @@ class EtlFactory
     }
 
     public function createEtlProcess(
-        string $dataType,
+        string $resourceType,
         ConnectionProfile $sourceConnectionProfile,
         ConnectionProfile $destinationConnectionProfile,
         EtlProfile $etlProfile,
         Hooks $hooks
     ): EtlProcess {
         $extractor = $this->createExtractor(
-            $dataType,
+            $resourceType,
             $sourceConnectionProfile,
             $etlProfile->getExtractProfile()
         );
@@ -56,7 +56,7 @@ class EtlFactory
         );
 
         $loader = $this->createLoader(
-            $dataType,
+            $resourceType,
             $destinationConnectionProfile,
             $etlProfile->getLoadProfile(),
             $hooks
@@ -66,14 +66,15 @@ class EtlFactory
     }
 
     public function createExtractor(
-        string $dataType,
+        string $resourceType,
         ConnectionProfile $profile,
         ExtractProfile $extractProfile
     ): Extractor {
         $client = $this->getClient($profile);
 
         return new Extractor(
-            $this->apiSelector->getApi($client, $dataType),
+            $resourceType,
+            $this->apiSelector->getApi($client, $resourceType),
             $this->buildQuery($extractProfile->getConditions())
         );
     }

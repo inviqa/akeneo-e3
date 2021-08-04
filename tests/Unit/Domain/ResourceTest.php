@@ -14,7 +14,7 @@ class ResourceTest extends TestCase
      */
     public function test_it_retrieves_values(array $options, $default, $expectedValue)
     {
-        $resource = new Resource($this->getProductData());
+        $resource = Resource::fromArray($this->getProductData(), 'product');
         $value = $resource->get(Field::fromOptions($options), $default);
 
         Assert::assertEquals($expectedValue, $value);
@@ -25,7 +25,7 @@ class ResourceTest extends TestCase
      */
     public function test_it_generates_patches(array $options, $newValue, bool $isAttribute, array $expectedValueArray)
     {
-        $resource = new Resource([]);
+        $resource = Resource::fromArray([], 'product');
         $field = Field::fromOptions($options);
         $data = $resource->makeValueArray($field, $newValue, $isAttribute);
 

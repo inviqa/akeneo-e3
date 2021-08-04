@@ -4,5 +4,5 @@ namespace AkeneoEtl\Domain;
 
 interface Transformer
 {
-    public function transform(array $item): ?array;
+    public function transform(Resource $resource): ?array;
 }

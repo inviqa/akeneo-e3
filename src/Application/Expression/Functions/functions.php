@@ -56,7 +56,7 @@ function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}")
  */
 function value(array $values, string $name, ?string $channel, ?string $locale, $defaultValue = null)
 {
-    $resource = Resource::fromValues($values);
+    $resource = Resource::fromValues($values, '');
     $field = Field::create($name, [
         'scope' => $channel,
         'locale' => $locale,

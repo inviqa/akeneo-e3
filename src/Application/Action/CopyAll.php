@@ -3,6 +3,7 @@
 namespace AkeneoEtl\Application\Action;
 
 use AkeneoEtl\Domain\Action;
+use AkeneoEtl\Domain\Resource;
 
 class CopyAll implements Action
 {
@@ -18,8 +19,10 @@ class CopyAll implements Action
         return 'copy-all';
     }
 
-    public function execute(array $item): ?array
+    public function execute(Resource $resource): ?array
     {
+        $item = $resource->toArray();
+
         if (isset($item['parent']) === true) {
             return null;
         }

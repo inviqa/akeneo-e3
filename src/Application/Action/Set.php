@@ -31,31 +31,30 @@ class Set implements Action, ActionTraceHookAware
         return 'expression';
     }
 
-    public function execute(array $item): ?array
+    public function execute(Resource $resource): ?array
     {
-        $standardFormat = new Resource($item);
         $field = $this->getField();
 
-        $beforeValue = $standardFormat->get($field);
+        $beforeValue = $resource->get($field);
 
-        $resultValue = $this->evaluateValue($item);
+        $resultValue = $this->evaluateValue($resource);
 
         // skip if same value
         if ($resultValue === $beforeValue) {
             return null;
         }
 
-        $this->traceHook->onAction(ActionTrace::create($item['identifier'], $beforeValue, $resultValue));
+        $this->traceHook->onAction(ActionTrace::create($resource->getCodeOrIdentifier(), $beforeValue, $resultValue));
 
-        $isAttribute = $standardFormat->isAttribute($this->options->getFieldName());
+        $isAttribute = $resource->isAttribute($this->options->getFieldName());
 
-        return $standardFormat->makeValueArray($field, $resultValue, $isAttribute);
+        return $resource->makeValueArray($field, $resultValue, $isAttribute);
     }
 
     /**
      * @return mixed
      */
-    protected function evaluateValue(array $item)
+    protected function evaluateValue(Resource $resource)
     {
         if ($this->options->getValue() !== null) {
             return $this->options->getValue();
@@ -63,7 +62,7 @@ class Set implements Action, ActionTraceHookAware
 
         $expression = $this->options->getExpression() ?? '';
 
-        return $this->expressionLanguage->evaluate($expression, $item);
+        return $this->expressionLanguage->evaluate($expression, $resource->toArray());
     }
 
     public function setHook(ActionTraceHook $hook): void
@@ -71,16 +70,14 @@ class Set implements Action, ActionTraceHookAware
         $this->traceHook = $hook;
     }
 
-    private function getField(): \AkeneoEtl\Domain\Field
+    private function getField(): Field
     {
-        $field = Field::create(
+        return Field::create(
             $this->options->getFieldName(),
             [
                 'scope' => $this->options->getScope(),
                 'locale' => $this->options->getLocale(),
             ]
         );
-
-        return $field;
     }
 }

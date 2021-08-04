@@ -4,6 +4,7 @@ namespace AkeneoEtl\Tests\Unit\Application;
 
 use AkeneoEtl\Application\SequentialTransformer;
 use AkeneoEtl\Domain\Action;
+use AkeneoEtl\Domain\Resource;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -14,7 +15,7 @@ class SequentialTransformerTest extends TestCase
     {
         $transform = new SequentialTransformer([new FakeAction()]);
 
-        $result = $transform->transform(['identifier' => 123]);
+        $result = $transform->transform(Resource::fromArray(['identifier' => 123], 'product'));
 
         Assert::assertEquals([
             'data' => 'fake',
@@ -28,14 +29,14 @@ class SequentialTransformerTest extends TestCase
 
         $transform = new SequentialTransformer([new FailAction()]);
 
-        $transform->transform(['identifier' => 123]);
+        $transform->transform(Resource::fromArray(['identifier' => 123], 'product'));
     }
 
     public function test_it_returns_null_if_no_actions_executed()
     {
         $transform = new SequentialTransformer([new NullAction()]);
 
-        $result = $transform->transform(['identifier' => 123]);
+        $result = $transform->transform(Resource::fromArray(['identifier' => 123], 'product'));
 
         Assert::assertNull($result);
     }
@@ -48,7 +49,7 @@ class FakeAction implements Action
         return 'fake';
     }
 
-    public function execute(array $item): ?array
+    public function execute(Resource $resource): ?array
     {
         return ['data' => 'fake'];
     }
@@ -61,7 +62,7 @@ class FailAction implements Action
         return 'fail';
     }
 
-    public function execute(array $item): ?array
+    public function execute(Resource $resource): ?array
     {
         throw new RuntimeException('Ooops!');
     }
@@ -74,7 +75,7 @@ class NullAction implements Action
         return 'null';
     }
 
-    public function execute(array $item): ?array
+    public function execute(Resource $resource): ?array
     {
         return null;
     }

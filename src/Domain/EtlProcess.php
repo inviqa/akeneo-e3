@@ -27,9 +27,9 @@ class EtlProcess
 
         $this->hooks->onActionProgress(ActionProgress::create(0, $count));
 
-        $products = $this->extractor->extract();
+        $resources = $this->extractor->extract();
 
-        foreach ($products as $product) {
+        foreach ($resources as $product) {
             $patch = $this->transformer->transform($product);
             // @todo: in no patch method, then merge to $product
 

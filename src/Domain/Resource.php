@@ -6,14 +6,22 @@ class Resource
 {
     private array $data;
 
-    public function __construct(array $data)
+    private string $resourceType;
+
+    private function __construct(array $data, string $resourceType)
     {
         $this->data = $data;
+        $this->resourceType = $resourceType;
     }
 
-    public static function fromValues(array $values): self
+    public static function fromArray(array $data, string $resourceType): self
     {
-        return new self(['values' => $values]);
+        return new self($data, $resourceType);
+    }
+
+    public static function fromValues(array $values, string $resourceType): self
+    {
+        return new self(['values' => $values], $resourceType);
     }
 
     /**
@@ -65,5 +73,17 @@ class Resource
         }
 
         return [$field->getName() => $newValue];
+    }
+
+    public function toArray(): array
+    {
+        return $this->data;
+    }
+
+    public function getCodeOrIdentifier(): string
+    {
+        return $this->resourceType !== 'product' ?
+            $this->data['code'] :
+            $this->data['identifier'];
     }
 }
