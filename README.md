@@ -37,11 +37,11 @@ transform:
             field: name
             locale: en_GB
             scope: null
-            expression: 'trim(value(values, "name", null, "en_GB", ""))'
+            expression: 'trim(value("name", null, "en_GB", ""))'
 ```
 See [How to configure data manipulation (ETL)](docs/configure-etl.md)
 
 Step 4. Run the script:
 ```bash
-bin/akeneo-etl transform --data-type=product --connection-profile=connection.yaml --etl-profile=etl.yaml
+bin/akeneo-etl transform --resource-type=product --connection-profile=connection.yaml --etl-profile=etl.yaml
 ```

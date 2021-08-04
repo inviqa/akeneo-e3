@@ -4,6 +4,7 @@ namespace AkeneoEtl\Domain;
 
 use AkeneoEtl\Domain\Hook\ActionProgress;
 use AkeneoEtl\Domain\Hook\Hooks;
+use function AkeneoEtl\Application\Expression\Functions\setCurrentActionResource;
 
 class EtlProcess
 {
@@ -29,9 +30,11 @@ class EtlProcess
 
         $resources = $this->extractor->extract();
 
-        foreach ($resources as $product) {
-            $patch = $this->transformer->transform($product);
-            // @todo: in no patch method, then merge to $product
+        foreach ($resources as $resource) {
+            setCurrentActionResource($resource);
+
+            $patch = $this->transformer->transform($resource);
+            // @todo: in no patch method, then merge to $resource
 
             if ($patch !== null) {
                 $this->loader->queue($patch);
