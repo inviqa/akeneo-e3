@@ -19,11 +19,6 @@ class Resource
         return new self($data, $resourceType);
     }
 
-    public static function fromValues(array $values, string $resourceType): self
-    {
-        return new self(['values' => $values], $resourceType);
-    }
-
     /**
      * @param mixed $default
      *
