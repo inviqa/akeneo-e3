@@ -21,7 +21,7 @@ class SetOptionsTest extends TestCase
             ]
         );
 
-        Assert::assertEquals('head_count', $options->getField());
+        Assert::assertEquals('head_count', $options->getFieldName());
         Assert::assertEquals('de_DE', $options->getLocale());
         Assert::assertEquals(null, $options->getScope());
         Assert::assertEquals(3, $options->getValue());

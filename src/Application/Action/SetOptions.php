@@ -67,7 +67,7 @@ class SetOptions
         );
     }
 
-    public function getField(): string
+    public function getFieldName(): string
     {
         return $this->field;
     }

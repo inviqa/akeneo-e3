@@ -41,11 +41,12 @@ class ActionFactory
     public function createActions(TransformProfile $transformProfile, ActionTraceHook $traceHook): array
     {
         $actions = [];
-        foreach ($transformProfile->getActions() as $actionData) {
+        foreach ($transformProfile->getActions() as $actionOptions) {
             // @todo: throw exception if no type
 
-            $type = $actionData['type'];
-            $actions[] = $this->create($type, $actionData, $traceHook);
+            $type = $actionOptions['type'];
+            unset($actionOptions['type']);
+            $actions[] = $this->create($type, $actionOptions, $traceHook);
         }
 
         return $actions;

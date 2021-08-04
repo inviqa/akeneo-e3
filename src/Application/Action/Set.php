@@ -13,17 +13,17 @@ use AkeneoEtl\Domain\StandardFormat;
 
 class Set implements Action, ActionTraceHookAware
 {
+    private SetOptions $options;
+
     private ExpressionLanguage $expressionLanguage;
-    private array $options;
+
     private ActionTraceHook $traceHook;
 
     public function __construct(ExpressionLanguage $expressionLanguage, array $options)
     {
         $this->expressionLanguage = $expressionLanguage;
-        $this->options = $options;
+        $this->options = SetOptions::fromArray($options);
         $this->traceHook = new EmptyHooks();
-
-        // @todo: check that value or expression are set
     }
 
     public function getType(): string
@@ -34,7 +34,7 @@ class Set implements Action, ActionTraceHookAware
     public function execute(array $item): ?array
     {
         $standardFormat = new StandardFormat($item);
-        $field = Field::fromOptions($this->options);
+        $field = $this->getField();
 
         $beforeValue = $standardFormat->get($field);
 
@@ -47,7 +47,7 @@ class Set implements Action, ActionTraceHookAware
 
         $this->traceHook->onAction(ActionTrace::create($item['identifier'], $beforeValue, $resultValue));
 
-        $isAttribute = $standardFormat->isAttribute($this->options['field']);
+        $isAttribute = $standardFormat->isAttribute($this->options->getFieldName());
 
         return $standardFormat->makeValueArray($field, $resultValue, $isAttribute);
     }
@@ -57,11 +57,11 @@ class Set implements Action, ActionTraceHookAware
      */
     protected function evaluateValue(array $item)
     {
-        if (isset($this->options['value'])) {
-            return $this->options['value'];
+        if ($this->options->getValue() !== null) {
+            return $this->options->getValue();
         }
 
-        $expression = $this->options['expression'];
+        $expression = $this->options->getExpression() ?? '';
 
         return $this->expressionLanguage->evaluate($expression, $item);
     }
@@ -69,5 +69,18 @@ class Set implements Action, ActionTraceHookAware
     public function setHook(ActionTraceHook $hook): void
     {
         $this->traceHook = $hook;
+    }
+
+    private function getField(): \AkeneoEtl\Domain\Field
+    {
+        $field = Field::create(
+            $this->options->getFieldName(),
+            [
+                'scope' => $this->options->getScope(),
+                'locale' => $this->options->getLocale(),
+            ]
+        );
+
+        return $field;
     }
 }
