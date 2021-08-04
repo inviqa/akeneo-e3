@@ -1,6 +1,6 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Application;
+namespace AkeneoEtl\Tests\Unit\Domain;
 
 use AkeneoEtl\Domain\Field;
 use AkeneoEtl\Domain\StandardFormat;
