@@ -30,6 +30,20 @@ class ValueCollectionTest extends TestCase
             $collection->get(Attribute::create('head_count', null, null)));
     }
 
+
+    public function test_it_gets_a_default_value_if_attribute_not_found()
+    {
+        $collection = ValueCollection::fromArray(
+            $this->getValueArray()
+        );
+
+        Assert::assertEquals(
+            '~value~',
+            $collection->get(
+                Attribute::create('horn_count', null, null), '~value~'),
+            );
+    }
+
     private function getValueArray(): array
     {
         return [

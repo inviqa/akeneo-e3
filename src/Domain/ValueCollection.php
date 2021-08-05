@@ -18,7 +18,7 @@ class ValueCollection
                     $localisedValue['scope'],
                     $localisedValue['locale']
                 );
-                $this->values[spl_object_hash($attribute)] = $localisedValue['data'];
+                $this->values[$this->attributeHash($attribute)] = $localisedValue['data'];
             }
         }
     }
@@ -29,11 +29,15 @@ class ValueCollection
     }
 
     /**
+     * @param mixed $default
+     *
      * @return mixed|null
      */
-    public function get(Attribute $attribute)
+    public function get(Attribute $attribute, $default = null)
     {
-        return $this->values[$this->attributeHash($attribute)];
+        $hash = $this->attributeHash($attribute);
+
+        return $this->values[$hash] ?? $default;
     }
 
     public function count(): int
@@ -43,6 +47,6 @@ class ValueCollection
 
     private function attributeHash(Attribute $attribute): string
     {
-        return spl_object_hash($attribute);
+        return implode('.', [$attribute->getName(), $attribute->getScope(), $attribute->getLocale()]);
     }
 }
