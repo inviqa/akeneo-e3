@@ -6,6 +6,7 @@ use Akeneo\Pim\ApiClient\Api\Operation\UpsertableResourceListInterface;
 use AkeneoEtl\Domain\Hook\LoaderError;
 use AkeneoEtl\Domain\Hook\LoaderErrorHook;
 use AkeneoEtl\Domain\Loader;
+use AkeneoEtl\Domain\Resource;
 use Exception;
 use Traversable;
 
@@ -26,10 +27,10 @@ class ApiLoader implements Loader
         $this->onError = $onError;
     }
 
-    public function queue(array $item): void
+    public function queue(Resource $resource): void
     {
-        $id = $item['identifier'];
-        $this->buffer[$id] = $item;
+        $id = $resource->getCodeOrIdentifier();
+        $this->buffer[$id] = $resource->toArray();
 
         if (count($this->buffer) >= $this->batchSize) {
             $this->load();

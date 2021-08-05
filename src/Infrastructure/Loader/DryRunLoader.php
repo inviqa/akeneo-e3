@@ -3,10 +3,11 @@
 namespace AkeneoEtl\Infrastructure\Loader;
 
 use AkeneoEtl\Domain\Loader;
+use AkeneoEtl\Domain\Resource;
 
 class DryRunLoader implements Loader
 {
-    public function queue(array $item): void
+    public function queue(Resource $resource): void
     {
         // dry run
     }

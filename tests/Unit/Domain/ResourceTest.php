@@ -139,7 +139,8 @@ class ResourceTest extends TestCase
                 'ziggy-academic',
                 false,
                 [
-                    'family' => 'ziggy-academic'
+                    'family' => 'ziggy-academic',
+                    'identifier' => 'the-ziggy',
                 ],
             ],
 
@@ -161,7 +162,8 @@ class ResourceTest extends TestCase
                                 'data' => 'pink',
                             ]
                         ]
-                    ]
+                    ],
+                    'identifier' => 'the-ziggy',
                 ],
             ],
 
@@ -182,7 +184,8 @@ class ResourceTest extends TestCase
                                 'data' => 'pink',
                             ]
                         ]
-                    ]
+                    ],
+                    'identifier' => 'the-ziggy',
                 ],
             ],
         ];
@@ -191,6 +194,7 @@ class ResourceTest extends TestCase
     private function getProductData(): array
     {
         return [
+            'identifier' => 'the-ziggy',
             'family' => 'ziggy',
             'categories' => ['hydra', 'pim'],
             'values' => [
