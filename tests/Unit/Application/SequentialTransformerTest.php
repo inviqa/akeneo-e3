@@ -4,7 +4,7 @@ namespace AkeneoEtl\Tests\Unit\Application;
 
 use AkeneoEtl\Application\SequentialTransformer;
 use AkeneoEtl\Domain\Action;
-use AkeneoEtl\Domain\Field;
+use AkeneoEtl\Domain\Property;
 use AkeneoEtl\Domain\Resource;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
@@ -52,7 +52,7 @@ class FakeAction implements Action
 
     public function execute(Resource $resource): void
     {
-        $resource->set(Field::create('fake', []), '!', false);
+        $resource->set(Property::create('fake'), '!');
     }
 }
 

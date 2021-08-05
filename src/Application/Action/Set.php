@@ -5,6 +5,7 @@ namespace AkeneoEtl\Application\Action;
 use AkeneoEtl\Application\Expression\ExpressionLanguage;
 use AkeneoEtl\Domain\Action;
 use AkeneoEtl\Domain\Field;
+use AkeneoEtl\Domain\FieldFactory;
 use AkeneoEtl\Domain\Hook\ActionTrace;
 use AkeneoEtl\Domain\Hook\ActionTraceHook;
 use AkeneoEtl\Domain\Hook\ActionTraceHookAware;
@@ -13,6 +14,8 @@ use AkeneoEtl\Domain\Resource;
 
 class Set implements Action, ActionTraceHookAware
 {
+    private Field $field;
+
     private SetOptions $options;
 
     private ExpressionLanguage $expressionLanguage;
@@ -22,6 +25,7 @@ class Set implements Action, ActionTraceHookAware
     public function __construct(ExpressionLanguage $expressionLanguage, array $options)
     {
         $this->expressionLanguage = $expressionLanguage;
+        $this->field = FieldFactory::fromOptions($options);
         $this->options = SetOptions::fromArray($options);
         $this->traceHook = new EmptyHooks();
     }
@@ -33,9 +37,7 @@ class Set implements Action, ActionTraceHookAware
 
     public function execute(Resource $resource): void
     {
-        $field = $this->getField();
-
-        $beforeValue = $resource->get($field);
+        $beforeValue = $resource->get($this->field);
 
         $resultValue = $this->evaluateValue($resource);
 
@@ -46,9 +48,7 @@ class Set implements Action, ActionTraceHookAware
 
         $this->traceHook->onAction(ActionTrace::create($resource->getCodeOrIdentifier(), $beforeValue, $resultValue));
 
-        $isAttribute = $resource->isAttribute($this->options->getFieldName());
-
-        $resource->set($field, $resultValue, $isAttribute);
+        $resource->set($this->field, $resultValue);
     }
 
     /**
@@ -68,16 +68,5 @@ class Set implements Action, ActionTraceHookAware
     public function setHook(ActionTraceHook $hook): void
     {
         $this->traceHook = $hook;
-    }
-
-    private function getField(): Field
-    {
-        return Field::create(
-            $this->options->getFieldName(),
-            [
-                'scope' => $this->options->getScope(),
-                'locale' => $this->options->getLocale(),
-            ]
-        );
     }
 }

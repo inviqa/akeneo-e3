@@ -2,7 +2,8 @@
 
 namespace AkeneoEtl\Tests\Unit\Domain;
 
-use AkeneoEtl\Domain\Field;
+use AkeneoEtl\Domain\FieldFactory;
+use AkeneoEtl\Domain\Property;
 use AkeneoEtl\Domain\Resource;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
@@ -15,7 +16,8 @@ class ResourceTest extends TestCase
     public function test_it_retrieves_values(array $options, $default, $expectedValue)
     {
         $resource = Resource::fromArray($this->getProductData(), 'product');
-        $value = $resource->get(Field::fromOptions($options), $default);
+        $field = FieldFactory::fromOptions($options);
+        $value = $resource->get($field, $default);
 
         Assert::assertEquals($expectedValue, $value);
     }
@@ -26,9 +28,9 @@ class ResourceTest extends TestCase
     public function test_it_returns_changes(array $options, $newValue, bool $isAttribute, array $expectedValueArray)
     {
         $resource = Resource::fromArray($this->getProductData(), 'product');
-        $field = Field::fromOptions($options);
+        $field = FieldFactory::fromOptions($options);
 
-        $resource->set(Field::fromOptions($options), $newValue, $isAttribute);
+        $resource->set($field, $newValue);
 
         $data = $resource->changes()->toArray();
 
@@ -38,7 +40,7 @@ class ResourceTest extends TestCase
     public function test_it_should_be_changed_if_set_applied()
     {
         $resource = Resource::fromArray($this->getProductData(), 'product');
-        $resource->set(Field::create('family', []), 'ziggy-mama', false);
+        $resource->set(Property::create('family'), 'ziggy-mama');
 
         Assert::assertTrue($resource->isChanged());
     }
@@ -74,7 +76,8 @@ class ResourceTest extends TestCase
             'for an attribute value (not-scopable, not-localisable)' =>
             [
                 [
-                    'field' => 'head_count'
+                    'field' => 'head_count',
+                    'locale' => null
                 ],
                 null,
                 3
@@ -113,7 +116,7 @@ class ResourceTest extends TestCase
                 'violet'
             ],
 
-            'for a default value for non-existing attribute' =>
+            'for a default value for non-existing property' =>
             [
                 [
                     'field' => 'no-color',
@@ -162,10 +165,11 @@ class ResourceTest extends TestCase
                 ],
             ],
 
-            'for an attribute if no locale and scope provided' =>
+            'for an attribute if locale is null' =>
             [
                 [
                     'field' => 'colour',
+                    'locale' => null,
                 ],
                 'pink',
                 true,

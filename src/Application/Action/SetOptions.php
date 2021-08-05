@@ -47,10 +47,8 @@ class SetOptions
 
         $resolver
             ->setRequired('field')
-            ->setDefaults([
-                'locale' => null,
-                'scope' => null,
-            ])
+            ->setDefined('scope')
+            ->setDefined('locale')
             ->setDefined('value')
             ->setDefined('expression')
             ->setAllowedTypes('locale', ['string', 'null'])
