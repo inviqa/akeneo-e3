@@ -19,7 +19,7 @@ class SequentialTransformer implements Transformer
         $this->actions = $actions;
     }
 
-    public function transform(Resource $resource): ?array
+    public function transform(Resource $resource): \AkeneoEtl\Domain\Resource
     {
         $transformingResource = clone $resource;
 
@@ -32,18 +32,6 @@ class SequentialTransformer implements Transformer
             }
         }
 
-
-        // if no changes - skip
-        if ($transformingResource->isChanged() === false) {
-            return null;
-        }
-
-        // @todo: store to 'code' if not product
-        $patch = array_merge(
-            ['identifier' => $resource->getCodeOrIdentifier()],
-            $transformingResource->changes()->toArray()
-        );
-
-        return $patch;
+        return $transformingResource;
     }
 }

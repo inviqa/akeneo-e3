@@ -60,13 +60,15 @@ class Resource
     /**
      * @param mixed $newValue
      */
-    public function set(Field $field, $newValue): void
+    public function set(Field $field, $newValue): self
     {
         // @todo: check if new value and old value are different
 
         $this->isChanged = true;
 
         $this->changes = array_merge_recursive($this->getPatch($field, $newValue));
+
+        return $this;
     }
 
     public function getCodeOrIdentifier(): string
@@ -76,9 +78,22 @@ class Resource
             $this->data['identifier'];
     }
 
+    private function setCodeOrIdentifier(string $identifierOrCode): self
+    {
+        $this->resourceType !== 'product' ?
+            $this->data['code'] = $identifierOrCode :
+            $this->data['identifier'] = $identifierOrCode;
+
+        return $this;
+    }
+
     public function changes(): self
     {
-        return self::fromArray($this->changes, $this->resourceType);
+        $originalId = $this->getCodeOrIdentifier();
+
+        return self::fromArray($this->changes, $this->resourceType)->setCodeOrIdentifier(
+            $originalId
+        );
     }
 
     public function toArray(): array

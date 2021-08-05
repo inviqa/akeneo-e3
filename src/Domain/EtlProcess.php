@@ -36,8 +36,8 @@ class EtlProcess
             $patch = $this->transformer->transform($resource);
             // @todo: in no patch method, then merge to $resource
 
-            if ($patch !== null) {
-                $this->loader->queue($patch);
+            if ($patch->isChanged() === true) {
+                $this->loader->queue($patch->changes());
             }
 
             $this->hooks->onActionProgress(ActionProgress::create($index++, $count));
