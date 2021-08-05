@@ -2,6 +2,8 @@
 
 namespace AkeneoEtl\Domain;
 
+use LogicException;
+
 class Resource
 {
     private array $data;
@@ -37,8 +39,12 @@ class Resource
     {
         $fieldName = $field->getName();
 
-        if (isset($this->data[$fieldName]) === true) {
-            return $this->data[$fieldName];
+        if ($field instanceof Property) {
+            return $this->data[$fieldName] ?? $default;
+        }
+
+        if (!$field instanceof Attribute) {
+            throw new LogicException('Unsupported type of field');
         }
 
         foreach ($this->data['values'][$fieldName] ?? [] as $attribute) {
@@ -54,19 +60,13 @@ class Resource
     /**
      * @param mixed $newValue
      */
-    public function set(Field $field, $newValue, bool $isAttribute): void
+    public function set(Field $field, $newValue): void
     {
         // @todo: check if new value and old value are different
 
         $this->isChanged = true;
 
-        $this->changes = array_merge_recursive($this->getPatch($field, $newValue, $isAttribute));
-    }
-
-    public function isAttribute(string $field): bool
-    {
-        // @todo: hardcode all top-level fields of akeneo api?
-        return isset($this->data[$field]) === false;
+        $this->changes = array_merge_recursive($this->getPatch($field, $newValue));
     }
 
     public function getCodeOrIdentifier(): string
@@ -94,22 +94,26 @@ class Resource
     /**
      * @param mixed $newValue
      */
-    private function getPatch(Field $field, $newValue, bool $isAttribute): array
+    private function getPatch(Field $field, $newValue): array
     {
-        if ($isAttribute === true) {
-            return [
-                'values' => [
-                    $field->getName() => [
-                        [
-                            'scope' => $field->getScope(),
-                            'locale' => $field->getLocale(),
-                            'data' => $newValue
-                        ]
-                    ]
-                ]
-            ];
+        if ($field instanceof Property) {
+            return [$field->getName() => $newValue];
         }
 
-        return [$field->getName() => $newValue];
+        if (!$field instanceof Attribute) {
+            throw new LogicException('Unsupported type of field');
+        }
+
+        return [
+            'values' => [
+                $field->getName() => [
+                    [
+                        'scope' => $field->getScope(),
+                        'locale' => $field->getLocale(),
+                        'data' => $newValue
+                    ]
+                ]
+            ]
+        ];
     }
 }

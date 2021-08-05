@@ -2,7 +2,7 @@
 
 namespace AkeneoEtl\Application\Expression\Functions;
 
-use AkeneoEtl\Domain\Field;
+use AkeneoEtl\Domain\Attribute;
 use AkeneoEtl\Domain\Resource;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
@@ -66,10 +66,7 @@ function value(string $name, ?string $channel, ?string $locale, $defaultValue = 
     /** @var Resource $currentResourceInAction */
     global $currentResourceInAction;
 
-    $field = Field::create($name, [
-        'scope' => $channel,
-        'locale' => $locale,
-    ]);
+    $field = Attribute::create($name, $channel, $locale);
 
     return $currentResourceInAction->get($field, $defaultValue);
 }
