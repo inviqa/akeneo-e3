@@ -53,7 +53,7 @@ function setCurrentActionResource(Resource $resource): void
 {
     global $currentResourceInAction;
 
-    $currentResourceInAction = $resource;
+    $currentResourceInAction = clone $resource;
 }
 
 /**

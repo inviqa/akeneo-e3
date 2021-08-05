@@ -21,21 +21,39 @@ class ResourceTest extends TestCase
     }
 
     /**
-     * @dataProvider patchArrayProviders
+     * @dataProvider changeProviders
      */
-    public function test_it_generates_patches(array $options, $newValue, bool $isAttribute, array $expectedValueArray)
+    public function test_it_returns_changes(array $options, $newValue, bool $isAttribute, array $expectedValueArray)
     {
-        $resource = Resource::fromArray([], 'product');
+        $resource = Resource::fromArray($this->getProductData(), 'product');
         $field = Field::fromOptions($options);
-        $data = $resource->makeValueArray($field, $newValue, $isAttribute);
+
+        $resource->set(Field::fromOptions($options), $newValue, $isAttribute);
+
+        $data = $resource->changes()->toArray();
 
         Assert::assertEquals($expectedValueArray, $data);
+    }
+
+    public function test_it_should_be_changed_if_set_applied()
+    {
+        $resource = Resource::fromArray($this->getProductData(), 'product');
+        $resource->set(Field::create('family', []), 'ziggy-mama', false);
+
+        Assert::assertTrue($resource->isChanged());
+    }
+
+    public function test_it_should_not_be_changed_if_set_not_applied()
+    {
+        $resource = Resource::fromArray($this->getProductData(), 'product');
+
+        Assert::assertFalse($resource->isChanged());
     }
 
     public function valueProviders(): array
     {
         return [
-            'return a top-level field value' =>
+            'for a top-level field value' =>
             [
                 [
                     'field' => 'family'
@@ -44,7 +62,7 @@ class ResourceTest extends TestCase
                 'ziggy'
             ],
 
-            'return a top-level array field value' =>
+            'for a top-level array field value' =>
             [
                 [
                     'field' => 'categories'
@@ -53,7 +71,7 @@ class ResourceTest extends TestCase
                 ['hydra', 'pim']
             ],
 
-            'return an attribute value (not-scopable, not-localisable)' =>
+            'for an attribute value (not-scopable, not-localisable)' =>
             [
                 [
                     'field' => 'head_count'
@@ -62,7 +80,7 @@ class ResourceTest extends TestCase
                 3
             ],
 
-            'return an attribute value (scopable, localisable)' =>
+            'for an attribute value (scopable, localisable)' =>
             [
                 [
                     'field' => 'name',
@@ -73,7 +91,7 @@ class ResourceTest extends TestCase
                 'Süßes Ziggy'
             ],
 
-            'return an attribute value (not-scopable, localisable)' =>
+            'for an attribute value (not-scopable, localisable)' =>
             [
                 [
                     'field' => 'description',
@@ -84,7 +102,7 @@ class ResourceTest extends TestCase
                 'Ziggy - the Hydra'
             ],
 
-            'return an attribute value (scopable, not-localisable)' =>
+            'for an attribute value (scopable, not-localisable)' =>
             [
                 [
                     'field' => 'colour',
@@ -95,7 +113,7 @@ class ResourceTest extends TestCase
                 'violet'
             ],
 
-            'return a default value for non-existing attribute' =>
+            'for a default value for non-existing attribute' =>
             [
                 [
                     'field' => 'no-color',
@@ -106,11 +124,11 @@ class ResourceTest extends TestCase
         ];
     }
 
-    public function patchArrayProviders()
+    public function changeProviders()
     {
         return
         [
-            'creates a patch for a top-level field' =>
+            'for a top-level field' =>
             [
                 [
                     'field' => 'family'
@@ -122,7 +140,7 @@ class ResourceTest extends TestCase
                 ],
             ],
 
-            'creates a patch for an attribute' =>
+            'for an attribute' =>
             [
                 [
                     'field' => 'colour',
@@ -144,7 +162,7 @@ class ResourceTest extends TestCase
                 ],
             ],
 
-            'make a patch for an attribute if no locale and scope provided' =>
+            'for an attribute if no locale and scope provided' =>
             [
                 [
                     'field' => 'colour',

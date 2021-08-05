@@ -19,12 +19,12 @@ class CopyAll implements Action
         return 'copy-all';
     }
 
-    public function execute(Resource $resource): ?array
+    public function execute(Resource $resource): void
     {
         $item = $resource->toArray();
 
         if (isset($item['parent']) === true) {
-            return null;
+            return;
         }
 
         $item['family'] = 'common';
@@ -34,6 +34,7 @@ class CopyAll implements Action
 
         unset($item['quantified_associations']);
 
-        return $item;
+        $type = $resource->getResourceType();
+        $resource = Resource::fromArray($item, $type);
     }
 }

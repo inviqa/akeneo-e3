@@ -21,33 +21,28 @@ class SequentialTransformer implements Transformer
 
     public function transform(Resource $resource): ?array
     {
-        $patch = [];
-        $actionsExecuted = 0;
+        $transformingResource = clone $resource;
 
         foreach ($this->actions as $action) {
             try {
-                $transformationResult = $action->execute($resource);
+                $action->execute($transformingResource);
             } catch (Exception $e) {
                 // @todo: skip if configured to skip exceptions
                 throw($e);
             }
-
-            // @todo: or SkipException? NonProcessableItemException?
-            if ($transformationResult === null) {
-                continue;
-            }
-
-            $actionsExecuted++;
-            $patch = array_merge_recursive($patch, $transformationResult);
         }
 
+
         // if no changes - skip
-        if ($actionsExecuted === 0) {
+        if ($transformingResource->isChanged() === false) {
             return null;
         }
 
         // @todo: store to 'code' if not product
-        $patch['identifier'] = $resource->getCodeOrIdentifier();
+        $patch = array_merge(
+            ['identifier' => $resource->getCodeOrIdentifier()],
+            $transformingResource->changes()->toArray()
+        );
 
         return $patch;
     }

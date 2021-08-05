@@ -4,6 +4,7 @@ namespace AkeneoEtl\Tests\Unit\Application;
 
 use AkeneoEtl\Application\SequentialTransformer;
 use AkeneoEtl\Domain\Action;
+use AkeneoEtl\Domain\Field;
 use AkeneoEtl\Domain\Resource;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
@@ -18,8 +19,8 @@ class SequentialTransformerTest extends TestCase
         $result = $transform->transform(Resource::fromArray(['identifier' => 123], 'product'));
 
         Assert::assertEquals([
-            'data' => 'fake',
             'identifier' => 123,
+            'fake' => '!',
         ], $result);
     }
 
@@ -49,9 +50,9 @@ class FakeAction implements Action
         return 'fake';
     }
 
-    public function execute(Resource $resource): ?array
+    public function execute(Resource $resource): void
     {
-        return ['data' => 'fake'];
+        $resource->set(Field::create('fake', []), '!', false);
     }
 }
 
@@ -62,7 +63,7 @@ class FailAction implements Action
         return 'fail';
     }
 
-    public function execute(Resource $resource): ?array
+    public function execute(Resource $resource): void
     {
         throw new RuntimeException('Ooops!');
     }
@@ -75,8 +76,7 @@ class NullAction implements Action
         return 'null';
     }
 
-    public function execute(Resource $resource): ?array
+    public function execute(Resource $resource): void
     {
-        return null;
     }
 }

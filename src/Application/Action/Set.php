@@ -31,7 +31,7 @@ class Set implements Action, ActionTraceHookAware
         return 'expression';
     }
 
-    public function execute(Resource $resource): ?array
+    public function execute(Resource $resource): void
     {
         $field = $this->getField();
 
@@ -41,14 +41,14 @@ class Set implements Action, ActionTraceHookAware
 
         // skip if same value
         if ($resultValue === $beforeValue) {
-            return null;
+            return;
         }
 
         $this->traceHook->onAction(ActionTrace::create($resource->getCodeOrIdentifier(), $beforeValue, $resultValue));
 
         $isAttribute = $resource->isAttribute($this->options->getFieldName());
 
-        return $resource->makeValueArray($field, $resultValue, $isAttribute);
+        $resource->set($field, $resultValue, $isAttribute);
     }
 
     /**
