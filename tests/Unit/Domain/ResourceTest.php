@@ -15,7 +15,7 @@ class ResourceTest extends TestCase
      */
     public function test_it_retrieves_values(array $options, $default, $expectedValue)
     {
-        $resource = Resource::fromArray($this->getProductData(), 'product');
+        $resource = Resource::fromArray(TestData::getProduct(), 'product');
         $field = FieldFactory::fromOptions($options);
         $value = $resource->get($field, $default);
 
@@ -24,7 +24,7 @@ class ResourceTest extends TestCase
 
     public function test_it_should_be_changed_if_set_applied()
     {
-        $resource = Resource::fromArray($this->getProductData(), 'product');
+        $resource = Resource::fromArray(TestData::getProduct(), 'product');
         $resource->set(Property::create('family'), 'ziggy-mama');
 
         Assert::assertTrue($resource->isChanged());
@@ -32,7 +32,7 @@ class ResourceTest extends TestCase
 
     public function test_it_should_not_be_changed_if_set_not_applied()
     {
-        $resource = Resource::fromArray($this->getProductData(), 'product');
+        $resource = Resource::fromArray(TestData::getProduct(), 'product');
 
         Assert::assertFalse($resource->isChanged());
     }
@@ -42,130 +42,51 @@ class ResourceTest extends TestCase
         return [
             'for a top-level field value' =>
             [
-                [
-                    'field' => 'family'
-                ],
+                ['field' => 'family'],
                 null,
                 'ziggy'
             ],
 
             'for a top-level array field value' =>
             [
-                [
-                    'field' => 'categories'
-                ],
+                ['field' => 'categories'],
                 null,
                 ['hydra', 'pim']
             ],
 
             'for an attribute value (not-scopable, not-localisable)' =>
             [
-                [
-                    'field' => 'head_count',
-                    'locale' => null
-                ],
+                ['field' => 'head_count', 'locale' => null],
                 null,
                 3
             ],
 
             'for an attribute value (scopable, localisable)' =>
             [
-                [
-                    'field' => 'name',
-                    'locale' => 'de_DE',
-                    'scope' => 'web',
-                ],
+                ['field' => 'name', 'scope' => 'web', 'locale' => 'de_DE'],
                 null,
-                'Süßes Ziggy'
+                'Süßer Ziggy'
             ],
 
             'for an attribute value (not-scopable, localisable)' =>
             [
-                [
-                    'field' => 'description',
-                    'locale' => 'en_GB',
-                    'scope' => null,
-                ],
+                ['field' => 'description', 'scope' => null, 'locale' => 'en_GB',],
                 null,
                 'Ziggy - the Hydra'
             ],
 
             'for an attribute value (scopable, not-localisable)' =>
             [
-                [
-                    'field' => 'colour',
-                    'locale' => null,
-                    'scope' => 'mobile',
-                ],
+                ['field' => 'colour', 'scope' => 'erp', 'locale' => null],
                 null,
                 'violet'
             ],
 
             'for a default value for non-existing property' =>
             [
-                [
-                    'field' => 'no-color',
-                ],
+                ['field' => 'no-color'],
                 'pink',
                 'pink'
-            ],
-        ];
-    }
-
-    private function getProductData(): array
-    {
-        return [
-            'identifier' => 'the-ziggy',
-            'family' => 'ziggy',
-            'categories' => ['hydra', 'pim'],
-            'values' => [
-
-                'name' => [
-                    [
-                        'locale' => 'en_GB',
-                        'scope' => 'web',
-                        'data' => 'Ziggy'
-                    ],
-                    [
-                        'locale' => 'de_DE',
-                        'scope' => 'web',
-                        'data' => 'Süßes Ziggy'
-                    ]
-                ],
-
-                'description' => [
-                    [
-                        'locale' => 'en_GB',
-                        'scope' => null,
-                        'data' => 'Ziggy - the Hydra'
-                    ],
-                    [
-                        'locale' => 'de_DE',
-                        'scope' => 'web',
-                        'data' => 'Ziggy - die Hydra'
-                    ]
-                ],
-
-                'colour' => [
-                    [
-                        'locale' => null,
-                        'scope' => 'web',
-                        'data' => 'violet and white'
-                    ],
-                    [
-                        'locale' => null,
-                        'scope' => 'mobile',
-                        'data' => 'violet'
-                    ]
-                ],
-
-                'head_count' => [
-                    [
-                        'locale' => null,
-                        'scope' => null,
-                        'data' => 3
-                    ]
-                ]
             ],
         ];
     }

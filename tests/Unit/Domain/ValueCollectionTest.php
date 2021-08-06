@@ -13,7 +13,7 @@ class ValueCollectionTest extends TestCase
     public function test_it_can_be_created_from_array()
     {
         $collection = ValueCollection::fromArray(
-            $this->getValueArray()
+            TestData::getValues()
         );
 
         Assert::assertGreaterThan(0, $collection->count());
@@ -22,7 +22,7 @@ class ValueCollectionTest extends TestCase
     public function test_it_gets_a_value()
     {
         $collection = ValueCollection::fromArray(
-            $this->getValueArray()
+            TestData::getValues()
         );
 
         Assert::assertEquals(
@@ -35,7 +35,7 @@ class ValueCollectionTest extends TestCase
     public function test_it_gets_a_default_value_if_attribute_not_found()
     {
         $collection = ValueCollection::fromArray(
-            $this->getValueArray()
+            TestData::getValues()
         );
 
         Assert::assertEquals(
@@ -50,7 +50,7 @@ class ValueCollectionTest extends TestCase
     public function test_it_sets_a_value_of_an_existing_attribute()
     {
         $collection = ValueCollection::fromArray(
-            $this->getValueArray()
+            TestData::getValues()
         );
 
         $attribute = Attribute::create('head_count', null, null);
@@ -62,7 +62,7 @@ class ValueCollectionTest extends TestCase
     public function test_it_sets_a_value_of_a_new_attribute()
     {
         $collection = ValueCollection::fromArray(
-            $this->getValueArray()
+            TestData::getValues()
         );
 
         $attribute = Attribute::create('name', null, 'ua_UA');
@@ -93,9 +93,9 @@ class ValueCollectionTest extends TestCase
 
     public function test_it_returns_a_diff_with_another_collection()
     {
-        $collection1 = ValueCollection::fromArray($this->getValueArray());
+        $collection1 = ValueCollection::fromArray(TestData::getValues());
 
-        $collection2 = ValueCollection::fromArray($this->getValueArray());
+        $collection2 = ValueCollection::fromArray(TestData::getValues());
         $attribute = Attribute::create('head_count', null, null);
         $collection2->set($attribute, 2);
         $attribute = Attribute::create('name', 'web', 'de_DE');
@@ -125,7 +125,7 @@ class ValueCollectionTest extends TestCase
 
     public function test_it_returns_a_merge_with_another_collection()
     {
-        $collection1 = ValueCollection::fromArray($this->getValueArray());
+        $collection1 = ValueCollection::fromArray(TestData::getValues());
 
         $collection2 = ValueCollection::fromArray([]);
         $attribute = Attribute::create('head_count', null, null);
@@ -159,29 +159,5 @@ class ValueCollectionTest extends TestCase
         ];
 
         $this->assertEquals($expected, $merge->toArray());
-    }
-
-    private function getValueArray(): array
-    {
-        return [
-            'name' => [
-                ['scope' => 'web', 'locale' => 'en_GB', 'data' => 'Ziggy'],
-                ['scope' => 'web', 'locale' => 'de_DE', 'data' => 'Süßer Ziggy'],
-            ],
-
-            'description' => [
-                ['scope' => null, 'locale' => 'en_GB', 'data' => 'Ziggy - the Hydra'],
-                ['scope' => null, 'locale' => 'de_DE', 'data' => 'Ziggy - die Hydra'],
-            ],
-
-            'colour' => [
-                ['scope' => 'web', 'locale' => null, 'data' => 'violet and white'],
-                ['scope' => 'erp', 'locale' => null, 'data' => 'violet'],
-            ],
-
-            'head_count' => [
-                ['scope' => null, 'locale' => null, 'data' => 3]
-            ]
-        ];
     }
 }
