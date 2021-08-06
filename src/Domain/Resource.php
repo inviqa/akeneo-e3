@@ -103,7 +103,7 @@ class Resource
         return $this->resourceType !== 'product' ? 'code' : 'identifier';
     }
 
-    public function diff(Resource $resource): \AkeneoEtl\Domain\Resource
+    public function diff(Resource $resource): self
     {
         $propertiesDiff = [];
         foreach ($this->properties as $name => $value) {
@@ -125,7 +125,7 @@ class Resource
         return $diff;
     }
 
-    public function merge(Resource $resource)
+    public function merge(Resource $resource): self
     {
         $propertiesMerge = $this->properties;
         foreach ($resource->properties as $name => $value) {
