@@ -8,5 +8,8 @@ interface Extractor
 {
     public function count(): int;
 
+    /**
+     * @return \Generator|\AkeneoEtl\Domain\Resource[]
+     */
     public function extract(): Generator;
 }

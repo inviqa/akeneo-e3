@@ -46,7 +46,7 @@ class Set implements Action, ActionTraceHookAware
             return;
         }
 
-        $this->traceHook->onAction(ActionTrace::create($resource->getCodeOrIdentifier(), $beforeValue, $resultValue));
+        $this->traceHook->onAction(ActionTrace::create($resource->getCodeOrIdentifier() ?? '', $beforeValue, $resultValue));
 
         $resource->set($this->field, $resultValue);
     }

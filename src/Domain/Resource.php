@@ -6,18 +6,30 @@ use LogicException;
 
 class Resource
 {
-    private array $data;
+    private array $properties;
+
+    private ValueCollection $values;
 
     private string $resourceType;
 
-    private array $changes = [];
-
     private bool $isChanged = false;
+
+    private string $codeOrIdentifier;
 
     private function __construct(array $data, string $resourceType)
     {
-        $this->data = $data;
         $this->resourceType = $resourceType;
+
+        $idFieldName = $this->getCodeOrIdentifierFieldName();
+        if (array_key_exists($idFieldName, $data) === false) {
+            throw new LogicException(sprintf('%s field is expected for %s resource type', $idFieldName, $resourceType));
+        }
+
+        $this->codeOrIdentifier = $data[$idFieldName];
+        $this->values = ValueCollection::fromArray($data['values'] ?? []);
+
+        unset($data['values']);
+        $this->properties = $data;
     }
 
     public static function fromArray(array $data, string $resourceType): self
@@ -40,21 +52,14 @@ class Resource
         $fieldName = $field->getName();
 
         if ($field instanceof Property) {
-            return $this->data[$fieldName] ?? $default;
+            return $this->properties[$fieldName] ?? $default;
         }
 
         if (!$field instanceof Attribute) {
             throw new LogicException('Unsupported type of field');
         }
 
-        foreach ($this->data['values'][$fieldName] ?? [] as $attribute) {
-            if ($attribute['scope'] === $field->getScope() &&
-                $attribute['locale'] === $field->getLocale()) {
-                return $attribute['data'] ?? $default;
-            }
-        }
-
-        return $default;
+        return $this->values->get($field, $default);
     }
 
     /**
@@ -66,39 +71,57 @@ class Resource
 
         $this->isChanged = true;
 
-        $this->changes = array_merge_recursive($this->getPatch($field, $newValue));
+        if ($field instanceof Property) {
+            $this->properties[$field->getName()] = $newValue;
+
+            return $this;
+        }
+
+        if (!$field instanceof Attribute) {
+            throw new LogicException('Unsupported type of field');
+        }
+
+        $this->values->set($field, $newValue);
 
         return $this;
     }
 
-    public function getCodeOrIdentifier(): string
+    public function getCodeOrIdentifier(): ?string
     {
-        return $this->resourceType !== 'product' ?
-            $this->data['code'] :
-            $this->data['identifier'];
+        return $this->codeOrIdentifier;
     }
 
-    private function setCodeOrIdentifier(string $identifierOrCode): self
+    public function setCodeOrIdentifier(string $codeOrIdentifier): self
     {
-        $this->resourceType !== 'product' ?
-            $this->data['code'] = $identifierOrCode :
-            $this->data['identifier'] = $identifierOrCode;
+        $this->properties[$this->getCodeOrIdentifierFieldName()] = $codeOrIdentifier;
 
         return $this;
     }
 
-    public function changes(): self
+    public function getCodeOrIdentifierFieldName(): string
     {
-        $originalId = $this->getCodeOrIdentifier();
-
-        return self::fromArray($this->changes, $this->resourceType)->setCodeOrIdentifier(
-            $originalId
-        );
+        return $this->resourceType !== 'product' ? 'code' : 'identifier';
     }
 
-    public function toArray(): array
+    public function diff(Resource $resource): \AkeneoEtl\Domain\Resource
     {
-        return $this->data;
+        $propertiesDiff = [];
+        foreach ($this->properties as $name => $value) {
+            if (array_key_exists($name, $resource->properties) === false ||
+                $value !== $resource->properties[$name]) {
+                $propertiesDiff[$name] = $value;
+            }
+        }
+
+        $identifierFieldName = $this->getCodeOrIdentifierFieldName();
+        if (array_key_exists($identifierFieldName, $propertiesDiff) === false) {
+            $propertiesDiff[$identifierFieldName] = $this->codeOrIdentifier;
+        }
+
+        $diff = new self($propertiesDiff, $this->resourceType);
+        $diff->values = $this->values->diff($resource->values);
+
+        return $diff;
     }
 
     public function isChanged(): bool
@@ -106,29 +129,24 @@ class Resource
         return $this->isChanged;
     }
 
-    /**
-     * @param mixed $newValue
-     */
-    private function getPatch(Field $field, $newValue): array
+    public function toArray(): array
     {
-        if ($field instanceof Property) {
-            return [$field->getName() => $newValue];
+        $data = array_merge(
+            [$this->getCodeOrIdentifierFieldName() => $this->codeOrIdentifier],
+            $this->properties
+        );
+
+        if ($this->values->count() > 0) {
+            $data['values'] = $this->values->toArray();
         }
 
-        if (!$field instanceof Attribute) {
-            throw new LogicException('Unsupported type of field');
-        }
+        return $data;
+    }
 
-        return [
-            'values' => [
-                $field->getName() => [
-                    [
-                        'scope' => $field->getScope(),
-                        'locale' => $field->getLocale(),
-                        'data' => $newValue
-                    ]
-                ]
-            ]
-        ];
+    public function __clone()
+    {
+        // Force a copy of this->object, otherwise
+        // it will point to same object.
+        $this->values = clone $this->values;
     }
 }

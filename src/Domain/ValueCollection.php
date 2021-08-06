@@ -5,7 +5,7 @@ namespace AkeneoEtl\Domain;
 class ValueCollection
 {
     /**
-     * @var array<\AkeneoEtl\Domain\Attribute, mixed>
+     * @var array<string, mixed>
      */
     private array $values = [];
 
@@ -40,13 +40,68 @@ class ValueCollection
         return $this->values[$hash] ?? $default;
     }
 
+    /**
+     * @param mixed $value
+     */
+    public function set(Attribute $attribute, $value): self
+    {
+        $hash = $this->attributeHash($attribute);
+        $this->values[$hash] = $value;
+
+        return $this;
+    }
+
     public function count(): int
     {
         return count($this->values);
     }
 
+    public function toArray(): array
+    {
+        $result = [];
+
+        foreach ($this->values as $hash => $value) {
+            $attribute = $this->hashToAttribute($hash);
+
+            $result[$attribute->getName()][] = [
+                'scope' => $attribute->getScope(),
+                'locale' => $attribute->getLocale(),
+                'data' => $value,
+            ];
+        }
+
+        return $result;
+    }
+
     private function attributeHash(Attribute $attribute): string
     {
         return implode('.', [$attribute->getName(), $attribute->getScope(), $attribute->getLocale()]);
+    }
+
+    private function hashToAttribute(string $hash): Attribute
+    {
+        $pieces = explode('.', $hash);
+
+        return Attribute::create(
+            $pieces[0],
+            $pieces[1] !== '' ? $pieces[1] : null,
+            $pieces[2] !== '' ? $pieces[2] : null
+        );
+    }
+
+    public function diff(ValueCollection $collection): ValueCollection
+    {
+        $diff = [];
+        foreach ($this->values as $hash => $value) {
+            if (array_key_exists($hash, $collection->values) === false ||
+                $value !== $collection->values[$hash]) {
+                $diff[$hash] = $value;
+            }
+        }
+
+        $diffCollection = new self([]);
+        $diffCollection->values = $diff;
+
+        return $diffCollection;
     }
 }

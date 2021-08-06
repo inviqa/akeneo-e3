@@ -18,7 +18,6 @@ class SequentialTransformerTest extends TestCase
 
         $result = $transform
             ->transform(Resource::fromArray(['identifier' => 123], 'product'))
-            ->changes()
             ->toArray();
 
         Assert::assertEquals([
@@ -46,7 +45,7 @@ class SequentialTransformerTest extends TestCase
         Assert::assertFalse($result->isChanged());
         Assert::assertEquals([
             'identifier' => 123,
-        ], $result->changes()->toArray());
+        ], $result->toArray());
     }
 }
 

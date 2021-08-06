@@ -22,21 +22,6 @@ class ResourceTest extends TestCase
         Assert::assertEquals($expectedValue, $value);
     }
 
-    /**
-     * @dataProvider changeProviders
-     */
-    public function test_it_returns_changes(array $options, $newValue, bool $isAttribute, array $expectedValueArray)
-    {
-        $resource = Resource::fromArray($this->getProductData(), 'product');
-        $field = FieldFactory::fromOptions($options);
-
-        $resource->set($field, $newValue);
-
-        $data = $resource->changes()->toArray();
-
-        Assert::assertEquals($expectedValueArray, $data);
-    }
-
     public function test_it_should_be_changed_if_set_applied()
     {
         $resource = Resource::fromArray($this->getProductData(), 'product');
@@ -123,70 +108,6 @@ class ResourceTest extends TestCase
                 ],
                 'pink',
                 'pink'
-            ],
-        ];
-    }
-
-    public function changeProviders()
-    {
-        return
-        [
-            'for a top-level field' =>
-            [
-                [
-                    'field' => 'family'
-                ],
-                'ziggy-academic',
-                false,
-                [
-                    'family' => 'ziggy-academic',
-                    'identifier' => 'the-ziggy',
-                ],
-            ],
-
-            'for an attribute' =>
-            [
-                [
-                    'field' => 'colour',
-                    'locale' => 'en_GB',
-                    'scope' => 'web',
-                ],
-                'pink',
-                true,
-                [
-                    'values' => [
-                        'colour' => [
-                            [
-                                'scope' => 'web',
-                                'locale' => 'en_GB',
-                                'data' => 'pink',
-                            ]
-                        ]
-                    ],
-                    'identifier' => 'the-ziggy',
-                ],
-            ],
-
-            'for an attribute if locale is null' =>
-            [
-                [
-                    'field' => 'colour',
-                    'locale' => null,
-                ],
-                'pink',
-                true,
-                [
-                    'values' => [
-                        'colour' => [
-                            [
-                                'scope' => null,
-                                'locale' => null,
-                                'data' => 'pink',
-                            ]
-                        ]
-                    ],
-                    'identifier' => 'the-ziggy',
-                ],
             ],
         ];
     }

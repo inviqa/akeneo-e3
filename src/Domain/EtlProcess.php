@@ -33,11 +33,12 @@ class EtlProcess
         foreach ($resources as $resource) {
             setCurrentActionResource($resource);
 
-            $patch = $this->transformer->transform($resource);
-            // @todo: in no patch method, then merge to $resource
+            $transformedResource = $this->transformer->transform($resource);
 
-            if ($patch->isChanged() === true) {
-                $this->loader->queue($patch->changes());
+            if ($transformedResource->isChanged() === true) {
+                $patch = $transformedResource->diff($resource);
+
+                $this->loader->queue($patch);
             }
 
             $this->hooks->onActionProgress(ActionProgress::create($index++, $count));

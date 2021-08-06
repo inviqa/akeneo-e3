@@ -47,7 +47,6 @@ class ConsoleHooks implements Hooks
     {
         if ($actionProgress->getIndex() === 0) {
             $this->progress->start($actionProgress->getTotal());
-
             return;
         }
 
