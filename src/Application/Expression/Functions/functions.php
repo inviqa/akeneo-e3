@@ -3,7 +3,7 @@
 namespace AkeneoEtl\Application\Expression\Functions;
 
 use AkeneoEtl\Domain\Attribute;
-use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\CurrentResourceHolder;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 
@@ -49,13 +49,6 @@ function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}")
     return $unicodeString->trim($chars);
 }
 
-function setCurrentActionResource(Resource $resource): void
-{
-    global $currentResourceInAction;
-
-    $currentResourceInAction = clone $resource;
-}
-
 /**
  * @param mixed|null $defaultValue
  *
@@ -63,10 +56,9 @@ function setCurrentActionResource(Resource $resource): void
  */
 function value(string $name, ?string $channel, ?string $locale, $defaultValue = null)
 {
-    /** @var Resource $currentResourceInAction */
-    global $currentResourceInAction;
+    $resource = CurrentResourceHolder::$current;
 
     $field = Attribute::create($name, $channel, $locale);
 
-    return $currentResourceInAction->get($field, $defaultValue);
+    return $resource->get($field, $defaultValue);
 }

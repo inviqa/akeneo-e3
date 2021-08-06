@@ -1,0 +1,9 @@
+default:
+    autoload:
+        '': '%paths.base%/tests/Acceptance/bootstrap'
+    suites:
+        etl:
+            paths:
+                - tests/Acceptance/features
+            contexts:
+                - AkeneoEtl\Tests\Acceptance\bootstrap\EtlContext

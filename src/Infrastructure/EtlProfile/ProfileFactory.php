@@ -16,9 +16,9 @@ class ProfileFactory
 {
     private ActionFactory $actionFactory;
 
-    private ValidatorInterface $validator;
+    private ?ValidatorInterface $validator;
 
-    public function __construct(ActionFactory $actionFactory, ValidatorInterface $validator)
+    public function __construct(ActionFactory $actionFactory, ValidatorInterface $validator = null)
     {
         $this->actionFactory = $actionFactory;
         $this->validator = $validator;
@@ -27,6 +27,13 @@ class ProfileFactory
     public function fromFile(string $fileName): EtlProfile
     {
         $profileData = Yaml::parseFile($fileName);
+
+        return $this->fromArray($profileData);
+    }
+
+    public function fromArray(array $profileData): EtlProfile
+    {
+        // @todo: replace validator with optionsresolver
         $this->validate($profileData);
 
         $extractProfile = $this->createExtractProfile($profileData);
@@ -57,6 +64,10 @@ class ProfileFactory
 
     private function validate(array $profileData): void
     {
+        if ($this->validator === null) {
+            return;
+        }
+
         $constraint = new Assert\Collection([
             'extract' => new Assert\Optional(
                 new Assert\Collection([

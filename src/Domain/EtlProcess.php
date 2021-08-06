@@ -4,7 +4,6 @@ namespace AkeneoEtl\Domain;
 
 use AkeneoEtl\Domain\Hook\ActionProgress;
 use AkeneoEtl\Domain\Hook\Hooks;
-use function AkeneoEtl\Application\Expression\Functions\setCurrentActionResource;
 
 class EtlProcess
 {
@@ -31,7 +30,8 @@ class EtlProcess
         $resources = $this->extractor->extract();
 
         foreach ($resources as $resource) {
-            setCurrentActionResource($resource);
+            //setCurrentActionResource($resource);
+            CurrentResourceHolder::$current = $resource;
 
             $transformedResource = $this->transformer->transform($resource);
 
