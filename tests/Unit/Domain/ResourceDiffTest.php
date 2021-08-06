@@ -3,17 +3,14 @@
 namespace AkeneoEtl\Tests\Unit\Domain;
 
 use AkeneoEtl\Domain\Attribute;
-use AkeneoEtl\Domain\Field;
 use AkeneoEtl\Domain\Property;
 use AkeneoEtl\Domain\Resource;
-use AkeneoEtl\Domain\StandardFormat\StandardFormatDiff;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
-use Rogervila\ArrayDiffMultidimensional;
 
 class ResourceDiffTest extends TestCase
 {
-    public function test_it_generates_diffs_for_properties()
+    public function test_it_generates_diff_for_scalar_properties()
     {
         $resource1 = Resource::fromArray(TestData::getSimpleProduct(), 'product');
         $resource2 = Resource::fromArray(TestData::getSimpleProduct(), 'product');
@@ -36,7 +33,7 @@ class ResourceDiffTest extends TestCase
         );
     }
 
-    public function test_it_generates_diffs_for_array_properties()
+    public function test_it_generates_diff_for_array_properties()
     {
         $resource1 = Resource::fromArray(TestData::getSimpleProduct(), 'product');
         $resource2 = Resource::fromArray(TestData::getSimpleProduct(), 'product');
@@ -59,7 +56,7 @@ class ResourceDiffTest extends TestCase
         );
     }
 
-    public function test_it_generates_diffs_for_object_properties()
+    public function test_it_generates_diff_for_object_properties()
     {
         $resource1 = Resource::fromArray(TestData::getSimpleProduct(), 'product');
         $resource2 = Resource::fromArray(TestData::getSimpleProduct(), 'product');
@@ -101,7 +98,7 @@ class ResourceDiffTest extends TestCase
 
 
 
-    public function test_it_generates_diffs_for_values()
+    public function test_it_generates_diff_for_values()
     {
         $resource1 = Resource::fromArray(TestData::getProduct(), 'product');
         $resource2 = Resource::fromArray(TestData::getProduct(), 'product');

@@ -107,6 +107,7 @@ class Resource
     {
         $propertiesDiff = [];
         foreach ($this->properties as $name => $value) {
+            // @todo: process objects (assoc arrays) as per doc
             if (array_key_exists($name, $resource->properties) === false ||
                 $value !== $resource->properties[$name]) {
                 $propertiesDiff[$name] = $value;
@@ -122,6 +123,23 @@ class Resource
         $diff->values = $this->values->diff($resource->values);
 
         return $diff;
+    }
+
+    public function merge(Resource $resource)
+    {
+        $propertiesMerge = $this->properties;
+        foreach ($resource->properties as $name => $value) {
+            if (is_array($value) === true && $this->isObjectLikeArray($value) === true) {
+                $value = array_merge($value, $this->properties[$name]);
+            }
+
+            $propertiesMerge[$name] = $value;
+        }
+
+        $merge = new self($propertiesMerge, $this->resourceType);
+        $merge->values = $this->values->merge($resource->values);
+
+        return $merge;
     }
 
     public function isChanged(): bool
@@ -141,6 +159,11 @@ class Resource
         }
 
         return $data;
+    }
+
+    private function isObjectLikeArray(array $data): bool
+    {
+        return is_string(array_key_first($data));
     }
 
     public function __clone()
