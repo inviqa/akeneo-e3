@@ -122,54 +122,65 @@ class ValueCollectionTest extends TestCase
         $this->assertEquals($expected, $diff->toArray());
     }
 
+
+    public function test_it_returns_a_merge_with_another_collection()
+    {
+        $collection1 = ValueCollection::fromArray($this->getValueArray());
+
+        $collection2 = ValueCollection::fromArray([]);
+        $attribute = Attribute::create('head_count', null, null);
+        $collection2->set($attribute, 2);
+        $attribute = Attribute::create('name', 'web', 'ua_UA');
+        $collection2->set($attribute, 'Зіггі');
+        $attribute = Attribute::create('mood', null, null);
+        $collection2->set($attribute, 'fun');
+
+        $merge = $collection1->merge($collection2);
+        $expected = [
+            'name' => [
+                ['scope' => 'web', 'locale' => 'en_GB', 'data' => 'Ziggy'],
+                ['scope' => 'web', 'locale' => 'de_DE', 'data' => 'Süßer Ziggy'],
+                ['scope' => 'web', 'locale' => 'ua_UA', 'data' => 'Зіггі'],
+            ],
+            'description' => [
+                ['scope' => null, 'locale' => 'en_GB', 'data' => 'Ziggy - the Hydra'],
+                ['scope' => null, 'locale' => 'de_DE', 'data' => 'Ziggy - die Hydra'],
+            ],
+            'colour' => [
+                ['scope' => 'web', 'locale' => null, 'data' => 'violet and white'],
+                ['scope' => 'erp', 'locale' => null, 'data' => 'violet'],
+            ],
+            'head_count' => [
+                ['scope' => null, 'locale' => null, 'data' => 2]
+            ],
+            'mood' => [
+                ['scope' => null, 'locale' => null, 'data' => 'fun'],
+            ],
+        ];
+
+        $this->assertEquals($expected, $merge->toArray());
+    }
+
     private function getValueArray(): array
     {
         return [
             'name' => [
-                [
-                    'locale' => 'en_GB',
-                    'scope' => 'web',
-                    'data' => 'Ziggy'
-                ],
-                [
-                    'locale' => 'de_DE',
-                    'scope' => 'web',
-                    'data' => 'Süßer Ziggy'
-                ]
+                ['scope' => 'web', 'locale' => 'en_GB', 'data' => 'Ziggy'],
+                ['scope' => 'web', 'locale' => 'de_DE', 'data' => 'Süßer Ziggy'],
             ],
 
             'description' => [
-                [
-                    'locale' => 'en_GB',
-                    'scope' => null,
-                    'data' => 'Ziggy - the Hydra'
-                ],
-                [
-                    'locale' => 'de_DE',
-                    'scope' => 'web',
-                    'data' => 'Ziggy - die Hydra'
-                ]
+                ['scope' => null, 'locale' => 'en_GB', 'data' => 'Ziggy - the Hydra'],
+                ['scope' => null, 'locale' => 'de_DE', 'data' => 'Ziggy - die Hydra'],
             ],
 
             'colour' => [
-                [
-                    'locale' => null,
-                    'scope' => 'web',
-                    'data' => 'violet and white'
-                ],
-                [
-                    'locale' => null,
-                    'scope' => 'mobile',
-                    'data' => 'violet'
-                ]
+                ['scope' => 'web', 'locale' => null, 'data' => 'violet and white'],
+                ['scope' => 'erp', 'locale' => null, 'data' => 'violet'],
             ],
 
             'head_count' => [
-                [
-                    'locale' => null,
-                    'scope' => null,
-                    'data' => 3
-                ]
+                ['scope' => null, 'locale' => null, 'data' => 3]
             ]
         ];
     }

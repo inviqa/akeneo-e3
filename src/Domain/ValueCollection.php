@@ -56,6 +56,35 @@ class ValueCollection
         return count($this->values);
     }
 
+    public function diff(ValueCollection $collection): self
+    {
+        $diff = [];
+        foreach ($this->values as $hash => $value) {
+            if (array_key_exists($hash, $collection->values) === false ||
+                $value !== $collection->values[$hash]) {
+                $diff[$hash] = $value;
+            }
+        }
+
+        $diffCollection = new self([]);
+        $diffCollection->values = $diff;
+
+        return $diffCollection;
+    }
+
+    public function merge(ValueCollection $collection): self
+    {
+        $merge = $this->values;
+        foreach ($collection->values as $hash => $value) {
+            $merge[$hash] = $value;
+        }
+
+        $mergeCollection = new self([]);
+        $mergeCollection->values = $merge;
+
+        return $mergeCollection;
+    }
+
     public function toArray(): array
     {
         $result = [];
@@ -87,21 +116,5 @@ class ValueCollection
             $pieces[1] !== '' ? $pieces[1] : null,
             $pieces[2] !== '' ? $pieces[2] : null
         );
-    }
-
-    public function diff(ValueCollection $collection): ValueCollection
-    {
-        $diff = [];
-        foreach ($this->values as $hash => $value) {
-            if (array_key_exists($hash, $collection->values) === false ||
-                $value !== $collection->values[$hash]) {
-                $diff[$hash] = $value;
-            }
-        }
-
-        $diffCollection = new self([]);
-        $diffCollection->values = $diff;
-
-        return $diffCollection;
     }
 }
