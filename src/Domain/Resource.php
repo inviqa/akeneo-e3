@@ -168,8 +168,6 @@ class Resource
 
     public function __clone()
     {
-        // Force a copy of this->object, otherwise
-        // it will point to same object.
         $this->values = clone $this->values;
     }
 }
