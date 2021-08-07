@@ -56,7 +56,7 @@ class Set implements Action, ActionTraceHookAware
      */
     protected function evaluateValue(Resource $resource)
     {
-        if ($this->options->getValue() !== null) {
+        if ($this->options->getExpression() === null) {
             return $this->options->getValue();
         }
 

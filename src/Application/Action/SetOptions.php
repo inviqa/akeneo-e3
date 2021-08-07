@@ -30,10 +30,6 @@ class SetOptions
         $value,
         ?string $expression
     ) {
-        if ($value === null && $expression === null) {
-            throw new LogicException('One of the options `value` or `expression` are required for the set action.');
-        }
-
         $this->field = $field;
         $this->locale = $locale;
         $this->scope = $scope;
@@ -55,6 +51,16 @@ class SetOptions
             ->setAllowedTypes('scope', ['string', 'null'])
             ->setAllowedTypes('expression', ['string', 'null'])
             ->resolve($array);
+
+        if (array_key_exists('value', $array) === false &&
+            array_key_exists('expression', $array) === false) {
+            throw new LogicException('One of the options `value` or `expression` are required for the set action.');
+        }
+
+        if (isset($array['value']) === true &&
+            isset($array['expression']) === true) {
+            throw new LogicException('Only one of the options `value` or `expression` is required for the set action.');
+        }
 
         return new self(
             $array['field'],
@@ -80,7 +86,10 @@ class SetOptions
         return $this->scope;
     }
 
-    public function getValue(): ?string
+    /**
+     * @return mixed|null
+     */
+    public function getValue()
     {
         return $this->value;
     }
