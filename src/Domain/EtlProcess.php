@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain;
 
-use AkeneoEtl\Domain\Hook\ActionProgress;
 use AkeneoEtl\Domain\Hook\Hooks;
+use AkeneoEtl\Domain\Transform\Event\ProgressEvent;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class EtlProcess
 {
@@ -14,12 +15,16 @@ final class EtlProcess
     private Loader $loader;
     private Hooks $hooks;
 
-    public function __construct(Extractor $extractor, Transformer $transformer, Loader $loader, Hooks $hooks)
+    private EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(Extractor $extractor, Transformer $transformer,
+        Loader $loader, Hooks $hooks, EventDispatcherInterface $eventDispatcher)
     {
         $this->extractor = $extractor;
         $this->transformer = $transformer;
         $this->loader = $loader;
         $this->hooks = $hooks;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function execute(): void
@@ -27,7 +32,7 @@ final class EtlProcess
         $index = 0;
         $count = $this->extractor->count();
 
-        $this->hooks->onActionProgress(ActionProgress::create(0, $count));
+        //$this->hooks->onActionProgress(ProgressEvent::create(0, $count));
 
         $resources = $this->extractor->extract();
 
@@ -38,13 +43,14 @@ final class EtlProcess
 
             $transformedResource = $this->transformer->transform($resource);
 
+            $patch = null;
             if ($transformedResource->isChanged() === true) {
                 $patch = $transformedResource->diff($resource);
 
                 $this->loader->load($patch);
             }
 
-            $this->hooks->onActionProgress(ActionProgress::create($index++, $count));
+            $this->eventDispatcher->dispatch(ProgressEvent::create($index++, $count, $patch, $resource));
         }
 
         $this->loader->finish();

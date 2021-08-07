@@ -11,6 +11,7 @@ use AkeneoEtl\Infrastructure\EtlFactory;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
 use Webmozart\Assert\Assert;
 

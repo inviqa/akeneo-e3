@@ -24,6 +24,7 @@ use AkeneoEtl\Infrastructure\Api\ApiSelector;
 use AkeneoEtl\Infrastructure\Extractor\Extractor;
 use AkeneoEtl\Infrastructure\Loader\ApiLoader;
 use AkeneoEtl\Infrastructure\Loader\DryRunLoader;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class EtlFactory
 {
@@ -44,7 +45,8 @@ final class EtlFactory
         ConnectionProfile $sourceConnectionProfile,
         ConnectionProfile $destinationConnectionProfile,
         EtlProfile $etlProfile,
-        Hooks $hooks
+        Hooks $hooks,
+        EventDispatcherInterface $eventDispatcher
     ): EtlProcess {
         $extractor = $this->createExtractor(
             $resourceType,
@@ -64,7 +66,7 @@ final class EtlFactory
             $hooks
         );
 
-        return new EtlProcess($extractor, $transformer, $loader, $hooks);
+        return new EtlProcess($extractor, $transformer, $loader, $hooks, $eventDispatcher);
     }
 
     public function createExtractor(

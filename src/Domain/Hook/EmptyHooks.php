@@ -6,7 +6,7 @@ namespace AkeneoEtl\Domain\Hook;
 
 final class EmptyHooks implements Hooks
 {
-    public function onActionProgress(ActionProgress $actionProgress): void
+    public function onActionProgress(ProgressEvent $actionProgress): void
     {
     }
 

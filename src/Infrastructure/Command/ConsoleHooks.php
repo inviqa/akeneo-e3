@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AkeneoEtl\Infrastructure\Command;
 
 use AkeneoEtl\Domain\Hook\ActionTrace;
-use AkeneoEtl\Domain\Hook\ActionProgress;
+use AkeneoEtl\Domain\Hook\ProgressEvent;
 use AkeneoEtl\Domain\Hook\Hooks;
 use AkeneoEtl\Domain\Hook\LoaderError;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -24,14 +24,7 @@ final class ConsoleHooks implements Hooks
 
     public function onAction(ActionTrace $trace): void
     {
-        $this->progress->clear();
-        $this->output->writeln(sprintf(
-            '[[ %s ]] %s -> %s',
-            $trace->getIdentifier(),
-            $trace->getBefore(),
-            $trace->getAfter()
-        ));
-        $this->progress->display();
+
     }
 
     public function onLoaderError(array $item, LoaderError $error): void
@@ -45,7 +38,7 @@ final class ConsoleHooks implements Hooks
         );
     }
 
-    public function onActionProgress(ActionProgress $actionProgress): void
+    public function onActionProgress(ProgressEvent $actionProgress): void
     {
         if ($actionProgress->getIndex() === 0) {
             $this->progress->start($actionProgress->getTotal());
