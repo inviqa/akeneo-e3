@@ -33,6 +33,7 @@ final class EtlProcess
 
         foreach ($resources as $resource) {
             //setCurrentActionResource($resource);
+            // @todo: implement as an event and move holder to Application
             CurrentResourceHolder::$current = $resource;
 
             $transformedResource = $this->transformer->transform($resource);
@@ -40,12 +41,12 @@ final class EtlProcess
             if ($transformedResource->isChanged() === true) {
                 $patch = $transformedResource->diff($resource);
 
-                $this->loader->queue($patch);
+                $this->loader->load($patch);
             }
 
             $this->hooks->onActionProgress(ActionProgress::create($index++, $count));
         }
 
-        $this->loader->load();
+        $this->loader->finish();
     }
 }

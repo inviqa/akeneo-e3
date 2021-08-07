@@ -9,12 +9,12 @@ use AkeneoEtl\Domain\Resource;
 
 final class DryRunLoader implements Loader
 {
-    public function queue(Resource $resource): void
+    public function load(Resource $resource): void
     {
         // dry run
     }
 
-    public function load(): void
+    public function finish(): void
     {
         // dry run
     }

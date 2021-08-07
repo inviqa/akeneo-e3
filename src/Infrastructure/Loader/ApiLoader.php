@@ -29,17 +29,17 @@ final class ApiLoader implements Loader
         $this->onError = $onError;
     }
 
-    public function queue(Resource $resource): void
+    public function load(Resource $resource): void
     {
         $id = $resource->getCodeOrIdentifier();
         $this->buffer[$id] = $resource->toArray();
 
         if (count($this->buffer) >= $this->batchSize) {
-            $this->load();
+            $this->finish();
         }
     }
 
-    public function load(): void
+    public function finish(): void
     {
         if (count($this->buffer) === 0) {
             return;

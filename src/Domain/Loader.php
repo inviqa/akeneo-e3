@@ -6,7 +6,10 @@ namespace AkeneoEtl\Domain;
 
 interface Loader
 {
-    public function queue(Resource $resource): void;
+    public function load(Resource $resource): void;
 
-    public function load(): void;
+    /**
+     * Finish loading, e.g. load remaining resources in bulk
+     */
+    public function finish(): void;
 }

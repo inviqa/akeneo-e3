@@ -16,12 +16,12 @@ class InMemoryLoader implements Loader
         $this->originalResource = $originalResource;
     }
 
-    public function queue(Resource $resource): void
+    public function load(Resource $resource): void
     {
         $this->result = $this->originalResource->merge($resource);
     }
 
-    public function load(): void
+    public function finish(): void
     {
         // nothing
     }
