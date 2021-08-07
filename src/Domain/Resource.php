@@ -130,7 +130,7 @@ class Resource
         $propertiesMerge = $this->properties;
         foreach ($resource->properties as $name => $value) {
             if (is_array($value) === true && $this->isObjectLikeArray($value) === true) {
-                $value = array_merge($value, $this->properties[$name]);
+                $value = array_merge($this->properties[$name], $value);
             }
 
             $propertiesMerge[$name] = $value;
