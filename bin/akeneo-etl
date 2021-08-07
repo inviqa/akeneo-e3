@@ -8,13 +8,11 @@ use AkeneoEtl\Infrastructure\ConnectionProfile\ProfileFactory as ConnectionProfi
 use AkeneoEtl\Infrastructure\EtlFactory;
 use AkeneoEtl\Infrastructure\EtlProfile\ProfileFactory as EtlProfileFactory;
 use Symfony\Component\Console\Application;
-use Symfony\Component\Validator\ValidatorBuilder;
 
-$validatorBuilder = new ValidatorBuilder();
 
 $etlFactory = new EtlFactory();
 $connectionProfileFactory = new ConnectionProfileFactory();
-$etlProfileFactory = new EtlProfileFactory($validatorBuilder->getValidator());
+$etlProfileFactory = new EtlProfileFactory();
 
 $application = new Application('AkeneoEtl', 'git_version');
 $application->add(new Command\TransformCommand($etlFactory, $connectionProfileFactory, $etlProfileFactory));

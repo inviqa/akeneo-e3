@@ -2,13 +2,12 @@
 
 namespace AkeneoEtl\Tests\Acceptance\bootstrap;
 
-use AkeneoEtl\Application\ActionFactory;
 use AkeneoEtl\Domain\EtlProcess;
 use AkeneoEtl\Domain\Hook\EmptyHooks;
+use AkeneoEtl\Domain\Profile\EtlProfile;
 use AkeneoEtl\Domain\Resource;
 use AkeneoEtl\Domain\Transformer;
 use AkeneoEtl\Infrastructure\EtlFactory;
-use AkeneoEtl\Infrastructure\EtlProfile\ProfileFactory;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
@@ -60,8 +59,7 @@ class EtlContext implements Context
         $config = Yaml::parse($string);
 
         $factory = new EtlFactory();
-        $profileFactory = new ProfileFactory();
-        $profile = $profileFactory->fromArray($config);
+        $profile = EtlProfile::fromArray($config);
 
         $transformProfile = $profile->getTransformProfile();
         $this->transformer = $factory->createTransformer($transformProfile, new EmptyHooks());
