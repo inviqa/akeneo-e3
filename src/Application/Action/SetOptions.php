@@ -31,7 +31,7 @@ class SetOptions
         ?string $expression
     ) {
         if ($value === null && $expression === null) {
-            throw new LogicException('One of the options `field` or `expression` are required for the set action.');
+            throw new LogicException('One of the options `value` or `expression` are required for the set action.');
         }
 
         $this->field = $field;
