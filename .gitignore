@@ -10,4 +10,5 @@
 ###< symfony/framework-bundle ###
 /.idea
 /profiles
+/phar
 .php-cs-fixer.cache
