@@ -9,7 +9,7 @@ class InMemoryLoader implements Loader
 {
     private \AkeneoEtl\Domain\Resource $originalResource;
 
-    private array $result = [];
+    private \AkeneoEtl\Domain\Resource $result;
 
     public function __construct(Resource $originalResource)
     {
@@ -18,10 +18,7 @@ class InMemoryLoader implements Loader
 
     public function queue(Resource $resource): void
     {
-        $this->result = array_merge(
-            $this->originalResource->toArray(),
-            $resource->toArray()
-        );
+        $this->result = $this->originalResource->merge($resource);
     }
 
     public function load(): void
@@ -29,7 +26,7 @@ class InMemoryLoader implements Loader
         // nothing
     }
 
-    public function getResult(): array
+    public function getResult(): \AkeneoEtl\Domain\Resource
     {
         return $this->result;
     }

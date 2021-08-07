@@ -79,14 +79,31 @@ class EtlContext implements Context
     {
         $data = $this->readResourceDataFromTable($table);
 
-        Assert::eq($data, $this->loader->getResult());
+        Assert::eq($data, $this->loader->getResult()->toArray());
     }
 
     private function readResourceDataFromTable(TableNode $table): array
     {
         $data = [];
         foreach ($table as $row) {
-            $data[$row['field']] = $row['value'];
+            $field = $row['field'];
+            $value = $row['value'];
+
+            $matches = [];
+            if (preg_match('/^\[(.*)\]$/', $value, $matches) === 1) {
+                $value = explode(',', $matches[1]);
+            }
+
+            if ($row[''] === '') {
+                $data[$field] = $value;
+                continue;
+            }
+
+            $data['values'][$field][] = [
+                'scope' => $row['scope'],
+                'locale' => $row['locale'],
+                'data' => $value,
+            ];
         }
 
         return $data;
