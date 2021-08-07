@@ -13,12 +13,6 @@ final class ProfileFactory
     {
         $profileData = Yaml::parseFile($fileName);
 
-        return ConnectionProfile::fromUser(
-            $profileData['host'],
-            $profileData['clientId'],
-            $profileData['clientSecret'],
-            $profileData['userName'],
-            $profileData['userPassword']
-        );
+        return ConnectionProfile::fromArray($profileData);
     }
 }

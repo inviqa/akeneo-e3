@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Profile;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
 final class ConnectionProfile
 {
     private string $host;
@@ -12,7 +14,7 @@ final class ConnectionProfile
     private string $userName;
     private string $userPassword;
 
-    private function __construct(
+    public function __construct(
         string $host,
         string $clientId,
         string $clientSecret,
@@ -25,14 +27,18 @@ final class ConnectionProfile
         $this->userName = $userName;
         $this->userPassword = $userPassword;
     }
-    public static function fromUser(
-        string $host,
-        string $clientId,
-        string $clientSecret,
-        string $userName,
-        string $userPassword
-    ): self {
-        return new self($host, $clientId, $clientSecret, $userName, $userPassword);
+
+    public static function fromArray(array $data): self
+    {
+        $data = self::resolve($data);
+
+        return new self(
+            $data['host'],
+            $data['clientId'],
+            $data['clientSecret'],
+            $data['userName'],
+            $data['userPassword']
+        );
     }
 
     public function getHost(): string
@@ -58,5 +64,20 @@ final class ConnectionProfile
     public function getUserPassword(): string
     {
         return $this->userPassword;
+    }
+
+    private static function resolve(array $data): array
+    {
+        $resolver = new OptionsResolver();
+
+        $resolver
+            ->setRequired(['host', 'clientId', 'clientSecret', 'userName', 'userPassword'])
+            ->setAllowedTypes('host', 'string')
+            ->setAllowedTypes('clientId', 'string')
+            ->setAllowedTypes('clientSecret', 'string')
+            ->setAllowedTypes('userName', 'string')
+            ->setAllowedTypes('userPassword', 'string');
+
+        return $resolver->resolve($data);
     }
 }
