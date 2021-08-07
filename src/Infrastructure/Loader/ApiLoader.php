@@ -12,7 +12,7 @@ use AkeneoEtl\Domain\Resource;
 use Exception;
 use Traversable;
 
-class ApiLoader implements Loader
+final class ApiLoader implements Loader
 {
     private UpsertableResourceListInterface $api;
 

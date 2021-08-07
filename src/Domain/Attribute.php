@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain;
 
-class Attribute implements Field
+final class Attribute implements Field
 {
     private string $name;
     private ?string $scope;

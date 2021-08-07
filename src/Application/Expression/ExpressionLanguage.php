@@ -9,7 +9,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage as BaseExpressionLan
 
 require_once('src/Application/Expression/Functions/functions.php');
 
-class ExpressionLanguage extends BaseExpressionLanguage
+final class ExpressionLanguage extends BaseExpressionLanguage
 {
     public function __construct()
     {

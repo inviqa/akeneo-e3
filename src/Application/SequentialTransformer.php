@@ -10,7 +10,7 @@ use AkeneoEtl\Domain\Transformer;
 use Exception;
 use LogicException;
 
-class SequentialTransformer implements Transformer
+final class SequentialTransformer implements Transformer
 {
     /**
      * @var iterable|Action[]
@@ -32,6 +32,7 @@ class SequentialTransformer implements Transformer
             } catch (LogicException $e) {
                 // @todo: stop if configured to stop internal exceptions
                 // @todo: trigger onTransformerError
+                // @todo: stop on expression errors
                 print $e->getMessage().PHP_EOL;
             } catch (Exception $e) {
                 throw($e);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Hook;
 
-class ActionProgress
+final class ActionProgress
 {
     private int $index;
     private int $total;

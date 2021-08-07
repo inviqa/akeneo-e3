@@ -11,7 +11,7 @@ use AkeneoEtl\Domain\Hook\LoaderError;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ConsoleHooks implements Hooks
+final class ConsoleHooks implements Hooks
 {
     private OutputInterface $output;
     private ProgressBar $progress;

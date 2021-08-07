@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Hook;
 
-class EmptyHooks implements Hooks
+final class EmptyHooks implements Hooks
 {
     public function onActionProgress(ActionProgress $actionProgress): void
     {

@@ -7,7 +7,7 @@ namespace AkeneoEtl\Domain;
 use AkeneoEtl\Domain\Hook\ActionProgress;
 use AkeneoEtl\Domain\Hook\Hooks;
 
-class EtlProcess
+final class EtlProcess
 {
     private Extractor $extractor;
     private Transformer $transformer;

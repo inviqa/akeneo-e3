@@ -7,7 +7,7 @@ namespace AkeneoEtl\Application\Action;
 use LogicException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SetOptions
+final class SetOptions
 {
     private string $field;
 

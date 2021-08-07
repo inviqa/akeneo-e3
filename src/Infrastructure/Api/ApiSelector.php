@@ -9,7 +9,7 @@ use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClient;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use LogicException;
 
-class ApiSelector
+final class ApiSelector
 {
     /**
      * @return mixed

@@ -6,7 +6,7 @@ namespace AkeneoEtl\Domain;
 
 use LogicException;
 
-class Resource
+final class Resource
 {
     private array $properties;
 

@@ -14,7 +14,7 @@ use AkeneoEtl\Domain\Hook\ActionTraceHookAware;
 use AkeneoEtl\Domain\Hook\EmptyHooks;
 use AkeneoEtl\Domain\Resource;
 
-class Set implements Action, ActionTraceHookAware
+final class Set implements Action, ActionTraceHookAware
 {
     private Field $field;
 

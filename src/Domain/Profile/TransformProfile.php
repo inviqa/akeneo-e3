@@ -6,7 +6,7 @@ namespace AkeneoEtl\Domain\Profile;
 
 use AkeneoEtl\Domain\Action;
 
-class TransformProfile
+final class TransformProfile
 {
     private array $actions;
 

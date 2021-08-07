@@ -25,7 +25,7 @@ use AkeneoEtl\Infrastructure\Extractor\Extractor;
 use AkeneoEtl\Infrastructure\Loader\ApiLoader;
 use AkeneoEtl\Infrastructure\Loader\DryRunLoader;
 
-class EtlFactory
+final class EtlFactory
 {
     private array $clients = [];
 

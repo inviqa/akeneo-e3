@@ -12,7 +12,7 @@ use AkeneoEtl\Domain\Profile\TransformProfile;
 use LogicException;
 use AkeneoEtl\Application\Expression\ExpressionLanguage;
 
-class ActionFactory
+final class ActionFactory
 {
     public function create(string $type, array $options, ActionTraceHook $traceHook = null): Action
     {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Profile;
 
-class ConnectionProfile
+final class ConnectionProfile
 {
     private string $host;
     private string $clientId;

@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class TransformCommand extends Command
+final class TransformCommand extends Command
 {
     private EtlFactory $factory;
     private ConnectionProfileFactory $connectionProfileFactory;

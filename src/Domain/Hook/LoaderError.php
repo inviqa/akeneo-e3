@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Hook;
 
-class LoaderError
+final class LoaderError
 {
     private array $data;
 

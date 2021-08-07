@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain;
 
-class Property implements Field
+final class Property implements Field
 {
     private string $name;
 

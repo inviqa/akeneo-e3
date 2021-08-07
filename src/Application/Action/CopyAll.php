@@ -7,7 +7,7 @@ namespace AkeneoEtl\Application\Action;
 use AkeneoEtl\Domain\Action;
 use AkeneoEtl\Domain\Resource;
 
-class CopyAll implements Action
+final class CopyAll implements Action
 {
     private array $options;
 

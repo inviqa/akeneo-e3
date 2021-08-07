@@ -6,7 +6,7 @@ namespace AkeneoEtl\Domain;
 
 use LogicException;
 
-class ValueCollection
+final class ValueCollection
 {
     /**
      * @var array<string, mixed>

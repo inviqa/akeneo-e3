@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Profile;
 
-class ExtractProfile
+final class ExtractProfile
 {
     private array $conditions;
 

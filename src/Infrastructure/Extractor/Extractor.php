@@ -9,7 +9,7 @@ use AkeneoEtl\Domain\Extractor as DomainExtractor;
 use AkeneoEtl\Domain\Resource;
 use Generator;
 
-class Extractor implements DomainExtractor
+final class Extractor implements DomainExtractor
 {
     private ListableResourceInterface $api;
 

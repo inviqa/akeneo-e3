@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Profile;
 
-class EtlProfile
+final class EtlProfile
 {
     private ExtractProfile $extractProfile;
     private TransformProfile $transformProfile;

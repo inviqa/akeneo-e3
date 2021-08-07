@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain;
 
-class FieldFactory
+final class FieldFactory
 {
     public static function fromOptions(array $options): Field
     {

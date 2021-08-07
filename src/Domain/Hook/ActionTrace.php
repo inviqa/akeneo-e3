@@ -7,7 +7,7 @@ namespace AkeneoEtl\Domain\Hook;
 use DateTimeImmutable;
 use DateTimeInterface;
 
-class ActionTrace
+final class ActionTrace
 {
     private DateTimeInterface $dateTime;
 

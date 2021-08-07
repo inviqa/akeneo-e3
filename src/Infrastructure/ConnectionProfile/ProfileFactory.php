@@ -7,7 +7,7 @@ namespace AkeneoEtl\Infrastructure\ConnectionProfile;
 use AkeneoEtl\Domain\Profile\ConnectionProfile;
 use Symfony\Component\Yaml\Yaml;
 
-class ProfileFactory
+final class ProfileFactory
 {
     public function read(string $fileName): ConnectionProfile
     {
