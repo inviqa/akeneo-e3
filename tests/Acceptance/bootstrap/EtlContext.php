@@ -17,27 +17,39 @@ use Webmozart\Assert\Assert;
 
 class EtlContext implements Context
 {
-    private \AkeneoEtl\Domain\Resource $resource;
-
     private InMemoryExtractor $extractor;
 
     private Transformer $transformer;
 
     private InMemoryLoader $loader;
 
-    public function __construct()
+    private array $resourceData = [];
+
+    private string $resourceType;
+
+    /**
+     * @Given /^(a|an) (?P<resourceType>[^"]+) in the PIM( with properties)?:$/
+     */
+    public function readResourceProperties(string $resourceType, TableNode $table)
     {
+        $this->resourceType = $resourceType;
+        $this->resourceData = $this->readPropertiesFromTable($table);
     }
 
     /**
-     * @Given a :resourceType in the PIM:
+     * @Given /^attributes:$/
      */
-    public function createResource(string $resourceType, TableNode $table)
+    public function readResourceValues(TableNode $table)
     {
-        $data = $this->readResourceDataFromTable($table);
+        $this->resourceData['values'] = $this->readValuesFromTable($table);
+    }
 
-        $this->resource = Resource::fromArray($data, $resourceType);
-        $this->extractor = new InMemoryExtractor($this->resource);
+    /**
+     * @Given the list of :listCode:
+     */
+    public function readResourceLocalisedList(string $listCode, TableNode $table)
+    {
+        $this->resourceData[$listCode] = $this->readLocalisedListFromTable($table);
     }
 
     /**
@@ -60,7 +72,10 @@ class EtlContext implements Context
      */
     public function transformationIsExecuted()
     {
-        $this->loader = new InMemoryLoader($this->resource);
+        $resource = Resource::fromArray($this->resourceData, $this->resourceType);
+        $this->extractor = new InMemoryExtractor($resource);
+
+        $this->loader = new InMemoryLoader($resource);
 
         $etl = new EtlProcess(
             $this->extractor,
@@ -73,33 +88,62 @@ class EtlContext implements Context
     }
 
     /**
-     * @Then the :product in the PIM should look like:
+     * @Then the :resourceType in the PIM should have properties:
      */
-    public function checkResultInLoader(string $resourceType, TableNode $table)
+    public function checkProperties(string $resourceType, TableNode $table)
     {
-        $data = $this->readResourceDataFromTable($table);
+        $expected = $this->readPropertiesFromTable($table);
 
-        Assert::eq($data, $this->loader->getResult()->toArray());
+        $loaderData = $this->loader->getResult()->toArray();
+        unset($loaderData['values'], $loaderData['labels'], $loaderData['associations']);
+
+        Assert::eq($expected, $loaderData);
     }
 
-    private function readResourceDataFromTable(TableNode $table): array
+    /**
+     * @Then should have attributes:
+     */
+    public function checkValues(TableNode $table)
+    {
+        $expected = $this->readValuesFromTable($table);
+
+        $loaderData = $this->loader->getResult()->toArray();
+        Assert::eq($expected, $loaderData['values']);
+    }
+
+    /**
+     * @Then should have the list of :listCode:
+     */
+    public function checkLocalisedList(string $listCode, TableNode $table)
+    {
+        $expected = $this->readLocalisedListFromTable($table);
+
+        $loaderData = $this->loader->getResult()->toArray();
+
+        Assert::eq($expected, $loaderData[$listCode]);
+    }
+
+    private function readPropertiesFromTable(TableNode $table): array
     {
         $data = [];
         foreach ($table as $row) {
             $field = $row['field'];
-            $value = $row['value'];
+            $value = $this->convertTableValue($row['value']);
 
-            $matches = [];
-            if (preg_match('/^\[(.*)\]$/', $value, $matches) === 1) {
-                $value = explode(',', $matches[1]);
-            }
+            $data[$field] = $value;
+        }
 
-            if ($row[''] === '') {
-                $data[$field] = $value;
-                continue;
-            }
+        return $data;
+    }
 
-            $data['values'][$field][] = [
+    private function readValuesFromTable(TableNode $table): array
+    {
+        $data = [];
+        foreach ($table as $row) {
+            $field = $row['attribute'];
+            $value = $this->convertTableValue($row['value']);
+
+            $data[$field][] = [
                 'scope' => $row['scope'],
                 'locale' => $row['locale'],
                 'data' => $value,
@@ -107,5 +151,34 @@ class EtlContext implements Context
         }
 
         return $data;
+    }
+
+
+    private function readLocalisedListFromTable(TableNode $table): array
+    {
+        $data = [];
+        foreach ($table as $row) {
+            $locale = $row['locale'];
+            $value = $this->convertTableValue($row['value']);
+
+            $data[$locale] = $value;
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param mixed $value
+     * @return mixed
+     */
+    private function convertTableValue($value)
+    {
+        $matches = [];
+        if (preg_match('/^\[(.*)\]$/', $value, $matches) !== 1) {
+            return $value;
+        }
+
+        return explode(',', $matches[1]);
+        return [$matches, $value];
     }
 }
