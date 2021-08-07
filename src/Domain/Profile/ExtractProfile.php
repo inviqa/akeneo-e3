@@ -12,7 +12,7 @@ final class ExtractProfile
 
     private function __construct(array $data)
     {
-        $data = self::validate($data);
+        $data = self::resolve($data);
 
         $this->conditions = $data['conditions'] ?? [];
     }
@@ -27,7 +27,7 @@ final class ExtractProfile
         return $this->conditions;
     }
 
-    private static function validate(array $data): array
+    private static function resolve(array $data): array
     {
         $resolver = new OptionsResolver();
 

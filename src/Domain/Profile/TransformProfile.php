@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Profile;
 
-use AkeneoEtl\Domain\Action;
+use LogicException;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class TransformProfile
 {
@@ -12,6 +13,8 @@ final class TransformProfile
 
     private function __construct(array $data)
     {
+        $data = self::resolve($data);
+
         $this->actions = $data['actions'] ?? [];
     }
 
@@ -23,5 +26,22 @@ final class TransformProfile
     public function getActions(): array
     {
         return $this->actions;
+    }
+
+    private static function resolve(array $data): array
+    {
+        $resolver = new OptionsResolver();
+
+        $resolver
+            ->setRequired('actions')
+            ->setAllowedTypes('actions', 'array');
+
+        foreach ($data['actions'] as $actionId => $action) {
+            if (isset($action['type']) === false) {
+                throw new LogicException(sprintf('No type specified for action %s', $actionId));
+            }
+        }
+
+        return $data;
     }
 }
