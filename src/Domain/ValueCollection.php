@@ -62,6 +62,13 @@ final class ValueCollection
         return $this;
     }
 
+    public function has(Attribute $attribute): bool
+    {
+        $hash = $this->attributeHash($attribute);
+
+        return array_key_exists($hash, $this->values);
+    }
+
     public function count(): int
     {
         return count($this->values);

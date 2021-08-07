@@ -90,6 +90,21 @@ final class Resource
         return $this;
     }
 
+    public function has(Field $field): bool
+    {
+        $fieldName = $field->getName();
+
+        if ($field instanceof Property) {
+            return array_key_exists($fieldName, $this->properties);
+        }
+
+        if (!$field instanceof Attribute) {
+            throw new LogicException('Unsupported type of field');
+        }
+
+        return $this->values->has($field);
+    }
+
     public function getCodeOrIdentifier(): ?string
     {
         return $this->codeOrIdentifier;

@@ -31,6 +31,28 @@ class ValueCollectionTest extends TestCase
         );
     }
 
+    public function test_it_has_an_attribute()
+    {
+        $collection = ValueCollection::fromArray(
+            TestData::getValues()
+        );
+
+        Assert::assertTrue(
+            $collection->has(Attribute::create('head_count', null, null))
+        );
+    }
+
+    public function test_it_does_not_have_an_attribute()
+    {
+        $collection = ValueCollection::fromArray(
+            TestData::getValues()
+        );
+
+        Assert::assertFalse(
+            $collection->has(Attribute::create('paw_count', null, null))
+        );
+    }
+
     public function test_it_sets_a_value_of_an_existing_attribute()
     {
         $collection = ValueCollection::fromArray(

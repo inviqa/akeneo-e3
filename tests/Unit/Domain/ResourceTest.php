@@ -24,6 +24,14 @@ class ResourceTest extends TestCase
         Assert::assertEquals($expectedValue, $value);
     }
 
+    public function test_it_has_a_property()
+    {
+        $resource = Resource::fromArray(TestData::getProduct(), 'product');
+        $field = Property::create('family');
+
+        $this->assertTrue($resource->has($field));
+    }
+
     public function test_it_throws_an_exception_if_property_does_not_exist()
     {
         $resource = Resource::fromArray(TestData::getProduct(), 'product');
