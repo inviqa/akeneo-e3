@@ -60,7 +60,7 @@ class EtlContext implements Context
         $config = Yaml::parse($string);
 
         $factory = new EtlFactory();
-        $profileFactory = new ProfileFactory(new ActionFactory(), );
+        $profileFactory = new ProfileFactory();
         $profile = $profileFactory->fromArray($config);
 
         $transformProfile = $profile->getTransformProfile();

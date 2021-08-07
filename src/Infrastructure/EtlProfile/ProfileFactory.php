@@ -16,13 +16,10 @@ use Symfony\Component\Yaml\Yaml;
 
 class ProfileFactory
 {
-    private ActionFactory $actionFactory;
-
     private ?ValidatorInterface $validator;
 
-    public function __construct(ActionFactory $actionFactory, ValidatorInterface $validator = null)
+    public function __construct(ValidatorInterface $validator = null)
     {
-        $this->actionFactory = $actionFactory;
         $this->validator = $validator;
     }
 
