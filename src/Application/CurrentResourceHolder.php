@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Domain;
+namespace AkeneoEtl\Application;
 
 final class CurrentResourceHolder
 {

@@ -6,15 +6,25 @@ namespace AkeneoEtl\Application;
 
 use AkeneoEtl\Domain\Action;
 use AkeneoEtl\Application\Action as Actions;
-use AkeneoEtl\Domain\Hook\ActionTraceHook;
-use AkeneoEtl\Domain\Hook\ActionTraceHookAware;
 use AkeneoEtl\Domain\Profile\TransformProfile;
+use AkeneoEtl\Domain\Transform\Event\BeforeTransformEvent;
 use LogicException;
 use AkeneoEtl\Application\Expression\ExpressionLanguage;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class ActionFactory
 {
-    public function create(string $type, array $options, ActionTraceHook $traceHook = null): Action
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $eventDispatcher->addListener(
+            BeforeTransformEvent::class,
+            function (BeforeTransformEvent $event) {
+                CurrentResourceHolder::$current = $event->getResource();
+            }
+        );
+    }
+
+    public function create(string $type, array $options): Action
     {
         // if deps needed, then clone from registry
         $action = null;
@@ -30,17 +40,13 @@ final class ActionFactory
                 throw new LogicException(sprintf('No registered action with the name %s', $type));
         }
 
-        if ($traceHook !== null && $action instanceof ActionTraceHookAware) {
-            $action->setHook($traceHook);
-        }
-
         return $action;
     }
 
     /**
      * @return array|Action[]
      */
-    public function createActions(TransformProfile $transformProfile, ActionTraceHook $traceHook): array
+    public function createActions(TransformProfile $transformProfile): array
     {
         $actions = [];
         foreach ($transformProfile->getActions() as $actionOptions) {
@@ -48,7 +54,7 @@ final class ActionFactory
 
             $type = $actionOptions['type'];
             unset($actionOptions['type']);
-            $actions[] = $this->create($type, $actionOptions, $traceHook);
+            $actions[] = $this->create($type, $actionOptions);
         }
 
         return $actions;

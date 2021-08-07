@@ -9,9 +9,6 @@ use Akeneo\Pim\ApiClient\Search\SearchBuilder;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientBuilder;
 use AkeneoEtl\Application\ActionFactory;
 use AkeneoEtl\Application\SequentialTransformer;
-use AkeneoEtl\Domain\Hook\ActionTraceHook;
-use AkeneoEtl\Domain\Hook\Hooks;
-use AkeneoEtl\Domain\Hook\LoaderErrorHook;
 use AkeneoEtl\Domain\Profile\ConnectionProfile;
 use AkeneoEtl\Domain\Profile\ExtractProfile;
 use AkeneoEtl\Domain\Profile\LoadProfile;
@@ -24,7 +21,7 @@ use AkeneoEtl\Infrastructure\Api\ApiSelector;
 use AkeneoEtl\Infrastructure\Extractor\Extractor;
 use AkeneoEtl\Infrastructure\Loader\ApiLoader;
 use AkeneoEtl\Infrastructure\Loader\DryRunLoader;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class EtlFactory
 {
@@ -34,19 +31,20 @@ final class EtlFactory
 
     private ActionFactory $actionFactory;
 
-    public function __construct()
+    private EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(EventDispatcherInterface $eventDispatcher)
     {
+        $this->eventDispatcher = $eventDispatcher;
         $this->apiSelector = new ApiSelector();
-        $this->actionFactory = new ActionFactory();
+        $this->actionFactory = new ActionFactory($eventDispatcher);
     }
 
     public function createEtlProcess(
         string $resourceType,
         ConnectionProfile $sourceConnectionProfile,
         ConnectionProfile $destinationConnectionProfile,
-        EtlProfile $etlProfile,
-        Hooks $hooks,
-        EventDispatcherInterface $eventDispatcher
+        EtlProfile $etlProfile
     ): EtlProcess {
         $extractor = $this->createExtractor(
             $resourceType,
@@ -55,18 +53,16 @@ final class EtlFactory
         );
 
         $transformer = $this->createTransformer(
-            $etlProfile->getTransformProfile(),
-            $hooks
+            $etlProfile->getTransformProfile()
         );
 
         $loader = $this->createLoader(
             $resourceType,
             $destinationConnectionProfile,
-            $etlProfile->getLoadProfile(),
-            $hooks
+            $etlProfile->getLoadProfile()
         );
 
-        return new EtlProcess($extractor, $transformer, $loader, $hooks, $eventDispatcher);
+        return new EtlProcess($extractor, $transformer, $loader, $this->eventDispatcher);
     }
 
     public function createExtractor(
@@ -83,9 +79,9 @@ final class EtlFactory
         );
     }
 
-    public function createTransformer(TransformProfile $transformProfile, ActionTraceHook $traceHook): Transformer
+    public function createTransformer(TransformProfile $transformProfile): Transformer
     {
-        $actions = $this->actionFactory->createActions($transformProfile, $traceHook);
+        $actions = $this->actionFactory->createActions($transformProfile);
 
         return new SequentialTransformer($actions);
     }
@@ -93,8 +89,7 @@ final class EtlFactory
     public function createLoader(
         string $dataType,
         ConnectionProfile $connectionProfile,
-        LoadProfile $loadProfile,
-        LoaderErrorHook $onLoaderError
+        LoadProfile $loadProfile
     ): Loader {
         if ($loadProfile->isDryRun() === true) {
             return new DryRunLoader();
@@ -103,8 +98,7 @@ final class EtlFactory
         $client = $this->getClient($connectionProfile);
 
         return new ApiLoader(
-            $this->apiSelector->getApi($client, $dataType),
-            $onLoaderError
+            $this->apiSelector->getApi($client, $dataType)
         );
     }
 

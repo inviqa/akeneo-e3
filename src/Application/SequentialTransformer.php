@@ -7,9 +7,6 @@ namespace AkeneoEtl\Application;
 use AkeneoEtl\Domain\Action;
 use AkeneoEtl\Domain\Resource;
 use AkeneoEtl\Domain\Transformer;
-use Exception;
-use LogicException;
-use Symfony\Component\ExpressionLanguage\SyntaxError;
 
 final class SequentialTransformer implements Transformer
 {
@@ -27,18 +24,8 @@ final class SequentialTransformer implements Transformer
     {
         $transformingResource = clone $resource;
 
-        foreach ($this->actions as $actionId => $action) {
-            try {
-                $action->execute($transformingResource);
-            } catch (SyntaxError $e) {
-                throw $e;
-            } catch (LogicException $e) {
-                // @todo: stop if configured to stop internal exceptions
-                // @todo: trigger onTransformerError
-                print $actionId.'  | '.$e->getMessage().PHP_EOL;
-            } catch (Exception $e) {
-                throw $e;
-            }
+        foreach ($this->actions as $action) {
+            $action->execute($transformingResource);
         }
 
         return $transformingResource;

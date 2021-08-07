@@ -9,7 +9,7 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
-final class ProgressEvent extends Event
+final class AfterTransformEvent extends Event
 {
     private int $index;
     private int $total;
@@ -54,7 +54,7 @@ final class ProgressEvent extends Event
         return $this->before;
     }
 
-    public function getDateTime()
+    public function getDateTime(): DateTimeInterface
     {
         return $this->dateTime;
     }

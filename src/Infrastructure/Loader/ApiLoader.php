@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace AkeneoEtl\Infrastructure\Loader;
 
 use Akeneo\Pim\ApiClient\Api\Operation\UpsertableResourceListInterface;
-use AkeneoEtl\Domain\Hook\LoaderError;
-use AkeneoEtl\Domain\Hook\LoaderErrorHook;
+use AkeneoEtl\Domain\Exception\LoadException;
+use AkeneoEtl\Domain\Load\LoadError;
 use AkeneoEtl\Domain\Loader;
 use AkeneoEtl\Domain\Resource;
-use Exception;
 use Traversable;
 
 final class ApiLoader implements Loader
@@ -20,13 +19,10 @@ final class ApiLoader implements Loader
 
     private array $buffer = [];
 
-    private LoaderErrorHook $onError;
-
-    public function __construct(UpsertableResourceListInterface $api, LoaderErrorHook $onError, int $batchSize = 100)
+    public function __construct(UpsertableResourceListInterface $api, int $batchSize = 100)
     {
         $this->api = $api;
         $this->batchSize = $batchSize;
-        $this->onError = $onError;
     }
 
     public function load(Resource $resource): void
@@ -41,6 +37,11 @@ final class ApiLoader implements Loader
 
     public function finish(): void
     {
+        $this->loadBatch();
+    }
+
+    private function loadBatch(): void
+    {
         if (count($this->buffer) === 0) {
             return;
         }
@@ -53,16 +54,37 @@ final class ApiLoader implements Loader
 
     private function processResponse(Traversable $result): void
     {
+        $errors = [];
+
         foreach ($result as $line) {
             if ($line['status_code'] === 422) {
                 $initialItem = $this->buffer[$line['identifier']];
 
-                try {
-                    $this->onError->onLoaderError($initialItem, new LoaderError($line));
-                } catch (Exception $e) {
-                    // @todo: log exceptions
-                }
+                $errors[] = LoadError::create(
+                    $this->getErrorMessage($line),
+                    Resource::fromArray($initialItem, '')
+                );
             }
         }
+
+        if (count($errors) > 0) {
+            throw new LoadException('Batch upload errors', $errors);
+        }
+    }
+
+    public function getErrorMessage(array $response): string
+    {
+        $messages = [$response['message'] ?? ''];
+
+        foreach ($response['errors'] ?? [] as $error) {
+            $messages[] = sprintf(
+                ' - property: %s, attribute: %s, %s',
+                $error['property'] ?? '?',
+                $error['attribute'] ?? '?',
+                $error['message'] ?? '?',
+            );
+        }
+
+        return implode(PHP_EOL, $messages);
     }
 }

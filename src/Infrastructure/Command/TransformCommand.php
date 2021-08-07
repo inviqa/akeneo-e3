@@ -15,7 +15,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class TransformCommand extends Command
 {
@@ -36,9 +36,9 @@ final class TransformCommand extends Command
         $this->factory = $factory;
         $this->connectionProfileFactory = $connectionProfileFactory;
         $this->etlProfileFactory = $etlProfileFactory;
+        $this->eventDispatcher = $eventDispatcher;
 
         parent::__construct();
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     protected function configure(): void
@@ -70,7 +70,6 @@ final class TransformCommand extends Command
         }
 
         $progress = new ProgressBar($output);
-        $consoleHooks = new ConsoleHooks($output, $progress);
 
         new EventSubscriber($this->eventDispatcher, $progress, $output);
 
@@ -78,9 +77,7 @@ final class TransformCommand extends Command
             $resourceType,
             $sourceConnectionProfile,
             $destinationConnectionProfile,
-            $etlProfile,
-            $consoleHooks,
-            $this->eventDispatcher
+            $etlProfile
         );
 
         $etl->execute();

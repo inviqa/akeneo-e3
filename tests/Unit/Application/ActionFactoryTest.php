@@ -8,12 +8,13 @@ use LogicException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class ActionFactoryTest extends TestCase
 {
     public function test_it_creates_a_action()
     {
-        $factory = new ActionFactory();
+        $factory = new ActionFactory(new EventDispatcher());
         $action = $factory->create('copy-all', []);
 
         Assert::assertInstanceOf(Action::class, $action);
@@ -23,7 +24,7 @@ class ActionFactoryTest extends TestCase
     {
         $this->expectException(LogicException::class);
 
-        $factory = new ActionFactory();
+        $factory = new ActionFactory(new EventDispatcher());
         $factory->create('??? unknown ???', []);
     }
 }

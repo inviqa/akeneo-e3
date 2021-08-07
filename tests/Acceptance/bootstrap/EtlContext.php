@@ -3,7 +3,6 @@
 namespace AkeneoEtl\Tests\Acceptance\bootstrap;
 
 use AkeneoEtl\Domain\EtlProcess;
-use AkeneoEtl\Domain\Hook\EmptyHooks;
 use AkeneoEtl\Domain\Profile\EtlProfile;
 use AkeneoEtl\Domain\Resource;
 use AkeneoEtl\Domain\Transformer;
@@ -26,6 +25,13 @@ class EtlContext implements Context
     private array $resourceData = [];
 
     private string $resourceType;
+
+    private EventDispatcher $eventDispatcher;
+
+    public function __construct()
+    {
+        $this->eventDispatcher = new EventDispatcher();
+    }
 
     /**
      * @Given /^(a|an) (?P<resourceType>[^"]+) in the PIM( with properties)?:$/
@@ -59,11 +65,11 @@ class EtlContext implements Context
     {
         $config = Yaml::parse($string);
 
-        $factory = new EtlFactory();
+        $factory = new EtlFactory($this->eventDispatcher);
         $profile = EtlProfile::fromArray($config);
 
         $transformProfile = $profile->getTransformProfile();
-        $this->transformer = $factory->createTransformer($transformProfile, new EmptyHooks());
+        $this->transformer = $factory->createTransformer($transformProfile);
     }
 
     /**
@@ -80,7 +86,7 @@ class EtlContext implements Context
             $this->extractor,
             $this->transformer,
             $this->loader,
-            new EmptyHooks()
+            $this->eventDispatcher
         );
 
         $etl->execute();

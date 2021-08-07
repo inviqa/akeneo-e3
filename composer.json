@@ -50,7 +50,7 @@
             "phpstan analyse"
         ],
         "test-unit": [
-            "phpunit tests/"
+            "phpunit tests/ --testdox --color"
         ],
         "test-acceptance": [
             "behat"

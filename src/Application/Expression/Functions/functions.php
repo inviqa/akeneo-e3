@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Application\Expression\Functions;
 
+use AkeneoEtl\Application\CurrentResourceHolder;
 use AkeneoEtl\Domain\Attribute;
-use AkeneoEtl\Domain\CurrentResourceHolder;
+use AkeneoEtl\Domain\Exception\TransformException;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 
@@ -61,6 +62,10 @@ function value(string $name, ?string $channel, ?string $locale, $defaultValue = 
     $resource = CurrentResourceHolder::$current;
 
     $field = Attribute::create($name, $channel, $locale);
+
+    if ($resource->has($field) === false) {
+        throw new TransformException(sprintf('Attribute %s is not present in data.', $name), true);
+    }
 
     return $resource->get($field);
 }

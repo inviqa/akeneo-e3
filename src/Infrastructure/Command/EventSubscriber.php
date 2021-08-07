@@ -2,10 +2,12 @@
 
 namespace AkeneoEtl\Infrastructure\Command;
 
-use AkeneoEtl\Domain\Transform\Event\ProgressEvent;
+use AkeneoEtl\Domain\Load\Event\LoadErrorEvent;
+use AkeneoEtl\Domain\Transform\Event\AfterTransformEvent;
+use AkeneoEtl\Domain\Transform\Event\TransformErrorEvent;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class EventSubscriber
 {
@@ -19,12 +21,13 @@ class EventSubscriber
     {
         $this->eventDispatcher = $eventDispatcher;
         $this->progressBar = $progressBar;
-
-        $this->eventDispatcher->addListener(ProgressEvent::class, [$this, 'onProgress']);
         $this->output = $output;
+
+        $this->eventDispatcher->addListener(AfterTransformEvent::class, [$this, 'onProgress']);
+        $this->eventDispatcher->addListener(TransformErrorEvent::class, [$this, 'onTransformError']);
     }
 
-    public function onProgress(ProgressEvent $event): void
+    public function onProgress(AfterTransformEvent $event): void
     {
         if ($this->progressBar->getMaxSteps() === 0) {
             $this->progressBar->setMaxSteps($event->getTotal());
@@ -39,6 +42,26 @@ class EventSubscriber
                 $event->getAfter()->getCodeOrIdentifier()
             ));
             $this->progressBar->display();
+        }
+    }
+
+    public function onTransformError(TransformErrorEvent $event): void
+    {
+        $this->progressBar->clear();
+        $this->output->writeln(sprintf('%s', $event->getMessage()));
+        $this->progressBar->display();
+    }
+
+    public function onLoadError(LoadErrorEvent $event): void
+    {
+        foreach ($event->getErrors() as $error) {
+            $this->output->writeln(
+                sprintf(
+                    '[%s] %s',
+                    $error->getIdentifier(),
+                    $error->getMessage()
+                )
+            );
         }
     }
 }
