@@ -1,6 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AkeneoEtl\Domain;
+
+use LogicException;
 
 class ValueCollection
 {
@@ -29,15 +33,22 @@ class ValueCollection
     }
 
     /**
-     * @param mixed $default
-     *
      * @return mixed|null
      */
-    public function get(Attribute $attribute, $default = null)
+    public function get(Attribute $attribute)
     {
         $hash = $this->attributeHash($attribute);
 
-        return $this->values[$hash] ?? $default;
+        if (array_key_exists($hash, $this->values) === false) {
+            throw new LogicException(sprintf(
+                'Attribute %s (scope=%s, locale=%s) is not present in data.',
+                $attribute->getName(),
+                $attribute->getScope() ?? 'null',
+                $attribute->getLocale() ?? 'null'
+            ));
+        }
+
+        return $this->values[$hash];
     }
 
     /**

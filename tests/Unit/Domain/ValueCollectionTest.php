@@ -31,22 +31,6 @@ class ValueCollectionTest extends TestCase
         );
     }
 
-
-    public function test_it_gets_a_default_value_if_attribute_not_found()
-    {
-        $collection = ValueCollection::fromArray(
-            TestData::getValues()
-        );
-
-        Assert::assertEquals(
-            '~value~',
-            $collection->get(
-                Attribute::create('horn_count', null, null),
-                '~value~'
-            ),
-        );
-    }
-
     public function test_it_sets_a_value_of_an_existing_attribute()
     {
         $collection = ValueCollection::fromArray(

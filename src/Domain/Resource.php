@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AkeneoEtl\Domain;
 
 use LogicException;
@@ -25,7 +27,7 @@ class Resource
             throw new LogicException(sprintf('%s field is expected for %s resource type', $idFieldName, $resourceType));
         }
 
-        $this->codeOrIdentifier = $data[$idFieldName];
+        $this->codeOrIdentifier = (string)$data[$idFieldName];
         $this->values = ValueCollection::fromArray($data['values'] ?? []);
 
         unset($data['values']);
@@ -47,19 +49,24 @@ class Resource
      *
      * @return mixed
      */
-    public function get(Field $field, $default = null)
+    public function get(Field $field)
     {
         $fieldName = $field->getName();
 
         if ($field instanceof Property) {
-            return $this->properties[$fieldName] ?? $default;
+
+            if (array_key_exists($fieldName, $this->properties) === false) {
+                throw new LogicException(sprintf('Field %s is not present in data.', $fieldName));
+            }
+
+            return $this->properties[$fieldName];
         }
 
         if (!$field instanceof Attribute) {
             throw new LogicException('Unsupported type of field');
         }
 
-        return $this->values->get($field, $default);
+        return $this->values->get($field);
     }
 
     /**
