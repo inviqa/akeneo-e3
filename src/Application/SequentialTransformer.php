@@ -35,7 +35,7 @@ final class SequentialTransformer implements Transformer
             } catch (LogicException $e) {
                 // @todo: stop if configured to stop internal exceptions
                 // @todo: trigger onTransformerError
-                print $e->getMessage().PHP_EOL;
+                print $actionId.'  | '.$e->getMessage().PHP_EOL;
             } catch (Exception $e) {
                 throw $e;
             }

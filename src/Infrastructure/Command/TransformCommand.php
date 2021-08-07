@@ -59,9 +59,9 @@ final class TransformCommand extends Command
 
         $etlProfile = $this->getEtlProfile($input);
 
-        $resourceType = $input->getOption('resource-type');
+        $resourceType = (string)$input->getOption('resource-type');
 
-        if ($resourceType === null) {
+        if ($resourceType === '') {
             // @todo: read from etl profile
             // if null, throw an exception
         }
@@ -86,9 +86,9 @@ final class TransformCommand extends Command
 
     private function getConnectionProfile(InputInterface $input): ConnectionProfile
     {
-        $profileFileName = $input->getOption('connection-profile');
+        $profileFileName = (string)$input->getOption('connection-profile');
 
-        if ($profileFileName === null) {
+        if ($profileFileName === '') {
             throw new LogicException(
                 '--connection-profile option is required.'
             );
@@ -99,9 +99,9 @@ final class TransformCommand extends Command
 
     private function getDestinationConnectionProfile(InputInterface $input): ?ConnectionProfile
     {
-        $profileFileName = $input->getOption('destination-connection-profile');
+        $profileFileName = (string)$input->getOption('destination-connection-profile');
 
-        if ($profileFileName === null) {
+        if ($profileFileName === '') {
             return null;
         }
 
@@ -110,9 +110,9 @@ final class TransformCommand extends Command
 
     private function getEtlProfile(InputInterface $input): EtlProfile
     {
-        $profileFileName = $input->getOption('etl-profile');
+        $profileFileName = (string)$input->getOption('etl-profile');
 
-        if ($profileFileName === null) {
+        if ($profileFileName === '') {
             throw new LogicException('--etl-profile option is required.');
         }
 
