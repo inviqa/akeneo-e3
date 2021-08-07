@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AkeneoEtl\Application\Action;
 
 use AkeneoEtl\Application\Expression\ExpressionLanguage;
@@ -37,16 +39,7 @@ class Set implements Action, ActionTraceHookAware
 
     public function execute(Resource $resource): void
     {
-        $beforeValue = $resource->get($this->field);
-
         $resultValue = $this->evaluateValue($resource);
-
-        // skip if same value
-        if ($resultValue === $beforeValue) {
-            return;
-        }
-
-        $this->traceHook->onAction(ActionTrace::create($resource->getCodeOrIdentifier() ?? '', $beforeValue, $resultValue));
 
         $resource->set($this->field, $resultValue);
     }

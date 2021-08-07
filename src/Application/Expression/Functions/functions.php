@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AkeneoEtl\Application\Expression\Functions;
 
 use AkeneoEtl\Domain\Attribute;
@@ -11,42 +13,42 @@ function slug(string $string, string $separator = '-', string $locale = null): s
 {
     $slugger = new AsciiSlugger();
 
-    return $slugger->slug($string, $separator, $locale);
+    return $slugger->slug($string, $separator, $locale)->toString();
 }
 
 function lowercase(string $string): string
 {
     $unicodeString = new UnicodeString($string);
 
-    return $unicodeString->lower();
+    return $unicodeString->lower()->toString();
 }
 
 function uppercase(string $string): string
 {
     $unicodeString = new UnicodeString($string);
 
-    return $unicodeString->upper();
+    return $unicodeString->upper()->toString();
 }
 
 function camelcase(string $string): string
 {
     $unicodeString = new UnicodeString($string);
 
-    return $unicodeString->camel();
+    return $unicodeString->camel()->toString();
 }
 
 function snakecase(string $string): string
 {
     $unicodeString = new UnicodeString($string);
 
-    return $unicodeString->snake();
+    return $unicodeString->snake()->toString();
 }
 
 function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}"): string
 {
     $unicodeString = new UnicodeString($string);
 
-    return $unicodeString->trim($chars);
+    return $unicodeString->trim($chars)->toString();
 }
 
 /**
@@ -60,5 +62,5 @@ function value(string $name, ?string $channel, ?string $locale, $defaultValue = 
 
     $field = Attribute::create($name, $channel, $locale);
 
-    return $resource->get($field, $defaultValue);
+    return $resource->get($field);
 }

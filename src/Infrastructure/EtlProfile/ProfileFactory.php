@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AkeneoEtl\Infrastructure\EtlProfile;
 
 use AkeneoEtl\Application\ActionFactory;

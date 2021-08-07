@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AkeneoEtl\Application;
 
 use AkeneoEtl\Domain\Action;
 use AkeneoEtl\Domain\Resource;
 use AkeneoEtl\Domain\Transformer;
 use Exception;
+use LogicException;
 
 class SequentialTransformer implements Transformer
 {
@@ -26,8 +29,11 @@ class SequentialTransformer implements Transformer
         foreach ($this->actions as $action) {
             try {
                 $action->execute($transformingResource);
+            } catch (LogicException $e) {
+                // @todo: stop if configured to stop internal exceptions
+                // @todo: trigger onTransformerError
+                print $e->getMessage().PHP_EOL;
             } catch (Exception $e) {
-                // @todo: skip if configured to skip exceptions
                 throw($e);
             }
         }
