@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\EtlProfile;
+namespace AkeneoEtl\Infrastructure\Profile;
 
 use AkeneoEtl\Domain\Profile\EtlProfile;
 use Symfony\Component\Yaml\Yaml;
 
-final class ProfileFactory
+final class EtlProfileFactory
 {
     public function fromFile(string $fileName): EtlProfile
     {

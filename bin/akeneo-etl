@@ -4,9 +4,9 @@
 require __DIR__.'/../vendor/autoload.php';
 
 use AkeneoEtl\Infrastructure\Command;
-use AkeneoEtl\Infrastructure\ConnectionProfile\ProfileFactory as ConnectionProfileFactory;
 use AkeneoEtl\Infrastructure\EtlFactory;
-use AkeneoEtl\Infrastructure\EtlProfile\ProfileFactory as EtlProfileFactory;
+use AkeneoEtl\Infrastructure\Profile\ConnectionProfileFactory;
+use AkeneoEtl\Infrastructure\Profile\EtlProfileFactory;
 use Symfony\Component\Console\Application;
 
 

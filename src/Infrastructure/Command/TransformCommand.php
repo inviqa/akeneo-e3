@@ -6,9 +6,9 @@ namespace AkeneoEtl\Infrastructure\Command;
 
 use AkeneoEtl\Domain\Profile\ConnectionProfile;
 use AkeneoEtl\Domain\Profile\EtlProfile;
-use AkeneoEtl\Infrastructure\ConnectionProfile\ProfileFactory as ConnectionProfileFactory;
-use AkeneoEtl\Infrastructure\EtlProfile\ProfileFactory as EtlProfileFactory;
 use AkeneoEtl\Infrastructure\EtlFactory;
+use AkeneoEtl\Infrastructure\Profile\ConnectionProfileFactory;
+use AkeneoEtl\Infrastructure\Profile\EtlProfileFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Helper\ProgressBar;

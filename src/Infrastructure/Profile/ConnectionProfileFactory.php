@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\ConnectionProfile;
+namespace AkeneoEtl\Infrastructure\Profile;
 
 use AkeneoEtl\Domain\Profile\ConnectionProfile;
 use Symfony\Component\Yaml\Yaml;
 
-final class ProfileFactory
+final class ConnectionProfileFactory
 {
     public function fromFile(string $fileName): ConnectionProfile
     {
