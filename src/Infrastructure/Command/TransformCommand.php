@@ -38,7 +38,7 @@ final class TransformCommand extends Command
     {
         $this
             ->setName('transform')
-            ->addOption('resource-type', 'r ', InputOption::VALUE_REQUIRED)
+            ->addOption('resource-type', 'r', InputOption::VALUE_REQUIRED)
             ->addOption('connection-profile', 'c', InputOption::VALUE_REQUIRED)
             ->addOption(
                 'destination-connection-profile',
