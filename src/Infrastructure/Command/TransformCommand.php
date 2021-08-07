@@ -94,7 +94,7 @@ final class TransformCommand extends Command
             );
         }
 
-        return $this->connectionProfileFactory->read($profileFileName);
+        return $this->connectionProfileFactory->fromFile($profileFileName);
     }
 
     private function getDestinationConnectionProfile(InputInterface $input): ?ConnectionProfile
@@ -105,7 +105,7 @@ final class TransformCommand extends Command
             return null;
         }
 
-        return $this->connectionProfileFactory->read($profileFileName);
+        return $this->connectionProfileFactory->fromFile($profileFileName);
     }
 
     private function getEtlProfile(InputInterface $input): EtlProfile

@@ -9,7 +9,7 @@ use Symfony\Component\Yaml\Yaml;
 
 final class ProfileFactory
 {
-    public function read(string $fileName): ConnectionProfile
+    public function fromFile(string $fileName): ConnectionProfile
     {
         $profileData = Yaml::parseFile($fileName);
 
