@@ -43,8 +43,6 @@ final class EtlProcess
         $resources = $this->extractor->extract();
 
         foreach ($resources as $resource) {
-            // @todo: implement as an event and move holder to Application
-            //CurrentResourceHolder::$current = $resource;
             $this->eventDispatcher->dispatch(BeforeTransformEvent::create($index++, $count, $resource));
 
             $transformedResource = $this->transform($resource);
