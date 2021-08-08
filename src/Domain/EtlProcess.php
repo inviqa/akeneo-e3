@@ -42,6 +42,11 @@ final class EtlProcess
         $resources = $this->extractor->extract();
 
         foreach ($resources as $resource) {
+
+//            if ($progress->current() > 200) {
+//                break;
+//            }
+
             $this->onBeforeTransform($progress, $resource);
 
             $result = $this->transform($resource);

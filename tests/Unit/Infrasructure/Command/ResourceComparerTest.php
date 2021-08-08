@@ -1,0 +1,39 @@
+<?php
+
+namespace AkeneoEtl\Tests\Unit\Infrastructure\Command;
+
+use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Attribute;
+use AkeneoEtl\Infrastructure\Command\ResourceComparer;
+use AkeneoEtl\Infrastructure\Command\ResourceDataNormaliser;
+use PHPUnit\Framework\TestCase;
+
+class ResourceComparerTest extends TestCase
+{
+    public function test_it_returns_a_comparison_table()
+    {
+        $resource1 = Resource::fromArray([
+            'identifier' => '0123456789',
+            'family' => 'ziggy'
+        ], 'product');
+        $resource1->set(Attribute::create('description', 'web', 'en_GB'), 'Ziggy The Hydra');
+
+        $resource2 = Resource::fromArray([
+            'identifier' => '0123456789',
+            'family' => 'pet'
+        ], 'product');
+        $resource2->set(Attribute::create('name', null, 'en_GB'), 'Ziggy');
+        $resource2->set(Attribute::create('description', 'web', 'en_GB'), 'Ziggy The Pet');
+
+
+        $comparer = new ResourceComparer();
+        $table = $comparer->getCompareTable($resource1, $resource2);
+
+        $this->assertEquals([
+            ['identifier',  '0123456789',      '0123456789'   ],
+            ['family',      'ziggy',           'pet'          ],
+            ['name',        '',                'Ziggy'        ],
+            ['description', 'Ziggy The Hydra', 'Ziggy The Pet'],
+        ], $table);
+    }
+}

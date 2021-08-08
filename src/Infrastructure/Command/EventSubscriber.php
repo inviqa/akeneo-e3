@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AkeneoEtl\Infrastructure\Command;
 
 use AkeneoEtl\Domain\Load\Event\LoadErrorEvent;
@@ -9,6 +11,7 @@ use AkeneoEtl\Domain\Transform\Event\TransformErrorEvent;
 use LogicException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -23,7 +26,7 @@ class EventSubscriber
 
     private Table $table;
 
-    private ResourceNormaliser $normaliser;
+    private ResourceComparer $resourceComparer;
 
     public function __construct(EventDispatcherInterface $eventDispatcher, ProgressBar $progressBar, OutputInterface $output)
     {
@@ -37,7 +40,11 @@ class EventSubscriber
         $section = $output->section();
 
         $this->table = new Table($section);
-        $this->normaliser = new ResourceNormaliser();
+        $this->table->setColumnWidth(0, 10);
+        $this->table->setColumnWidth(1, 10);
+        $this->table->setColumnWidth(2, 10);
+
+        $this->resourceComparer = new ResourceComparer();
 
         $this->eventDispatcher->addListener(AfterTransformEvent::class, [$this, 'onProgress']);
         $this->eventDispatcher->addListener(TransformErrorEvent::class, [$this, 'onTransformError']);
@@ -54,20 +61,14 @@ class EventSubscriber
         if ($event->getAfter() !== null) {
             $this->progressBar->clear();
 
-//            $this->output->writeln(sprintf(
-//                '[[ %s ]]',
-//                $event->getAfter()->getCodeOrIdentifier()
-//            ));
+            $comparison = $this->resourceComparer->getCompareTable($event->getBefore(), $event->getAfter());
+            foreach ($comparison as $item) {
+                $this->table->appendRow($item);
+            }
 
-//            if ($this->table === null) {
-//                $this->table = new Table($this->output);
-//            }
-            $this->table->appendRow([
-                $this->normaliseResource($event->getBefore()),
-                $this->normaliseResource($event->getAfter()),
-
-            ]);
-//            $this->table->render();
+            if (count($comparison) > 0) {
+                $this->table->appendRow(new TableSeparator());
+            }
 
             $this->progressBar->display();
         }
