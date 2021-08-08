@@ -6,8 +6,10 @@ use AkeneoEtl\Domain\Load\Event\LoadErrorEvent;
 use AkeneoEtl\Domain\Resource;
 use AkeneoEtl\Domain\Transform\Event\AfterTransformEvent;
 use AkeneoEtl\Domain\Transform\Event\TransformErrorEvent;
+use LogicException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -21,13 +23,19 @@ class EventSubscriber
 
     private Table $table;
 
+    private ResourceNormaliser $normaliser;
+
     public function __construct(EventDispatcherInterface $eventDispatcher, ProgressBar $progressBar, OutputInterface $output)
     {
+        if (!$output instanceof ConsoleOutputInterface) {
+            throw new LogicException('Console output must implement ConsoleOutputInterface');
+        }
+
         $this->eventDispatcher = $eventDispatcher;
         $this->progressBar = $progressBar;
         $this->output = $output;
-
         $section = $output->section();
+
         $this->table = new Table($section);
         $this->normaliser = new ResourceNormaliser();
 

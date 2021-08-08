@@ -42,7 +42,6 @@ final class EtlProcess
         $resources = $this->extractor->extract();
 
         foreach ($resources as $resource) {
-
             $this->onBeforeTransform($progress, $resource);
 
             $result = $this->transform($resource);

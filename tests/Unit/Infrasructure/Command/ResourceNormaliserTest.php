@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 
 class ResourceNormaliserTest extends TestCase
 {
-
     public function test_it_normalises_a_resource_to_array()
     {
         $resource = Resource::fromArray([
@@ -25,6 +24,5 @@ class ResourceNormaliserTest extends TestCase
             'family: ziggy',
             'description (web,en_GB): Ziggy The Hydra is here',
         ], $normaliser->normalise($resource));
-
     }
 }

@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 class ResourceTest extends TestCase
 {
-
     /**
      * @dataProvider valueProviders
      */
@@ -88,7 +87,6 @@ class ResourceTest extends TestCase
         $this->assertEquals('name', $fields[2]->getName());
         $this->assertEquals('web', $fields[2]->getScope());
         $this->assertEquals('en_GB', $fields[2]->getLocale());
-
     }
 
     public function valueProviders(): array

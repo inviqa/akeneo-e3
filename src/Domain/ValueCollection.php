@@ -109,7 +109,7 @@ final class ValueCollection
      */
     public function attributes(): Generator
     {
-        foreach ($this->values as $hash => $value) {
+        foreach (array_keys($this->values) as $hash) {
             yield $this->hashToAttribute($hash);
         }
     }
