@@ -10,6 +10,7 @@ use AkeneoEtl\Domain\Load\Event\LoadErrorEvent;
 use AkeneoEtl\Domain\Transform\Event\AfterTransformEvent;
 use AkeneoEtl\Domain\Transform\Event\BeforeTransformEvent;
 use AkeneoEtl\Domain\Transform\Event\TransformErrorEvent;
+use AkeneoEtl\Domain\Transform\Progress;
 use Exception;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -37,19 +38,18 @@ final class EtlProcess
 
     public function execute(): void
     {
-        $index = 0;
-        $count = $this->extractor->count();
-
+        $progress = Progress::create($this->extractor->count());
         $resources = $this->extractor->extract();
 
         foreach ($resources as $resource) {
-            $this->eventDispatcher->dispatch(BeforeTransformEvent::create($index++, $count, $resource));
 
-            $transformedResource = $this->transform($resource);
-            $loadingResource = $this->getResourceForLoad($transformedResource, $resource);
-            $this->load($loadingResource);
+            $this->onBeforeTransform($progress, $resource);
 
-            $this->eventDispatcher->dispatch(AfterTransformEvent::create($index++, $count, $loadingResource, $resource));
+            $result = $this->transform($resource);
+            $patch = $this->getResourceForLoad($result, $resource);
+            $this->load($patch);
+
+            $this->onAfterTransform($progress->advance(), $patch, $this->getInitialData($result, $resource));
         }
 
         $this->finishLoading();
@@ -64,7 +64,7 @@ final class EtlProcess
         try {
             $result = $this->transformer->transform($resource);
         } catch (TransformException $e) {
-            $this->dispatchTransformEvent($e);
+            $this->onTransformError($e);
 
             if ($e->canBeSkipped() === false) {
                 throw $e;
@@ -83,6 +83,15 @@ final class EtlProcess
         return $transformedResource->diff($resource);
     }
 
+    private function getInitialData(?Resource $transformedResource, Resource $resource): ?\AkeneoEtl\Domain\Resource
+    {
+        if ($transformedResource === null || $transformedResource->isChanged() === false) {
+            return null;
+        }
+
+        return $resource->diff($transformedResource);
+    }
+
     private function load(?Resource $loadingResource): void
     {
         if ($loadingResource === null) {
@@ -92,7 +101,7 @@ final class EtlProcess
         try {
             $this->loader->load($loadingResource);
         } catch (LoadException $e) {
-            $this->dispatchLoadEvent($e);
+            $this->onLoadError($e);
         }
     }
 
@@ -101,21 +110,35 @@ final class EtlProcess
         try {
             $this->loader->finish();
         } catch (LoadException $e) {
-            $this->dispatchLoadEvent($e);
+            $this->onLoadError($e);
         }
     }
 
-    private function dispatchTransformEvent(Exception $exception): void
+    private function onTransformError(Exception $exception): void
     {
         $this->eventDispatcher->dispatch(
             TransformErrorEvent::create($exception->getMessage())
         );
     }
 
-    private function dispatchLoadEvent(LoadException $exception): void
+    private function onLoadError(LoadException $exception): void
     {
         $this->eventDispatcher->dispatch(
             LoadErrorEvent::create($exception->getLoadErrors())
+        );
+    }
+
+    private function onBeforeTransform(Progress $progress, Resource $resource): void
+    {
+        $this->eventDispatcher->dispatch(
+            BeforeTransformEvent::create($progress, $resource)
+        );
+    }
+
+    private function onAfterTransform(Progress $progress, ?Resource $loadingResource, ?Resource $initialResource): void
+    {
+        $this->eventDispatcher->dispatch(
+            AfterTransformEvent::create($progress, $loadingResource, $initialResource)
         );
     }
 }

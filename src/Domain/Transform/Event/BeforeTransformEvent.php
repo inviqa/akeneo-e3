@@ -5,40 +5,34 @@ declare(strict_types=1);
 namespace AkeneoEtl\Domain\Transform\Event;
 
 use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Transform\Progress;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 final class BeforeTransformEvent extends Event
 {
-    private int $index;
-    private int $total;
+    private Progress $progress;
 
     private \AkeneoEtl\Domain\Resource $resource;
 
     private DateTimeInterface $dateTime;
 
-    private function __construct(int $index, int $total, Resource $resource)
+    private function __construct(Progress $progress, Resource $resource)
     {
-        $this->index = $index;
-        $this->total = $total;
         $this->resource = $resource;
         $this->dateTime = new DateTimeImmutable();
+        $this->progress = $progress;
     }
 
-    public static function create(int $index, int $total, Resource $resource): self
+    public static function create(Progress $progress, Resource $resource): self
     {
-        return new self($index, $total, $resource);
+        return new self($progress, $resource);
     }
 
-    public function getIndex(): int
+    public function getProgress(): Progress
     {
-        return $this->index;
-    }
-
-    public function getTotal(): int
-    {
-        return $this->total;
+        return $this->progress;
     }
 
     public function getResource(): \AkeneoEtl\Domain\Resource

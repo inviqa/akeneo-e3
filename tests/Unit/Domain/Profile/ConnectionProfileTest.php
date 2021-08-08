@@ -3,7 +3,6 @@
 namespace AkeneoEtl\Tests\Unit\Domain\Profile;
 
 use AkeneoEtl\Domain\Profile\ConnectionProfile;
-use AkeneoEtl\Domain\Profile\ExtractProfile;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 
