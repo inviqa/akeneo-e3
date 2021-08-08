@@ -166,4 +166,18 @@ class ValueCollectionTest extends TestCase
 
         $this->assertEquals($expected, $merge->toArray());
     }
+
+    public function test_it_returns_attributes()
+    {
+        $collection = ValueCollection::fromArray(TestData::getValues());
+        $attributes = iterator_to_array($collection->attributes());
+
+        $this->assertEquals('name', $attributes[0]->getName());
+        $this->assertEquals('web', $attributes[0]->getScope());
+        $this->assertEquals('en_GB', $attributes[0]->getLocale());
+
+        $this->assertEquals('description', $attributes[3]->getName());
+        $this->assertEquals(null, $attributes[3]->getScope());
+        $this->assertEquals('de_DE', $attributes[3]->getLocale());
+    }
 }

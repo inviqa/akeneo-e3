@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain;
 
+use Generator;
 use LogicException;
 
 final class ValueCollection
@@ -101,6 +102,16 @@ final class ValueCollection
         $mergeCollection->values = $merge;
 
         return $mergeCollection;
+    }
+
+    /**
+     * @return Generator|Attribute[]
+     */
+    public function attributes(): Generator
+    {
+        foreach ($this->values as $hash => $value) {
+            yield $this->hashToAttribute($hash);
+        }
     }
 
     public function toArray(): array

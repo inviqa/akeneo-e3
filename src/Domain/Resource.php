@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain;
 
+use Generator;
 use LogicException;
 
 final class Resource
@@ -164,6 +165,20 @@ final class Resource
     public function isChanged(): bool
     {
         return $this->isChanged;
+    }
+
+    /**
+     * @return Generator|Field[]
+     */
+    public function fields(): Generator
+    {
+        foreach (array_keys($this->properties) as $propertyName) {
+            yield Property::create($propertyName);
+        }
+
+        foreach ($this->values->attributes() as $attribute) {
+            yield $attribute;
+        }
     }
 
     public function toArray(): array
