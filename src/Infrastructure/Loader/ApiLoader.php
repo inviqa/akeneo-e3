@@ -19,14 +19,26 @@ final class ApiLoader implements Loader
 
     private array $buffer = [];
 
+    private string $codeFieldName = '';
+
+    private string $resourceType = '';
+
     public function __construct(UpsertableResourceListInterface $api, int $batchSize = 100)
     {
         $this->api = $api;
         $this->batchSize = $batchSize;
     }
 
+    /**
+     * @throws \AkeneoEtl\Domain\Exception\LoadException
+     */
     public function load(Resource $resource): void
     {
+        if ($this->codeFieldName === '') {
+            $this->codeFieldName = $resource->getCodeOrIdentifierFieldName();
+            $this->resourceType = $resource->getResourceType();
+        }
+
         $id = $resource->getCodeOrIdentifier();
         $this->buffer[$id] = $resource->toArray();
 
@@ -35,11 +47,17 @@ final class ApiLoader implements Loader
         }
     }
 
+    /**
+     * @throws \AkeneoEtl\Domain\Exception\LoadException
+     */
     public function finish(): void
     {
         $this->loadBatch();
     }
 
+    /**
+     * @throws \AkeneoEtl\Domain\Exception\LoadException
+     */
     private function loadBatch(): void
     {
         if (count($this->buffer) === 0) {
@@ -52,17 +70,21 @@ final class ApiLoader implements Loader
         $this->buffer = [];
     }
 
+    /**
+     * @throws \AkeneoEtl\Domain\Exception\LoadException
+     */
     private function processResponse(Traversable $result): void
     {
         $errors = [];
 
         foreach ($result as $line) {
             if ($line['status_code'] === 422) {
-                $initialItem = $this->buffer[$line['identifier']];
+                $code = $line[$this->codeFieldName] ?? '';
+                $initialItem = $this->buffer[$code] ?? [];
 
                 $errors[] = LoadError::create(
                     $this->getErrorMessage($line),
-                    Resource::fromArray($initialItem, '')
+                    Resource::fromArray($initialItem, $this->resourceType)
                 );
             }
         }

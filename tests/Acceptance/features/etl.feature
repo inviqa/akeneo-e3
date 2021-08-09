@@ -39,7 +39,7 @@ Feature: Data transformations using Akeneo-ETL
                   type: set
                   field: name
                   scope: web
-                  locale: ua_UA
+                  locale: uk_UA
                   value: Зіггі
       """
 
@@ -54,7 +54,7 @@ Feature: Data transformations using Akeneo-ETL
       | attribute | scope | locale | value     |
       | name      | web   | en_GB  | The Ziggy |
       | name      | web   | de_DE  | Die Ziggy |
-      | name      | web   | ua_UA  | Зіггі     |
+      | name      | web   | uk_UA  | Зіггі     |
 
   Scenario: Transform scalar values with "set" actions using expressions:
   - change family (concatenate with a prefix)
@@ -133,7 +133,7 @@ Feature: Data transformations using Akeneo-ETL
                   field: labels
                   value:
                       de_DE: Akeneö
-                      ua_UA: Акенео
+                      uk_UA: Акенео
       """
 
     When transformation is executed
@@ -145,4 +145,4 @@ Feature: Data transformations using Akeneo-ETL
       | locale | value  |
       | en_GB  | Akeneo |
       | de_DE  | Akeneö |
-      | ua_UA  | Акенео |
+      | uk_UA  | Акенео |
