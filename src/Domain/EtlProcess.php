@@ -60,6 +60,7 @@ final class EtlProcess
     private function transform(Resource $resource): ?\AkeneoEtl\Domain\Resource
     {
         $result = null;
+
         try {
             $result = $this->transformer->transform($resource);
         } catch (TransformException $e) {

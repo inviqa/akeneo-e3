@@ -36,7 +36,7 @@ class EtlContext implements Context
     /**
      * @Given /^(a|an) (?P<resourceType>[^"]+) in the PIM( with properties)?:$/
      */
-    public function readResourceProperties(string $resourceType, TableNode $table)
+    public function readResourceProperties(string $resourceType, TableNode $table): void
     {
         $this->resourceType = $resourceType;
         $this->resourceData = $this->readPropertiesFromTable($table);
@@ -45,7 +45,7 @@ class EtlContext implements Context
     /**
      * @Given /^attributes:$/
      */
-    public function readResourceValues(TableNode $table)
+    public function readResourceValues(TableNode $table): void
     {
         $this->resourceData['values'] = $this->readValuesFromTable($table);
     }
@@ -53,15 +53,23 @@ class EtlContext implements Context
     /**
      * @Given the list of :listCode:
      */
-    public function readResourceLocalisedList(string $listCode, TableNode $table)
+    public function readResourceLocalisedList(string $listCode, TableNode $table): void
     {
         $this->resourceData[$listCode] = $this->readLocalisedListFromTable($table);
     }
 
     /**
+     * @Given /^associations:$/
+     */
+    public function readResourceAssociations(TableNode $table): void
+    {
+        $this->resourceData['associations'] = $this->readAssociationsFromTable($table);
+    }
+
+    /**
      * @Given an ETL profile:
      */
-    public function initialiseEtlProfile(PyStringNode $string)
+    public function initialiseEtlProfile(PyStringNode $string): void
     {
         $config = Yaml::parse($string);
 
@@ -75,7 +83,7 @@ class EtlContext implements Context
     /**
      * @When transformation is executed
      */
-    public function transformationIsExecuted()
+    public function transformationIsExecuted(): void
     {
         $resource = Resource::fromArray($this->resourceData, $this->resourceType);
         $this->extractor = new InMemoryExtractor($resource);
@@ -95,7 +103,7 @@ class EtlContext implements Context
     /**
      * @Then the :resourceType in the PIM should have properties:
      */
-    public function checkProperties(string $resourceType, TableNode $table)
+    public function checkProperties(string $resourceType, TableNode $table): void
     {
         $expected = $this->readPropertiesFromTable($table);
 
@@ -108,7 +116,7 @@ class EtlContext implements Context
     /**
      * @Then should have attributes:
      */
-    public function checkValues(TableNode $table)
+    public function checkValues(TableNode $table): void
     {
         $expected = $this->readValuesFromTable($table);
 
@@ -119,13 +127,25 @@ class EtlContext implements Context
     /**
      * @Then should have the list of :listCode:
      */
-    public function checkLocalisedList(string $listCode, TableNode $table)
+    public function checkLocalisedList(string $listCode, TableNode $table): void
     {
         $expected = $this->readLocalisedListFromTable($table);
 
         $loaderData = $this->loader->getResult()->toArray();
 
         Assert::eq($expected, $loaderData[$listCode]);
+    }
+
+    /**
+     * @Then should have associations:
+     */
+    public function checkAssociations(TableNode $table): void
+    {
+        $expected = $this->readAssociationsFromTable($table);
+
+        $loaderData = $this->loader->getResult()->toArray();
+
+        Assert::eq($expected, $loaderData['associations']);
     }
 
     private function readPropertiesFromTable(TableNode $table): array
@@ -158,6 +178,21 @@ class EtlContext implements Context
         return $data;
     }
 
+    private function readAssociationsFromTable(TableNode $table): array
+    {
+        $data = [];
+        foreach ($table as $row) {
+            $type = $row['type'];
+
+            $data[$type] = [
+                'products' => $this->convertTableValue($row['products']),
+                'product_models' => $this->convertTableValue($row['product_models']),
+                'groups' => $this->convertTableValue($row['groups']),
+            ];
+        }
+
+        return $data;
+    }
 
     private function readLocalisedListFromTable(TableNode $table): array
     {
@@ -184,6 +219,5 @@ class EtlContext implements Context
         }
 
         return explode(',', $matches[1]);
-        return [$matches, $value];
     }
 }

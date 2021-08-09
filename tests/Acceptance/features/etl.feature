@@ -146,3 +146,38 @@ Feature: Data transformations using Akeneo-ETL
       | en_GB  | Akeneo |
       | de_DE  | Akeneö |
       | uk_UA  | Акенео |
+
+  Scenario: Add elements to product associations
+
+    Given a product in the PIM with properties:
+      | field      | value |
+      | identifier | ziggy |
+    And associations:
+      | type      | products | product_models | groups |
+      | FRIENDS   | [fuzzy]  | []             | []     |
+      | RELATIVES | [izzy]   | []             | []     |
+
+    And an ETL profile:
+      """
+      transform:
+          actions:
+              -
+                  type: set
+                  field: associations
+                  value:
+                      FRIENDS:
+                          products: ['gizzy', 'jazzy']
+                      RELATIVES:
+                          product_models: ['unicorn', 'mermaid']
+                          groups: ['magical_creatures']
+
+      """
+
+    When transformation is executed
+    Then the product in the PIM should have properties:
+      | field      | value |
+      | identifier | ziggy |
+    And should have associations:
+      | type      | products      | product_models    | groups              |
+      | FRIENDS   | [gizzy,jazzy] | []                | []                  |
+      | RELATIVES | [izzy]        | [unicorn,mermaid] | [magical_creatures] |
