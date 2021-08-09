@@ -73,6 +73,7 @@ class EventSubscriber
 
         $this->eventDispatcher->addListener(AfterTransformEvent::class, [$this, 'onProgress']);
         $this->eventDispatcher->addListener(TransformErrorEvent::class, [$this, 'onTransformError']);
+        $this->eventDispatcher->addListener(LoadErrorEvent::class, [$this, 'onLoadError']);
     }
 
     public function onProgress(AfterTransformEvent $event): void
