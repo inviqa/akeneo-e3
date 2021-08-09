@@ -52,14 +52,16 @@ final class TransformCommand extends Command
                 'd',
                 InputOption::VALUE_REQUIRED
             )
-            ->addOption('etl-profile', 'p', InputOption::VALUE_REQUIRED);
+            ->addOption('etl-profile', 'p', InputOption::VALUE_REQUIRED)
+            ->addOption('output-transform', 'o', InputOption::VALUE_NONE, 'Output transformation results on-the-fly')
+            ->addOption('output-transform-errors', null, InputOption::VALUE_NONE, 'Output transformation errors on-the-fly')
+            ->addOption('output-load-errors', null, InputOption::VALUE_NONE, 'Output load errors on-the-fly');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $sourceConnectionProfile = $this->getConnectionProfile($input);
         $destinationConnectionProfile = $this->getDestinationConnectionProfile($input) ?? $sourceConnectionProfile;
-
         $etlProfile = $this->getEtlProfile($input);
 
         $resourceType = (string)$input->getOption('resource-type');
@@ -69,9 +71,7 @@ final class TransformCommand extends Command
             // if null, throw an exception
         }
 
-        $progress = new ProgressBar($output);
-
-        new EventSubscriber($this->eventDispatcher, $progress, $output);
+        new EventSubscriber($this->eventDispatcher, $input, $output);
 
         $etl = $this->factory->createEtlProcess(
             $resourceType,
@@ -81,8 +81,6 @@ final class TransformCommand extends Command
         );
 
         $etl->execute();
-
-        $progress->finish();
 
         return Command::SUCCESS;
     }

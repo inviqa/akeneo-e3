@@ -8,13 +8,22 @@ final class ConsoleTableFormatter
 {
     const COLUMN_SEPARATOR = ' | ';
 
-    private int $columnWidth;
+    /**
+     * @var int[]|array
+     */
+    private array $columnWidths;
 
-    public function __construct(int $columnWidth)
+    /**
+     * @param int[]|array $columnWidths
+     */
+    public function __construct(array $columnWidths)
     {
-        $this->columnWidth = $columnWidth;
+        $this->columnWidths = $columnWidths;
     }
 
+    /**
+     * @return array|string[]
+     */
     public function format(array $data): array
     {
         return array_map([$this, 'formatLine'], $data);
@@ -22,12 +31,11 @@ final class ConsoleTableFormatter
 
     private function formatLine(array $line): string
     {
-        $columnWidth = $this->columnWidth;
+        $columnWidths = $this->columnWidths;
 
-        $line = array_map(function($item) use ($columnWidth) {
-            return str_pad(substr($item, 0, $columnWidth-2), $columnWidth-2);
-
-        }, $line);
+        array_walk($line, function(&$item, $key) use ($columnWidths) {
+            $item = str_pad(substr($item, 0, $columnWidths[$key]), $columnWidths[$key]);
+        });
 
         return implode(self::COLUMN_SEPARATOR, $line);
     }

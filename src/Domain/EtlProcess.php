@@ -42,11 +42,6 @@ final class EtlProcess
         $resources = $this->extractor->extract();
 
         foreach ($resources as $resource) {
-
-//            if ($progress->current() > 200) {
-//                break;
-//            }
-
             $this->onBeforeTransform($progress, $resource);
 
             $result = $this->transform($resource);
@@ -68,7 +63,7 @@ final class EtlProcess
         try {
             $result = $this->transformer->transform($resource);
         } catch (TransformException $e) {
-            $this->onTransformError($e);
+            $this->onTransformError($e, $resource);
 
             if ($e->canBeSkipped() === false) {
                 throw $e;
@@ -118,10 +113,10 @@ final class EtlProcess
         }
     }
 
-    private function onTransformError(Exception $exception): void
+    private function onTransformError(Exception $exception, Resource $resource): void
     {
         $this->eventDispatcher->dispatch(
-            TransformErrorEvent::create($exception->getMessage())
+            TransformErrorEvent::create($resource, $exception->getMessage())
         );
     }
 
