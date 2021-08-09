@@ -145,15 +145,33 @@ final class Resource
         return $diff;
     }
 
+    /**
+     * Merge a resource.
+     *
+     * The `merge` operation apart from `diff` is not important
+     * for business logic and needed only to emulate
+     * Akeneo's merge behaviour in tests.
+     */
     public function merge(Resource $resource): self
     {
         $propertiesMerge = $this->properties;
         foreach ($resource->properties as $name => $value) {
+            if ($name === 'associations') {
+                // process  associations differently
+                continue;
+            }
+
             if (is_array($value) === true && $this->isObjectLikeArray($value) === true) {
                 $value = array_merge($this->properties[$name], $value);
             }
 
             $propertiesMerge[$name] = $value;
+        }
+
+        foreach ($resource->properties['associations'] ?? [] as $associationType => $association) {
+            foreach ($association as $associationResourceType => $identifiers) {
+                $propertiesMerge['associations'][$associationType][$associationResourceType] = $identifiers;
+            }
         }
 
         $merge = new self($propertiesMerge, $this->resourceType);
