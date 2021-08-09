@@ -6,7 +6,7 @@ namespace AkeneoEtl\Infrastructure\Command\Compare;
 
 final class ConsoleTableFormatter
 {
-    const COLUMN_SEPARATOR = ' | ';
+    public const COLUMN_SEPARATOR = ' | ';
 
     /**
      * @var int[]|array
@@ -26,17 +26,23 @@ final class ConsoleTableFormatter
      */
     public function format(array $data): array
     {
-        return array_map([$this, 'formatLine'], $data);
-    }
+        return array_map(
+            function (array $line): string {
+                $columnWidths = $this->columnWidths;
 
-    private function formatLine(array $line): string
-    {
-        $columnWidths = $this->columnWidths;
+                array_walk(
+                    $line,
+                    function (&$item, $key) use ($columnWidths) {
+                        $item = str_pad(
+                            substr($item, 0, $columnWidths[$key]),
+                            $columnWidths[$key]
+                        );
+                    }
+                );
 
-        array_walk($line, function(&$item, $key) use ($columnWidths) {
-            $item = str_pad(substr($item, 0, $columnWidths[$key]), $columnWidths[$key]);
-        });
-
-        return implode(self::COLUMN_SEPARATOR, $line);
+                return implode(self::COLUMN_SEPARATOR, $line);
+            },
+            $data
+        );
     }
 }

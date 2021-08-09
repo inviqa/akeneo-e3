@@ -14,13 +14,25 @@ final class ResourceComparer
     }
 
     public function getCompareTable(
+        ?\AkeneoEtl\Domain\Resource $resource1,
+        \AkeneoEtl\Domain\Resource $resource2
+    ): array {
+        if ($resource1 === null) {
+            return $this->getAfterTable($resource2);
+        }
+
+        return $this->getBeforeAfterTable($resource1, $resource2);
+    }
+
+    private function getBeforeAfterTable(
         \AkeneoEtl\Domain\Resource $resource1,
         \AkeneoEtl\Domain\Resource $resource2
     ): array {
         $comparison = [];
 
         foreach ($resource2->fields() as $field) {
-            if ($field->getName() === $resource2->getCodeOrIdentifierFieldName()) {
+            if ($field->getName() === $resource2->getCodeOrIdentifierFieldName(
+                )) {
                 continue;
             }
 
@@ -41,5 +53,28 @@ final class ResourceComparer
         return $comparison;
     }
 
+    private function getAfterTable(
+        \AkeneoEtl\Domain\Resource $resource
+    ): array {
+        $comparison = [];
 
+        foreach ($resource->fields() as $field) {
+            if ($field->getName() === $resource->getCodeOrIdentifierFieldName(
+                )) {
+                continue;
+            }
+
+            $originalValue = $resource->has($field) ?
+                $this->normaliser->normalise($resource->get($field)) :
+                '';
+
+            $comparison[] = [
+                $resource->getCodeOrIdentifier(),
+                $field->getName(),
+                $originalValue,
+            ];
+        }
+
+        return $comparison;
+    }
 }

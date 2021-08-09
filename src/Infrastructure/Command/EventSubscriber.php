@@ -90,9 +90,6 @@ class EventSubscriber
 
         $this->progressBar->clear();
         $this->transformReportSection->overwrite(sprintf('Processed: %d', ++$this->processedCount));
-        $this->transformProgressSection->writeln(
-            $this->processedCount
-        );
 
         if ($this->outputTransformations === true) {
             $comparison = $this->resourceComparer->getCompareTable(
