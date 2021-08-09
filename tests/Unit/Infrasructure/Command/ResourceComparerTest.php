@@ -25,15 +25,13 @@ class ResourceComparerTest extends TestCase
         $resource2->set(Attribute::create('name', null, 'en_GB'), 'Ziggy');
         $resource2->set(Attribute::create('description', 'web', 'en_GB'), 'Ziggy The Pet');
 
-
         $comparer = new ResourceComparer();
         $table = $comparer->getCompareTable($resource1, $resource2);
 
         $this->assertEquals([
-            ['identifier',  '0123456789',      '0123456789'   ],
-            ['family',      'ziggy',           'pet'          ],
-            ['name',        '',                'Ziggy'        ],
-            ['description', 'Ziggy The Hydra', 'Ziggy The Pet'],
+            ['0123456789', 'family',      'ziggy',           'pet'          ],
+            ['0123456789', 'name',        '',                'Ziggy'        ],
+            ['0123456789', 'description', 'Ziggy The Hydra', 'Ziggy The Pet'],
         ], $table);
     }
 }

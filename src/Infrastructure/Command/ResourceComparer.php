@@ -20,15 +20,18 @@ final class ResourceComparer
         $comparison = [];
 
         foreach ($resource2->fields() as $field) {
+            if ($field->getName() === $resource2->getCodeOrIdentifierFieldName()) {
+                continue;
+            }
+
             $originalValue = $resource1->has($field) ?
                 $this->normaliser->normalise($resource1->get($field)) :
                 '';
-            $originalValue = substr($originalValue, 0, 40);
 
             $newValue = $this->normaliser->normalise($resource2->get($field));
-            $newValue = substr($newValue, 0, 40);
 
             $comparison[] = [
+                $resource2->getCodeOrIdentifier(),
                 $field->getName(),
                 $originalValue,
                 $newValue,
@@ -37,4 +40,6 @@ final class ResourceComparer
 
         return $comparison;
     }
+
+
 }
