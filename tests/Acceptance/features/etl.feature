@@ -3,7 +3,7 @@ Feature: Data transformations using Akeneo-ETL
   Scenario: Transform scalar values with "set" actions using fixed values:
   - change family
   - set parent to null
-  - change name in en_GB
+  - change name in existing locale
   - add name localisation
 
     Given a product in the PIM with properties:
@@ -59,7 +59,7 @@ Feature: Data transformations using Akeneo-ETL
   Scenario: Transform scalar values with "set" actions using expressions:
   - change family (concatenate with a prefix)
   - uppercase name in en_GB
-  - add url_slug
+  - add url_slug with a sluggified version of name
 
     Given a product in the PIM with properties:
       | field      | value     |

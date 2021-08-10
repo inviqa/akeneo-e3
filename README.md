@@ -6,7 +6,7 @@ Akeneo ETL is a tool to manipulate product data in the Akeneo PIM using its REST
 
 * To change product attribute values in bulk, e.g. trim data, remove html tags, lowercase or uppercase.
 * To help with attribute type changes, e.g. to copy values of a non-localisable attribute to a localisable one.
-* To migrate data between instances, e.g. copy a range products from UAT to production.  
+* To migrate data between instances, e.g. copy a product range from UAT to production.  
 
 ## How to use
 
