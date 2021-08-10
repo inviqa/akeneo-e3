@@ -33,11 +33,11 @@ final class EtlFactory
 
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(EventDispatcherInterface $eventDispatcher)
+    public function __construct(EventDispatcherInterface $eventDispatcher, ActionFactory $actionFactory = null)
     {
         $this->eventDispatcher = $eventDispatcher;
         $this->apiSelector = new ApiSelector();
-        $this->actionFactory = new ActionFactory($eventDispatcher);
+        $this->actionFactory = $actionFactory ?? new ActionFactory($eventDispatcher);
     }
 
     public function createEtlProcess(
