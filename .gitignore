@@ -12,3 +12,4 @@
 /profiles
 /phar
 .php-cs-fixer.cache
+.phpunit.cache
