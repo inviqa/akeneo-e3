@@ -33,9 +33,6 @@ final class ActionFactory
             case 'set':
                 $action = new Actions\Set(new ExpressionLanguage(), $options);
                 break;
-            case 'copy-all':
-                $action = new Actions\CopyAll($options);
-                break;
             default:
                 throw new LogicException(sprintf('No registered action with the name %s', $type));
         }

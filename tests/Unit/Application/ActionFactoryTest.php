@@ -14,7 +14,10 @@ class ActionFactoryTest extends TestCase
     public function test_it_creates_a_action()
     {
         $factory = new ActionFactory(new EventDispatcher());
-        $action = $factory->create('copy-all', []);
+        $action = $factory->create('set', [
+            'field' => 'name',
+            'value' => 'nemo',
+        ]);
 
         Assert::assertInstanceOf(Action::class, $action);
     }
