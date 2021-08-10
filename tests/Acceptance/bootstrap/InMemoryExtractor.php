@@ -3,12 +3,12 @@
 namespace AkeneoEtl\Tests\Acceptance\bootstrap;
 
 use AkeneoEtl\Domain\Extractor;
-use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Resource\Resource;
 use Generator;
 
 class InMemoryExtractor implements Extractor
 {
-    private \AkeneoEtl\Domain\Resource $resource;
+    private \AkeneoEtl\Domain\Resource\Resource $resource;
 
     public function __construct(Resource $resource)
     {

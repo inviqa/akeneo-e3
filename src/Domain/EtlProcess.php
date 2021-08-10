@@ -7,6 +7,7 @@ namespace AkeneoEtl\Domain;
 use AkeneoEtl\Domain\Exception\LoadException;
 use AkeneoEtl\Domain\Exception\TransformException;
 use AkeneoEtl\Domain\Load\Event\LoadErrorEvent;
+use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Domain\Transform\Event\AfterTransformEvent;
 use AkeneoEtl\Domain\Transform\Event\BeforeTransformEvent;
 use AkeneoEtl\Domain\Transform\Event\TransformErrorEvent;
@@ -57,7 +58,7 @@ final class EtlProcess
     /**
      * @throws \AkeneoEtl\Domain\Exception\TransformException
      */
-    private function transform(Resource $resource): ?\AkeneoEtl\Domain\Resource
+    private function transform(Resource $resource): ?\AkeneoEtl\Domain\Resource\Resource
     {
         $result = null;
 
@@ -74,7 +75,7 @@ final class EtlProcess
         return $result;
     }
 
-    private function getResourceForLoad(?Resource $transformedResource, Resource $resource): ?\AkeneoEtl\Domain\Resource
+    private function getResourceForLoad(?Resource $transformedResource, Resource $resource): ?\AkeneoEtl\Domain\Resource\Resource
     {
         if ($transformedResource === null || $transformedResource->isChanged() === false) {
             return null;
@@ -83,7 +84,7 @@ final class EtlProcess
         return $transformedResource->diff($resource);
     }
 
-    private function getInitialData(?Resource $transformedResource, Resource $resource): ?\AkeneoEtl\Domain\Resource
+    private function getInitialData(?Resource $transformedResource, Resource $resource): ?\AkeneoEtl\Domain\Resource\Resource
     {
         if ($transformedResource === null || $transformedResource->isChanged() === false) {
             return null;

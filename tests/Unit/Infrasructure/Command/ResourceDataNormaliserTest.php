@@ -2,8 +2,6 @@
 
 namespace AkeneoEtl\Tests\Unit\Infrastructure\Command;
 
-use AkeneoEtl\Domain\Resource;
-use AkeneoEtl\Domain\Attribute;
 use AkeneoEtl\Infrastructure\Command\ResourceDataNormaliser;
 use PHPUnit\Framework\TestCase;
 

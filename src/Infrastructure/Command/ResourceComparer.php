@@ -14,8 +14,8 @@ final class ResourceComparer
     }
 
     public function getCompareTable(
-        ?\AkeneoEtl\Domain\Resource $resource1,
-        \AkeneoEtl\Domain\Resource $resource2
+        ?\AkeneoEtl\Domain\Resource\Resource $resource1,
+        \AkeneoEtl\Domain\Resource\Resource $resource2
     ): array {
         if ($resource1 === null) {
             return $this->getAfterTable($resource2);
@@ -25,8 +25,8 @@ final class ResourceComparer
     }
 
     private function getBeforeAfterTable(
-        \AkeneoEtl\Domain\Resource $resource1,
-        \AkeneoEtl\Domain\Resource $resource2
+        \AkeneoEtl\Domain\Resource\Resource $resource1,
+        \AkeneoEtl\Domain\Resource\Resource $resource2
     ): array {
         $comparison = [];
 
@@ -54,7 +54,7 @@ final class ResourceComparer
     }
 
     private function getAfterTable(
-        \AkeneoEtl\Domain\Resource $resource
+        \AkeneoEtl\Domain\Resource\Resource $resource
     ): array {
         $comparison = [];
 

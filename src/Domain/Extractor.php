@@ -11,7 +11,7 @@ interface Extractor
     public function count(): int;
 
     /**
-     * @return \Generator|\AkeneoEtl\Domain\Resource[]
+     * @return \Generator|\AkeneoEtl\Domain\Resource\Resource[]
      */
     public function extract(): Generator;
 }

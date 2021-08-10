@@ -2,10 +2,10 @@
 
 namespace AkeneoEtl\Tests\Unit\Domain;
 
-use AkeneoEtl\Domain\Attribute;
-use AkeneoEtl\Domain\FieldFactory;
-use AkeneoEtl\Domain\Property;
-use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Resource\Attribute;
+use AkeneoEtl\Domain\Resource\FieldFactory;
+use AkeneoEtl\Domain\Resource\Property;
+use AkeneoEtl\Domain\Resource\Resource;
 use LogicException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;

@@ -7,7 +7,6 @@ use AkeneoEtl\Domain\Action;
 use LogicException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class ActionFactoryTest extends TestCase

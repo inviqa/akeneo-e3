@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AkeneoEtl\Application\Action;
 
 use AkeneoEtl\Domain\Action;
-use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Resource\Resource;
 
 final class CopyAll implements Action
 {

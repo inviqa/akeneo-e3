@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AkeneoEtl\Infrastructure\Loader;
 
 use AkeneoEtl\Domain\Loader;
-use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Resource\Resource;
 
 final class DryRunLoader implements Loader
 {

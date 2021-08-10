@@ -6,7 +6,7 @@ namespace AkeneoEtl\Infrastructure\Extractor;
 
 use Akeneo\Pim\ApiClient\Api\Operation\ListableResourceInterface;
 use AkeneoEtl\Domain\Extractor as DomainExtractor;
-use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Resource\Resource;
 use Generator;
 
 final class Extractor implements DomainExtractor

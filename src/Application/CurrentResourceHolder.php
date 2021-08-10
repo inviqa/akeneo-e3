@@ -6,5 +6,5 @@ namespace AkeneoEtl\Application;
 
 final class CurrentResourceHolder
 {
-    public static \AkeneoEtl\Domain\Resource $current;
+    public static \AkeneoEtl\Domain\Resource\Resource $current;
 }

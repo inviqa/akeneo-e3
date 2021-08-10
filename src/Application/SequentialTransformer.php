@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AkeneoEtl\Application;
 
 use AkeneoEtl\Domain\Action;
-use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Domain\Transformer;
 
 final class SequentialTransformer implements Transformer
@@ -20,7 +20,7 @@ final class SequentialTransformer implements Transformer
         $this->actions = $actions;
     }
 
-    public function transform(Resource $resource): \AkeneoEtl\Domain\Resource
+    public function transform(Resource $resource): \AkeneoEtl\Domain\Resource\Resource
     {
         $transformingResource = clone $resource;
 

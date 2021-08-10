@@ -2,7 +2,7 @@
 
 namespace AkeneoEtl\Tests\Unit\Domain;
 
-use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Resource\Resource;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 

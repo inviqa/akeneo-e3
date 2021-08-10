@@ -3,13 +3,13 @@
 namespace AkeneoEtl\Tests\Acceptance\bootstrap;
 
 use AkeneoEtl\Domain\Loader;
-use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Resource\Resource;
 
 class InMemoryLoader implements Loader
 {
-    private \AkeneoEtl\Domain\Resource $originalResource;
+    private \AkeneoEtl\Domain\Resource\Resource $originalResource;
 
-    private \AkeneoEtl\Domain\Resource $result;
+    private \AkeneoEtl\Domain\Resource\Resource $result;
 
     public function __construct(Resource $originalResource)
     {
@@ -26,7 +26,7 @@ class InMemoryLoader implements Loader
         // nothing
     }
 
-    public function getResult(): \AkeneoEtl\Domain\Resource
+    public function getResult(): \AkeneoEtl\Domain\Resource\Resource
     {
         return $this->result;
     }

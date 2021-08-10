@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Transform\Event;
 
-use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Domain\Transform\Progress;
 use DateTimeImmutable;
 use DateTimeInterface;
@@ -38,12 +38,12 @@ final class AfterTransformEvent extends Event
         return $this->progress;
     }
 
-    public function getAfter(): ?\AkeneoEtl\Domain\Resource
+    public function getAfter(): ?\AkeneoEtl\Domain\Resource\Resource
     {
         return $this->after;
     }
 
-    public function getBefore(): ?\AkeneoEtl\Domain\Resource
+    public function getBefore(): ?\AkeneoEtl\Domain\Resource\Resource
     {
         return $this->before;
     }

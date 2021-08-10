@@ -6,9 +6,9 @@ namespace AkeneoEtl\Application\Action;
 
 use AkeneoEtl\Application\Expression\ExpressionLanguage;
 use AkeneoEtl\Domain\Action;
-use AkeneoEtl\Domain\Field;
-use AkeneoEtl\Domain\FieldFactory;
-use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Resource\Field;
+use AkeneoEtl\Domain\Resource\FieldFactory;
+use AkeneoEtl\Domain\Resource\Resource;
 
 final class Set implements Action
 {

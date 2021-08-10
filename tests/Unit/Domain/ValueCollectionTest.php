@@ -2,9 +2,8 @@
 
 namespace AkeneoEtl\Tests\Unit\Domain;
 
-use AkeneoEtl\Domain\Attribute;
-use AkeneoEtl\Domain\Field;
-use AkeneoEtl\Domain\ValueCollection;
+use AkeneoEtl\Domain\Resource\Attribute;
+use AkeneoEtl\Domain\Resource\ValueCollection;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 

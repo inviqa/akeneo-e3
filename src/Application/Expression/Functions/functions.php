@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace AkeneoEtl\Application\Expression\Functions;
 
 use AkeneoEtl\Application\CurrentResourceHolder;
-use AkeneoEtl\Domain\Attribute;
 use AkeneoEtl\Domain\Exception\TransformException;
+use AkeneoEtl\Domain\Resource\Attribute;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 
@@ -53,11 +53,9 @@ function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}")
 }
 
 /**
- * @param mixed|null $defaultValue
- *
  * @return mixed|null
  */
-function value(string $name, ?string $channel, ?string $locale, $defaultValue = null)
+function value(string $name, ?string $channel, ?string $locale)
 {
     $resource = CurrentResourceHolder::$current;
 

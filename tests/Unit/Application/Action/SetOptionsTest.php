@@ -6,7 +6,6 @@ use AkeneoEtl\Application\Action\SetOptions;
 use LogicException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
 class SetOptionsTest extends TestCase
 {

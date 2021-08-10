@@ -2,10 +2,9 @@
 
 namespace AkeneoEtl\Tests\Unit\Infrastructure\Command;
 
-use AkeneoEtl\Domain\Resource;
-use AkeneoEtl\Domain\Attribute;
+use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoEtl\Domain\Resource\Attribute;
 use AkeneoEtl\Infrastructure\Command\ResourceComparer;
-use AkeneoEtl\Infrastructure\Command\ResourceDataNormaliser;
 use PHPUnit\Framework\TestCase;
 
 class ResourceComparerTest extends TestCase

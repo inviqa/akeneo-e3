@@ -4,7 +4,7 @@ namespace AkeneoEtl\Tests\Acceptance\bootstrap;
 
 use AkeneoEtl\Domain\EtlProcess;
 use AkeneoEtl\Domain\Profile\EtlProfile;
-use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Domain\Transformer;
 use AkeneoEtl\Infrastructure\EtlFactory;
 use Behat\Behat\Context\Context;

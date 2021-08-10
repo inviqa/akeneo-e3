@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Load;
 
-use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Resource\Resource;
 
 final class LoadError
 {
     private string $message;
 
-    private \AkeneoEtl\Domain\Resource $resource;
+    private \AkeneoEtl\Domain\Resource\Resource $resource;
 
     public function __construct(string $message, Resource $resource)
     {

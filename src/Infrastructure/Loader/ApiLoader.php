@@ -8,7 +8,7 @@ use Akeneo\Pim\ApiClient\Api\Operation\UpsertableResourceListInterface;
 use AkeneoEtl\Domain\Exception\LoadException;
 use AkeneoEtl\Domain\Load\LoadError;
 use AkeneoEtl\Domain\Loader;
-use AkeneoEtl\Domain\Resource;
+use AkeneoEtl\Domain\Resource\Resource;
 use Traversable;
 
 final class ApiLoader implements Loader

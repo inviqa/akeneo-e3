@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Domain;
+namespace AkeneoEtl\Domain\Resource;
 
 use Generator;
 use LogicException;
