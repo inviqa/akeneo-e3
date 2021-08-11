@@ -19,6 +19,8 @@ final class Resource
 
     private string $codeOrIdentifier;
 
+    private ?Resource $origin;
+
     private function __construct(array $data, string $resourceType)
     {
         $this->resourceType = $resourceType;
@@ -38,6 +40,15 @@ final class Resource
     public static function fromArray(array $data, string $resourceType): self
     {
         return new self($data, $resourceType);
+    }
+
+    public static function fromResource(Resource $resource): self
+    {
+        $newResource = clone $resource;
+
+        $newResource->origin = $resource;
+
+        return $newResource;
     }
 
     public function getResourceType(): string
@@ -197,6 +208,11 @@ final class Resource
         foreach ($this->values->attributes() as $attribute) {
             yield $attribute;
         }
+    }
+
+    public function getOrigin(): ?Resource
+    {
+        return $this->origin;
     }
 
     public function toArray(): array

@@ -12,6 +12,16 @@ use PHPUnit\Framework\TestCase;
 
 class ResourceTest extends TestCase
 {
+
+    public function test_it_can_be_create_from_resource()
+    {
+        $resource = Resource::fromArray(TestData::getProduct(), 'product');
+
+        $newResource = Resource::fromResource($resource);
+
+        $this->assertEquals($resource, $newResource->getOrigin());
+    }
+
     /**
      * @dataProvider valueProviders
      */
