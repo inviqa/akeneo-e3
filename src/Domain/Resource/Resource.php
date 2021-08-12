@@ -35,6 +35,8 @@ final class Resource
 
         unset($data['values']);
         $this->properties = $data;
+
+        $this->origin = null;
     }
 
     public static function fromArray(array $data, string $resourceType): self
