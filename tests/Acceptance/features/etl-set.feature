@@ -1,6 +1,8 @@
-Feature: Data transformations using Akeneo-ETL
+Feature: Data transformations using `set` actions
+  As a user
+  I want to transform data in Akeneo
 
-  Scenario: Transform scalar values with "set" actions using fixed values:
+  Scenario: Transform scalar values using fixed values:
   - change family
   - set parent to null
   - change name in existing locale
@@ -17,7 +19,7 @@ Feature: Data transformations using Akeneo-ETL
       | name      | web   | en_GB  | The Ziggy |
       | name      | web   | de_DE  | Der Ziggy |
 
-    And an ETL profile:
+    And I apply transformations using the profile:
       """
       transform:
           actions:
@@ -56,7 +58,8 @@ Feature: Data transformations using Akeneo-ETL
       | name      | web   | de_DE  | Die Ziggy |
       | name      | web   | uk_UA  | Зіггі     |
 
-  Scenario: Transform scalar values with "set" actions using expressions:
+
+  Scenario: Transform scalar values using expressions:
   - change family (concatenate with a prefix)
   - uppercase name in en_GB
   - add url_slug with a sluggified version of name
@@ -71,7 +74,7 @@ Feature: Data transformations using Akeneo-ETL
       | name      | web   | en_GB  | The Ziggy        |
       | name      | web   | de_DE  | Dēr Süße $Zïggy$ |
 
-    And an ETL profile:
+    And I apply transformations using the profile:
       """
       transform:
           actions:
@@ -120,7 +123,7 @@ Feature: Data transformations using Akeneo-ETL
       | en_GB  | Akeneo |
       | de_DE  | Akënëo |
 
-    And an ETL profile:
+    And I apply transformations using the profile:
       """
       transform:
           actions:
@@ -147,6 +150,7 @@ Feature: Data transformations using Akeneo-ETL
       | de_DE  | Akeneö |
       | uk_UA  | Акенео |
 
+
   Scenario: Add elements to product associations
 
     Given a product in the PIM with properties:
@@ -157,7 +161,7 @@ Feature: Data transformations using Akeneo-ETL
       | FRIENDS   | [fuzzy]  | []             | []     |
       | RELATIVES | [izzy]   | []             | []     |
 
-    And an ETL profile:
+    And I apply transformations using the profile:
       """
       transform:
           actions:

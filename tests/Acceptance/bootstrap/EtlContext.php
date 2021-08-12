@@ -67,7 +67,7 @@ class EtlContext implements Context
     }
 
     /**
-     * @Given an ETL profile:
+     * @Given I apply transformations using the profile:
      */
     public function initialiseEtlProfile(PyStringNode $string): void
     {
