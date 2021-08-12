@@ -16,14 +16,16 @@ class InMemoryLoader implements Loader
         $this->originalResource = $originalResource;
     }
 
-    public function load(Resource $resource): void
+    public function load(Resource $resource): array
     {
         $this->result = $this->originalResource->merge($resource);
+
+        return [];
     }
 
-    public function finish(): void
+    public function finish(): array
     {
-        // nothing
+        return [];
     }
 
     public function getResult(): \AkeneoEtl\Domain\Resource\Resource
