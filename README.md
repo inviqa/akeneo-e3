@@ -6,20 +6,20 @@ It is like Akeneo Enrichment Rules but with more features like expressions.
 
 ## When to use
 
-:star: **Data cleansing**. Examples: 
+:star:&nbsp;**Data cleansing** e.g. 
 * trim attribute values
 * remove html tags
 * generate slugs
 * lowercase or uppercase
 
-:star: **Attribute type changes**. Examples:
+:star:&nbsp;**Attribute type changes** e.g.
 * copy values of a non-localisable attribute to a localisable one
 * copy number data to a metric attribute
 
-:star: **Data model changes**. Examples:
+:star:&nbsp;**Data model changes** e.g.
 * add an attribute to all families
 
-:star: **Migration** e.g. 
+:star:&nbsp;**Migration** e.g. 
 * copy a product range from UAT to production  
 
 ## How to use
