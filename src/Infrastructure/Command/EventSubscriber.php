@@ -9,6 +9,7 @@ use AkeneoEtl\Domain\Load\LoadResult\Failed;
 use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Domain\Transform\Event\AfterTransformEvent;
 use AkeneoEtl\Domain\Transform\Event\TransformErrorEvent;
+use AkeneoEtl\Domain\Transform\TransformResult\Failed as TransformFailed;
 use AkeneoEtl\Infrastructure\Command\Compare\ConsoleTableFormatter;
 use LogicException;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -47,7 +48,7 @@ class EventSubscriber
      */
     private array $tableColumnWidths;
 
-    public function __construct(
+    private function __construct(
         EventDispatcherInterface $eventDispatcher,
         InputInterface $input,
         OutputInterface $output
@@ -71,12 +72,19 @@ class EventSubscriber
         $this->transformReportSection = $output->section();
         $this->transformErrorSection = $output->section();
 
-        $this->eventDispatcher->addListener(AfterTransformEvent::class, [$this, 'onProgress']);
-        $this->eventDispatcher->addListener(TransformErrorEvent::class, [$this, 'onTransformError']);
+        $this->eventDispatcher->addListener(AfterTransformEvent::class, [$this, 'onAfterTransform']);
         $this->eventDispatcher->addListener(AfterLoadEvent::class, [$this, 'onAfterLoad']);
     }
 
-    public function onProgress(AfterTransformEvent $event): void
+    public static function init(
+        EventDispatcherInterface $eventDispatcher,
+        InputInterface $input,
+        OutputInterface $output
+    ): self {
+        return new self($eventDispatcher, $input, $output);
+    }
+
+    public function onAfterTransform(AfterTransformEvent $event): void
     {
         if ($this->progressBar->getMaxSteps() === 0) {
             $this->progressBar->setMaxSteps($event->getProgress()->total());
@@ -84,31 +92,29 @@ class EventSubscriber
 
         $this->progressBar->setProgress($event->getProgress()->current());
 
-        // If there is no transformed object, skip
         if ($event->getResource() === null) {
             return;
         }
 
         $this->progressBar->clear();
+
+        // output total
         $this->transformReportSection->overwrite(sprintf('Processed: %d', ++$this->processedCount));
-        $this->progressBar->display();
-    }
 
-    public function onTransformError(TransformErrorEvent $event): void
-    {
-        if ($this->outputTransformErrors === false) {
-            return;
+        // output transform error stats
+        $transformResult = $event->getTransformResult();
+        if ($transformResult instanceof TransformFailed) {
+            $transformError = $transformResult->getError();
+            $this->transformErrors[$transformError][] = $event->getResource()->getCodeOrIdentifier() ?? '';
+
+            $messages = [];
+            foreach ($this->transformErrors as $message => $ids) {
+                $messages[] = sprintf('%s: %d', $message, count($ids));
+            }
+
+            $this->transformErrorSection->overwrite($messages);
         }
 
-        $this->transformErrors[$event->getMessage()][] = $event->getResource()->getCodeOrIdentifier() ?? '';
-
-        $messages = [];
-        foreach ($this->transformErrors as $message => $ids) {
-            $messages[] = sprintf('%s: %d', $message, count($ids));
-        }
-
-        $this->progressBar->clear();
-        $this->transformErrorSection->overwrite($messages);
         $this->progressBar->display();
     }
 

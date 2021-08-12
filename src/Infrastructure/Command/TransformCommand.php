@@ -52,8 +52,7 @@ final class TransformCommand extends Command
                 InputOption::VALUE_REQUIRED
             )
             ->addOption('etl-profile', 'p', InputOption::VALUE_REQUIRED)
-            ->addOption('output-transform', 'o', InputOption::VALUE_NONE, 'Output transformation results on-the-fly')
-            ->addOption('output-transform-errors', null, InputOption::VALUE_NONE, 'Output transformation errors on-the-fly');
+            ->addOption('output-transform', 'o', InputOption::VALUE_NONE, 'Output transformation results on-the-fly');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -69,7 +68,7 @@ final class TransformCommand extends Command
             // if null, throw an exception
         }
 
-        new EventSubscriber($this->eventDispatcher, $input, $output);
+        EventSubscriber::init($this->eventDispatcher, $input, $output);
 
         $etl = $this->factory->createEtlProcess(
             $resourceType,
