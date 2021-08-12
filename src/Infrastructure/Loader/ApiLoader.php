@@ -44,9 +44,6 @@ final class ApiLoader implements Loader
         $this->isUpdateMode = $this->profile->getMode() === LoadProfile::MODE_UPDATE;
     }
 
-    /**
-     * @throws \AkeneoEtl\Domain\Exception\LoadException
-     */
     public function load(Resource $resource): array
     {
         if ($this->codeFieldName === '') {
@@ -73,9 +70,6 @@ final class ApiLoader implements Loader
         return [];
     }
 
-    /**
-     * @throws \AkeneoEtl\Domain\Exception\LoadException
-     */
     public function finish(): array
     {
         return $this->loadBatch();

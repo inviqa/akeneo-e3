@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AkeneoEtl\Infrastructure\Command;
 
 use AkeneoEtl\Domain\Load\Event\AfterLoadEvent;
-use AkeneoEtl\Domain\Load\Event\LoadErrorEvent;
 use AkeneoEtl\Domain\Load\LoadResult\Failed;
 use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Domain\Transform\Event\AfterTransformEvent;
@@ -35,7 +34,6 @@ class EventSubscriber
 
     private bool $outputTransformations;
     private bool $outputTransformErrors;
-    private bool $outputLoadErrors;
 
     private ConsoleSectionOutput $transformErrorSection;
     private ConsoleSectionOutput $transformProgressSection;
@@ -68,7 +66,6 @@ class EventSubscriber
 
         $this->outputTransformations = (bool)$input->getOption('output-transform');
         $this->outputTransformErrors = (bool)$input->getOption('output-transform-errors');
-        $this->outputLoadErrors = (bool)$input->getOption('output-load-errors');
 
         $this->transformProgressSection = $output->section();
         $this->transformReportSection = $output->section();

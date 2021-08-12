@@ -53,8 +53,7 @@ final class TransformCommand extends Command
             )
             ->addOption('etl-profile', 'p', InputOption::VALUE_REQUIRED)
             ->addOption('output-transform', 'o', InputOption::VALUE_NONE, 'Output transformation results on-the-fly')
-            ->addOption('output-transform-errors', null, InputOption::VALUE_NONE, 'Output transformation errors on-the-fly')
-            ->addOption('output-load-errors', null, InputOption::VALUE_NONE, 'Output load errors on-the-fly');
+            ->addOption('output-transform-errors', null, InputOption::VALUE_NONE, 'Output transformation errors on-the-fly');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
