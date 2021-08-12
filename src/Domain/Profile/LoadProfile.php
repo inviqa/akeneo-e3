@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 final class LoadProfile
 {
     public const MODE_UPDATE = 'update';
-    public const MODE_CREATE = 'create';
+    public const MODE_DUPLICATE = 'duplicate';
 
     private bool $isDryRun;
 
@@ -41,7 +41,7 @@ final class LoadProfile
             ->setDefined('type')
             ->setAllowedTypes('type', 'string')
             ->setDefault('mode', self::MODE_UPDATE)
-            ->setAllowedValues('mode', [self::MODE_UPDATE, self::MODE_CREATE])
+            ->setAllowedValues('mode', [self::MODE_UPDATE, self::MODE_DUPLICATE])
         ;
 
         return $resolver->resolve($data);

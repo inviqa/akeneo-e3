@@ -24,7 +24,7 @@ Feature: Data transformations in `duplicate` mode
       transform:
           actions: []
       load:
-          mode: create
+          mode: duplicate
       """
 
     When transformation is executed
@@ -90,7 +90,7 @@ Feature: Data transformations in `duplicate` mode
                       RELATIVES:
                           groups: ['magical_creatures']
       load:
-          mode: create
+          mode: duplicate
       """
 
     When transformation is executed
