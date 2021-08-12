@@ -54,7 +54,9 @@ final class ApiLoader implements Loader
             $this->api = $apiSelector->getApi($this->client, $this->resourceType);
         }
 
-        assert($this->isUpdateMode === true && $resource->getOrigin() === null, 'Resource must have origin for thr update mode.');
+        if ($this->isUpdateMode === true && $resource->getOrigin() === null) {
+            throw new LogicException('Resource must have origin for the update mode.');
+        }
 
         if ($resource->isChanged() === false) {
             return [];
