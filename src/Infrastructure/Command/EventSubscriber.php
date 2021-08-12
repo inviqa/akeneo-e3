@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace AkeneoEtl\Infrastructure\Command;
 
 use AkeneoEtl\Domain\Load\Event\AfterLoadEvent;
-use AkeneoEtl\Domain\Load\LoadResult\Failed;
+use AkeneoEtl\Domain\Load\LoadResult\Failed as LoadFailed;
 use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Domain\Transform\Event\AfterTransformEvent;
-use AkeneoEtl\Domain\Transform\Event\TransformErrorEvent;
 use AkeneoEtl\Domain\Transform\TransformResult\Failed as TransformFailed;
 use AkeneoEtl\Infrastructure\Command\Compare\ConsoleTableFormatter;
 use LogicException;
@@ -126,7 +125,7 @@ class EventSubscriber
 
         foreach ($event->getLoadResults() as $loadResult) {
             $comparison = $this->getCompareTable($loadResult->getResource());
-            $comparison[0][] = ($loadResult instanceof Failed) ?
+            $comparison[0][] = ($loadResult instanceof LoadFailed) ?
                 str_replace("\n", '', $loadResult->getError()) :
                 'updated';
 
