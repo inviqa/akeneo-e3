@@ -33,7 +33,6 @@ class EventSubscriber
     private ConsoleTableFormatter $tableFormatter;
 
     private bool $outputTransformations;
-    private bool $outputTransformErrors;
 
     private ConsoleSectionOutput $transformErrorSection;
     private ConsoleSectionOutput $transformProgressSection;
@@ -65,7 +64,6 @@ class EventSubscriber
         $this->tableFormatter = new ConsoleTableFormatter($this->tableColumnWidths);
 
         $this->outputTransformations = (bool)$input->getOption('output-transform');
-        $this->outputTransformErrors = (bool)$input->getOption('output-transform-errors');
 
         $this->transformProgressSection = $output->section();
         $this->transformReportSection = $output->section();
