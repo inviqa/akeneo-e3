@@ -32,6 +32,7 @@
 | :robot: | :man: | Fields       | Merge type |
 | ------- | ----- | ------------ | ---------- |
 |         |       |              | scalar     | 
+|         |       | attribute_requirements             | object+array     | 
 
 
 ## Family variant / SET action

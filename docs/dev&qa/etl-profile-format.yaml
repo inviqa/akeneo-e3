@@ -1,0 +1,66 @@
+resource-type: product # options: product-model, family, any supported API aliases
+
+extract:
+    # Data source
+    type: api # options api, csv, xlsx?
+
+    # (optional)
+    resource-type: product # options: product-model, family, any supported API aliases
+
+    # filter for the API call (API related?)
+    conditions:
+        -
+            field: 'identifier'
+            operator: 'IN'
+            value: ['100000007']
+
+transform:
+    # Update generation strategy
+    # Options: patch, post (full)
+    # Should it be a responsibility of the loader?
+    type: patch
+
+    actions: []
+
+    # What to do if no actions
+    # Option 1: stop - how to clone then?
+    # Option 2: load full resource !!!
+
+    # What are conditions to run FULL mode
+    # only flag
+
+
+
+    # Between transform and load there is a generation of a resource that will be sent to Akeneo
+
+    ### Pro loader
+    # - Loader knows if patch mode is supported or not
+    # - Generating a patch is not a responsibility of the transformer
+
+    # Loader can then generate an event onLoad with:
+    # before
+    # after
+    # error for this particular resource
+
+    # Soooo... one more "Pro"
+    # - improved onLoadEvent with errors
+
+
+    ### Pro transformer
+    # - no need to send before and after to loader
+    # OnTransform seemed to be a good thing (but see: - Generating a patch is not a responsibility of the transformer)
+
+
+
+
+loader:
+    # Destination
+    # Options: dry-run, api, csv, xlsx?
+    ### Question: is dry-run a property of loader?
+    type: api
+
+    # Options: patch (default), full
+    mode: patch
+
+    # (optional) API related? ot also csv?
+    batch-size: 100
