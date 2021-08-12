@@ -97,9 +97,7 @@ final class EtlFactory
 
         $client = $this->getClient($connectionProfile);
 
-        return new ApiLoader(
-            $this->apiSelector->getApi($client, $dataType)
-        );
+        return new ApiLoader($loadProfile, $client);
     }
 
     private function getClient(
