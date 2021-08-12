@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace AkeneoEtl\Domain\Load\Event;
 
 use AkeneoEtl\Domain\Load\LoadResult\LoadResult;
-use AkeneoEtl\Domain\Resource\Resource;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Symfony\Contracts\EventDispatcher\Event;

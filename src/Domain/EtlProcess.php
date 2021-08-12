@@ -9,9 +9,10 @@ use AkeneoEtl\Domain\Load\Event\AfterLoadEvent;
 use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Domain\Transform\Event\AfterTransformEvent;
 use AkeneoEtl\Domain\Transform\Event\BeforeTransformEvent;
-use AkeneoEtl\Domain\Transform\Event\TransformErrorEvent;
 use AkeneoEtl\Domain\Transform\Progress;
-use Exception;
+use AkeneoEtl\Domain\Transform\TransformResult\Failed;
+use AkeneoEtl\Domain\Transform\TransformResult\Transformed;
+use AkeneoEtl\Domain\Transform\TransformResult\TransformResult;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class EtlProcess
@@ -58,50 +59,37 @@ final class EtlProcess
      */
     private function transform(Resource $resource, Progress $progress): bool
     {
+        $this->onBeforeTransform($progress, $resource);
+
+        $result = Transformed::create($resource);
+
         try {
-            $this->onBeforeTransform($progress, $resource);
-
             $this->transformer->transform($resource);
-
-            $this->onAfterTransform($progress->advance(), $resource);
         } catch (TransformException $e) {
-
-            // what if to raise onAfterTransform Error
-            //  AfterTransformEvent::create($progress, $resource, $transformError)
-            $this->onTransformError($e, $resource);
+            $result = Failed::create($resource, $e->getMessage());
 
             if ($e->canBeSkipped() === false) {
                 throw $e;
             }
-
-            return false;
+        } finally {
+            $this->onAfterTransform($progress->advance(), $resource, $result);
         }
 
-        return true;
+        return (!$result instanceof Failed);
     }
 
     private function load(Resource $resource): void
     {
         $results = $this->loader->load($resource);
 
-        $this->eventDispatcher->dispatch(
-            AfterLoadEvent::create($results)
-        );
+        $this->onAfterLoad($results);
     }
 
     private function finishLoading(): void
     {
         $results = $this->loader->finish();
-        $this->eventDispatcher->dispatch(
-            AfterLoadEvent::create($results)
-        );
-    }
 
-    private function onTransformError(Exception $exception, Resource $resource): void
-    {
-        $this->eventDispatcher->dispatch(
-            TransformErrorEvent::create($resource, $exception->getMessage())
-        );
+        $this->onAfterLoad($results);
     }
 
     private function onBeforeTransform(Progress $progress, Resource $resource): void
@@ -111,10 +99,17 @@ final class EtlProcess
         );
     }
 
-    private function onAfterTransform(Progress $progress, ?Resource $resource): void
+    private function onAfterTransform(Progress $progress, ?Resource $resource, TransformResult $result): void
     {
         $this->eventDispatcher->dispatch(
-            AfterTransformEvent::create($progress, $resource)
+            AfterTransformEvent::create($progress, $resource, $result)
+        );
+    }
+
+    private function onAfterLoad(array $results): void
+    {
+        $this->eventDispatcher->dispatch(
+            AfterLoadEvent::create($results)
         );
     }
 }
