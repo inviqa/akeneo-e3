@@ -62,7 +62,7 @@ function value(string $name, ?string $channel, ?string $locale)
     $field = Attribute::create($name, $channel, $locale);
 
     if ($resource->has($field) === false) {
-        throw new TransformException(sprintf('Attribute %s is not present in data.', $name), true);
+        throw new TransformException(sprintf('Attribute %s is not present in data', $name), true);
     }
 
     return $resource->get($field);

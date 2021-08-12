@@ -42,7 +42,7 @@ final class ValueCollection
 
         if (array_key_exists($hash, $this->values) === false) {
             throw new LogicException(sprintf(
-                'Attribute %s (scope=%s, locale=%s) is not present in data.',
+                'Attribute %s (scope=%s, locale=%s) is not present in data',
                 $attribute->getName(),
                 $attribute->getScope() ?? 'null',
                 $attribute->getLocale() ?? 'null'

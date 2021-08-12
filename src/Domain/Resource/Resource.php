@@ -67,7 +67,7 @@ final class Resource
 
         if ($field instanceof Property) {
             if (array_key_exists($fieldName, $this->properties) === false) {
-                throw new LogicException(sprintf('Field %s is not present in data.', $fieldName));
+                throw new LogicException(sprintf('Field %s is not present in data', $fieldName));
             }
 
             return $this->properties[$fieldName];
