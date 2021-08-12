@@ -4,94 +4,133 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Infrastructure\Loader;
 
+use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\Pim\ApiClient\Api\Operation\UpsertableResourceListInterface;
-use AkeneoEtl\Domain\Exception\LoadException;
-use AkeneoEtl\Domain\Load\LoadError;
+use AkeneoEtl\Domain\Load\LoadResult\Failed;
+use AkeneoEtl\Domain\Load\LoadResult\Loaded;
+use AkeneoEtl\Domain\Load\LoadResult\LoadResult;
 use AkeneoEtl\Domain\Loader;
+use AkeneoEtl\Domain\Profile\LoadProfile;
 use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoEtl\Infrastructure\Api\ApiSelector;
+use LogicException;
 use Traversable;
 
 final class ApiLoader implements Loader
 {
     private UpsertableResourceListInterface $api;
 
-    private int $batchSize;
+    private int $batchSize = 100;
 
+    /**
+     * @var array|Resource[]
+     */
     private array $buffer = [];
 
     private string $codeFieldName = '';
 
     private string $resourceType = '';
 
-    public function __construct(UpsertableResourceListInterface $api, int $batchSize = 100)
+    private LoadProfile $profile;
+
+    private AkeneoPimClientInterface $client;
+
+    private bool $isUpdateMode;
+
+    public function __construct(LoadProfile $loadProfile, AkeneoPimClientInterface $client)
     {
-        $this->api = $api;
-        $this->batchSize = $batchSize;
+        $this->profile = $loadProfile;
+        $this->client = $client;
+        $this->isUpdateMode = $this->profile->getMode() === LoadProfile::MODE_UPDATE;
     }
 
     /**
      * @throws \AkeneoEtl\Domain\Exception\LoadException
      */
-    public function load(Resource $resource): void
+    public function load(Resource $resource): array
     {
         if ($this->codeFieldName === '') {
             $this->codeFieldName = $resource->getCodeOrIdentifierFieldName();
             $this->resourceType = $resource->getResourceType();
+
+            $apiSelector = new ApiSelector();
+            $this->api = $apiSelector->getApi($this->client, $this->resourceType);
+        }
+
+        assert($this->isUpdateMode === true && $resource->getOrigin() === null, 'Resource must have origin for thr update mode.');
+
+        if ($resource->isChanged() === false) {
+            return [];
         }
 
         $id = $resource->getCodeOrIdentifier();
-        $this->buffer[$id] = $resource->toArray();
+        $this->buffer[$id] = $resource;
 
         if (count($this->buffer) >= $this->batchSize) {
-            $this->finish();
+            return $this->loadBatch();
         }
+
+        return [];
     }
 
     /**
      * @throws \AkeneoEtl\Domain\Exception\LoadException
      */
-    public function finish(): void
+    public function finish(): array
     {
-        $this->loadBatch();
+        return $this->loadBatch();
     }
 
     /**
-     * @throws \AkeneoEtl\Domain\Exception\LoadException
+     * @return array|LoadResult[]
      */
-    private function loadBatch(): void
+    private function loadBatch(): array
     {
         if (count($this->buffer) === 0) {
-            return;
+            return [];
         }
 
-        $response = $this->api->upsertList($this->buffer);
-        $this->processResponse($response);
 
-        $this->buffer = [];
+        $isUpdateMode = $this->isUpdateMode;
+
+        $list = array_map(
+            function (Resource $resource) use ($isUpdateMode) {
+                if ($isUpdateMode === true && $resource->getOrigin() !== null) {
+                    $patch = $resource->diff($resource->getOrigin());
+
+                    return $patch->toArray();
+                }
+
+                return $resource->toArray();
+            },
+            $this->buffer
+        );
+
+        $response = $this->api->upsertList($list);
+
+        return $this->processResponse($response);
     }
 
-    /**
-     * @throws \AkeneoEtl\Domain\Exception\LoadException
-     */
-    private function processResponse(Traversable $result): void
+    private function processResponse(Traversable $result): array
     {
-        $errors = [];
+        $loadResults = [];
 
         foreach ($result as $line) {
-            if ($line['status_code'] === 422) {
-                $code = $line[$this->codeFieldName] ?? '';
-                $initialItem = $this->buffer[$code] ?? [];
+            $code = $line[$this->codeFieldName];
+            $resource = $this->buffer[$code];
 
-                $errors[] = LoadError::create(
-                    $this->getErrorMessage($line),
-                    Resource::fromArray($initialItem, $this->resourceType)
-                );
+            if ($line['status_code'] !== 422) {
+                $loadResults[] = Loaded::create($resource);
+                continue;
             }
+
+            $error = $this->getErrorMessage($line);
+            $loadResults[] = Failed::create($resource, $error);
         }
 
-        if (count($errors) > 0) {
-            throw new LoadException('Batch upload errors', $errors);
-        }
+        $this->buffer = [];
+
+        return $loadResults;
     }
 
     public function getErrorMessage(array $response): string

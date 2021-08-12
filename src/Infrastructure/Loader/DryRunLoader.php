@@ -9,13 +9,13 @@ use AkeneoEtl\Domain\Resource\Resource;
 
 final class DryRunLoader implements Loader
 {
-    public function load(Resource $resource): void
+    public function load(Resource $resource): array
     {
-        // dry run
+        return [];
     }
 
-    public function finish(): void
+    public function finish(): array
     {
-        // dry run
+        return [];
     }
 }

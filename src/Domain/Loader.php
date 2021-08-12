@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain;
 
+use AkeneoEtl\Domain\Load\LoadResult\LoadResult;
 use AkeneoEtl\Domain\Resource\Resource;
 
 interface Loader
 {
     /**
-     * @throws \AkeneoEtl\Domain\Exception\LoadException
+     * @return array|LoadResult[]
      */
-    public function load(Resource $resource): void;
+    public function load(Resource $resource): array;
 
     /**
      * Finish loading, e.g. load remaining resources in bulk.
      *
-     * @throws \AkeneoEtl\Domain\Exception\LoadException
+     * @return array|LoadResult[]
      */
-    public function finish(): void;
+    public function finish(): array;
 }
