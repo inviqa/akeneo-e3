@@ -15,15 +15,14 @@ class SequentialTransformerTest extends TestCase
     public function test_it_transforms()
     {
         $transform = new SequentialTransformer([new FakeAction()]);
+        $resource = Resource::fromArray(['identifier' => 123], 'product');
 
-        $result = $transform
-            ->transform(Resource::fromArray(['identifier' => 123], 'product'))
-            ->toArray();
+        $transform->transform($resource);
 
         Assert::assertEquals([
             'identifier' => 123,
             'fake' => '!',
-        ], $result);
+        ], $resource->toArray());
     }
 
     public function test_it_throws_an_exception_if_action_fails()
@@ -38,14 +37,14 @@ class SequentialTransformerTest extends TestCase
     public function test_it_returns_an_empty_changeset_no_actions_executed()
     {
         $transform = new SequentialTransformer([new NullAction()]);
+        $resource = Resource::fromArray(['identifier' => 123], 'product');
 
-        $result = $transform
-            ->transform(Resource::fromArray(['identifier' => 123], 'product'));
+        $transform->transform($resource);
 
-        Assert::assertFalse($result->isChanged());
+        Assert::assertFalse($resource->isChanged());
         Assert::assertEquals([
             'identifier' => 123,
-        ], $result->toArray());
+        ], $resource->toArray());
     }
 }
 

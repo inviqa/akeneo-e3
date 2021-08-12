@@ -20,14 +20,10 @@ final class SequentialTransformer implements Transformer
         $this->actions = $actions;
     }
 
-    public function transform(Resource $resource): \AkeneoEtl\Domain\Resource\Resource
+    public function transform(Resource $resource): void
     {
-        $transformingResource = clone $resource;
-
         foreach ($this->actions as $action) {
-            $action->execute($transformingResource);
+            $action->execute($resource);
         }
-
-        return $transformingResource;
     }
 }

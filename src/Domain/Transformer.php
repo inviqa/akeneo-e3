@@ -8,5 +8,5 @@ use AkeneoEtl\Domain\Resource\Resource as EtlResource;
 
 interface Transformer
 {
-    public function transform(EtlResource $resource): EtlResource;
+    public function transform(EtlResource $resource): void;
 }
