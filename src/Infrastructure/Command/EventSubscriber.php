@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Infrastructure\Command;
 
+use AkeneoEtl\Domain\Load\Event\AfterLoadEvent;
 use AkeneoEtl\Domain\Load\Event\LoadErrorEvent;
+use AkeneoEtl\Domain\Load\LoadResult\Failed;
+use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Domain\Transform\Event\AfterTransformEvent;
 use AkeneoEtl\Domain\Transform\Event\TransformErrorEvent;
 use AkeneoEtl\Infrastructure\Command\Compare\ConsoleTableFormatter;
@@ -60,7 +63,7 @@ class EventSubscriber
         $this->input = $input;
         $this->output = $output;
         $this->resourceComparer = new ResourceComparer();
-        $this->tableColumnWidths = [12, 16, 30, 30];
+        $this->tableColumnWidths = [12, 16, 30, 30, 30];
         $this->tableFormatter = new ConsoleTableFormatter($this->tableColumnWidths);
 
         $this->outputTransformations = (bool)$input->getOption('output-transform');
@@ -73,7 +76,7 @@ class EventSubscriber
 
         $this->eventDispatcher->addListener(AfterTransformEvent::class, [$this, 'onProgress']);
         $this->eventDispatcher->addListener(TransformErrorEvent::class, [$this, 'onTransformError']);
-        $this->eventDispatcher->addListener(LoadErrorEvent::class, [$this, 'onLoadError']);
+        $this->eventDispatcher->addListener(AfterLoadEvent::class, [$this, 'onAfterLoad']);
     }
 
     public function onProgress(AfterTransformEvent $event): void
@@ -85,21 +88,12 @@ class EventSubscriber
         $this->progressBar->setProgress($event->getProgress()->current());
 
         // If there is no transformed object, skip
-        if ($event->getAfter() === null) {
+        if ($event->getResource() === null) {
             return;
         }
 
         $this->progressBar->clear();
         $this->transformReportSection->overwrite(sprintf('Processed: %d', ++$this->processedCount));
-
-        if ($this->outputTransformations === true) {
-            $comparison = $this->resourceComparer->getCompareTable(
-                $event->getBefore(),
-                $event->getAfter()
-            );
-
-            $this->outputCompareTable($comparison);
-        }
         $this->progressBar->display();
     }
 
@@ -121,16 +115,19 @@ class EventSubscriber
         $this->progressBar->display();
     }
 
-    public function onLoadError(LoadErrorEvent $event): void
+    public function onAfterLoad(AfterLoadEvent $event): void
     {
-        foreach ($event->getErrors() as $error) {
-            $this->output->writeln(
-                sprintf(
-                    '[%s] %s',
-                    $error->getIdentifier(),
-                    $error->getMessage()
-                )
-            );
+        if ($this->outputTransformations === false) {
+            return;
+        }
+
+        foreach ($event->getLoadResults() as $loadResult) {
+            $comparison = $this->getCompareTable($loadResult->getResource());
+            $comparison[0][] = ($loadResult instanceof Failed) ?
+                str_replace("\n", '', $loadResult->getError()) :
+                'updated';
+
+            $this->outputCompareTable($comparison);
         }
     }
 
@@ -146,5 +143,17 @@ class EventSubscriber
         if (count($formattedTable) > 0) {
             $this->transformProgressSection->writeln(str_pad('', strlen($formattedTable[0]), '-'));
         }
+    }
+
+    private function getCompareTable(Resource $resource): array
+    {
+        if ($resource->getOrigin() === null) {
+            return $this->resourceComparer->getCompareTable(null, $resource);
+        }
+
+        return $this->resourceComparer->getCompareTable(
+            $resource->getOrigin()->diff($resource),
+            $resource->diff($resource->getOrigin())
+        );
     }
 }
