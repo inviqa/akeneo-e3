@@ -21,10 +21,10 @@ final class ExpressionLanguage extends BaseExpressionLanguage
             // 'trim' => 'trim', // can register simple php functions
             $namespace.'trim'  => 'trim',
             $namespace.'slug'  => 'slug',
-            $namespace.'lowercase'  => 'lowercase',
-            $namespace.'uppercase'  => 'uppercase',
-            $namespace.'camelcase'  => 'camelcase',
-            $namespace.'snakecase'  => 'snakecase',
+            $namespace.'lowerCase'  => 'lowerCase',
+            $namespace.'upperCase'  => 'upperCase',
+            $namespace.'camelCase'  => 'camelCase',
+            $namespace.'snakeCase'  => 'snakeCase',
             $namespace.'value'  => 'value',
         ];
 

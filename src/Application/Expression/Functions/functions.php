@@ -17,28 +17,28 @@ function slug(string $string, string $separator = '-', string $locale = null): s
     return $slugger->slug($string, $separator, $locale)->toString();
 }
 
-function lowercase(string $string): string
+function lowerCase(string $string): string
 {
     $unicodeString = new UnicodeString($string);
 
     return $unicodeString->lower()->toString();
 }
 
-function uppercase(string $string): string
+function upperCase(string $string): string
 {
     $unicodeString = new UnicodeString($string);
 
     return $unicodeString->upper()->toString();
 }
 
-function camelcase(string $string): string
+function camelCase(string $string): string
 {
     $unicodeString = new UnicodeString($string);
 
     return $unicodeString->camel()->toString();
 }
 
-function snakecase(string $string): string
+function snakeCase(string $string): string
 {
     $unicodeString = new UnicodeString($string);
 
@@ -49,7 +49,7 @@ function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}")
 {
     $unicodeString = new UnicodeString($string);
 
-    return $unicodeString->trim($chars)->toString();
+    return $unicodeString-> trim($chars)->toString();
 }
 
 /**
