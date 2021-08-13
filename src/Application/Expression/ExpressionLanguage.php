@@ -26,6 +26,7 @@ final class ExpressionLanguage extends BaseExpressionLanguage
             $namespace.'camelCase'  => 'camelCase',
             $namespace.'snakeCase'  => 'snakeCase',
             $namespace.'value'  => 'value',
+            $namespace.'removeHtmlTags'  => 'removeHtmlTags',
         ];
 
         foreach ($functionMap as $phpFunction => $expressionFunction) {

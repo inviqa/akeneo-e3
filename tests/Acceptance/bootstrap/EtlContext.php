@@ -4,6 +4,7 @@ namespace AkeneoEtl\Tests\Acceptance\bootstrap;
 
 use AkeneoEtl\Domain\EtlProcess;
 use AkeneoEtl\Domain\Profile\EtlProfile;
+use AkeneoEtl\Domain\Resource\Attribute;
 use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Domain\Transformer;
 use AkeneoEtl\Infrastructure\EtlFactory;
@@ -64,6 +65,18 @@ class EtlContext implements Context
     public function readResourceAssociations(TableNode $table): void
     {
         $this->resourceData['associations'] = $this->readAssociationsFromTable($table);
+    }
+
+    /**
+     * @Given with a text attribute :attributeName:
+     */
+    public function setTextAttributeValue(string $attributeName, PyStringNode $value)
+    {
+        $this->resourceData['values'][$attributeName][] = [
+            'locale' => null,
+            'scope' => null,
+            'data' => $value->getRaw(),
+        ];
     }
 
     /**
@@ -146,6 +159,16 @@ class EtlContext implements Context
         $loaderData = $this->loader->getResult()->toArray();
 
         Assert::eq($expected, $loaderData['associations']);
+    }
+
+    /**
+     * @Then should have the text attribute :attributeName:
+     */
+    public function checkTextAttributeValue(string $attributeName, PyStringNode $attributeValue)
+    {
+        $actualValue = $this->loader->getResult()->get(Attribute::create($attributeName, null, null));
+
+        Assert::eq($attributeValue->getRaw(), $actualValue);
     }
 
     private function readPropertiesFromTable(TableNode $table): array

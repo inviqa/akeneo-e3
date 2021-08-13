@@ -1,6 +1,6 @@
 Feature: Data transformations using `set` actions
   As a user
-  I want to transform data in Akeneo
+  I want to change values of properties and attributes in Akeneo
 
   Scenario: Transform scalar values using fixed values:
   - change family
@@ -61,7 +61,7 @@ Feature: Data transformations using `set` actions
 
   Scenario: Transform scalar values using expressions:
   - change family (concatenate with a prefix)
-  - uppercase name in en_GB
+  - upper case name in en_GB
   - add url_slug with a sluggified version of name
 
     Given a product in the PIM with properties:
@@ -87,13 +87,13 @@ Feature: Data transformations using `set` actions
                   field: name
                   scope: web
                   locale: en_GB
-                  expression: 'uppercase(value("name", "web", "en_GB"))'
+                  expression: 'upperCase(value("name", "web", "en_GB"))'
               -
                   type: set
                   field: url_slug
                   scope: null
                   locale: de_DE
-                  expression: 'lowercase(slug(value("name", "web", "de_DE")))'
+                  expression: 'lowerCase(slug(value("name", "web", "de_DE")))'
 
       """
 

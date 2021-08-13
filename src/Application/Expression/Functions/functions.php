@@ -49,7 +49,7 @@ function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}")
 {
     $unicodeString = new UnicodeString($string);
 
-    return $unicodeString-> trim($chars)->toString();
+    return $unicodeString->trim($chars)->toString();
 }
 
 /**
@@ -66,4 +66,9 @@ function value(string $name, ?string $channel, ?string $locale)
     }
 
     return $resource->get($field);
+}
+
+function removeHtmlTags(string $string, array $allowedTags = []): string
+{
+    return trim(strip_tags($string, $allowedTags));
 }
