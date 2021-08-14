@@ -1,6 +1,6 @@
-# Akeneo ETL
+# Akeneo Power Rules
 
-Akeneo ETL is a tool to manipulate product data in the Akeneo PIM using its REST API.
+Akeneo Power Rules is a tool to manipulate product data in the Akeneo PIM using its REST API.
 
 It is like Akeneo Enrichment Rules but with more features like expressions.
 
@@ -38,23 +38,21 @@ userName: ' {{ Username }}'
 userPassword: '{{ Password }}'
 ```
 
-Step 3. Generate an ETL profile (specification of how to manipulate your data).
+Step 3. Specify your rules
 
-Create a file `etl.yaml`, e.g. this configuration allows to trim values of the `name` attribute for the `en_GB` locale:
+Create a file `rules.yaml`, e.g. this configuration allows to trim values of the `name` attribute for the `en_GB` locale:
 
 ```yaml
-transform:
-    actions:
-        -
-            type: set
-            field: name
-            locale: en_GB
-            scope: null
-            expression: 'trim(value("name", null, "en_GB", ""))'
+actions:
+    -
+        type: set
+        field: name
+        locale: en_GB
+        scope: null
+        expression: 'trim(value("name", null, "en_GB", ""))'
 ```
-See [How to configure data manipulation (ETL)](docs/configure-etl.md)
 
 Step 4. Run the script:
 ```bash
-bin/akeneo-etl transform --resource-type=product --connection-profile=connection.yaml --etl-profile=etl.yaml
+bin/akeneo-etl transform --resource-type=product --connection=connection.yaml --profile=rules.yaml
 ```

@@ -18,9 +18,14 @@
 
 ### Functions
     
-- [ ] strip html tags
+- [x] strip html tags
 - [ ] string functions: replace, etc - how to expose all UnicodeString stuff?
 - [ ] array functions: merge, search, etc.
+- [ ] hasValue(name, scope, locale)
+- [ ] hasProperty(name)
+- [ ] priceValue(name, scope, locale, currency)
+- [ ] metricValue(name, scope, locale, unit)
+- [ ] register meta variable this_value, the_value(?) with the current value. Or just `value`?
     
 ## Commands
 
@@ -33,3 +38,7 @@
 - [ ] validate ETL profile against schema (optionresolver)
 - [ ] validate ETL profile against Akeneo (do attributes exist, are they configured accordingly, e.g. scopable if scope configured)
  
+
+## More ideas
+
+For expressions: object Akeneo to access real data, e.g. attribute options or ref. entities
