@@ -19,7 +19,8 @@
         "friendsofphp/php-cs-fixer": "^3.0",
         "phpmd/phpmd": "^2.10",
         "phpstan/phpstan": "^0.12.94",
-        "phpunit/phpunit": "^9"
+        "phpunit/phpunit": "^9",
+        "qossmic/deptrac-shim": "^0.14.1"
     },
     "config": {
         "optimize-autoloader": true,
