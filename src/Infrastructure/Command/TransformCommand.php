@@ -44,14 +44,14 @@ final class TransformCommand extends Command
     {
         $this
             ->setName('transform')
-            ->addOption('resource-type', 'r', InputOption::VALUE_REQUIRED)
-            ->addOption('connection-profile', 'c', InputOption::VALUE_REQUIRED)
+            ->addOption('resource-type', 't', InputOption::VALUE_REQUIRED)
+            ->addOption('connection', 'c', InputOption::VALUE_REQUIRED)
             ->addOption(
-                'destination-connection-profile',
+                'destination-connection',
                 'd',
                 InputOption::VALUE_REQUIRED
             )
-            ->addOption('etl-profile', 'p', InputOption::VALUE_REQUIRED)
+            ->addOption('rules', 'r', InputOption::VALUE_REQUIRED)
             ->addOption('output-transform', 'o', InputOption::VALUE_NONE, 'Output transformation results on-the-fly');
     }
 
@@ -84,11 +84,11 @@ final class TransformCommand extends Command
 
     private function getConnectionProfile(InputInterface $input): ConnectionProfile
     {
-        $profileFileName = (string)$input->getOption('connection-profile');
+        $profileFileName = (string)$input->getOption('connection');
 
         if ($profileFileName === '') {
             throw new LogicException(
-                '--connection-profile option is required.'
+                '--connection option is required.'
             );
         }
 
@@ -97,7 +97,7 @@ final class TransformCommand extends Command
 
     private function getDestinationConnectionProfile(InputInterface $input): ?ConnectionProfile
     {
-        $profileFileName = (string)$input->getOption('destination-connection-profile');
+        $profileFileName = (string)$input->getOption('destination-connection');
 
         if ($profileFileName === '') {
             return null;
@@ -108,10 +108,10 @@ final class TransformCommand extends Command
 
     private function getEtlProfile(InputInterface $input): EtlProfile
     {
-        $profileFileName = (string)$input->getOption('etl-profile');
+        $profileFileName = (string)$input->getOption('rules');
 
         if ($profileFileName === '') {
-            throw new LogicException('--etl-profile option is required.');
+            throw new LogicException('--rules option is required.');
         }
 
         return $this->etlProfileFactory->fromFile($profileFileName);
