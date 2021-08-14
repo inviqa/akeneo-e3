@@ -49,17 +49,17 @@ final class EtlFactory
         $extractor = $this->createExtractor(
             $resourceType,
             $sourceConnectionProfile,
-            $etlProfile->getExtractProfile()
+            $etlProfile
         );
 
         $transformer = $this->createTransformer(
-            $etlProfile->getTransformProfile()
+            $etlProfile
         );
 
         $loader = $this->createLoader(
             $resourceType,
             $destinationConnectionProfile,
-            $etlProfile->getLoadProfile()
+            $etlProfile
         );
 
         return new EtlProcess($extractor, $transformer, $loader, $this->eventDispatcher);

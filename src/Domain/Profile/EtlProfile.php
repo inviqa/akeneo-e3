@@ -4,45 +4,55 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Profile;
 
+use LogicException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class EtlProfile
+final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
 {
-    private ExtractProfile $extractProfile;
-    private TransformProfile $transformProfile;
-    private LoadProfile $loadProfile;
+    public const MODE_UPDATE = 'update';
+    public const MODE_DUPLICATE = 'duplicate';
 
-    public function __construct(ExtractProfile $extractProfile, TransformProfile $transformProfile, LoadProfile $loadProfile)
+    private bool $isDryRun;
+
+    private string $mode;
+
+    private array $conditions;
+
+    private array $actions;
+
+    public function __construct(array $data)
     {
-        $this->extractProfile = $extractProfile;
-        $this->transformProfile = $transformProfile;
-        $this->loadProfile = $loadProfile;
+        $data = self::resolve($data);
+
+        $this->isDryRun = ($data['type'] ?? '') === 'dry-run';
+        $this->mode = $data['upload-mode'] ?? self::MODE_UPDATE;
+        $this->conditions = $data['conditions'] ?? [];
+        $this->actions = $data['actions'] ?? [];
     }
 
     public static function fromArray(array $data): self
     {
-        $data = self::resolve($data);
-
-        return new self(
-            ExtractProfile::fromArray($data['extract'] ?? []),
-            TransformProfile::fromArray($data['transform'] ?? []),
-            LoadProfile::fromArray($data['load'] ?? []),
-        );
+        return new self($data);
     }
 
-    public function getExtractProfile(): ExtractProfile
+    public function isDryRun(): bool
     {
-        return $this->extractProfile;
+        return $this->isDryRun;
     }
 
-    public function getLoadProfile(): LoadProfile
+    public function getMode(): string
     {
-        return $this->loadProfile;
+        return $this->mode;
     }
 
-    public function getTransformProfile(): TransformProfile
+    public function getConditions(): array
     {
-        return $this->transformProfile;
+        return $this->conditions;
+    }
+
+    public function getActions(): array
+    {
+        return $this->actions;
     }
 
     private static function resolve(array $data): array
@@ -50,12 +60,30 @@ final class EtlProfile
         $resolver = new OptionsResolver();
 
         $resolver
-            ->setRequired('transform')
-            ->setDefined(['extract', 'load'])
-            ->setAllowedTypes('extract', 'array')
-            ->setAllowedTypes('transform', 'array')
-            ->setAllowedTypes('load', 'array');
+            ->setDefined('type')
+            ->setAllowedTypes('type', 'string')
+            ->setDefault('mode', self::MODE_UPDATE)
+            ->setAllowedValues('mode', [self::MODE_UPDATE, self::MODE_DUPLICATE])
+        ;
+        $resolver->setDefault('conditions', function (OptionsResolver $conditionResolver) {
+            $conditionResolver
+                ->setPrototype(true)
+                ->setRequired(['field', 'operator'])
+                ->setDefined('value')
+                ->setAllowedTypes('field', 'string')
+                ->setAllowedTypes('operator', 'string');
+        });
 
-        return $data;
+        $resolver
+            ->setRequired('actions')
+            ->setAllowedTypes('actions', 'array');
+
+        foreach ($data['actions'] ?? [] as $actionId => $action) {
+            if (isset($action['type']) === false) {
+                throw new LogicException(sprintf('No type specified for action %s', $actionId));
+            }
+        }
+
+        return $resolver->resolve($data);
     }
 }

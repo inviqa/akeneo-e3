@@ -10,6 +10,7 @@ use AkeneoEtl\Domain\Load\LoadResult\Failed;
 use AkeneoEtl\Domain\Load\LoadResult\Loaded;
 use AkeneoEtl\Domain\Load\LoadResult\LoadResult;
 use AkeneoEtl\Domain\Loader;
+use AkeneoEtl\Domain\Profile\EtlProfile;
 use AkeneoEtl\Domain\Profile\LoadProfile;
 use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Infrastructure\Api\ApiSelector;
@@ -41,7 +42,7 @@ final class ApiLoader implements Loader
     {
         $this->profile = $loadProfile;
         $this->client = $client;
-        $this->isUpdateMode = $this->profile->getMode() === LoadProfile::MODE_UPDATE;
+        $this->isUpdateMode = $this->profile->getMode() === EtlProfile::MODE_UPDATE;
     }
 
     public function load(Resource $resource): array
