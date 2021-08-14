@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Application\Action;
 
+use AkeneoEtl\Application\Expression\StateHolder;
 use AkeneoEtl\Application\Expression\ExpressionLanguage;
 use AkeneoEtl\Domain\Action;
 use AkeneoEtl\Domain\Resource\Field;
@@ -47,6 +48,9 @@ final class Set implements Action
         }
 
         $expression = $this->options->getExpression() ?? '';
+
+        StateHolder::$resource = $resource;
+        StateHolder::$field = $this->field;
 
         return $this->expressionLanguage->evaluate($expression, $resource->toArray());
     }

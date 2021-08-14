@@ -2,7 +2,7 @@
 
 namespace AkeneoEtl\Tests\Unit\Application\Expression\functions;
 
-use AkeneoEtl\Application\CurrentResourceHolder;
+use AkeneoEtl\Application\Expression\StateHolder;
 use AkeneoEtl\Domain\Exception\TransformException;
 use AkeneoEtl\Domain\Resource\Attribute;
 use AkeneoEtl\Domain\Resource\Resource;
@@ -18,7 +18,7 @@ class FunctionsTest extends TestCase
     {
         $resource = Resource::fromArray(TestData::getProduct(), 'product');
 
-        CurrentResourceHolder::$current = $resource;
+        StateHolder::$resource = $resource;
 
         $this->assertEquals('violet', value('colour', 'erp', null));
     }
@@ -27,7 +27,7 @@ class FunctionsTest extends TestCase
     {
         $resource = Resource::fromArray(TestData::getProduct(), 'product');
 
-        CurrentResourceHolder::$current = $resource;
+        StateHolder::$resource = $resource;
 
         $this->expectException(TransformException::class);
 
@@ -38,8 +38,8 @@ class FunctionsTest extends TestCase
     {
         $resource = Resource::fromArray(TestData::getProduct(), 'product');
 
-        CurrentResourceHolder::$current = $resource;
-        CurrentResourceHolder::$field = Attribute::create('colour', 'erp', null);
+        StateHolder::$resource = $resource;
+        StateHolder::$field = Attribute::create('colour', 'erp', null);
 
         $this->assertEquals('violet', value());
     }
@@ -49,8 +49,8 @@ class FunctionsTest extends TestCase
     {
         $resource = Resource::fromArray(TestData::getProduct(), 'product');
 
-        CurrentResourceHolder::$current = $resource;
-        CurrentResourceHolder::$field = Attribute::create('colour', 'erp', 'es_ES');
+        StateHolder::$resource = $resource;
+        StateHolder::$field = Attribute::create('colour', 'erp', 'es_ES');
 
         $this->expectException(TransformException::class);
 

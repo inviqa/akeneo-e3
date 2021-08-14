@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Application\Expression\Functions;
 
-use AkeneoEtl\Application\CurrentResourceHolder;
+use AkeneoEtl\Application\Expression\StateHolder;
 use AkeneoEtl\Domain\Exception\TransformException;
 use AkeneoEtl\Domain\Resource\Attribute;
 use Symfony\Component\String\Slugger\AsciiSlugger;
@@ -54,16 +54,16 @@ function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}")
 
 /**
  * Returns a value of an attribute by name, channel and locale.
- *
+ * If name is not specified, it returns a value of a field from the current rule.
  *
  * @return mixed|null
  */
 function value(string $name = '', ?string $channel = null, ?string $locale = null)
 {
-    $resource = CurrentResourceHolder::$current;
+    $resource = StateHolder::$resource;
 
     $field = ($name === '') ?
-        CurrentResourceHolder::$field :
+        StateHolder::$field :
         Attribute::create($name, $channel, $locale);
 
     if ($resource->has($field) === false) {
