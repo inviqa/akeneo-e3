@@ -112,6 +112,13 @@ final class ApiLoader implements Loader
         $loadResults = [];
 
         foreach ($result as $line) {
+            // In some cases when a PATCH body is invalid,
+            // Akeneo PHP client returns a response with null
+            // instead of throwing an HTTP exception.
+            if ($line === null) {
+                throw new LogicException('Akeneo API error by PATCH: please check your rules.');
+            }
+
             $code = $line[$this->codeFieldName];
             $resource = $this->buffer[$code];
 
