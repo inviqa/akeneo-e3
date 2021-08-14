@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace AkeneoEtl\Infrastructure\Extractor;
 
 use Akeneo\Pim\ApiClient\Api\Operation\ListableResourceInterface;
-use AkeneoEtl\Domain\Extractor as DomainExtractor;
+use Akeneo\Pim\ApiClient\Search\SearchBuilder;
+use AkeneoEtl\Domain\Extractor;
 use AkeneoEtl\Domain\Resource\Resource;
 use Generator;
 
-final class Extractor implements DomainExtractor
+final class ApiExtractor implements Extractor
 {
     private ListableResourceInterface $api;
 
@@ -17,11 +18,11 @@ final class Extractor implements DomainExtractor
 
     private string $resourceType;
 
-    public function __construct(string $resourceType, ListableResourceInterface $api, array $query)
+    public function __construct(string $resourceType, ListableResourceInterface $api, array $conditions)
     {
         $this->resourceType = $resourceType;
         $this->api = $api;
-        $this->query = $query;
+        $this->query = $this->buildQuery($conditions);
     }
 
     public function count(): int
@@ -41,5 +42,23 @@ final class Extractor implements DomainExtractor
         foreach ($cursor as $resource) {
             yield Resource::fromArray($resource, $this->resourceType);
         }
+    }
+
+    private function buildQuery(array $conditions): array
+    {
+        $searchBuilder = new SearchBuilder();
+
+        foreach ($conditions as $condition) {
+            $searchBuilder
+                ->addFilter(
+                    $condition['field'],
+                    $condition['operator'],
+                    $condition['value']
+                );
+        }
+
+        $searchFilters = $searchBuilder->getFilters();
+
+        return ['search' => $searchFilters];
     }
 }

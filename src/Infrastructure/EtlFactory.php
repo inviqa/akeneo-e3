@@ -18,7 +18,7 @@ use AkeneoEtl\Domain\Profile\TransformProfile;
 use AkeneoEtl\Domain\Loader;
 use AkeneoEtl\Domain\Transformer;
 use AkeneoEtl\Infrastructure\Api\ApiSelector;
-use AkeneoEtl\Infrastructure\Extractor\Extractor;
+use AkeneoEtl\Infrastructure\Extractor\ApiExtractor;
 use AkeneoEtl\Infrastructure\Loader\ApiLoader;
 use AkeneoEtl\Infrastructure\Loader\DryRunLoader;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -69,13 +69,13 @@ final class EtlFactory
         string $resourceType,
         ConnectionProfile $profile,
         ExtractProfile $extractProfile
-    ): Extractor {
+    ): ApiExtractor {
         $client = $this->getClient($profile);
 
-        return new Extractor(
+        return new ApiExtractor(
             $resourceType,
             $this->apiSelector->getApi($client, $resourceType),
-            $this->buildQuery($extractProfile->getConditions())
+            $extractProfile->getConditions()
         );
     }
 
@@ -122,23 +122,5 @@ final class EtlFactory
             $profile->getUserName(),
             $profile->getUserPassword()
         );
-    }
-
-    private function buildQuery(array $conditions): array
-    {
-        $searchBuilder = new SearchBuilder();
-
-        foreach ($conditions as $condition) {
-            $searchBuilder
-                ->addFilter(
-                    $condition['field'],
-                    $condition['operator'],
-                    $condition['value']
-                );
-        }
-
-        $searchFilters = $searchBuilder->getFilters();
-
-        return ['search' => $searchFilters];
     }
 }
