@@ -89,8 +89,7 @@ class EtlContext implements Context
         $factory = new EtlFactory($this->eventDispatcher);
         $profile = EtlProfile::fromArray($config);
 
-        $transformProfile = $profile->getTransformProfile();
-        $this->transformer = $factory->createTransformer($transformProfile);
+        $this->transformer = $factory->createTransformer($profile);
     }
 
     /**

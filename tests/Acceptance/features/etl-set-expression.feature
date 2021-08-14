@@ -21,13 +21,12 @@ Feature: Data transformations using `set` actions and specific expressions
 
     And I apply transformations using the profile:
       """
-      transform:
-          actions:
-              -
-                  type: set
-                  field: description
-                  scope: null
-                  expression: "removeHtmlTags(value('description', null, null))"
+      actions:
+          -
+              type: set
+              field: description
+              scope: null
+              expression: "removeHtmlTags(value('description', null, null))"
       """
 
     When transformation is executed

@@ -21,28 +21,27 @@ Feature: Data transformations using `set` actions
 
     And I apply transformations using the profile:
       """
-      transform:
-          actions:
-              -
-                  type: set
-                  field: family
-                  value: pet
-              -
-                  type: set
-                  field: parent
-                  value:
-              -
-                  type: set
-                  field: name
-                  scope: web
-                  locale: de_DE
-                  value: Die Ziggy
-              -
-                  type: set
-                  field: name
-                  scope: web
-                  locale: uk_UA
-                  value: Зіггі
+      actions:
+          -
+              type: set
+              field: family
+              value: pet
+          -
+              type: set
+              field: parent
+              value:
+          -
+              type: set
+              field: name
+              scope: web
+              locale: de_DE
+              value: Die Ziggy
+          -
+              type: set
+              field: name
+              scope: web
+              locale: uk_UA
+              value: Зіггі
       """
 
     When transformation is executed
@@ -76,25 +75,23 @@ Feature: Data transformations using `set` actions
 
     And I apply transformations using the profile:
       """
-      transform:
-          actions:
-              -
-                  type: set
-                  field: family
-                  expression: 'family~"_new"'
-              -
-                  type: set
-                  field: name
-                  scope: web
-                  locale: en_GB
-                  expression: 'upperCase(value("name", "web", "en_GB"))'
-              -
-                  type: set
-                  field: url_slug
-                  scope: null
-                  locale: de_DE
-                  expression: 'lowerCase(slug(value("name", "web", "de_DE")))'
-
+      actions:
+          -
+              type: set
+              field: family
+              expression: 'family~"_new"'
+          -
+              type: set
+              field: name
+              scope: web
+              locale: en_GB
+              expression: 'upperCase(value("name", "web", "en_GB"))'
+          -
+              type: set
+              field: url_slug
+              scope: null
+              locale: de_DE
+              expression: 'lowerCase(slug(value("name", "web", "de_DE")))'
       """
 
     When transformation is executed
@@ -125,18 +122,17 @@ Feature: Data transformations using `set` actions
 
     And I apply transformations using the profile:
       """
-      transform:
-          actions:
-              -
-                  type: set
-                  field: categories
-                  value: ['pet', 'pim']
-              -
-                  type: set
-                  field: labels
-                  value:
-                      de_DE: Akeneö
-                      uk_UA: Акенео
+      actions:
+          -
+              type: set
+              field: categories
+              value: ['pet', 'pim']
+          -
+              type: set
+              field: labels
+              value:
+                  de_DE: Akeneö
+                  uk_UA: Акенео
       """
 
     When transformation is executed
@@ -163,17 +159,16 @@ Feature: Data transformations using `set` actions
 
     And I apply transformations using the profile:
       """
-      transform:
-          actions:
-              -
-                  type: set
-                  field: associations
-                  value:
-                      FRIENDS:
-                          products: ['gizzy', 'jazzy']
-                      RELATIVES:
-                          product_models: ['unicorn', 'mermaid']
-                          groups: ['magical_creatures']
+      actions:
+          -
+              type: set
+              field: associations
+              value:
+                  FRIENDS:
+                      products: ['gizzy', 'jazzy']
+                  RELATIVES:
+                      product_models: ['unicorn', 'mermaid']
+                      groups: ['magical_creatures']
 
       """
 

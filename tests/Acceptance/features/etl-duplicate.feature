@@ -21,10 +21,8 @@ Feature: Data transformations in `duplicate` mode
 
     And I apply transformations using the profile:
       """
-      transform:
-          actions: []
-      load:
-          mode: duplicate
+      actions: []
+      upload-mode: duplicate
       """
 
     When transformation is executed
@@ -67,30 +65,28 @@ Feature: Data transformations in `duplicate` mode
 
     And I apply transformations using the profile:
       """
-      transform:
-          actions:
-              -
-                  type: set
-                  field: family
-                  value: null
-              -
-                  type: set
-                  field: parent
-                  value: me
-              -
-                  type: set
-                  field: name
-                  scope: web
-                  locale: uk_UA
-                  value: Зіггі
-              -
-                  type: set
-                  field: associations
-                  value:
-                      RELATIVES:
-                          groups: ['magical_creatures']
-      load:
-          mode: duplicate
+      actions:
+          -
+              type: set
+              field: family
+              value: null
+          -
+              type: set
+              field: parent
+              value: me
+          -
+              type: set
+              field: name
+              scope: web
+              locale: uk_UA
+              value: Зіггі
+          -
+              type: set
+              field: associations
+              value:
+                  RELATIVES:
+                      groups: ['magical_creatures']
+      upload-mode: duplicate
       """
 
     When transformation is executed
