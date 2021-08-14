@@ -170,6 +170,14 @@ class EtlContext implements Context
         Assert::eq($attributeValue->getRaw(), $actualValue);
     }
 
+    /**
+     * @Then the :resourceType in the PIM is not modified
+     */
+    public function resourceIsNotModified(string $resourceType)
+    {
+        Assert::true($this->loader->isResultEmpty());
+    }
+
     private function readPropertiesFromTable(TableNode $table): array
     {
         $data = [];
