@@ -1,0 +1,10 @@
+actions:
+    -
+        type: set
+        field: gross_weight
+        locale: null
+        scope: null
+        value:
+            amount: "2.0"
+            unit: "KILOGRAM"
+

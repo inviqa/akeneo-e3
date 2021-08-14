@@ -1,0 +1,8 @@
+actions:
+    -
+        type: set
+        field: description
+        locale: en_GB
+        scope: null
+        expression: 'removeHtmlTags(value("description", null, "en_GB"))'
+
