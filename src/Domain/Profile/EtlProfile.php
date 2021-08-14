@@ -40,7 +40,7 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
         return $this->isDryRun;
     }
 
-    public function getMode(): string
+    public function getUploadMode(): string
     {
         return $this->mode;
     }
@@ -62,8 +62,8 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
         $resolver
             ->setDefined('type')
             ->setAllowedTypes('type', 'string')
-            ->setDefault('mode', self::MODE_UPDATE)
-            ->setAllowedValues('mode', [self::MODE_UPDATE, self::MODE_DUPLICATE])
+            ->setDefault('upload-mode', self::MODE_UPDATE)
+            ->setAllowedValues('upload-mode', [self::MODE_UPDATE, self::MODE_DUPLICATE])
         ;
         $resolver->setDefault('conditions', function (OptionsResolver $conditionResolver) {
             $conditionResolver

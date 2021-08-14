@@ -42,7 +42,7 @@ final class ApiLoader implements Loader
     {
         $this->profile = $loadProfile;
         $this->client = $client;
-        $this->isUpdateMode = $this->profile->getMode() === EtlProfile::MODE_UPDATE;
+        $this->isUpdateMode = $this->profile->getUploadMode() === EtlProfile::MODE_UPDATE;
     }
 
     public function load(Resource $resource): array

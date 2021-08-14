@@ -6,5 +6,5 @@ interface LoadProfile
 {
     public function isDryRun(): bool;
 
-    public function getMode(): string;
+    public function getUploadMode(): string;
 }
