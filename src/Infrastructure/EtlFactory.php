@@ -37,7 +37,7 @@ final class EtlFactory
     {
         $this->eventDispatcher = $eventDispatcher;
         $this->apiSelector = new ApiSelector();
-        $this->actionFactory = $actionFactory ?? new ActionFactory($eventDispatcher);
+        $this->actionFactory = $actionFactory ?? new ActionFactory();
     }
 
     public function createEtlProcess(

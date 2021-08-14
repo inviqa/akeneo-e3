@@ -14,16 +14,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class ActionFactory
 {
-    public function __construct(EventDispatcherInterface $eventDispatcher)
-    {
-        $eventDispatcher->addListener(
-            BeforeTransformEvent::class,
-            function (BeforeTransformEvent $event) {
-                CurrentResourceHolder::$current = $event->getResource();
-            }
-        );
-    }
-
     public function create(string $type, array $options): Action
     {
         // if deps needed, then clone from registry
