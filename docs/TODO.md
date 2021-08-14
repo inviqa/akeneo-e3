@@ -17,11 +17,12 @@
 ## Expression language
 
 ### Functions
-    
+
+- [x] value (attributeValue() ?)
 - [x] strip html tags
 - [ ] string functions: replace, etc - how to expose all UnicodeString stuff?
 - [ ] array functions: merge, search, etc.
-- [ ] hasValue(name, scope, locale)
+- [ ] hasAttribute(name, scope, locale) - hasAttribute
 - [ ] hasProperty(name)
 - [ ] priceValue(name, scope, locale, currency)
 - [ ] metricValue(name, scope, locale, unit)
