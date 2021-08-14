@@ -49,7 +49,7 @@ actions:
         field: name
         locale: en_GB
         scope: null
-        expression: 'trim(value("name", null, "en_GB", ""))'
+        expression: 'trim(value("name", null, "en_GB"))'
 ```
 
 Step 4. Run the script:
