@@ -1,0 +1,30 @@
+paths:
+    - ./src
+    - ./vendor/akeneo
+exclude_files:
+    - '#.*test.*#'
+layers:
+    -   name: AkeneoApiClient
+        collectors:
+            -   type: directory
+                regex: vendor/akeneo/.*
+    -   name: Domain
+        collectors:
+            -   type: directory
+                regex: src/Domain/.*
+    -   name: Application
+        collectors:
+            -   type: directory
+                regex: src/Application/.*
+    -   name: Infrastructure
+        collectors:
+            -   type: directory
+                regex: src/Infrastructure/.*
+ruleset:
+    Domain: ~
+    Application:
+        - Domain
+    Infrastructure:
+        - Domain
+        - Application
+        - AkeneoApiClient
