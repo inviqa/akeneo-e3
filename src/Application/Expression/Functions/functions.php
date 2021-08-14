@@ -53,13 +53,18 @@ function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}")
 }
 
 /**
+ * Returns a value of an attribute by name, channel and locale.
+ *
+ *
  * @return mixed|null
  */
-function value(string $name, ?string $channel, ?string $locale)
+function value(string $name = '', ?string $channel = null, ?string $locale = null)
 {
     $resource = CurrentResourceHolder::$current;
 
-    $field = Attribute::create($name, $channel, $locale);
+    $field = ($name === '') ?
+        CurrentResourceHolder::$field :
+        Attribute::create($name, $channel, $locale);
 
     if ($resource->has($field) === false) {
         throw new TransformException(sprintf('Attribute %s is not present in data', $name), true);
