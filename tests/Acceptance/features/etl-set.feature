@@ -147,7 +147,7 @@ Feature: Data transformations using `set` actions
       | uk_UA  | Акенео |
 
 
-  Scenario: Add elements to product associations
+  Scenario: Transform product associations
 
     Given a product in the PIM with properties:
       | field      | value |

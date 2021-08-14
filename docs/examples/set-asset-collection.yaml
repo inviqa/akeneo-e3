@@ -1,0 +1,7 @@
+actions:
+    -
+        type: set
+        field: images
+        locale: null
+        scope: null
+        value: ['asset_image_code1', 'asset_image_code2']

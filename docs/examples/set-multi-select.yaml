@@ -1,0 +1,7 @@
+actions:
+    -
+        type: set
+        field: colours
+        locale: null
+        scope: null
+        value: ['magenta', 'pink']

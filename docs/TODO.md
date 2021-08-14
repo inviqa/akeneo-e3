@@ -30,7 +30,7 @@
 ## Commands
 
 - [x] transform
-- [ ] transform set - no ETL config, only command options: `set --field=name --scope=de_DE --value="new name"`
+- [ ] transform set - no profile, only command options: `set --field=name --scope=de_DE --value="new name"`
 - [ ] transform copy (migrate) - no ETL config, only command options: `copy --types=attribute,family,product`
 - [ ] generate connection profile
 - [ ] validate connection profile
@@ -41,4 +41,5 @@
 
 ## More ideas
 
-For expressions: object Akeneo to access real data, e.g. attribute options or ref. entities
+For expressions: object Akeneo to access real data, 
+e.g. attribute options or ref. entities

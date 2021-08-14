@@ -1,75 +1,31 @@
-# Use cases to be tested with ETL
+# Test cases
 
 :robot: - automated acceptance test created
 
 :man: - manually tested
 
-## Product / SET action
+## SET action 
 
-| :robot: | :man: | Fields     | Merge type |
-| ---- | ---- | ---------- | ---------- |
-| :ok: | :ok: | family, parent | scalar | 
-|      |      | identifier    | scalar |
-| :ok: | :ok: | categories | array |
-| :ok: | :ok: | values: scalar attributes | object |
-|      |      | values: number | object |
-|      |      | values: price | object |
-|      |      | values: metric | object |
-|      |      | values: multi-select | object |
-|      |      | values: asset collection | object |
-| :ok: | :ok: | associations | object+array |
-|      |      | quantified associations | object+array+object |
+### Product / product model / reference entities
 
-## Category / SET action
+| Fields                    | Merge type        | Who tested    | Example 
+| ------------------------- | ----------------- | ------------- | ------- 
+| properties e.g. family    | scalar            | :robot: :man: |  
+| identifier                | scalar            |               | 
+| categories                | array             | :robot: :man: | 
+| values: scalar attributes | object            | :robot: :man: | 
+| values: number            | object            |               | 
+| values: price             | object            | :man:         | set-price.yaml 
+| values: metric            | object            | :man:         | set-metric.yaml 
+| values: multi-select      | object            | :man:         | set-multi-select.yaml 
+| values: asset collection  | object            | :man:         | set-asset-collection.yaml
+| associations              | object+array      | :robot: :man: | 
+| quantified associations   | object+array+obj. |               | 
 
-| :robot: | :man: | Fields | Merge type |
-| ---- | ---- | ---------- | ---------- |
-|      |      | parent | scalar | 
-| :ok: | :ok: | labels | object | 
+## Additional cases
 
-## Family / SET action
-
-| :robot: | :man: | Fields       | Merge type |
-| ------- | ----- | ------------ | ---------- |
-|         |       |              | scalar     | 
-|         |       | attribute_requirements             | object+array     | 
-
-
-## Family variant / SET action
-
-| :robot: | :man: | Fields       | Merge type |
-| ------- | ----- | ------------ | ---------- |
-|         |       |              | scalar     |
-
-## Attribute / SET action
-
-| :robot: | :man: | Fields       | Merge type |
-| ------- | ----- | ------------ | ---------- |
-|         |       |              | scalar     | 
-
-## Attribute group / SET action
-
-| :robot: | :man: | Fields       | Merge type |
-| ------- | ----- | ------------ | ---------- |
-|         |       |              | scalar     | 
-|         |       | attributes | array     | 
-
-
-## Attribute option / SET action
-
-| :robot: | :man: | Fields       | Merge type |
-| ------- | ----- | ------------ | ---------- |
-|         |       |              | scalar     | 
-
-## Reference entity / SET action
-
-| :robot: | :man: | Fields       | Merge type |
-| ------- | ----- | ------------ | ---------- |
-|         |       |              | scalar     | 
-
-
-## Reference entity record / SET action
-
-| :robot: | :man: | Fields       | Merge type |
-| ------- | ----- | ------------ | ---------- |
-|         |       |              | scalar     | 
+| Fields                         | Merge type  | Who tested    |
+| ------------------------------ | ----------- | ------------- | 
+| category labels                | array       |  |
+| family: attribute_requirements | array       |  |
+| attribute group: ...           | array       |  |
