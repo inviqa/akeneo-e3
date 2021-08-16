@@ -16,64 +16,44 @@ final class ResourceComparer
         $this->normaliser = new ResourceDataNormaliser();
     }
 
-    public function getCompareTable(?Resource $resource1, Resource $resource2): array
+    /**
+     * @return array|DiffLine[]
+     */
+    public function compareWithOrigin(Resource $resource): array
     {
-        if ($resource1 === null) {
-            return $this->getAfterTable($resource2);
+        if ($resource->getOrigin() === null) {
+            return $this->compareResources(null, $resource);
         }
 
-        return $this->getBeforeAfterTable($resource1, $resource2);
+        return $this->compareResources(
+            $resource->getOrigin()->diff($resource),
+            $resource->diff($resource->getOrigin())
+        );
     }
 
-    private function getBeforeAfterTable(
-        Resource $resource1,
-        Resource $resource2
-    ): array {
+    /**
+     * @return array|DiffLine[]
+     */
+    protected function compareResources(?Resource $resource1, Resource $resource2): array
+    {
         $comparison = [];
 
         foreach ($resource2->fields() as $field) {
-            if ($field->getName() === $resource2->getCodeOrIdentifierFieldName(
-                )) {
+            if ($field->getName() === $resource2->getCodeFieldName()) {
                 continue;
             }
 
-            $originalValue = $resource1->has($field) ?
-                $this->normaliser->normalise($resource1->get($field)) :
-                '';
+            $originalValue = $resource1 !== null && $resource1->has($field) ?
+                $this->normaliser->normalise($resource1->get($field)) : '';
 
             $newValue = $this->normaliser->normalise($resource2->get($field));
 
-            $comparison[$field->getName()] = [
-                $resource2->getCodeOrIdentifier(),
-                $field->getName(),
+            $comparison[] = DiffLine::create(
+                $resource2->getCodeOrIdentifier() ?? '',
+                $field,
                 $originalValue,
-                $newValue,
-            ];
-        }
-
-        return $comparison;
-    }
-
-    private function getAfterTable(
-        Resource $resource
-    ): array {
-        $comparison = [];
-
-        foreach ($resource->fields() as $field) {
-            if ($field->getName() === $resource->getCodeOrIdentifierFieldName(
-                )) {
-                continue;
-            }
-
-            $originalValue = $resource->has($field) ?
-                $this->normaliser->normalise($resource->get($field)) :
-                '';
-
-            $comparison[$field->getName()] = [
-                $resource->getCodeOrIdentifier(),
-                $field->getName(),
-                $originalValue,
-            ];
+                $newValue
+            );
         }
 
         return $comparison;
