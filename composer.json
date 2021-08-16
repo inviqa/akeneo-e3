@@ -21,7 +21,8 @@
         "phpmd/phpmd": "^2.10",
         "phpstan/phpstan": "^0.12.94",
         "phpunit/phpunit": "^9",
-        "qossmic/deptrac-shim": "^0.14.1"
+        "qossmic/deptrac-shim": "^0.14.1",
+        "twig/twig": "^3.0"
     },
     "config": {
         "optimize-autoloader": true,

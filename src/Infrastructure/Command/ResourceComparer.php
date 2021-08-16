@@ -42,7 +42,7 @@ final class ResourceComparer
 
             $newValue = $this->normaliser->normalise($resource2->get($field));
 
-            $comparison[] = [
+            $comparison[$field->getName()] = [
                 $resource2->getCodeOrIdentifier(),
                 $field->getName(),
                 $originalValue,
