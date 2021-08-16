@@ -1,0 +1,160 @@
+"@categories":
+     basics: Basic examples
+     properties: How to modify property values
+     attributes: How to modify attribute values
+
+trim:
+    category: basics
+    file_name: trim
+    header: How to trim values
+    tasks:
+        - description: trim values of a `name` attribute of `en_GB` locale.
+          resource:
+              identifier: the-ziggy
+              values:
+                  name:
+                      - scope: web
+                        locale: en_GB
+                        data: '    The Ziggy        '
+          profile:
+            actions:
+                -
+                    type: set
+                    field: name
+                    scope: web
+                    locale: en_GB
+                    expression: 'trim(value("name", "web", "en_GB"))'
+remove-html-tags:
+    category: basics
+    file_name: remove-html-tags
+    header: How to remove HTML tags
+    tasks:
+        - description: remove HTML tags from a `description` attribute.
+          resource:
+              identifier: the-ziggy
+              values:
+                  description:
+                      - scope: null
+                        locale: en_GB
+                        data: ' <p>Lorem ipsum <span>dolor sit amet<span>.</p>'
+          profile:
+              actions:
+                  -
+                      type: set
+                      field: description
+                      scope: null
+                      locale: en_GB
+                      expression: 'removeHtmlTags(value())'
+set-price:
+    category: attributes
+    file_name: set-price
+    header: Set values of price attributes
+    tasks:
+        - description: set value of a price attribute `price_initial`
+          resource:
+              identifier: the-ziggy
+              values:
+                  price_initial:
+                      - scope: null
+                        locale: en_GB
+                        data:
+                          - amount: 10.34
+                            currency: EUR
+          profile:
+              actions:
+                -
+                    type: set
+                    field: price_initial
+                    locale: en_GB
+                    scope: null
+                    value:
+                        -
+                            amount: '12.34'
+                            currency: 'EUR'
+                        -
+                            amount: '14.00'
+                            currency: 'USD'
+set-categories:
+    category: properties
+    file_name: set-categories
+    header: Set categories of a product or a product model
+    tasks:
+        - description: set value of a `categories` field
+          resource:
+              identifier: the-ziggy
+              categories: ['pim', 'pet']
+          profile:
+              actions:
+                  -
+                      type: set
+                      field: categories
+                      value: ['pxm', 'akeneo']
+
+set-metric:
+    category: attributes
+    file_name: set-metric
+    header: Set value of a metric type attribute
+    tasks:
+        - description: set value of a metric attribute `gross_weight`
+          resource:
+              identifier: the-ziggy
+              values:
+                  gross_weight:
+                        - scope: null
+                          locale: null
+                          data:
+                              amount: "200"
+                              unit: "GRAM"
+          profile:
+                actions:
+                    -
+                        type: set
+                        field: gross_weight
+                        locale: null
+                        scope: null
+                        value:
+                            amount: "2.5"
+                            unit: "KILOGRAM"
+
+set-asset-collection:
+    category: attributes
+    file_name: set-asset-collection
+    header: Set value of an asset collection type attribute
+    tasks:
+        - description: set value of an asset collection type attribute `images`
+          resource:
+              identifier: the-ziggy
+              values:
+                  images:
+                      - scope: null
+                        locale: null
+                        data: ['asset_image_code1']
+          profile:
+                actions:
+                    -
+                        type: set
+                        field: images
+                        locale: null
+                        scope: null
+                        value: ['asset_image_code2', 'asset_image_code3']
+set-multi-select:
+    category: attributes
+    file_name: set-multi-select
+    header: Set value of a multi-select type attribute
+    tasks:
+        - description: set value of a multi-select type attribute `colours`
+          resource:
+              identifier: the-ziggy
+              values:
+                  colours:
+                      - scope: null
+                        locale: null
+                        data: ['yellow']
+          profile:
+            actions:
+                -
+                    type: set
+                    field: colours
+                    locale: null
+                    scope: null
+                    value: ['magenta', 'pink']

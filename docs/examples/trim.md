@@ -10,10 +10,9 @@ actions:
     -
         type: set
         field: name
-        locale: en_GB
         scope: web
+        locale: en_GB
         expression: 'trim(value("name", "web", "en_GB"))'
-
 ```
 
 Result:

@@ -1,0 +1,26 @@
+# Set value of an asset collection type attribute
+
+
+**Task:** set value of an asset collection type attribute `images`
+
+### Rules
+
+```yaml
+actions:
+    -
+        type: set
+        field: images
+        locale: null
+        scope: null
+        value:
+            - asset_image_code2
+            - asset_image_code3
+```
+
+### Result
+
+Field: `images`
+
+Before: <pre>asset_image_code1</pre>
+
+After: <pre>asset_image_code2, asset_image_code3</pre>

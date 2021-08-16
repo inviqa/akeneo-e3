@@ -1,8 +1,0 @@
-# Set en_GB price 2 x de_DE price
-actions:
-    -
-        type: set
-        field: price_initial
-        locale: en_GB
-        scope: null
-        expression: '[{ amount: value("price_initial", null, "de_DE")[0]["amount"] * 2, currency: "EUR" }]'
