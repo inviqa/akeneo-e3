@@ -12,14 +12,23 @@ class InMemoryLoader implements Loader
 
     private ?\AkeneoEtl\Domain\Resource\Resource $result;
 
-    public function __construct(Resource $originalResource)
+    private bool $mergeResource;
+
+    public function __construct(Resource $originalResource, bool $mergeResource = true)
     {
         $this->originalResource = $originalResource;
+        $this->mergeResource = $mergeResource;
         $this->result = null;
     }
 
     public function load(Resource $resource): array
     {
+        if ($this->mergeResource === false) {
+            $this->result = $resource;
+
+            return [];
+        }
+
         $this->result = $this->originalResource->merge($resource);
 
         return [];
@@ -36,7 +45,6 @@ class InMemoryLoader implements Loader
 
         return $this->result;
     }
-
 
     public function isResultEmpty(): bool
     {
