@@ -1,0 +1,10 @@
+# Examples of Rules
+
+{% for categoryCode, categoryTitle in categories %}
+
+## {{ categoryTitle }}
+
+{% for path, title in examples[categoryCode] %}
+- [{{ title }}]({{ path }}.md)
+{% endfor %}
+{% endfor %}

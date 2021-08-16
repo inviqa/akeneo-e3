@@ -51,45 +51,30 @@ final class GenerateDocsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $examples = Yaml::parseFile('docs/use-case-provider.yaml');
+        $examples = Yaml::parseFile('docs/example-provider.yaml');
+
+        $categories = $examples['@categories'];
+        unset($examples['@categories']);
+
+        $exampleList = [];
 
         foreach ($examples as &$example) {
-            foreach ($example['tasks'] as &$task) {
+            foreach ($example['tasks'] as $taskCode => &$task) {
                 $profileData = $task['profile'];
 
                 $profile = EtlProfile::fromArray($profileData);
                 $resource = Resource::fromArray($task['resource'], 'product');
 
-                $extractor = new InMemoryExtractor($resource);
-                $loader = new InMemoryLoader($resource, false);
-                $transformer = $this->factory->createTransformer($profile);
-
-                $etl = new EtlProcess($extractor, $transformer, $loader, $this->eventDispatcher);
-                $etl->execute();
-
-                if ($loader->getResult() === null) {
-                    throw new LogicException('Task %s: invalid rules', $task['description']);
-                }
-
-                $compareTable = $this->getCompareTable($loader->getResult());
-
-                foreach ($compareTable as $change) {
-                    $task['results'][$change[1]] = [
-                        'field' => $change[1],
-                        'before' => $change[2],
-                        'after' => $change[3],
-                    ];
-                }
-
+                $task['results'] = $this->getTransformationResults($resource, $profile, $task['description']);
                 $task['profile'] = Yaml::dump($task['profile'], 4);
             }
 
+            $this->renderExampleFile($example);
 
-            $content = $this->twig->render('use-case.md.twig', $example);
-
-            $resultFileName = sprintf('docs/examples/%s.md', $example['file_name']);
-            file_put_contents($resultFileName, $content);
+            $exampleList[$example['category']][$example['file_name']] = $example['header'];
         }
+
+        $this->renderExampleListFile($exampleList, $categories);
 
         return Command::SUCCESS;
     }
@@ -104,5 +89,64 @@ final class GenerateDocsCommand extends Command
             $resource->getOrigin()->diff($resource),
             $resource->diff($resource->getOrigin())
         );
+    }
+
+    protected function getTransformationResults(
+        Resource $resource,
+        EtlProfile $profile,
+        string $taskCode
+    ): array {
+        $extractor = new InMemoryExtractor($resource);
+        $loader = new InMemoryLoader($resource, false);
+        $transformer = $this->factory->createTransformer($profile);
+
+        $etl = new EtlProcess(
+            $extractor,
+            $transformer,
+            $loader,
+            $this->eventDispatcher
+        );
+
+        $etl->execute();
+
+        if ($loader->getResult() === null) {
+            throw new LogicException(
+                'Task %s: invalid rules',
+                $taskCode
+            );
+        }
+
+        $compareTable = $this->getCompareTable($loader->getResult());
+
+        $results = [];
+
+        foreach ($compareTable as $change) {
+            $results[$change[1]] = [
+                'field' => $change[1],
+                'before' => $change[2],
+                'after' => $change[3],
+            ];
+        }
+
+        return $results;
+    }
+
+    private function renderExampleFile(array $example): void
+    {
+        $content = $this->twig->render('example.md.twig', $example);
+
+        $resultFileName = sprintf('./docs/examples/%s.md', $example['file_name']);
+        file_put_contents($resultFileName, $content);
+    }
+
+    private function renderExampleListFile(array $exampleList, array $categories): void
+    {
+        $content = $this->twig->render('example-list.md.twig', [
+            'examples' => $exampleList,
+            'categories' => $categories,
+        ]);
+
+        $resultFileName = './docs/examples/example-list.md';
+        file_put_contents($resultFileName, $content);
     }
 }
