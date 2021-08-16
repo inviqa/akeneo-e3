@@ -28,6 +28,14 @@ class ResourceDataNormaliserTest extends TestCase
                 ['a', 'b'], 'a, b'
             ],
 
+            'price' => [
+                ['amount' => 100, 'currency' => 'EUR'],
+                <<<'END'
+                 amount: 100
+                 currency: EUR
+                 END
+            ],
+
             'object (labels)' => [
                 [
                     'en_GB' => 'The Ziggy',

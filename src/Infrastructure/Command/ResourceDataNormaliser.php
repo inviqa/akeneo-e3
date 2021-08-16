@@ -22,7 +22,7 @@ class ResourceDataNormaliser
         }
 
         if (is_array($value) === true) {
-            return implode(', ', $value);
+            return $this->normaliseArray($value);
         }
 
         return '~not supported~';
@@ -47,6 +47,15 @@ class ResourceDataNormaliser
         }
 
         return false;
+    }
+
+    private function isArrayOfScalarValues(array $data): bool
+    {
+        if (count($data) === 0) {
+            return true;
+        }
+
+        return (is_scalar($data[0]) === true);
     }
 
     private function normaliseObject(array $object): string
@@ -81,5 +90,17 @@ class ResourceDataNormaliser
 
             $this->normaliseObjectRecursively($item, $data, $masterKey.'.'.$key);
         }
+    }
+
+    private function normaliseArray(array $value): string
+    {
+        $data = [];
+        foreach ($value as $arrayItem) {
+            $data[] = $this->normalise($arrayItem);
+        }
+
+        $separator = $this->isArrayOfScalarValues($value) ? ', ' : PHP_EOL;
+
+        return implode($separator, $data);
     }
 }
