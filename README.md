@@ -7,10 +7,10 @@ It is like Akeneo Enrichment Rules but with more features like expressions.
 ## When to use
 
 :star:&nbsp;**Data cleansing** e.g. 
-* trim attribute values
-* remove html tags
+* [trim attribute values](docs/examples/trim.md)
+* [remove html tags](docs/examples/remove-html-tags.md)
+* lowercase or uppercase attribute values
 * generate slugs
-* lowercase or uppercase
 
 :star:&nbsp;**Attribute type changes** e.g.
 * copy values of a non-localisable attribute to a localisable one
@@ -51,6 +51,8 @@ actions:
         scope: null
         expression: 'trim(value("name", null, "en_GB"))'
 ```
+
+See all [examples of rules](docs/examples/example-list.md).
 
 Step 4. Run the script:
 ```bash
