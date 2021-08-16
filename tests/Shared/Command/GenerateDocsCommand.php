@@ -7,7 +7,7 @@ namespace AkeneoEtl\Tests\Shared\Command;
 use AkeneoEtl\Domain\EtlProcess;
 use AkeneoEtl\Domain\Profile\EtlProfile;
 use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Infrastructure\Command\ResourceComparer;
+use AkeneoEtl\Infrastructure\Comparer\ResourceComparer;
 use AkeneoEtl\Infrastructure\EtlFactory;
 use AkeneoEtl\Tests\Acceptance\bootstrap\InMemoryExtractor;
 use AkeneoEtl\Tests\Acceptance\bootstrap\InMemoryLoader;

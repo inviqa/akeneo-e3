@@ -2,7 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Command;
+namespace AkeneoEtl\Infrastructure\Comparer;
+
+use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoEtl\Infrastructure\Command\ResourceDataNormaliser;
 
 final class ResourceComparer
 {
@@ -13,10 +16,8 @@ final class ResourceComparer
         $this->normaliser = new ResourceDataNormaliser();
     }
 
-    public function getCompareTable(
-        ?\AkeneoEtl\Domain\Resource\Resource $resource1,
-        \AkeneoEtl\Domain\Resource\Resource $resource2
-    ): array {
+    public function getCompareTable(?Resource $resource1, Resource $resource2): array
+    {
         if ($resource1 === null) {
             return $this->getAfterTable($resource2);
         }
@@ -25,8 +26,8 @@ final class ResourceComparer
     }
 
     private function getBeforeAfterTable(
-        \AkeneoEtl\Domain\Resource\Resource $resource1,
-        \AkeneoEtl\Domain\Resource\Resource $resource2
+        Resource $resource1,
+        Resource $resource2
     ): array {
         $comparison = [];
 
@@ -54,7 +55,7 @@ final class ResourceComparer
     }
 
     private function getAfterTable(
-        \AkeneoEtl\Domain\Resource\Resource $resource
+        Resource $resource
     ): array {
         $comparison = [];
 
