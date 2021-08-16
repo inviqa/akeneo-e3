@@ -1,0 +1,26 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__.'/../vendor/autoload.php';
+
+use AkeneoEtl\Tests\Shared\Command;
+use AkeneoEtl\Infrastructure\EtlFactory;
+use Symfony\Component\Console\Application;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+
+
+$twigLoader = new FilesystemLoader([
+    'main' => 'tests/Shared/Command/views/',
+]);
+
+$twig = new Environment($twigLoader);
+$eventDispatcher = new EventDispatcher();
+$factory = new EtlFactory($eventDispatcher);
+
+$command = new Command\GenerateDocsCommand($factory, $twig, $eventDispatcher);
+$application = new Application('Akeneo Rules - Documentation Generator', 'alpha');
+$application->add($command);
+$application->setDefaultCommand($command->getName(), true);
+$application->run();

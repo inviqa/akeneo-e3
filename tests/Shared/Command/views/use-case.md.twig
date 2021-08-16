@@ -1,0 +1,22 @@
+# {{ header }}
+
+
+{% for task in tasks %}
+**Task:** {{ task.description }}
+
+### Rules
+
+```yaml
+{{ task.profile|raw -}}
+```
+
+### Result
+
+{% for result in task['results'] %}
+Field: `{{ result['field'] }}`
+
+Before: <pre>{{ result['before'] }}</pre>
+
+After: <pre>{{ result['after'] }}</pre>
+{% endfor %}
+{% endfor %}
