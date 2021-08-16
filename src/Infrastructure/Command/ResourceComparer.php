@@ -68,7 +68,7 @@ final class ResourceComparer
                 $this->normaliser->normalise($resource->get($field)) :
                 '';
 
-            $comparison[] = [
+            $comparison[$field->getName()] = [
                 $resource->getCodeOrIdentifier(),
                 $field->getName(),
                 $originalValue,

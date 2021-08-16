@@ -28,9 +28,9 @@ class ResourceComparerTest extends TestCase
         $table = $comparer->getCompareTable($resource1, $resource2);
 
         $this->assertEquals([
-            ['0123456789', 'family',      'ziggy',           'pet'          ],
-            ['0123456789', 'name',        '',                'Ziggy'        ],
-            ['0123456789', 'description', 'Ziggy The Hydra', 'Ziggy The Pet'],
+            'family'      => ['0123456789', 'family',      'ziggy',           'pet'          ],
+            'name'        => ['0123456789', 'name',        '',                'Ziggy'        ],
+            'description' => ['0123456789', 'description', 'Ziggy The Hydra', 'Ziggy The Pet'],
         ], $table);
     }
 
@@ -47,9 +47,9 @@ class ResourceComparerTest extends TestCase
         $table = $comparer->getCompareTable(null, $resource);
 
         $this->assertEquals([
-            ['0123456789', 'family',      'pet'          ],
-            ['0123456789', 'name',        'Ziggy'        ],
-            ['0123456789', 'description', 'Ziggy The Pet'],
+            'family'      => ['0123456789', 'family',      'pet'          ],
+            'name'        => ['0123456789', 'name',        'Ziggy'        ],
+            'description' => ['0123456789', 'description', 'Ziggy The Pet'],
         ], $table);
     }
 }
