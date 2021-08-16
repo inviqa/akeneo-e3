@@ -25,7 +25,7 @@ final class Resource
     {
         $this->resourceType = $resourceType;
 
-        $idFieldName = $this->getCodeOrIdentifierFieldName();
+        $idFieldName = $this->getCodeFieldName();
         if (array_key_exists($idFieldName, $data) === false) {
             throw new LogicException(sprintf('%s field is expected for %s resource type', $idFieldName, $resourceType));
         }
@@ -126,12 +126,12 @@ final class Resource
 
     public function setCodeOrIdentifier(string $codeOrIdentifier): self
     {
-        $this->properties[$this->getCodeOrIdentifierFieldName()] = $codeOrIdentifier;
+        $this->properties[$this->getCodeFieldName()] = $codeOrIdentifier;
 
         return $this;
     }
 
-    public function getCodeOrIdentifierFieldName(): string
+    public function getCodeFieldName(): string
     {
         return $this->resourceType !== 'product' ? 'code' : 'identifier';
     }
@@ -147,7 +147,7 @@ final class Resource
             }
         }
 
-        $identifierFieldName = $this->getCodeOrIdentifierFieldName();
+        $identifierFieldName = $this->getCodeFieldName();
         if (array_key_exists($identifierFieldName, $propertiesDiff) === false) {
             $propertiesDiff[$identifierFieldName] = $this->codeOrIdentifier;
         }
@@ -220,7 +220,7 @@ final class Resource
     public function toArray(): array
     {
         $data = array_merge(
-            [$this->getCodeOrIdentifierFieldName() => $this->codeOrIdentifier],
+            [$this->getCodeFieldName() => $this->codeOrIdentifier],
             $this->properties
         );
 
