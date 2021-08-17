@@ -99,7 +99,7 @@ final class EtlProcess
         );
     }
 
-    private function onAfterTransform(Progress $progress, ?Resource $resource, TransformResult $result): void
+    private function onAfterTransform(Progress $progress, Resource $resource, TransformResult $result): void
     {
         $this->eventDispatcher->dispatch(
             AfterTransformEvent::create($progress, $resource, $result)

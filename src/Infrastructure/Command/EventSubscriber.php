@@ -12,6 +12,7 @@ use AkeneoEtl\Domain\Transform\Event\AfterTransformEvent;
 use AkeneoEtl\Domain\Transform\TransformResult\Failed as TransformFailed;
 use AkeneoEtl\Infrastructure\Comparer\DiffLine;
 use AkeneoEtl\Infrastructure\Comparer\ResourceComparer;
+use AkeneoEtl\Infrastructure\Report\ProcessReport;
 use LogicException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
@@ -32,14 +33,13 @@ class EventSubscriber
     private OutputInterface $output;
 
     private ResourceComparer $resourceComparer;
+    private ProcessReport $report;
 
     private bool $outputTransformations;
 
     private ConsoleSectionOutput $transformErrorSection;
     private ConsoleSectionOutput $transformReportSection;
-
-    private array $transformErrors = [];
-    private int $processedCount = 0;
+    private ConsoleSectionOutput $loadErrorSection;
 
     private SymfonyStyle $style;
 
@@ -56,14 +56,18 @@ class EventSubscriber
         $this->progressBar = new ProgressBar($output);
         $this->input = $input;
         $this->output = $output;
-        $this->style = new SymfonyStyle($this->input, $this->output);
 
         $this->resourceComparer = new ResourceComparer();
+        $this->report = new ProcessReport();
 
         $this->outputTransformations = (bool)$input->getOption('output-transform');
 
+        $loadTableSection = $output->section();
         $this->transformReportSection = $output->section();
         $this->transformErrorSection = $output->section();
+        $this->loadErrorSection = $output->section();
+
+        $this->style = new SymfonyStyle($this->input, $loadTableSection);
 
         $this->eventDispatcher->addListener(AfterTransformEvent::class, [$this, 'onAfterTransform']);
         $this->eventDispatcher->addListener(AfterLoadEvent::class, [$this, 'onAfterLoad']);
@@ -85,42 +89,34 @@ class EventSubscriber
 
         $this->progressBar->setProgress($event->getProgress()->current());
 
-        if ($event->getResource() === null) {
-            return;
-        }
+        $this->report->add($event->getResource());
+        $this->report->addTransformResult($event->getTransformResult());
+
 
         $this->progressBar->clear();
 
-        // output total
-        $this->transformReportSection->overwrite(sprintf('Processed: %d', ++$this->processedCount));
-
-        // output transform error stats
-        $transformResult = $event->getTransformResult();
-        if ($transformResult instanceof TransformFailed) {
-            $transformError = $transformResult->getError();
-            $this->transformErrors[$transformError][] = $event->getResource()->getCode() ?? '';
-
-            $messages = [];
-            foreach ($this->transformErrors as $message => $ids) {
-                $messages[] = sprintf('%s: %d', $message, count($ids));
-            }
-
-            $this->transformErrorSection->overwrite($messages);
+        if ($event->getProgress()->current() === $event->getProgress()->total()) {
+            $this->outputTransformSummary();
+            $this->outputLoadSummary();
         }
+
+        $this->outputTransformSummary();
 
         $this->progressBar->display();
     }
 
     public function onAfterLoad(AfterLoadEvent $event): void
     {
-        if ($this->outputTransformations === false) {
-            return;
+        foreach ($event->getLoadResults() as $loadResult) {
+            $this->report->addLoadResult($loadResult);
         }
 
-        foreach ($event->getLoadResults() as $loadResult) {
-            $comparison = $this->resourceComparer->compareWithOrigin($loadResult->getResource());
-            $this->outputCompareTable($comparison, $loadResult);
-        }
+        $this->progressBar->clear();
+
+        $this->outputLoadSummary();
+        $this->outputLoadResults($event->getLoadResults());
+
+        $this->progressBar->display();
     }
 
     /**
@@ -131,8 +127,6 @@ class EventSubscriber
         if (count($comparison) === 0) {
             return;
         }
-
-        $this->progressBar->clear();
 
         foreach ($comparison as $diff) {
             $this->style->definitionList(
@@ -150,7 +144,61 @@ class EventSubscriber
         if ($loadResult instanceof Loaded) {
             $this->style->success('updated');
         }
+    }
 
-        $this->progressBar->display();
+    private function formatErrorSummary(array $errorSummary, string $title): array
+    {
+        if (count($errorSummary) === 0) {
+            return [];
+        }
+
+        $messages = [$title . ':'];
+        foreach ($errorSummary as $message => $total) {
+            $messages[] = sprintf(' - %s: %d', $message, $total);
+        }
+
+        return $messages;
+    }
+
+    protected function outputTransformSummary(): void
+    {
+        $this->transformReportSection->overwrite(
+            sprintf('Processed: %d', $this->report->total())
+        );
+
+        $errorSummary = $this->report->transformErrorSummary();
+        if (count($errorSummary) !== 0) {
+            $messages = $this->formatErrorSummary(
+                $errorSummary,
+                'Transform errors'
+            );
+            $this->transformErrorSection->overwrite($messages);
+        }
+    }
+
+    protected function outputLoadSummary(): void
+    {
+        $errorSummary = $this->report->loadErrorSummary();
+        if (count($errorSummary) !== 0) {
+            $messages = $this->formatErrorSummary($errorSummary, 'Load errors');
+            $this->loadErrorSection->overwrite($messages);
+        }
+    }
+
+    /**
+     * @param array|LoadResult[] $loadResults
+     */
+    protected function outputLoadResults(array $loadResults): void
+    {
+        if ($this->outputTransformations === false) {
+            return;
+        }
+
+        foreach ($loadResults as $loadResult) {
+            $comparison = $this->resourceComparer->compareWithOrigin(
+                $loadResult->getResource()
+            );
+            $this->outputCompareTable($comparison, $loadResult);
+        }
     }
 }

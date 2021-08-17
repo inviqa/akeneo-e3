@@ -24,7 +24,7 @@ class ProcessReport
         return $this->total;
     }
 
-    public function add(Resource $fromCode)
+    public function add(Resource $fromCode): void
     {
         $this->total++;
     }

@@ -15,13 +15,13 @@ final class AfterTransformEvent extends Event
 {
     private Progress $progress;
 
-    private ?Resource $resource;
+    private Resource $resource;
 
     private DateTimeInterface $dateTime;
 
     private TransformResult $transformResult;
 
-    private function __construct(Progress $progress, ?Resource $resource, TransformResult $transformResult)
+    private function __construct(Progress $progress, Resource $resource, TransformResult $transformResult)
     {
         $this->progress = $progress;
         $this->resource = $resource;
@@ -29,7 +29,7 @@ final class AfterTransformEvent extends Event
         $this->dateTime = new DateTimeImmutable();
     }
 
-    public static function create(Progress $progress, ?Resource $resource, TransformResult $transformResult): self
+    public static function create(Progress $progress, Resource $resource, TransformResult $transformResult): self
     {
         return new self($progress, $resource, $transformResult);
     }
@@ -39,7 +39,7 @@ final class AfterTransformEvent extends Event
         return $this->progress;
     }
 
-    public function getResource(): ?\AkeneoEtl\Domain\Resource\Resource
+    public function getResource(): \AkeneoEtl\Domain\Resource\Resource
     {
         return $this->resource;
     }
