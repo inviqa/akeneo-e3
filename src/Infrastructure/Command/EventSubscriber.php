@@ -98,7 +98,7 @@ class EventSubscriber
         $transformResult = $event->getTransformResult();
         if ($transformResult instanceof TransformFailed) {
             $transformError = $transformResult->getError();
-            $this->transformErrors[$transformError][] = $event->getResource()->getCodeOrIdentifier() ?? '';
+            $this->transformErrors[$transformError][] = $event->getResource()->getCode() ?? '';
 
             $messages = [];
             foreach ($this->transformErrors as $message => $ids) {

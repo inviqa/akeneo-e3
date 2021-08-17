@@ -12,13 +12,20 @@ use PHPUnit\Framework\TestCase;
 
 class ResourceTest extends TestCase
 {
-    public function test_it_can_be_create_from_resource()
+    public function test_it_can_be_created_from_a_resource()
     {
         $resource = Resource::fromArray(TestData::getProduct(), 'product');
 
         $newResource = Resource::fromResource($resource);
 
         $this->assertEquals($resource, $newResource->getOrigin());
+    }
+
+    public function test_it_can_be_created_from_a_code_or_identifier()
+    {
+        $resource = Resource::fromCode('123', 'product');
+
+        $this->assertEquals('123', $resource->getCode());
     }
 
     /**

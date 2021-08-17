@@ -49,7 +49,7 @@ final class ResourceComparer
             $newValue = $this->normaliser->normalise($resource2->get($field));
 
             $comparison[] = DiffLine::create(
-                $resource2->getCodeOrIdentifier() ?? '',
+                $resource2->getCode() ?? '',
                 $field,
                 $originalValue,
                 $newValue

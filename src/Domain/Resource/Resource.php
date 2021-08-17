@@ -17,7 +17,7 @@ final class Resource
 
     private bool $isChanged = false;
 
-    private string $codeOrIdentifier;
+    private string $code;
 
     private ?Resource $origin;
 
@@ -30,7 +30,7 @@ final class Resource
             throw new LogicException(sprintf('%s field is expected for %s resource type', $idFieldName, $resourceType));
         }
 
-        $this->codeOrIdentifier = (string)$data[$idFieldName];
+        $this->code = (string)$data[$idFieldName];
         $this->values = ValueCollection::fromArray($data['values'] ?? []);
 
         unset($data['values']);
@@ -51,6 +51,13 @@ final class Resource
         $newResource->origin = $resource;
 
         return $newResource;
+    }
+
+    public static function fromCode(string $code, string $resourceType): self
+    {
+        return new self([
+            'identifier' => $code
+        ], $resourceType);
     }
 
     public function getResourceType(): string
@@ -119,14 +126,14 @@ final class Resource
         return $this->values->has($field);
     }
 
-    public function getCodeOrIdentifier(): ?string
+    public function getCode(): ?string
     {
-        return $this->codeOrIdentifier;
+        return $this->code;
     }
 
-    public function setCodeOrIdentifier(string $codeOrIdentifier): self
+    public function setCode(string $code): self
     {
-        $this->properties[$this->getCodeFieldName()] = $codeOrIdentifier;
+        $this->properties[$this->getCodeFieldName()] = $code;
 
         return $this;
     }
@@ -149,7 +156,7 @@ final class Resource
 
         $identifierFieldName = $this->getCodeFieldName();
         if (array_key_exists($identifierFieldName, $propertiesDiff) === false) {
-            $propertiesDiff[$identifierFieldName] = $this->codeOrIdentifier;
+            $propertiesDiff[$identifierFieldName] = $this->code;
         }
 
         $diff = new self($propertiesDiff, $this->resourceType);
@@ -220,7 +227,7 @@ final class Resource
     public function toArray(): array
     {
         $data = array_merge(
-            [$this->getCodeFieldName() => $this->codeOrIdentifier],
+            [$this->getCodeFieldName() => $this->code],
             $this->properties
         );
 

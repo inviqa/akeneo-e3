@@ -63,7 +63,7 @@ final class ApiLoader implements Loader
             return [];
         }
 
-        $id = $resource->getCodeOrIdentifier();
+        $id = $resource->getCode();
         $this->buffer[$id] = $resource;
 
         if (count($this->buffer) >= $this->batchSize) {
