@@ -11,12 +11,14 @@ require_once('src/Application/Expression/Functions/functions.php');
 
 final class FunctionProvider implements ExpressionFunctionProviderInterface
 {
+    const EXPRESSION_FUNCTIONS_NAMESPACE = '\AkeneoEtl\Application\Expression\Functions\\';
+
     /**
      * @return array|ExpressionFunction[]
      */
     public function getFunctions(): array
     {
-        $namespace = '\AkeneoEtl\Application\Expression\Functions\\';
+        $namespace = self::EXPRESSION_FUNCTIONS_NAMESPACE;
 
         $functionMap = [
             // 'trim' => 'trim', // can register simple php functions
