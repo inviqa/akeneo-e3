@@ -23,6 +23,8 @@ final class FunctionProvider implements ExpressionFunctionProviderInterface
         $functionMap = [
             // 'trim' => 'trim', // can register simple php functions
             'value'          => 'value',
+            'hasAttribute'   => 'hasAttribute',
+            'hasProperty'    => 'hasProperty',
             'removeHtmlTags' => 'removeHtmlTags',
             'trim'           => 'trim',
             'slug'           => 'slug',
