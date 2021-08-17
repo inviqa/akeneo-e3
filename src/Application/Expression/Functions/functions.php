@@ -9,7 +9,18 @@ use AkeneoEtl\Domain\Exception\TransformException;
 use AkeneoEtl\Domain\Resource\Attribute;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
-
+/**
+ * Generates a slug for a `string`.
+ *
+ * @param string $string
+ * @param string $separator Word separator, default: '-'
+ * @param string|null $locale Locale, e.g. en_GB, de_DE, es_ES
+ *
+ * @meta-arguments "How To Raise A Ziggy"
+ * @meta-arguments "How To Raise A Ziggy", "_"
+ *
+ * @return string
+ */
 function slug(string $string, string $separator = '-', string $locale = null): string
 {
     $slugger = new AsciiSlugger();
@@ -17,6 +28,15 @@ function slug(string $string, string $separator = '-', string $locale = null): s
     return $slugger->slug($string, $separator, $locale)->toString();
 }
 
+/**
+ * Make a `string` lowercase
+ *
+ * @param string $string
+ *
+ * @meta-arguments "How To Raise A Ziggy"
+ *
+ * @return string
+ */
 function lowerCase(string $string): string
 {
     $unicodeString = new UnicodeString($string);
@@ -24,6 +44,15 @@ function lowerCase(string $string): string
     return $unicodeString->lower()->toString();
 }
 
+/**
+ * Make a `string` UPPERCASE
+ *
+ * @param string $string
+ *
+ * @meta-arguments "How To Raise A Ziggy"
+ *
+ * @return string
+ */
 function upperCase(string $string): string
 {
     $unicodeString = new UnicodeString($string);
@@ -31,6 +60,15 @@ function upperCase(string $string): string
     return $unicodeString->upper()->toString();
 }
 
+/**
+ * Make a `string` camelCase
+ *
+ * @param string $string
+ *
+ * @meta-arguments "How To Raise A Ziggy"
+ *
+ * @return string
+ */
 function camelCase(string $string): string
 {
     $unicodeString = new UnicodeString($string);
@@ -38,6 +76,15 @@ function camelCase(string $string): string
     return $unicodeString->camel()->toString();
 }
 
+/**
+ * Make a `string` snake_case
+ *
+ * @param string $string
+ *
+ * @meta-arguments "How To Raise A Ziggy"
+ *
+ * @return string
+ */
 function snakeCase(string $string): string
 {
     $unicodeString = new UnicodeString($string);
@@ -45,6 +92,16 @@ function snakeCase(string $string): string
     return $unicodeString->snake()->toString();
 }
 
+/**
+ * Removes whitespaces (or other `characters`) from the beginning and end of a `string`
+ *
+ * @param string $string
+ * @param string $chars Characters to remove, by default all whitespaces " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}"
+ *
+ * @return string
+ *
+ * @meta-arguments "     How To Raise A Ziggy  "
+ */
 function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}"): string
 {
     $unicodeString = new UnicodeString($string);
