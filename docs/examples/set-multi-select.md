@@ -1,5 +1,5 @@
+[comment]: <> (This file is auto-generated based on example-provider.)
 # Set value of a multi-select type attribute
-
 
 **Task:** set value of a multi-select type attribute `colours`
 

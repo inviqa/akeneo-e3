@@ -1,5 +1,5 @@
+[comment]: <> (This file is auto-generated based on example-provider.)
 # How to remove HTML tags
-
 
 **Task:** remove HTML tags from a `description` attribute.
 
