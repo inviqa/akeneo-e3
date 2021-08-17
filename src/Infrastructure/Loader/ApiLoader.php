@@ -48,7 +48,7 @@ final class ApiLoader implements Loader
     public function load(Resource $resource): array
     {
         if ($this->codeFieldName === '') {
-            $this->codeFieldName = $resource->getCodeOrIdentifierFieldName();
+            $this->codeFieldName = $resource->getCodeFieldName();
             $this->resourceType = $resource->getResourceType();
 
             $apiSelector = new ApiSelector();

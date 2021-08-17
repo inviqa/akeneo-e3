@@ -7,7 +7,7 @@ namespace AkeneoEtl\Tests\Shared\Command;
 use AkeneoEtl\Domain\EtlProcess;
 use AkeneoEtl\Domain\Profile\EtlProfile;
 use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Infrastructure\Command\ResourceComparer;
+use AkeneoEtl\Infrastructure\Comparer\ResourceComparer;
 use AkeneoEtl\Infrastructure\EtlFactory;
 use AkeneoEtl\Tests\Acceptance\bootstrap\InMemoryExtractor;
 use AkeneoEtl\Tests\Acceptance\bootstrap\InMemoryLoader;
@@ -79,19 +79,7 @@ final class GenerateDocsCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function getCompareTable(Resource $resource): array
-    {
-        if ($resource->getOrigin() === null) {
-            return $this->resourceComparer->getCompareTable(null, $resource);
-        }
-
-        return $this->resourceComparer->getCompareTable(
-            $resource->getOrigin()->diff($resource),
-            $resource->diff($resource->getOrigin())
-        );
-    }
-
-    protected function getTransformationResults(
+    private function getTransformationResults(
         Resource $resource,
         EtlProfile $profile,
         string $taskCode
@@ -116,15 +104,16 @@ final class GenerateDocsCommand extends Command
             );
         }
 
-        $compareTable = $this->getCompareTable($loader->getResult());
+        $compareTable = $this->resourceComparer->compareWithOrigin($loader->getResult());
 
         $results = [];
 
         foreach ($compareTable as $change) {
-            $results[$change[1]] = [
-                'field' => $change[1],
-                'before' => $change[2],
-                'after' => $change[3],
+            $fieldName = $change->getField()->getName();
+            $results[$fieldName] = [
+                'field' => $fieldName,
+                'before' => $change->getBefore(),
+                'after' => $change->getAfter(),
             ];
         }
 

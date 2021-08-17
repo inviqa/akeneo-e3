@@ -1,8 +1,8 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Infrastructure\Command\Compare;
+namespace AkeneoEtl\Tests\Unit\Infrastructure\Comparer;
 
-use AkeneoEtl\Infrastructure\Command\Compare\ConsoleTableFormatter;
+use AkeneoEtl\Infrastructure\Comparer\ConsoleTableFormatter;
 use PHPUnit\Framework\TestCase;
 
 class ConsoleTableFormatterTest extends TestCase

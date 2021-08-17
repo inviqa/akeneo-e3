@@ -5,17 +5,20 @@ declare(strict_types=1);
 namespace AkeneoEtl\Infrastructure\Command;
 
 use AkeneoEtl\Domain\Load\Event\AfterLoadEvent;
-use AkeneoEtl\Domain\Load\LoadResult\Failed as LoadFailed;
-use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoEtl\Domain\Load\LoadResult\Failed;
+use AkeneoEtl\Domain\Load\LoadResult\Loaded;
+use AkeneoEtl\Domain\Load\LoadResult\LoadResult;
 use AkeneoEtl\Domain\Transform\Event\AfterTransformEvent;
 use AkeneoEtl\Domain\Transform\TransformResult\Failed as TransformFailed;
-use AkeneoEtl\Infrastructure\Command\Compare\ConsoleTableFormatter;
+use AkeneoEtl\Infrastructure\Comparer\DiffLine;
+use AkeneoEtl\Infrastructure\Comparer\ResourceComparer;
 use LogicException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\ConsoleSectionOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class EventSubscriber
@@ -30,21 +33,15 @@ class EventSubscriber
 
     private ResourceComparer $resourceComparer;
 
-    private ConsoleTableFormatter $tableFormatter;
-
     private bool $outputTransformations;
 
     private ConsoleSectionOutput $transformErrorSection;
-    private ConsoleSectionOutput $transformProgressSection;
     private ConsoleSectionOutput $transformReportSection;
 
     private array $transformErrors = [];
     private int $processedCount = 0;
 
-    /**
-     * @var array|int[]
-     */
-    private array $tableColumnWidths;
+    private SymfonyStyle $style;
 
     private function __construct(
         EventDispatcherInterface $eventDispatcher,
@@ -59,13 +56,12 @@ class EventSubscriber
         $this->progressBar = new ProgressBar($output);
         $this->input = $input;
         $this->output = $output;
+        $this->style = new SymfonyStyle($this->input, $this->output);
+
         $this->resourceComparer = new ResourceComparer();
-        $this->tableColumnWidths = [12, 16, 30, 30, 30];
-        $this->tableFormatter = new ConsoleTableFormatter($this->tableColumnWidths);
 
         $this->outputTransformations = (bool)$input->getOption('output-transform');
 
-        $this->transformProgressSection = $output->section();
         $this->transformReportSection = $output->section();
         $this->transformErrorSection = $output->section();
 
@@ -122,38 +118,39 @@ class EventSubscriber
         }
 
         foreach ($event->getLoadResults() as $loadResult) {
-            $comparison = $this->getCompareTable($loadResult->getResource());
-            $comparison[0][] = ($loadResult instanceof LoadFailed) ?
-                str_replace("\n", '', $loadResult->getError()) :
-                'updated';
-
-            $this->outputCompareTable($comparison);
+            $comparison = $this->resourceComparer->compareWithOrigin($loadResult->getResource());
+            $this->outputCompareTable($comparison, $loadResult);
         }
     }
 
-    private function outputCompareTable(array $comparison): void
+    /**
+     * @param array|DiffLine[] $comparison
+     */
+    private function outputCompareTable(array $comparison, LoadResult $loadResult): void
     {
         if (count($comparison) === 0) {
             return;
         }
 
-        $formattedTable = $this->tableFormatter->format($comparison);
-        $this->transformProgressSection->writeln($formattedTable);
+        $this->progressBar->clear();
 
-        if (count($formattedTable) > 0) {
-            $this->transformProgressSection->writeln(str_pad('', strlen($formattedTable[0]), '-'));
-        }
-    }
-
-    private function getCompareTable(Resource $resource): array
-    {
-        if ($resource->getOrigin() === null) {
-            return $this->resourceComparer->getCompareTable(null, $resource);
+        foreach ($comparison as $diff) {
+            $this->style->definitionList(
+                ['Identifier' => $diff->getCode()],
+                ['Field' =>  $diff->getField()->getName()],
+                ['Before' =>  $diff->getBefore()],
+                ['After' =>  $diff->getAfter()]
+            );
         }
 
-        return $this->resourceComparer->getCompareTable(
-            $resource->getOrigin()->diff($resource),
-            $resource->diff($resource->getOrigin())
-        );
+        if ($loadResult instanceof Failed) {
+            $this->style->warning($loadResult->getError());
+        }
+
+        if ($loadResult instanceof Loaded) {
+            $this->style->success('updated');
+        }
+
+        $this->progressBar->display();
     }
 }
