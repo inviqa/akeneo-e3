@@ -1,5 +1,5 @@
+[comment]: <> (This file is auto-generated based on example-provider.)
 # Set value of an asset collection type attribute
-
 
 **Task:** set value of an asset collection type attribute `images`
 

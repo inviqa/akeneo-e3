@@ -1,9 +1,9 @@
+[comment]: <> (This file is auto-generated based on example-provider.)
 # How to trim values
 
+**Task:** trim values of a `name` attribute of `en_GB` locale.
 
-Task: trim values of a `name` attribute of `en_GB` locale.
-
-Rules:
+### Rules
 
 ```yaml
 actions:
@@ -15,10 +15,10 @@ actions:
         expression: 'trim(value("name", "web", "en_GB"))'
 ```
 
-Result:
+### Result
 
-Field: name
+Field: `name`
 
-Before: `    The Ziggy        `
+Before: <pre>    The Ziggy        </pre>
 
-After: `The Ziggy`
+After: <pre>The Ziggy</pre>

@@ -1,5 +1,5 @@
+[comment]: <> (This file is auto-generated based on example-provider.)
 # Set categories of a product or a product model
-
 
 **Task:** set value of a `categories` field
 
