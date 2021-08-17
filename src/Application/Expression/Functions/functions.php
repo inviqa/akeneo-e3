@@ -149,6 +149,17 @@ function value(string $name = '', ?string $channel = null, ?string $locale = nul
     return $resource->get($field);
 }
 
+/**
+ * Remove HTML tags from a `string`
+ *
+ * @param string $string
+ * @param array $allowedTags Tags which should not be removed
+ *
+ * @meta-arguments "<p>Lorem ipsum <span>dolor sit amet<span>.</p>"
+ * @meta-arguments "<p>Lorem ipsum <span>dolor sit amet<span>.</p>", ["span"]
+ *
+ * @return string
+ */
 function removeHtmlTags(string $string, array $allowedTags = []): string
 {
     return trim(strip_tags($string, $allowedTags));
