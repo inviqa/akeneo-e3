@@ -40,3 +40,35 @@ Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
 Aliquam tincidunt mauris eu risus.
 Vestibulum auctor dapibus neque.
       """
+
+  Scenario: Replace strings in text area attribute values
+    - replace all "\n" occurrences with spaces
+
+    Given a product in the PIM with properties:
+      | field      | value     |
+      | identifier | ziggy     |
+    And with a text attribute description:
+      """
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
+Aliquam tincidunt mauris eu risus.
+Vestibulum auctor dapibus neque.
+      """
+
+    And I apply transformations using the profile:
+      """
+      actions:
+          -
+              type: set
+              field: description
+              scope: null
+              expression: 'replace(value(), "\n", " ")'
+      """
+
+    When transformation is executed
+    Then the product in the PIM should have properties:
+      | field      | value     |
+      | identifier | ziggy     |
+    And should have the text attribute description:
+      """
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam tincidunt mauris eu risus. Vestibulum auctor dapibus neque.
+      """
