@@ -9,6 +9,9 @@ It is like Akeneo Enrichment Rules but with more features like expressions.
 :star:&nbsp;**Data cleansing** e.g. 
 * [trim attribute values](docs/examples/trim.md)
 * [remove html tags](docs/examples/remove-html-tags.md)
+* [replace junk](docs/examples/replace.md)
+
+:star:&nbsp;**Improve data** e.g.
 * lowercase or uppercase attribute values
 * generate slugs
 
