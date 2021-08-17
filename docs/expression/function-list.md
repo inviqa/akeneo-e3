@@ -153,6 +153,25 @@ Examples:
 
 
 
+## replace
+
+Replaces `from` with `to` in a `string`
+
+
+Examples:
+
+ * `replace("Lorem\nipsum\ndolor\nsit\namet", "\n", " ")` => `Lorem ipsum dolor sit amet`
+
+
+| Parameter | Description | Type
+| --------- | ----------- | ----
+| string |  | string
+| from |  | string
+| to |  | string
+
+
+
+
 ## lowerCase
 
 Make a `string` lowercase

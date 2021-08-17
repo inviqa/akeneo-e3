@@ -45,6 +45,28 @@ remove-html-tags:
                       scope: null
                       locale: en_GB
                       expression: 'removeHtmlTags(value())'
+replace:
+    category: basics
+    file_name: replace
+    header: How to replace strings in values
+    tasks:
+        - description: replace all `\n` occurrences with spaces.
+          resource:
+              identifier: the-ziggy
+              values:
+                  description:
+                      - scope: web
+                        locale: en_GB
+                        data: Lorem\nipsum\ndolor\nsit\namet
+          profile:
+              actions:
+                  -
+                      type: set
+                      field: description
+                      scope: web
+                      locale: en_GB
+                      expression: 'replace(value(), "\\n", " ")'
+
 set-price:
     category: attributes
     file_name: set-price

@@ -14,7 +14,6 @@ use AkeneoEtl\Tests\Acceptance\bootstrap\InMemoryExtractor;
 use AkeneoEtl\Tests\Acceptance\bootstrap\InMemoryLoader;
 use AkeneoEtl\Tests\Shared\FunctionDocumentor;
 use LogicException;
-use ReflectionFunction;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -95,13 +94,14 @@ final class GenerateDocsCommand extends Command
         $etl->execute();
 
         if ($loader->getResult() === null) {
-            throw new LogicException(
-                'Task %s: invalid rules',
-                $taskCode
-            );
+            throw new LogicException(sprintf('Task `%s`: invalid rules', $taskCode));
         }
 
         $compareTable = $this->resourceComparer->compareWithOrigin($loader->getResult());
+
+        if (count($compareTable) === 0) {
+            throw new LogicException(sprintf('Empty results of the task `%s`', $taskCode));
+        }
 
         $results = [];
 

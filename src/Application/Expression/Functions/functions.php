@@ -247,3 +247,21 @@ function removeHtmlTags(string $string, array $allowedTags = []): string
 {
     return trim(strip_tags($string, $allowedTags));
 }
+
+/**
+ * Replaces `from` with `to` in a `string`
+ *
+ * @param string $string
+ * @param string $from
+ * @param string $to
+ *
+ * @return string
+ *
+ * @meta-arguments "Lorem\nipsum\ndolor\nsit\namet", "\n", " "
+ */
+function replace(string $string, string $from, string $to): string
+{
+    $unicodeString = new UnicodeString($string);
+
+    return $unicodeString->replace($from, $to)->toString();
+}

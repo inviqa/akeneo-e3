@@ -6,6 +6,7 @@
 
 - [How to trim values](trim.md)
 - [How to remove HTML tags](remove-html-tags.md)
+- [How to replace strings in values](replace.md)
 
 ## How to modify property values
 

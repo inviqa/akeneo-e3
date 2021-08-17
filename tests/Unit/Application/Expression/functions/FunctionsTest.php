@@ -12,6 +12,7 @@ use PHPUnit\Framework\TestCase;
 use function AkeneoEtl\Application\Expression\Functions\value;
 use function AkeneoEtl\Application\Expression\Functions\hasAttribute;
 use function AkeneoEtl\Application\Expression\Functions\hasProperty;
+use function AkeneoEtl\Application\Expression\Functions\replace;
 
 require_once('src/Application/Expression/Functions/functions.php');
 
@@ -115,5 +116,10 @@ class FunctionsTest extends TestCase
         $this->expectException(TransformException::class);
 
         hasProperty();
+    }
+
+    public function test_function_replace_replaces_strings()
+    {
+        $this->assertEquals('Lorem\nipsum\ndolor\nsit\namet', replace('Lorem ipsum dolor sit amet', ' ', '\n'));
     }
 }

@@ -28,6 +28,7 @@ final class FunctionProvider implements ExpressionFunctionProviderInterface
             'removeHtmlTags' => 'removeHtmlTags',
             'trim'           => 'trim',
             'slug'           => 'slug',
+            'replace'        => 'replace',
             'lowerCase'      => 'lowerCase',
             'upperCase'      => 'upperCase',
             'camelCase'      => 'camelCase',
