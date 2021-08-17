@@ -52,7 +52,7 @@ actions:
         expression: 'trim(value("name", null, "en_GB"))'
 ```
 
-See all [examples of rules](docs/examples/example-list.md).
+See also [examples of rules](docs/examples/example-list.md) and [available expression functions](docs/expression/function-list.md).
 
 Step 4. Run the script:
 ```bash
