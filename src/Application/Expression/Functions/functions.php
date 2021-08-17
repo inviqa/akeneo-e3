@@ -170,7 +170,7 @@ function value(string $name = '', ?string $channel = null, ?string $locale = nul
  *    <pre>expression: 'hasAttribute("name", "web", "en_GB")'</pre>
  *
  * @meta-arguments "name", null, "en_GB"
- * @meta-arguments "description", "web", "en_GB"
+ * @meta-arguments "~unknown~", "web", "en_GB"
  *
  * @param string $name
  * @param string|null $channel
@@ -211,7 +211,7 @@ function hasAttribute(string $name = '', ?string $channel = null, ?string $local
  *    <pre>expression: 'hasProperty("family")'</pre>
  *
  * @meta-arguments "family"
- * @meta-arguments
+ * @meta-arguments "~unknown~"
  *
  * @param string $name
  *

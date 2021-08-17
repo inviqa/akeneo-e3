@@ -32,6 +32,70 @@ is as same as
    <pre>expression: 'value("name", "web", "en_GB")'</pre>
 
 
+## hasAttribute
+
+Returns true if an attribute with the given `name`, `channel` and `locale` exists in data.
+
+
+Examples:
+
+ * `hasAttribute("name", null, "en_GB")` => `true`
+ * `hasAttribute("~unknown~", "web", "en_GB")` => `false`
+
+
+| Parameter | Description | Type
+| --------- | ----------- | ----
+| name |  | string
+| channel |  | string/null
+| locale |  | string/null
+
+If `name` is not specified, it checks for the attribute from the current rule.
+
+E.g. if a current rule action is:
+
+```
+-
+     type: set
+     field: name
+     scope: web
+     locale: en_GB
+```
+then
+   <pre>expression: 'hasAttribute()'</pre>
+is as same as
+   <pre>expression: 'hasAttribute("name", "web", "en_GB")'</pre>
+
+
+## hasProperty
+
+Returns true if a property with the given `name` exists in data.
+
+
+Examples:
+
+ * `hasProperty("family")` => `true`
+ * `hasProperty("~unknown~")` => `false`
+
+
+| Parameter | Description | Type
+| --------- | ----------- | ----
+| name |  | string
+
+If `name` is not specified, it checks for the property from the current rule.
+
+E.g. if a current rule action is:
+
+```
+-
+     type: set
+     field: family
+```
+then
+   <pre>expression: 'hasProperty()'</pre>
+is as same as
+   <pre>expression: 'hasProperty("family")'</pre>
+
+
 ## removeHtmlTags
 
 Remove HTML tags from a `string`
