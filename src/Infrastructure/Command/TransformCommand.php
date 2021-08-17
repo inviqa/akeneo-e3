@@ -14,6 +14,7 @@ use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class TransformCommand extends Command
@@ -25,6 +26,16 @@ final class TransformCommand extends Command
     private EtlProfileFactory $etlProfileFactory;
 
     private EventDispatcherInterface $eventDispatcher;
+
+    private ConnectionProfile $sourceConnection;
+
+    private ConnectionProfile $destinationConnection;
+
+    private EtlProfile $ruleProfile;
+
+    private string $resourceType;
+
+    private SymfonyStyle $style;
 
     public function __construct(
         EtlFactory $factory,
@@ -55,26 +66,30 @@ final class TransformCommand extends Command
             ->addOption('output-transform', 'o', InputOption::VALUE_NONE, 'Output transformation results on-the-fly');
     }
 
+    protected function initialize(InputInterface $input, OutputInterface $output): void
+    {
+        $this->sourceConnection = $this->getConnectionProfile($input);
+        $this->destinationConnection = $this->getDestinationConnectionProfile($input) ?? $this->sourceConnection;
+        $this->ruleProfile = $this->getEtlProfile($input);
+
+        $this->resourceType = (string)$input->getOption('resource-type');
+
+        $this->style = new SymfonyStyle($input, $output);
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $sourceConnectionProfile = $this->getConnectionProfile($input);
-        $destinationConnectionProfile = $this->getDestinationConnectionProfile($input) ?? $sourceConnectionProfile;
-        $etlProfile = $this->getEtlProfile($input);
-
-        $resourceType = (string)$input->getOption('resource-type');
-
-        if ($resourceType === '') {
-            // @todo: read from etl profile
-            // if null, throw an exception
+        if ($this->askToConnect() === false) {
+            return Command::SUCCESS;
         }
 
         EventSubscriber::init($this->eventDispatcher, $input, $output);
 
         $etl = $this->factory->createEtlProcess(
-            $resourceType,
-            $sourceConnectionProfile,
-            $destinationConnectionProfile,
-            $etlProfile
+            $this->resourceType,
+            $this->sourceConnection,
+            $this->destinationConnection,
+            $this->ruleProfile
         );
 
         $etl->execute();
@@ -115,5 +130,19 @@ final class TransformCommand extends Command
         }
 
         return $this->etlProfileFactory->fromFile($profileFileName);
+    }
+
+    private function askToConnect(): bool
+    {
+        if ($this->ruleProfile->isDryRun() === true) {
+            return false;
+        }
+
+        $phrase = sprintf(
+            "You're going to connect to %s to transform data. Continue?",
+            $this->destinationConnection->getHost()
+        );
+
+        return $this->style->confirm($phrase);
     }
 }
