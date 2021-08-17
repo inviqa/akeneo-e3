@@ -9,6 +9,7 @@ use AkeneoEtl\Domain\Exception\TransformException;
 use AkeneoEtl\Domain\Resource\Attribute;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
+
 /**
  * Generates a slug for a `string`.
  *

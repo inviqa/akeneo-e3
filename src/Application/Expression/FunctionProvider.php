@@ -11,7 +11,7 @@ require_once('src/Application/Expression/Functions/functions.php');
 
 final class FunctionProvider implements ExpressionFunctionProviderInterface
 {
-    const EXPRESSION_FUNCTIONS_NAMESPACE = '\AkeneoEtl\Application\Expression\Functions\\';
+    public const EXPRESSION_FUNCTIONS_NAMESPACE = '\AkeneoEtl\Application\Expression\Functions\\';
 
     /**
      * @return array|ExpressionFunction[]
