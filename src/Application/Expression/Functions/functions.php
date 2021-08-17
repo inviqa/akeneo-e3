@@ -7,6 +7,7 @@ namespace AkeneoEtl\Application\Expression\Functions;
 use AkeneoEtl\Application\Expression\StateHolder;
 use AkeneoEtl\Domain\Exception\TransformException;
 use AkeneoEtl\Domain\Resource\Attribute;
+use AkeneoEtl\Domain\Resource\Property;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 
@@ -149,6 +150,99 @@ function value(string $name = '', ?string $channel = null, ?string $locale = nul
     return $resource->get($field);
 }
 
+/**
+ * Returns true if an attribute with the given `name`, `channel` and `locale` exists in data.
+ *
+ * If `name` is not specified, it checks for the attribute from the current rule.
+ *
+ * E.g. if a current rule action is:
+ *
+ * ```
+ * -
+ *      type: set
+ *      field: name
+ *      scope: web
+ *      locale: en_GB
+ * ```
+ * then
+ *    <pre>expression: 'hasAttribute()'</pre>
+ * is as same as
+ *    <pre>expression: 'hasAttribute("name", "web", "en_GB")'</pre>
+ *
+ * @meta-arguments "name", null, "en_GB"
+ * @meta-arguments "~unknown~", "web", "en_GB"
+ *
+ * @param string $name
+ * @param string|null $channel
+ * @param string|null $locale
+ *
+ * @return bool
+ */
+function hasAttribute(string $name = '', ?string $channel = null, ?string $locale = null): bool
+{
+    $resource = StateHolder::$resource;
+
+    $field = ($name === '') ?
+        StateHolder::$field :
+        Attribute::create($name, $channel, $locale);
+
+    if (!$field instanceof Attribute) {
+        throw new TransformException(sprintf('Current field %s is not an attribute', $field->getName()), true);
+    }
+
+    return $resource->has($field);
+}
+
+/**
+ * Returns true if a property with the given `name` exists in data.
+ *
+ * If `name` is not specified, it checks for the property from the current rule.
+ *
+ * E.g. if a current rule action is:
+ *
+ * ```
+ * -
+ *      type: set
+ *      field: family
+ * ```
+ * then
+ *    <pre>expression: 'hasProperty()'</pre>
+ * is as same as
+ *    <pre>expression: 'hasProperty("family")'</pre>
+ *
+ * @meta-arguments "family"
+ * @meta-arguments "~unknown~"
+ *
+ * @param string $name
+ *
+ * @return bool
+ */
+function hasProperty(string $name = ''): bool
+{
+    $resource = StateHolder::$resource;
+
+    $field = ($name === '') ?
+        StateHolder::$field :
+        Property::create($name);
+
+    if (!$field instanceof Property) {
+        throw new TransformException(sprintf('Current field %s is not a property', $field->getName()), true);
+    }
+
+    return $resource->has($field);
+}
+
+/**
+ * Remove HTML tags from a `string`
+ *
+ * @param string $string
+ * @param array $allowedTags Tags which should not be removed
+ *
+ * @meta-arguments "<p>Lorem ipsum <span>dolor sit amet<span>.</p>"
+ * @meta-arguments "<p>Lorem ipsum <span>dolor sit amet<span>.</p>", ["span"]
+ *
+ * @return string
+ */
 function removeHtmlTags(string $string, array $allowedTags = []): string
 {
     return trim(strip_tags($string, $allowedTags));

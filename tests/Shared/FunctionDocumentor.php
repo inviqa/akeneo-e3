@@ -29,6 +29,7 @@ class FunctionDocumentor
 
         StateHolder::$resource = Resource::fromArray([
             'identifier' => 'the-ziggy',
+            'family' => 'akeneo',
             'values' => [
                 'name' =>[['scope' => null, 'locale' => 'en_GB', 'data' => 'Ziggy']],
                 'description' =>[['scope' => 'web', 'locale' => 'en_GB', 'data' => 'Ziggy The Hydra']],
@@ -63,19 +64,11 @@ class FunctionDocumentor
                 }
 
                 if ($tag instanceof Generic && $tag->getName() === 'meta-arguments') {
-                    $content = $tag->getDescription();
+                    $content = $tag->getDescription() ?? '';
 
-                    $arguments = str_getcsv($content);
+                    $arguments = $this->parseArguments($content);
 
-                    $arguments = array_map(function ($item) {
-                        if (trim($item) === 'null') {
-                            return null;
-                        }
-
-                        return $item;
-                    }, $arguments);
-
-                    $invokeResult = $refFunction->invokeArgs($arguments);
+                    $invokeResult = $this->parseResult($refFunction->invokeArgs($arguments));
 
                     $examples[] = [
                         'arguments' => $content,
@@ -90,6 +83,41 @@ class FunctionDocumentor
                 'parameters' => $parameters,
                 'examples' => $examples,
             ];
+        }
+
+        return $result;
+    }
+
+    protected function parseArguments(string $content): array
+    {
+        if ($content === '') {
+            return [];
+        }
+
+        $rawArguments = str_getcsv($content);
+
+        return array_map(function ($item) {
+            if (trim($item) === 'null') {
+                return null;
+            }
+
+            $matches = [];
+            if (preg_match('/^\["(.*)"]$/', trim($item), $matches) === 1) {
+                return [$matches[1]];
+            }
+
+            return $item;
+        }, $rawArguments);
+    }
+
+    private function parseResult($result)
+    {
+        if (is_bool($result)) {
+            return $result ? 'true' : 'false';
+        }
+
+        if (is_array($result)) {
+            return '['. implode(', ', $result). ']';
         }
 
         return $result;
