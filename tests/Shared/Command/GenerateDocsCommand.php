@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Tests\Shared\Command;
 
+use AkeneoEtl\Application\Expression\FunctionProvider;
 use AkeneoEtl\Domain\EtlProcess;
 use AkeneoEtl\Domain\Profile\EtlProfile;
 use AkeneoEtl\Domain\Resource\Resource;
@@ -11,7 +12,9 @@ use AkeneoEtl\Infrastructure\Comparer\ResourceComparer;
 use AkeneoEtl\Infrastructure\EtlFactory;
 use AkeneoEtl\Tests\Acceptance\bootstrap\InMemoryExtractor;
 use AkeneoEtl\Tests\Acceptance\bootstrap\InMemoryLoader;
+use AkeneoEtl\Tests\Shared\FunctionDocumentor;
 use LogicException;
+use ReflectionFunction;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,9 +32,12 @@ final class GenerateDocsCommand extends Command
 
     private ResourceComparer $resourceComparer;
 
+    private FunctionDocumentor $functionDocumentor;
+
     public function __construct(
         EtlFactory $factory,
         Environment $twig,
+        FunctionProvider $functionProvider,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->factory = $factory;
@@ -39,6 +45,7 @@ final class GenerateDocsCommand extends Command
         $this->twig = $twig;
 
         $this->resourceComparer = new ResourceComparer();
+        $this->functionDocumentor = new FunctionDocumentor($functionProvider);
 
         parent::__construct();
     }
@@ -51,32 +58,22 @@ final class GenerateDocsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $examples = Yaml::parseFile('docs/example-provider.yaml');
-
-        $categories = $examples['@categories'];
-        unset($examples['@categories']);
-
-        $exampleList = [];
-
-        foreach ($examples as &$example) {
-            foreach ($example['tasks'] as $taskCode => &$task) {
-                $profileData = $task['profile'];
-
-                $profile = EtlProfile::fromArray($profileData);
-                $resource = Resource::fromArray($task['resource'], 'product');
-
-                $task['results'] = $this->getTransformationResults($resource, $profile, $task['description']);
-                $task['profile'] = Yaml::dump($task['profile'], 4);
-            }
-
-            $this->renderExampleFile($example);
-
-            $exampleList[$example['category']][$example['file_name']] = $example['header'];
-        }
-
-        $this->renderExampleListFile($exampleList, $categories);
+        $this->renderFunctions();
+        $this->renderExamples();
 
         return Command::SUCCESS;
+    }
+
+    protected function renderFunctions(): void
+    {
+        $functions = $this->functionDocumentor->getFunctions();
+        $content = $this->twig->render('function-list.md.twig', [
+            'functions' => $functions,
+        ]);
+
+        $resultFileName = './docs/expression/function-list.md';
+
+        file_put_contents($resultFileName, $content);
     }
 
     private function getTransformationResults(
@@ -137,5 +134,37 @@ final class GenerateDocsCommand extends Command
 
         $resultFileName = './docs/examples/example-list.md';
         file_put_contents($resultFileName, $content);
+    }
+
+    private function renderExamples(): void
+    {
+        $examples = Yaml::parseFile('docs/example-provider.yaml');
+
+        $categories = $examples['@categories'];
+        unset($examples['@categories']);
+
+        $exampleList = [];
+
+        foreach ($examples as &$example) {
+            foreach ($example['tasks'] as $taskCode => &$task) {
+                $profileData = $task['profile'];
+
+                $profile = EtlProfile::fromArray($profileData);
+                $resource = Resource::fromArray($task['resource'], 'product');
+
+                $task['results'] = $this->getTransformationResults(
+                    $resource,
+                    $profile,
+                    $task['description']
+                );
+                $task['profile'] = Yaml::dump($task['profile'], 4);
+            }
+
+            $this->renderExampleFile($example);
+
+            $exampleList[$example['category']][$example['file_name']] = $example['header'];
+        }
+
+        $this->renderExampleListFile($exampleList, $categories);
     }
 }
