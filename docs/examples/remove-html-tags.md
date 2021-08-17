@@ -19,6 +19,6 @@ actions:
 
 Field: `description`
 
-Before: <pre> &lt;p&gt;Lorem ipsum &lt;span&gt;dolor sit amet&lt;span&gt;.&lt;/p&gt;</pre>
+Before applying actions: <pre> &lt;p&gt;Lorem ipsum &lt;span&gt;dolor sit amet&lt;span&gt;.&lt;/p&gt;</pre>
 
-After: <pre>Lorem ipsum dolor sit amet.</pre>
+After applying actions: <pre>Lorem ipsum dolor sit amet.</pre>

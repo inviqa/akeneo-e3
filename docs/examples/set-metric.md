@@ -21,8 +21,8 @@ actions:
 
 Field: `gross_weight`
 
-Before: <pre>amount: 200
+Before applying actions: <pre>amount: 200
 unit: GRAM</pre>
 
-After: <pre>amount: 2.5
+After applying actions: <pre>amount: 2.5
 unit: KILOGRAM</pre>

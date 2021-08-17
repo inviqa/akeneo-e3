@@ -15,8 +15,8 @@
 {% for result in task['results'] %}
 Field: `{{ result['field'] }}`
 
-Before: <pre>{{ result['before'] }}</pre>
+Before applying actions: <pre>{{ result['before'] }}</pre>
 
-After: <pre>{{ result['after'] }}</pre>
+After applying actions: <pre>{{ result['after'] }}</pre>
 {% endfor %}
 {% endfor %}

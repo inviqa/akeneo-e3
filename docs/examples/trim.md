@@ -19,6 +19,6 @@ actions:
 
 Field: `name`
 
-Before: <pre>    The Ziggy        </pre>
+Before applying actions: <pre>    The Ziggy        </pre>
 
-After: <pre>The Ziggy</pre>
+After applying actions: <pre>The Ziggy</pre>

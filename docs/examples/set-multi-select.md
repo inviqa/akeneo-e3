@@ -21,6 +21,6 @@ actions:
 
 Field: `colours`
 
-Before: <pre>yellow</pre>
+Before applying actions: <pre>yellow</pre>
 
-After: <pre>magenta, pink</pre>
+After applying actions: <pre>magenta, pink</pre>

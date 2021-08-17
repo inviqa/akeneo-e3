@@ -19,6 +19,6 @@ actions:
 
 Field: `categories`
 
-Before: <pre>pim, pet</pre>
+Before applying actions: <pre>pim, pet</pre>
 
-After: <pre>pxm, akeneo</pre>
+After applying actions: <pre>pxm, akeneo</pre>

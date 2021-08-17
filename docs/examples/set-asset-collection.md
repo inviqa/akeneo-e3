@@ -21,6 +21,6 @@ actions:
 
 Field: `images`
 
-Before: <pre>asset_image_code1</pre>
+Before applying actions: <pre>asset_image_code1</pre>
 
-After: <pre>asset_image_code2, asset_image_code3</pre>
+After applying actions: <pre>asset_image_code2, asset_image_code3</pre>
