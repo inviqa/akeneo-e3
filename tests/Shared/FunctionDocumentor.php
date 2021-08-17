@@ -65,15 +65,7 @@ class FunctionDocumentor
                 if ($tag instanceof Generic && $tag->getName() === 'meta-arguments') {
                     $content = $tag->getDescription();
 
-                    $arguments = str_getcsv($content);
-
-                    $arguments = array_map(function ($item) {
-                        if (trim($item) === 'null') {
-                            return null;
-                        }
-
-                        return $item;
-                    }, $arguments);
+                    $arguments = $this->parseArguments($content);
 
                     $invokeResult = $refFunction->invokeArgs($arguments);
 
@@ -93,5 +85,23 @@ class FunctionDocumentor
         }
 
         return $result;
+    }
+
+    protected function parseArguments(string $content): array
+    {
+        $rawArguments = str_getcsv($content);
+
+        return array_map(function ($item) {
+            if (trim($item) === 'null') {
+                return null;
+            }
+
+            $matches = [];
+            if (preg_match('/^\["(.*)"]$/', trim($item), $matches) === 1) {
+                return [$matches[1]];
+            }
+
+            return $item;
+        }, $rawArguments);
     }
 }
