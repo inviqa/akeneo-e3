@@ -3,6 +3,8 @@
 namespace AkeneoEtl\Tests\Shared;
 
 use AkeneoEtl\Application\Expression\FunctionProvider;
+use AkeneoEtl\Application\Expression\StateHolder;
+use AkeneoEtl\Domain\Resource\Resource;
 use phpDocumentor\Reflection\DocBlock\Tags\Generic;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\DocBlockFactory;
@@ -25,6 +27,13 @@ class FunctionDocumentor
 
         $factory = DocBlockFactory::createInstance();
 
+        StateHolder::$resource = Resource::fromArray([
+            'identifier' => 'the-ziggy',
+            'values' => [
+                'name' =>[['scope' => null, 'locale' => 'en_GB', 'data' => 'Ziggy']],
+                'description' =>[['scope' => 'web', 'locale' => 'en_GB', 'data' => 'Ziggy The Hydra']],
+            ]
+        ], 'product');
 
         foreach ($this->functionProvider->getFunctions() as $function) {
             $name = $function->getName();
@@ -57,6 +66,15 @@ class FunctionDocumentor
                     $content = $tag->getDescription();
 
                     $arguments = str_getcsv($content);
+
+                    $arguments = array_map(function ($item) {
+                        if (trim($item) === 'null') {
+                            return null;
+                        }
+
+                        return $item;
+                    }, $arguments);
+
                     $invokeResult = $refFunction->invokeArgs($arguments);
 
                     $examples[] = [
