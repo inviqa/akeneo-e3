@@ -110,8 +110,26 @@ function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}")
 }
 
 /**
- * Returns a value of an attribute by name, channel and locale.
- * If name is not specified, it returns a value of a field from the current rule.
+ * Returns a value of an attribute by `name`, `channel` and `locale`.
+ *
+ * If `name` is not specified, it returns a value of a field from the current rule.
+ *
+ * E.g. if a current rule action is:
+ *
+ * ```
+ * -
+ *      type: set
+ *      field: name
+ *      scope: web
+ *      locale: en_GB
+ * ```
+ * then
+ *    <pre>expression: 'value()'</pre>
+ * is as same as
+ *    <pre>expression: 'value("name", "web", "en_GB")'</pre>
+ *
+ * @meta-arguments "name", null, "en_GB"
+ * @meta-arguments "description", "web", "en_GB"
  *
  * @return mixed|null
  */
