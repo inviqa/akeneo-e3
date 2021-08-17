@@ -3,6 +3,9 @@
 namespace AkeneoEtl\Tests\Shared;
 
 use AkeneoEtl\Application\Expression\FunctionProvider;
+use phpDocumentor\Reflection\DocBlock\Tags\Generic;
+use phpDocumentor\Reflection\DocBlock\Tags\Param;
+use phpDocumentor\Reflection\DocBlockFactory;
 use ReflectionFunction;
 
 require_once('src/Application/Expression/Functions/functions.php');
@@ -20,15 +23,55 @@ class FunctionDocumentor
     {
         $result = [];
 
+        $factory = DocBlockFactory::createInstance();
+
+
         foreach ($this->functionProvider->getFunctions() as $function) {
             $name = $function->getName();
 
             $refFunction = new ReflectionFunction(FunctionProvider::EXPRESSION_FUNCTIONS_NAMESPACE.$name);
 
-            $docComment = $refFunction->getDocComment();
-            $docComment = trim(str_replace(['/**', '*/', ' * ', ' *'], [], $docComment));
+            $comment = $refFunction->getDocComment();
 
-            $result[$name]['description'] = $docComment;
+            if ($comment === false) {
+                continue;
+            }
+
+            $docblock = $factory->create($comment);
+
+            $parameters = [];
+            $examples = [];
+
+            $tags = $docblock->getTags();
+
+            foreach ($tags as $tag) {
+                if ($tag instanceof Param) {
+                    $parameters[$tag->getVariableName()] = [
+                        'name' => $tag->getVariableName(),
+                        'type' => $tag->getType() ?? '',
+                        'description' => $tag->getDescription() ?? '',
+                    ];
+                }
+
+                if ($tag instanceof Generic && $tag->getName() === 'meta-arguments') {
+                    $content = $tag->getDescription();
+
+                    $arguments = str_getcsv($content);
+                    $invokeResult = $refFunction->invokeArgs($arguments);
+
+                    $examples[] = [
+                        'arguments' => $content,
+                        'result' => $invokeResult,
+                    ];
+                }
+            }
+
+            $result[$name] = [
+                'summary' => $docblock->getSummary(),
+                'description' => (string)$docblock->getDescription(),
+                'parameters' => $parameters,
+                'examples' => $examples,
+            ];
         }
 
         return $result;
