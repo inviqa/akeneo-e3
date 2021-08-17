@@ -35,7 +35,7 @@ final class TransformCommand extends Command
 
     private string $resourceType;
 
-    private SymfonyStyle $style;
+    private TransformOutput $output;
 
     public function __construct(
         EtlFactory $factory,
@@ -74,16 +74,20 @@ final class TransformCommand extends Command
 
         $this->resourceType = (string)$input->getOption('resource-type');
 
-        $this->style = new SymfonyStyle($input, $output);
+        $this->output = new TransformOutput($input, $output);
+        EventSubscriber::init($this->eventDispatcher, $this->output);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($this->askToConnect() === false) {
+        $askToConnect = $this->output->askToConnect(
+            $this->destinationConnection->getHost(),
+            $this->ruleProfile->isDryRun()
+        );
+
+        if ($askToConnect === false) {
             return Command::SUCCESS;
         }
-
-        EventSubscriber::init($this->eventDispatcher, $input, $output);
 
         $etl = $this->factory->createEtlProcess(
             $this->resourceType,
@@ -130,19 +134,5 @@ final class TransformCommand extends Command
         }
 
         return $this->etlProfileFactory->fromFile($profileFileName);
-    }
-
-    private function askToConnect(): bool
-    {
-        if ($this->ruleProfile->isDryRun() === true) {
-            return false;
-        }
-
-        $phrase = sprintf(
-            "You're going to connect to %s to transform data. Continue?",
-            $this->destinationConnection->getHost()
-        );
-
-        return $this->style->confirm($phrase);
     }
 }

@@ -173,6 +173,17 @@ class TransformOutput
         }
     }
 
+    public function askToConnect(string $host, bool $dryRun): bool
+    {
+        if ($dryRun === true) {
+            return true;
+        }
+
+        $phrase = sprintf("You're going to connect to %s to transform data. Continue?", $host);
+
+        return $this->style->confirm($phrase);
+    }
+
     private function formatErrorSummary(array $errorSummary, string $title): array
     {
         if (count($errorSummary) === 0) {
