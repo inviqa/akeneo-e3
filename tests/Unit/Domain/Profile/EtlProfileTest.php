@@ -42,4 +42,29 @@ class EtlProfileTest extends TestCase
             'unknown' => [],
         ]);
     }
+
+    public function test_it_allows_to_dynamically_set_dry_run_list_of_codes()
+    {
+        $condition = [
+            'field' => 'name',
+            'operator' => '=',
+            'value' => 'me',
+        ];
+
+        $action = [
+            'type' => 'set',
+            'field' => 'family',
+            'value' => 'pet',
+        ];
+
+        $profile = EtlProfile::fromArray([
+            'conditions' => [$condition],
+            'actions' => [$action]
+        ]);
+
+        $profile->setDryRunCodes(['123', '456', 'abc']);
+
+        $this->assertEquals(['123', '456', 'abc'], $profile->getDryRunCodes());
+        $this->assertTrue($profile->isDryRun());
+    }
 }
