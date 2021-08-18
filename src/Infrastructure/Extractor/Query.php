@@ -22,8 +22,10 @@ class Query
             );
         }
 
-        $codeFieldName = AkeneoSpecifics::getCodeFieldName($resourceType);
-        $builder->addFilter($codeFieldName, 'IN', $profile->getDryRunCodes());
+        if (count($profile->getDryRunCodes()) > 0) {
+            $codeFieldName = AkeneoSpecifics::getCodeFieldName($resourceType);
+            $builder->addFilter($codeFieldName, 'IN', $profile->getDryRunCodes());
+        }
 
         $this->data = ['search' => $builder->getFilters()];
     }
