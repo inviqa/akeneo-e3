@@ -22,15 +22,18 @@ final class ListableExtractor implements Extractor
 
     private array $query;
 
+    private ListableResourceInterface $api;
+
     public function __construct(string $resourceType, ExtractProfile $profile, AkeneoPimClientInterface $client)
     {
         $this->resourceType = $resourceType;
         $this->profile = $profile;
-        $this->api = (new ApiSelector())->getApi($client, $resourceType);
 
-        if (!$this->api instanceof ListableResourceInterface) {
+        $api = (new ApiSelector())->getApi($client, $resourceType);
+        if (!$api instanceof ListableResourceInterface) {
             throw new LogicException(sprintf('%s API does not support listing', $resourceType));
         }
+        $this->api = $api;
 
         $this->query = $this->buildQuery($profile->getConditions());
     }

@@ -65,6 +65,14 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
         return $this->dryRunCodes;
     }
 
+    public function setDryRunCodes(array $codes): self
+    {
+        $this->dryRunCodes = $codes;
+        $this->isDryRun = true;
+
+        return $this;
+    }
+
     private static function resolve(array $data): array
     {
         $resolver = new OptionsResolver();
@@ -93,11 +101,5 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
         }
 
         return $resolver->resolve($data);
-    }
-
-    public function setDryRunCodes(array $codes)
-    {
-        $this->dryRunCodes = $codes;
-        $this->isDryRun = true;
     }
 }
