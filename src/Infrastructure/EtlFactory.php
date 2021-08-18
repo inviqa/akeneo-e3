@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace AkeneoEtl\Infrastructure;
 
 use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
-use Akeneo\Pim\ApiClient\Search\SearchBuilder;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientBuilder;
+use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoEtl\Application\ActionFactory;
 use AkeneoEtl\Application\SequentialTransformer;
+use AkeneoEtl\Domain\Extractor;
 use AkeneoEtl\Domain\Profile\ConnectionProfile;
 use AkeneoEtl\Domain\Profile\ExtractProfile;
 use AkeneoEtl\Domain\Profile\LoadProfile;
@@ -18,9 +19,9 @@ use AkeneoEtl\Domain\Profile\TransformProfile;
 use AkeneoEtl\Domain\Loader;
 use AkeneoEtl\Domain\Transformer;
 use AkeneoEtl\Infrastructure\Api\ApiSelector;
+use AkeneoEtl\Infrastructure\Extractor\Api\ReferenceEntityRecordExtractor;
 use AkeneoEtl\Infrastructure\Extractor\ApiExtractor;
-use AkeneoEtl\Infrastructure\Loader\ApiLoader;
-use AkeneoEtl\Infrastructure\Loader\DryRunLoader;
+use AkeneoEtl\Infrastructure\Loader\LoaderFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class EtlFactory
@@ -33,11 +34,18 @@ final class EtlFactory
 
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(EventDispatcherInterface $eventDispatcher, ActionFactory $actionFactory = null)
-    {
+    private LoaderFactory $loaderFactory;
+
+    public function __construct(
+        EventDispatcherInterface $eventDispatcher,
+        ActionFactory $actionFactory = null,
+        LoaderFactory $loaderFactory = null
+    ) {
         $this->eventDispatcher = $eventDispatcher;
+
         $this->apiSelector = new ApiSelector();
         $this->actionFactory = $actionFactory ?? new ActionFactory();
+        $this->loaderFactory = $loaderFactory ?? new LoaderFactory();
     }
 
     public function createEtlProcess(
@@ -69,8 +77,16 @@ final class EtlFactory
         string $resourceType,
         ConnectionProfile $profile,
         ExtractProfile $extractProfile
-    ): ApiExtractor {
+    ): Extractor {
         $client = $this->getClient($profile);
+
+        if ($resourceType === 'reference-entity-record') {
+            return new ReferenceEntityRecordExtractor(
+                $resourceType,
+                $this->apiSelector->getApi($client, $resourceType),
+                $extractProfile->getConditions()
+            );
+        }
 
         return new ApiExtractor(
             $resourceType,
@@ -87,17 +103,13 @@ final class EtlFactory
     }
 
     public function createLoader(
-        string $dataType,
+        string $resourceType,
         ConnectionProfile $connectionProfile,
         LoadProfile $loadProfile
     ): Loader {
-        if ($loadProfile->isDryRun() === true) {
-            return new DryRunLoader();
-        }
-
         $client = $this->getClient($connectionProfile);
 
-        return new ApiLoader($loadProfile, $client);
+        return $this->loaderFactory->createLoader($resourceType, $loadProfile, $client);
     }
 
     private function getClient(

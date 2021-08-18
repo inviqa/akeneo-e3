@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Loader;
+namespace AkeneoEtl\Infrastructure\Loader\Api;
 
 use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\Pim\ApiClient\Api\Operation\UpsertableResourceListInterface;
@@ -17,10 +17,8 @@ use AkeneoEtl\Infrastructure\Api\ApiSelector;
 use LogicException;
 use Traversable;
 
-final class ApiLoader implements Loader
+abstract class BaseBatchLoader implements Loader
 {
-    private UpsertableResourceListInterface $api;
-
     private int $batchSize = 100;
 
     /**
@@ -34,14 +32,11 @@ final class ApiLoader implements Loader
 
     private LoadProfile $profile;
 
-    private AkeneoPimClientInterface $client;
-
     private bool $isUpdateMode;
 
-    public function __construct(LoadProfile $loadProfile, AkeneoPimClientInterface $client)
+    public function __construct(LoadProfile $loadProfile)
     {
         $this->profile = $loadProfile;
-        $this->client = $client;
         $this->isUpdateMode = $this->profile->getUploadMode() === EtlProfile::MODE_UPDATE;
     }
 
@@ -50,9 +45,6 @@ final class ApiLoader implements Loader
         if ($this->codeFieldName === '') {
             $this->codeFieldName = $resource->getCodeFieldName();
             $this->resourceType = $resource->getResourceType();
-
-            $apiSelector = new ApiSelector();
-            $this->api = $apiSelector->getApi($this->client, $this->resourceType);
         }
 
         if ($this->isUpdateMode === true && $resource->getOrigin() === null) {
@@ -79,6 +71,13 @@ final class ApiLoader implements Loader
     }
 
     /**
+     * @param array|Resource[] $list
+     *
+     * @return array
+     */
+    abstract protected function upsertList(array $list): iterable;
+
+    /**
      * @return array|LoadResult[]
      */
     private function loadBatch(): array
@@ -87,28 +86,12 @@ final class ApiLoader implements Loader
             return [];
         }
 
-
-        $isUpdateMode = $this->isUpdateMode;
-
-        $list = array_map(
-            function (Resource $resource) use ($isUpdateMode) {
-                if ($isUpdateMode === true && $resource->getOrigin() !== null) {
-                    $patch = $resource->diff($resource->getOrigin());
-
-                    return $patch->toArray();
-                }
-
-                return $resource->toArray();
-            },
-            $this->buffer
-        );
-
-        $response = $this->api->upsertList($list);
+        $response = $this->upsertList($this->buffer);
 
         return $this->processResponse($response);
     }
 
-    private function processResponse(Traversable $result): array
+    private function processResponse(iterable $result): array
     {
         $loadResults = [];
 
@@ -137,7 +120,7 @@ final class ApiLoader implements Loader
         return $loadResults;
     }
 
-    public function getErrorMessage(array $response): string
+    private function getErrorMessage(array $response): string
     {
         $messages = [$response['message'] ?? ''];
 
@@ -151,5 +134,30 @@ final class ApiLoader implements Loader
         }
 
         return implode(PHP_EOL, $messages);
+    }
+
+    /**
+     * @param array|Resource[] $buffer
+     *
+     * @return array
+     */
+    protected function prepareBufferToUpsert(array $buffer): array
+    {
+        $isUpdateMode = $this->isUpdateMode;
+
+        $list = array_map(
+            function (Resource $resource) use ($isUpdateMode) {
+                if ($isUpdateMode === true && $resource->getOrigin() !== null) {
+                    $patch = $resource->diff($resource->getOrigin());
+
+                    return $patch->toArray();
+                }
+
+                return $resource->toArray();
+            },
+            $buffer
+        );
+
+        return $list;
     }
 }
