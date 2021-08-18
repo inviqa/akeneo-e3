@@ -2,7 +2,7 @@
 
 | Enhanced Enrichment Engine **(E3)** | Native Akeneo Rules Engine
 | ----------------------------------- | ----------------------------
-| Support only concatenation and simple calculations | :+1:  Supports expressions (e.g. remove html tags, trim, replace)          
+| Support only concatenation and simple calculations | :+1:  Supports expressions (e.g. to remove HTML tags, trim, replace)          
 | Works only with products and product models        | :+1:  Works with all data types: families, assets, reference entities, etc 
 | Available only in Enterprise Edition               | :+1:  Works with Growth and Community Editions                             
 | :heavy_minus_sign:                                 | :+1:  Can be used for copying data between Akeneo instances                
