@@ -118,7 +118,7 @@ function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}")
  *
  * E.g. if a current rule action is:
  *
- * ```
+ * ```yaml
  * -
  *      type: set
  *      field: name
@@ -157,7 +157,7 @@ function value(string $name = '', ?string $channel = null, ?string $locale = nul
  *
  * E.g. if a current rule action is:
  *
- * ```
+ * ```yaml
  * -
  *      type: set
  *      field: name
@@ -200,7 +200,7 @@ function hasAttribute(string $name = '', ?string $channel = null, ?string $local
  *
  * E.g. if a current rule action is:
  *
- * ```
+ * ```yaml
  * -
  *      type: set
  *      field: family

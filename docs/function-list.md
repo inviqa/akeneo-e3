@@ -19,7 +19,7 @@ If `name` is not specified, it returns a value of a field from the current rule.
 
 E.g. if a current rule action is:
 
-```
+```yaml
 -
      type: set
      field: name
@@ -53,7 +53,7 @@ If `name` is not specified, it checks for the attribute from the current rule.
 
 E.g. if a current rule action is:
 
-```
+```yaml
 -
      type: set
      field: name
@@ -85,7 +85,7 @@ If `name` is not specified, it checks for the property from the current rule.
 
 E.g. if a current rule action is:
 
-```
+```yaml
 -
      type: set
      field: family
