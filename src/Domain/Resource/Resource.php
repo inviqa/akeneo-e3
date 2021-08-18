@@ -112,6 +112,27 @@ final class Resource
         return $this;
     }
 
+    public function addTo(Field $field, array $newValue): self
+    {
+        $this->isChanged = true;
+
+        if ($field instanceof Property) {
+            $existingValue = $this->properties[$field->getName()];
+
+            $this->properties[$field->getName()] = array_unique(array_merge($existingValue, $newValue));
+
+            return $this;
+        }
+
+        if (!$field instanceof Attribute) {
+            throw new LogicException('Unsupported type of field');
+        }
+
+        $this->values->addTo($field, $newValue);
+
+        return $this;
+    }
+
     public function has(Field $field): bool
     {
         $fieldName = $field->getName();

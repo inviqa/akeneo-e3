@@ -71,6 +71,16 @@ final class ValueCollection
         return $this;
     }
 
+    public function addTo(Attribute $attribute, array $value): self
+    {
+        $existingValue = $this->get($attribute);
+
+        $hash = $this->attributeHash($attribute);
+        $this->values[$hash] = array_unique(array_merge($existingValue, $value));
+
+        return $this;
+    }
+
     public function has(Attribute $attribute): bool
     {
         $hash = $this->attributeHash($attribute);

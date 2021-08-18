@@ -76,6 +76,31 @@ class ValueCollectionTest extends TestCase
         Assert::assertEquals('Зіггі', $collection->get($attribute));
     }
 
+    public function test_it_adds_a_scalar_value_to_an_existing_attribute()
+    {
+        $collection = ValueCollection::fromArray(
+            TestData::getValuesWithArrayData()
+        );
+
+        $attribute = Attribute::create('head_names', 'web', null);
+        $collection->addTo($attribute, 'Nantes');
+
+        Assert::assertEquals(['Lyon', 'Paris', 'Nantes'], $collection->get($attribute));
+    }
+
+
+    public function test_it_adds_an_array_value_to_an_existing_attribute()
+    {
+        $collection = ValueCollection::fromArray(
+            TestData::getValuesWithArrayData()
+        );
+
+        $attribute = Attribute::create('head_names', 'web', null);
+        $collection->addTo($attribute, ['Nantes', 'Paris']);
+
+        Assert::assertEquals(['Lyon', 'Paris', 'Nantes'], $collection->get($attribute));
+    }
+
     public function test_it_converts_to_array_with_scope_fields()
     {
         $collection = ValueCollection::fromArray([]);

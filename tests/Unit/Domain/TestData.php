@@ -34,6 +34,16 @@ class TestData
 
             'head_count' => [
                 ['scope' => null, 'locale' => null, 'data' => 3]
+            ],
+        ];
+    }
+
+
+    public static function getValuesWithArrayData(): array
+    {
+        return [
+            'head_names' => [
+                ['scope' => 'web', 'locale' => null, 'data' => ['Lyon', 'Paris']]
             ]
         ];
     }
