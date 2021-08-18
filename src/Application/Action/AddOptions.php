@@ -15,21 +15,15 @@ final class AddOptions
 
     private ?string $scope;
 
-    /**
-     * @var mixed|null
-     */
-    private $items;
+    private array $items;
 
     private ?string $expression;
 
-    /**
-     * @param mixed $items
-     */
     private function __construct(
         string $field,
         ?string $locale,
         ?string $scope,
-        ?array $items,
+        array $items,
         ?string $expression
     ) {
         $this->field = $field;
@@ -69,7 +63,7 @@ final class AddOptions
             $array['field'],
             $array['locale'] ?? null,
             $array['scope'] ?? null,
-            $array['items'] ?? null,
+            $array['items'] ?? [],
             $array['expression'] ?? null,
         );
     }

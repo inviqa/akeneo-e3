@@ -84,7 +84,7 @@ class ResourceTest extends TestCase
     public function test_it_should_be_changed_if_add_to_applied()
     {
         $resource = Resource::fromArray(TestData::getProduct(), 'product');
-        $resource->addTo(Property::create('categories'), 'pxm');
+        $resource->addTo(Property::create('categories'), ['pxm']);
 
         Assert::assertTrue($resource->isChanged());
     }
