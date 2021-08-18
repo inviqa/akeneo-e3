@@ -18,6 +18,9 @@ final class ActionFactory
             case 'set':
                 $action = new Actions\Set(new ExpressionLanguage(), $options);
                 break;
+            case 'add':
+                $action = new Actions\Add(new ExpressionLanguage(), $options);
+                break;
             default:
                 throw new LogicException(sprintf('No registered action with the name %s', $type));
         }
