@@ -6,7 +6,6 @@ namespace AkeneoEtl\Infrastructure;
 
 use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientBuilder;
-use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoEtl\Application\ActionFactory;
 use AkeneoEtl\Application\SequentialTransformer;
 use AkeneoEtl\Domain\Extractor;
@@ -20,7 +19,7 @@ use AkeneoEtl\Domain\Loader;
 use AkeneoEtl\Domain\Transformer;
 use AkeneoEtl\Infrastructure\Api\ApiSelector;
 use AkeneoEtl\Infrastructure\Extractor\Api\ReferenceEntityRecordExtractor;
-use AkeneoEtl\Infrastructure\Extractor\ApiExtractor;
+use AkeneoEtl\Infrastructure\Extractor\ExtractorFactory;
 use AkeneoEtl\Infrastructure\Loader\LoaderFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -36,14 +35,18 @@ final class EtlFactory
 
     private LoaderFactory $loaderFactory;
 
+    private ExtractorFactory $extractorFactory;
+
     public function __construct(
         EventDispatcherInterface $eventDispatcher,
         ActionFactory $actionFactory = null,
+        ExtractorFactory $extractorFactory = null,
         LoaderFactory $loaderFactory = null
     ) {
         $this->eventDispatcher = $eventDispatcher;
 
         $this->apiSelector = new ApiSelector();
+        $this->extractorFactory = $extractorFactory ?? new ExtractorFactory();
         $this->actionFactory = $actionFactory ?? new ActionFactory();
         $this->loaderFactory = $loaderFactory ?? new LoaderFactory();
     }
@@ -80,19 +83,7 @@ final class EtlFactory
     ): Extractor {
         $client = $this->getClient($profile);
 
-        if ($resourceType === 'reference-entity-record') {
-            return new ReferenceEntityRecordExtractor(
-                $resourceType,
-                $this->apiSelector->getApi($client, $resourceType),
-                $extractProfile->getConditions()
-            );
-        }
-
-        return new ApiExtractor(
-            $resourceType,
-            $this->apiSelector->getApi($client, $resourceType),
-            $extractProfile->getConditions()
-        );
+        return $this->extractorFactory->create($resourceType, $extractProfile, $client);
     }
 
     public function createTransformer(TransformProfile $transformProfile): Transformer

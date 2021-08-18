@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Extractor;
+namespace AkeneoEtl\Infrastructure\Extractor\Api;
 
 use Akeneo\Pim\ApiClient\Api\Operation\ListableResourceInterface;
 use Akeneo\Pim\ApiClient\Search\SearchBuilder;
@@ -10,7 +10,7 @@ use AkeneoEtl\Domain\Extractor;
 use AkeneoEtl\Domain\Resource\Resource;
 use Generator;
 
-final class ApiExtractor implements Extractor
+final class ListableExtractor implements Extractor
 {
     private ListableResourceInterface $api;
 
