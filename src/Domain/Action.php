@@ -8,7 +8,5 @@ use AkeneoEtl\Domain\Resource\Resource;
 
 interface Action
 {
-    public function getType(): string;
-
     public function execute(Resource $resource): void;
 }

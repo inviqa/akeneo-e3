@@ -26,11 +26,6 @@ final class Set implements Action
         $this->options = SetOptions::fromArray($options);
     }
 
-    public function getType(): string
-    {
-        return 'expression';
-    }
-
     public function execute(Resource $resource): void
     {
         $resultValue = $this->evaluateValue($resource);

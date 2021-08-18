@@ -7,18 +7,13 @@ namespace AkeneoEtl\Application;
 use AkeneoEtl\Domain\Action;
 use AkeneoEtl\Application\Action as Actions;
 use AkeneoEtl\Domain\Profile\TransformProfile;
-use AkeneoEtl\Domain\Transform\Event\BeforeTransformEvent;
 use LogicException;
 use AkeneoEtl\Application\Expression\ExpressionLanguage;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class ActionFactory
 {
     public function create(string $type, array $options): Action
     {
-        // if deps needed, then clone from registry
-        $action = null;
-
         switch ($type) {
             case 'set':
                 $action = new Actions\Set(new ExpressionLanguage(), $options);

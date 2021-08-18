@@ -50,11 +50,6 @@ class SequentialTransformerTest extends TestCase
 
 class FakeAction implements Action
 {
-    public function getType(): string
-    {
-        return 'fake';
-    }
-
     public function execute(Resource $resource): void
     {
         $resource->set(Property::create('fake'), '!');
@@ -63,11 +58,6 @@ class FakeAction implements Action
 
 class FailAction implements Action
 {
-    public function getType(): string
-    {
-        return 'fail';
-    }
-
     public function execute(Resource $resource): void
     {
         throw new RuntimeException('Ooops!');
@@ -76,11 +66,6 @@ class FailAction implements Action
 
 class NullAction implements Action
 {
-    public function getType(): string
-    {
-        return 'null';
-    }
-
     public function execute(Resource $resource): void
     {
     }
