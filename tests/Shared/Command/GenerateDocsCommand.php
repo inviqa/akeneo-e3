@@ -70,7 +70,7 @@ final class GenerateDocsCommand extends Command
             'functions' => $functions,
         ]);
 
-        $resultFileName = './docs/expression/function-list.md';
+        $resultFileName = './docs/function-list.md';
 
         file_put_contents($resultFileName, $content);
     }
@@ -132,7 +132,7 @@ final class GenerateDocsCommand extends Command
             'categories' => $categories,
         ]);
 
-        $resultFileName = './docs/examples/example-list.md';
+        $resultFileName = './docs/example-list.md';
         file_put_contents($resultFileName, $content);
     }
 
