@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Resource;
 
+use AkeneoEtl\Domain\AkeneoSpecifics;
 use Generator;
 use LogicException;
 
@@ -140,7 +141,7 @@ final class Resource
 
     public function getCodeFieldName(): string
     {
-        return $this->resourceType !== 'product' ? 'code' : 'identifier';
+        return AkeneoSpecifics::getCodeFieldName($this->resourceType);
     }
 
     public function diff(Resource $resource): self
