@@ -18,7 +18,6 @@ use AkeneoEtl\Domain\Profile\TransformProfile;
 use AkeneoEtl\Domain\Loader;
 use AkeneoEtl\Domain\Transformer;
 use AkeneoEtl\Infrastructure\Api\ApiSelector;
-use AkeneoEtl\Infrastructure\Extractor\Api\ReferenceEntityRecordExtractor;
 use AkeneoEtl\Infrastructure\Extractor\ExtractorFactory;
 use AkeneoEtl\Infrastructure\Loader\LoaderFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
