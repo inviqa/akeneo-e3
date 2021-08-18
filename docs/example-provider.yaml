@@ -2,6 +2,7 @@
      basics: Basic examples
      properties: How to modify property values
      attributes: How to modify attribute values
+     resource-types: How to modify non-product data
 
 trim:
     category: basics
@@ -180,3 +181,29 @@ set-multi-select:
                     locale: null
                     scope: null
                     value: ['magenta', 'pink']
+modify-reference-entity-records:
+    category: resource-types
+    file_name: modify-reference-entity-records
+    header: Modify reference entity records
+    tasks:
+        - description: trim values of a `description` attribute of all `suppliers` reference entity records.
+          resource-type: reference-entity-record
+          resource:
+              code: ziggy-supplier
+              values:
+                  description:
+                      - channel: null
+                        locale: de_DE
+                        data: "  I'm a Ziggy-supplier    "
+          profile:
+                conditions:
+                    -
+                        field: 'reference_entity_code'
+                        value: 'suppliers'
+                actions:
+                    -
+                        type: set
+                        field: description
+                        scope: null
+                        locale: de_DE
+                        expression: 'trim(value())'

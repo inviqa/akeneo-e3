@@ -14,6 +14,12 @@
 - [ ] clear :question: ([akeneo rule engine clear](https://docs.akeneo.com/5.0/manipulate_pim_data/rule/general_information_on_rule_format.html#clear)) - set to null?
 - [ ] calculate :question: ([akeneo rule engine calculate](https://docs.akeneo.com/5.0/manipulate_pim_data/rule/general_information_on_rule_format.html#calculate)) - expressions are **much** better here
 
+### Supported data types / features
+
+- [ ] all from api
+- [ ] accumulating APIs, e.g. apply rules to **all** ref entity records (need to first fetch all ref entites and iterate them) 
+
+
 ## Expression language
 
 ### Functions
@@ -22,12 +28,14 @@
 - [x] strip html tags
 - [ ] string functions: replace, etc - how to expose all UnicodeString stuff?
 - [ ] array functions: merge, search, etc.
-- [ ] hasAttribute(name, scope, locale) - hasAttribute
-- [ ] hasProperty(name)
+- [x] hasAttribute(name, scope, locale) - hasAttribute
+- [x] hasProperty(name)
 - [ ] priceValue(name, scope, locale, currency)
 - [ ] metricValue(name, scope, locale, unit)
-- [ ] register meta variable this_value, the_value(?) with the current value. Or just `value`?
-    
+   
+
+
+ 
 ## Commands
 
 - [x] transform

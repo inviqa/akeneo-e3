@@ -19,6 +19,10 @@
 - [Set value of an asset collection type attribute](examples/set-asset-collection.md)
 - [Set value of a multi-select type attribute](examples/set-multi-select.md)
 
+## How to modify non-product data
+
+- [Modify reference entity records](examples/modify-reference-entity-records.md)
+
 ## See also
 
 - [List of expression functions](function-list.md)
