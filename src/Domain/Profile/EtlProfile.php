@@ -68,8 +68,9 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
         $resolver->setDefault('conditions', function (OptionsResolver $conditionResolver) {
             $conditionResolver
                 ->setPrototype(true)
-                ->setRequired(['field', 'operator'])
-                ->setDefined('value')
+                ->setRequired('field')
+                ->setDefined(['operator', 'value'])
+                ->setDefault('operator', '=')
                 ->setAllowedTypes('field', 'string')
                 ->setAllowedTypes('operator', 'string');
         });

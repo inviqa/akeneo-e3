@@ -31,7 +31,7 @@ final class Resource
         }
 
         $this->code = (string)$data[$idFieldName];
-        $this->values = ValueCollection::fromArray($data['values'] ?? []);
+        $this->values = ValueCollection::fromArray($data['values'] ?? [], $resourceType);
 
         unset($data['values']);
         $this->properties = $data;

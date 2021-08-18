@@ -14,13 +14,20 @@ final class ValueCollection
      */
     private array $values = [];
 
-    private function __construct(array $data)
+    private string $channelFieldName;
+
+    private string $resourceType;
+
+    private function __construct(array $data, string $resourceType)
     {
+        $this->channelFieldName = $resourceType === 'reference-entity-record' ? 'channel' : 'scope';
+        $this->resourceType = $resourceType;
+
         foreach ($data as $name => $localisedValues) {
             foreach ($localisedValues as $localisedValue) {
                 $attribute = Attribute::create(
                     $name,
-                    $localisedValue['scope'],
+                    $localisedValue[$this->channelFieldName],
                     $localisedValue['locale']
                 );
                 $this->values[$this->attributeHash($attribute)] = $localisedValue['data'];
@@ -28,9 +35,9 @@ final class ValueCollection
         }
     }
 
-    public static function fromArray(array $data): self
+    public static function fromArray(array $data, string $resourceType = 'product'): self
     {
-        return new self($data);
+        return new self($data, $resourceType);
     }
 
     /**
@@ -42,8 +49,9 @@ final class ValueCollection
 
         if (array_key_exists($hash, $this->values) === false) {
             throw new LogicException(sprintf(
-                'Attribute %s (scope=%s, locale=%s) is not present in data',
+                'Attribute %s (%s=%s, locale=%s) is not present in data',
                 $attribute->getName(),
+                $this->channelFieldName,
                 $attribute->getScope() ?? 'null',
                 $attribute->getLocale() ?? 'null'
             ));
@@ -85,7 +93,7 @@ final class ValueCollection
             }
         }
 
-        $diffCollection = new self([]);
+        $diffCollection = new self([], $this->resourceType);
         $diffCollection->values = $diff;
 
         return $diffCollection;
@@ -98,7 +106,7 @@ final class ValueCollection
             $merge[$hash] = $value;
         }
 
-        $mergeCollection = new self([]);
+        $mergeCollection = new self([], $this->resourceType);
         $mergeCollection->values = $merge;
 
         return $mergeCollection;
@@ -122,7 +130,7 @@ final class ValueCollection
             $attribute = $this->hashToAttribute($hash);
 
             $result[$attribute->getName()][] = [
-                'scope' => $attribute->getScope(),
+                $this->channelFieldName => $attribute->getScope(),
                 'locale' => $attribute->getLocale(),
                 'data' => $value,
             ];

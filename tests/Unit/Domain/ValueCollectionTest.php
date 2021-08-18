@@ -76,7 +76,7 @@ class ValueCollectionTest extends TestCase
         Assert::assertEquals('Зіггі', $collection->get($attribute));
     }
 
-    public function test_it_converts_to_array()
+    public function test_it_converts_to_array_with_scope_fields()
     {
         $collection = ValueCollection::fromArray([]);
 
@@ -93,6 +93,28 @@ class ValueCollectionTest extends TestCase
                 ['scope' => null, 'locale' => 'l1', 'data' => 3],
             ],
         ];
+
+        $this->assertEquals($expected, $collection->toArray());
+    }
+
+    public function test_it_converts_to_array_with_channel_fields()
+    {
+        $collection = ValueCollection::fromArray([], 'reference-entity-record');
+
+        $collection->set(Attribute::create('a1', 's1', null), 1);
+        $collection->set(Attribute::create('a1', 's2', null), 2);
+        $collection->set(Attribute::create('a2', null, 'l1'), 3);
+
+        $expected = [
+            'a1' => [
+                ['channel' => 's1', 'locale' => null, 'data' => 1],
+                ['channel' => 's2', 'locale' => null, 'data' => 2],
+            ],
+            'a2' => [
+                ['channel' => null, 'locale' => 'l1', 'data' => 3],
+            ],
+        ];
+
         $this->assertEquals($expected, $collection->toArray());
     }
 
