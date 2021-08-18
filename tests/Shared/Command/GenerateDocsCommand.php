@@ -93,10 +93,6 @@ final class GenerateDocsCommand extends Command
 
         $etl->execute();
 
-        if ($loader->getResult() === null) {
-            throw new LogicException(sprintf('Task `%s`: invalid rules', $taskCode));
-        }
-
         $compareTable = $this->resourceComparer->compareWithOrigin($loader->getResult());
 
         if (count($compareTable) === 0) {
@@ -150,7 +146,7 @@ final class GenerateDocsCommand extends Command
                 $profileData = $task['profile'];
 
                 $profile = EtlProfile::fromArray($profileData);
-                $resource = Resource::fromArray($task['resource'], 'product');
+                $resource = Resource::fromArray($task['resource'], $task['resource-type'] ?? 'product');
 
                 $task['results'] = $this->getTransformationResults(
                     $resource,
