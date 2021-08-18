@@ -100,9 +100,9 @@ set-price:
 set-categories:
     category: properties
     file_name: set-categories
-    header: Set categories of a product or a product model
+    header: Modify categories of a product or a product model
     tasks:
-        - description: set value of a `categories` field
+        - description: set `categories`
           resource:
               identifier: the-ziggy
               categories: ['pim', 'pet']
@@ -112,7 +112,26 @@ set-categories:
                       type: set
                       field: categories
                       value: ['pxm', 'akeneo']
-
+        - description: add new items to `categories`
+          resource:
+              identifier: the-ziggy
+              categories: ['pim', 'pet']
+          profile:
+              actions:
+                  -
+                      type: add
+                      field: categories
+                      items: ['pxm', 'akeneo']
+        - description: add new items to `categories` using an expression
+          resource:
+              identifier: the-ziggy
+              categories: ['pim', 'pet']
+          profile:
+              actions:
+                  -
+                      type: add
+                      field: categories
+                      expression: "['pxm', upperCase(identifier)]"
 set-metric:
     category: attributes
     file_name: set-metric

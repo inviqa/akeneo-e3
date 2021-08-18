@@ -10,7 +10,7 @@
 
 ## How to modify property values
 
-- [Set categories of a product or a product model](examples/set-categories.md)
+- [Modify categories of a product or a product model](examples/set-categories.md)
 
 ## How to modify attribute values
 

@@ -1,7 +1,7 @@
 [comment]: <> (This file is auto-generated based on example-provider.)
-# Set categories of a product or a product model
+# Modify categories of a product or a product model
 
-**Task:** set value of a `categories` field
+**Task:** set `categories`
 
 ### Rules
 
@@ -22,3 +22,43 @@ Field: `categories`
 Before applying actions: <pre>pim, pet</pre>
 
 After applying actions: <pre>pxm, akeneo</pre>
+**Task:** add new items to `categories`
+
+### Rules
+
+```yaml
+actions:
+    -
+        type: add
+        field: categories
+        items:
+            - pxm
+            - akeneo
+```
+
+### Result
+
+Field: `categories`
+
+Before applying actions: <pre>pim, pet</pre>
+
+After applying actions: <pre>pim, pet, pxm, akeneo</pre>
+**Task:** add new items to `categories` using an expression
+
+### Rules
+
+```yaml
+actions:
+    -
+        type: add
+        field: categories
+        expression: '[''pxm'', upperCase(identifier)]'
+```
+
+### Result
+
+Field: `categories`
+
+Before applying actions: <pre>pim, pet</pre>
+
+After applying actions: <pre>pim, pet, pxm, THE-ZIGGY</pre>
