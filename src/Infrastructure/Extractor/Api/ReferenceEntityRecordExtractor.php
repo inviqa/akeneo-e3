@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Infrastructure\Extractor\Api;
 
-use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
-use Akeneo\Pim\ApiClient\Search\SearchBuilder;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityRecordApiInterface;
 use AkeneoEtl\Domain\Extractor;
