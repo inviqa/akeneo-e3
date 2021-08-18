@@ -2,19 +2,30 @@
 
 namespace AkeneoEtl\Infrastructure\Extractor;
 
+use Akeneo\Pim\ApiClient\Search\SearchBuilder;
 use AkeneoEtl\Domain\AkeneoSpecifics;
 use AkeneoEtl\Domain\Profile\ExtractProfile;
 
 class Query
 {
-    private ExtractProfile $profile;
-
-    private string $resourceType;
+    private array $data = [];
 
     public function __construct(ExtractProfile $profile, string $resourceType)
     {
-        $this->profile = $profile;
-        $this->resourceType = $resourceType;
+        $builder = new SearchBuilder();
+
+        foreach ($profile->getConditions() as $condition) {
+            $builder->addFilter(
+                $condition['field'],
+                $condition['operator'],
+                $condition['value'] ?? null
+            );
+        }
+
+        $codeFieldName = AkeneoSpecifics::getCodeFieldName($resourceType);
+        $builder->addFilter($codeFieldName, 'IN', $profile->getDryRunCodes());
+
+        $this->data = ['search' => $builder->getFilters()];
     }
 
     public static function fromProfile(ExtractProfile $profile, string $resourceType): self
@@ -24,12 +35,6 @@ class Query
 
     public function toArray(): array
     {
-        return [
-            'search' => array_merge($this->profile->getConditions(), [[
-                'field' => AkeneoSpecifics::getCodeFieldName($this->resourceType),
-                'operator' => 'IN',
-                'value' => $this->profile->getDryRunCodes()
-            ]])
-        ];
+        return $this->data;
     }
 }

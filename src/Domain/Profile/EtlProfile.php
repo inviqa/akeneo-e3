@@ -23,7 +23,7 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
     /**
      * @var string[]
      */
-    private array $dryRunCodes;
+    private array $dryRunCodes = [];
 
     public function __construct(array $data)
     {

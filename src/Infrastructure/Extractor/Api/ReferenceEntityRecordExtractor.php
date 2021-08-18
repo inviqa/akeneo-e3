@@ -11,13 +11,14 @@ use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityRecordApiInterface;
 use AkeneoEtl\Domain\Extractor;
 use AkeneoEtl\Domain\Profile\ExtractProfile;
 use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoEtl\Infrastructure\Extractor\Query;
 use Generator;
 
 final class ReferenceEntityRecordExtractor implements Extractor
 {
     private ReferenceEntityRecordApiInterface $api;
 
-    private array $query;
+    private Query $query;
 
     private string $resourceType;
 
@@ -25,7 +26,7 @@ final class ReferenceEntityRecordExtractor implements Extractor
     {
         $this->resourceType = $resourceType;
         $this->api = $client->getReferenceEntityRecordApi();
-        $this->query = $this->buildQuery($profile->getConditions());
+        $this->query = Query::fromProfile($profile, $resourceType);
     }
 
     public function count(): int
@@ -38,17 +39,11 @@ final class ReferenceEntityRecordExtractor implements Extractor
      */
     public function extract(): Generator
     {
-        $cursor = $this->api->all('suppliers', []);
+        $cursor = $this->api->all('suppliers', $this->query->toArray());
 
         foreach ($cursor as $resource) {
             $resource['reference_entity_code'] = 'suppliers';
             yield Resource::fromArray($resource, $this->resourceType);
         }
-    }
-
-    private function buildQuery(array $conditions): array
-    {
-        // remove "code"
-        return ['search' => $conditions];
     }
 }

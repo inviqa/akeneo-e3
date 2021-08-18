@@ -6,11 +6,11 @@ namespace AkeneoEtl\Infrastructure\Extractor\Api;
 
 use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\Pim\ApiClient\Api\Operation\ListableResourceInterface;
-use Akeneo\Pim\ApiClient\Search\SearchBuilder;
 use AkeneoEtl\Domain\Extractor;
 use AkeneoEtl\Domain\Profile\ExtractProfile;
 use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Infrastructure\Api\ApiSelector;
+use AkeneoEtl\Infrastructure\Extractor\Query;
 use Generator;
 use LogicException;
 
@@ -18,16 +18,13 @@ final class ListableExtractor implements Extractor
 {
     private string $resourceType;
 
-    private ExtractProfile $profile;
-
-    private array $query;
+    private Query $query;
 
     private ListableResourceInterface $api;
 
     public function __construct(string $resourceType, ExtractProfile $profile, AkeneoPimClientInterface $client)
     {
         $this->resourceType = $resourceType;
-        $this->profile = $profile;
 
         $api = (new ApiSelector())->getApi($client, $resourceType);
         if (!$api instanceof ListableResourceInterface) {
@@ -35,13 +32,13 @@ final class ListableExtractor implements Extractor
         }
         $this->api = $api;
 
-        $this->query = $this->buildQuery($profile->getConditions());
+        $this->query = Query::fromProfile($profile, $resourceType);
     }
 
     public function count(): int
     {
         return (int)$this->api
-            ->listPerPage(1, true, $this->query)
+            ->listPerPage(1, true, $this->query->toArray())
             ->getCount();
     }
 
@@ -50,28 +47,10 @@ final class ListableExtractor implements Extractor
      */
     public function extract(): Generator
     {
-        $cursor = $this->api->all(100, $this->query);
+        $cursor = $this->api->all(100, $this->query->toArray());
 
         foreach ($cursor as $resource) {
             yield Resource::fromArray($resource, $this->resourceType);
         }
-    }
-
-    private function buildQuery(array $conditions): array
-    {
-        $searchBuilder = new SearchBuilder();
-
-        foreach ($conditions as $condition) {
-            $searchBuilder
-                ->addFilter(
-                    $condition['field'],
-                    $condition['operator'],
-                    $condition['value']
-                );
-        }
-
-        $searchFilters = $searchBuilder->getFilters();
-
-        return ['search' => $searchFilters];
     }
 }

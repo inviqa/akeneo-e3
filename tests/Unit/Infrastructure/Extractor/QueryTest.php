@@ -19,12 +19,8 @@ class QueryTest extends TestCase
 
         $expected = [
             'search' => [
-                ['field' => 'family', 'operator' => 'IN', 'value' => ['pim']],
-                [
-                    'field' => 'identifier',
-                    'operator' => 'IN',
-                    'value' => ['123', 'abc']
-                ],
+                'family'     => [['operator' => 'IN', 'value' => ['pim']]],
+                'identifier' => [['operator' => 'IN', 'value' => ['123', 'abc']]],
             ]
         ];
 
@@ -42,18 +38,13 @@ class QueryTest extends TestCase
 
         $expected = [
             'search' => [
-                ['field' => 'family', 'operator' => 'IN', 'value' => ['pim']],
-                [
-                    'field' => 'code',
-                    'operator' => 'IN',
-                    'value' => ['123', 'abc']
-                ],
+                'family' => [['operator' => 'IN', 'value' => ['pim']]],
+                'code'   => [['operator' => 'IN', 'value' => ['123', 'abc']]],
             ]
         ];
 
         $this->assertEquals($expected, $query->toArray());
     }
-
 }
 
 class FakeExtractProfile implements ExtractProfile
