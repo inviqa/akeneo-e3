@@ -63,14 +63,18 @@ final class TransformCommand extends Command
                 InputOption::VALUE_REQUIRED
             )
             ->addOption('rules', 'r', InputOption::VALUE_REQUIRED)
-            ->addOption('output-transform', 'o', InputOption::VALUE_NONE, 'Output transformation results on-the-fly');
+            ->addOption('output-transform', 'o', InputOption::VALUE_NONE, 'Output transformation results on-the-fly')
+            ->addOption('dry-run', null, InputOption::VALUE_OPTIONAL, 'Enables dry run - no data will be modified. Apply only for specific resources by their codes --dry-run=1234,5678')
+        ;
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
         $this->sourceConnection = $this->getConnectionProfile($input);
         $this->destinationConnection = $this->getDestinationConnectionProfile($input) ?? $this->sourceConnection;
+
         $this->ruleProfile = $this->getEtlProfile($input);
+        $this->ruleProfile->setDryRunCodes($this->getDryRunCodes($input));
 
         $this->resourceType = (string)$input->getOption('resource-type');
 
@@ -134,5 +138,16 @@ final class TransformCommand extends Command
         }
 
         return $this->etlProfileFactory->fromFile($profileFileName);
+    }
+
+    private function getDryRunCodes(InputInterface $input): array
+    {
+        $dryRunOption = (string)$input->getOption('dry-run');
+
+        if ($dryRunOption === '') {
+            return [];
+        }
+
+        return explode(',', $dryRunOption);
     }
 }
