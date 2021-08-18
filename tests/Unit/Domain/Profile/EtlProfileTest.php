@@ -23,7 +23,7 @@ class EtlProfileTest extends TestCase
         ];
 
         $profile = EtlProfile::fromArray([
-            'type' => 'dry-run',
+            'upload-type' => 'dry-run',
             'conditions' => [$condition],
             'actions' => [$action]
         ]);

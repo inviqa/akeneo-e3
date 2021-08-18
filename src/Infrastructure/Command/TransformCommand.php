@@ -70,7 +70,10 @@ final class TransformCommand extends Command
     {
         $this->sourceConnection = $this->getConnectionProfile($input);
         $this->destinationConnection = $this->getDestinationConnectionProfile($input) ?? $this->sourceConnection;
+
         $this->ruleProfile = $this->getEtlProfile($input);
+
+
 
         $this->resourceType = (string)$input->getOption('resource-type');
 

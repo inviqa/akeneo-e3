@@ -24,7 +24,7 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
     {
         $data = self::resolve($data);
 
-        $this->isDryRun = ($data['type'] ?? '') === 'dry-run';
+        $this->isDryRun = ($data['upload-type'] ?? '') === 'dry-run';
         $this->mode = $data['upload-mode'] ?? self::MODE_UPDATE;
         $this->conditions = $data['conditions'] ?? [];
         $this->actions = $data['actions'] ?? [];
@@ -60,22 +60,19 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
         $resolver = new OptionsResolver();
 
         $resolver
-            ->setDefined('type')
-            ->setAllowedTypes('type', 'string')
             ->setDefault('upload-mode', self::MODE_UPDATE)
             ->setAllowedValues('upload-mode', [self::MODE_UPDATE, self::MODE_DUPLICATE])
-        ;
-        $resolver->setDefault('conditions', function (OptionsResolver $conditionResolver) {
-            $conditionResolver
-                ->setPrototype(true)
-                ->setRequired('field')
-                ->setDefined(['operator', 'value'])
-                ->setDefault('operator', '=')
-                ->setAllowedTypes('field', 'string')
-                ->setAllowedTypes('operator', 'string');
-        });
-
-        $resolver
+            ->setDefault('upload-type', 'api')
+            ->setAllowedValues('upload-type', ['api', 'dry-run'])
+            ->setDefault('conditions', function (OptionsResolver $conditionResolver) {
+                $conditionResolver
+                    ->setPrototype(true)
+                    ->setRequired('field')
+                    ->setDefined(['operator', 'value'])
+                    ->setDefault('operator', '=')
+                    ->setAllowedTypes('field', 'string')
+                    ->setAllowedTypes('operator', 'string');
+            })
             ->setRequired('actions')
             ->setAllowedTypes('actions', 'array');
 
