@@ -57,15 +57,13 @@ final class AttributeValues
     /**
      * @param mixed $value
      */
-    public function set(Attribute $attribute, $value): self
+    public function set(Attribute $attribute, $value): void
     {
         $hash = $this->attributeHash($attribute);
         $this->values[$hash] = $value;
-
-        return $this;
     }
 
-    public function addTo(Attribute $attribute, array $value): self
+    public function addTo(Attribute $attribute, array $value): void
     {
         // @todo: check if exist
 
@@ -73,8 +71,6 @@ final class AttributeValues
 
         $hash = $this->attributeHash($attribute);
         $this->values[$hash] = array_unique(array_merge($existingValue, $value));
-
-        return $this;
     }
 
     public function has(Attribute $attribute): bool

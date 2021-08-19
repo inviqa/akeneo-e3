@@ -2,7 +2,6 @@
 
 namespace AkeneoEtl\Tests\Unit\Domain;
 
-use AkeneoEtl\Domain\Resource\Attribute;
 use AkeneoEtl\Domain\Resource\Property;
 use AkeneoEtl\Domain\Resource\PropertyValues;
 use LogicException;

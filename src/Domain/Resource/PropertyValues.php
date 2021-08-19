@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Resource;
 
-use AkeneoEtl\Domain\ArrayUtils;
+use AkeneoEtl\Domain\UpdateBehavior;
 use Generator;
 use LogicException;
 
@@ -12,10 +12,14 @@ final class PropertyValues
 {
     private array $values;
 
+    private UpdateBehavior $updateBehavior;
+
     private function __construct(array $data)
     {
         unset($data['values']);
         $this->values = $data;
+
+        $this->updateBehavior = new UpdateBehavior();
     }
 
     public static function fromArray(array $data): self
@@ -52,20 +56,18 @@ final class PropertyValues
     /**
      * @param mixed $value
      */
-    public function set(Property $property, $value): self
+    public function set(Property $property, $value): void
     {
         $name = $property->getName();
-        $this->recursivelySet($this->values, $name, $value);
 
-        return $this;
+        $this->updateBehavior->patch($this->values, $name, $value);
     }
 
-    public function addTo(Property $property, array $value): self
+    public function addTo(Property $property, array $value): void
     {
         $name = $property->getName();
-        $this->recursivelyAddTo($this->values, $name, $value);
 
-        return $this;
+        $this->updateBehavior->addTo($this->values, $name, $value);
     }
 
     /**
@@ -81,47 +83,5 @@ final class PropertyValues
     public function toArray(): array
     {
         return $this->values;
-    }
-
-    /**
-     * @param mixed $currentValue
-     */
-    private function recursivelySet(array &$currentElement, string $currentName, $currentValue): void
-    {
-        if ($currentValue === null || ArrayUtils::isScalarOrSimpleArray($currentValue) === true) {
-            $currentElement[$currentName] = $currentValue;
-
-            return;
-        }
-
-        foreach ($currentValue as $key => $value) {
-            if (array_key_exists($currentName, $currentElement) === false) {
-                $currentElement[$currentName] = [];
-            }
-
-            $this->recursivelySet($currentElement[$currentName], $key, $value);
-        }
-    }
-
-    private function recursivelyAddTo(array &$currentElement, string $currentName, array $currentItems): void
-    {
-        if (ArrayUtils::isSimpleArray($currentItems) === true) {
-            if (isset($currentElement[$currentName]) && ArrayUtils::isSimpleArray($currentElement[$currentName]) === false) {
-                throw new LogicException(sprintf('%s must be an array for using with `add`', $currentName));
-            }
-
-            $before = $currentElement[$currentName] ?? [];
-            $currentElement[$currentName] = array_unique(array_merge($before, $currentItems));
-
-            return;
-        }
-
-        foreach ($currentItems as $key => $value) {
-            if (array_key_exists($currentName, $currentElement) === false) {
-                $currentElement[$currentName] = [];
-            }
-
-            $this->recursivelyAddTo($currentElement[$currentName], $key, $value);
-        }
     }
 }

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AkeneoEtl\Domain;
 
-class ArrayUtils
+final class ArrayHelper
 {
-    public static function isLikeObject(array $array): bool
+    public function isLikeObject(array $array): bool
     {
         return is_string(array_key_first($array));
     }
@@ -12,7 +14,7 @@ class ArrayUtils
     /**
      * @param mixed $value
      */
-    public static function isScalarOrSimpleArray($value): bool
+    public function isScalarOrSimpleArray($value): bool
     {
         if (is_scalar($value) === true) {
             return true;
@@ -28,7 +30,7 @@ class ArrayUtils
     /**
      * @param mixed $value
      */
-    public static function isSimpleArray($value): bool
+    public function isSimpleArray($value): bool
     {
         return is_array($value) === true && self::isLikeObject($value) === false;
     }
