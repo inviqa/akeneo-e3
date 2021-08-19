@@ -15,7 +15,7 @@ final class NonAuditableResource implements Resource
 {
     private PropertyValues $properties;
 
-    private ValueCollection $values;
+    private AttributeValues $attributes;
 
     private string $resourceType;
 
@@ -33,7 +33,7 @@ final class NonAuditableResource implements Resource
         }
 
         $this->code = (string)$data[$idFieldName];
-        $this->values = ValueCollection::fromArray($data['values'] ?? [], $resourceType);
+        $this->attributes = AttributeValues::fromArray($data['values'] ?? [], $resourceType);
 
         unset($data['values']);
         $this->properties = PropertyValues::fromArray($data);
@@ -66,7 +66,7 @@ final class NonAuditableResource implements Resource
         }
 
         if ($field instanceof Attribute) {
-            return $this->values->get($field);
+            return $this->attributes->get($field);
         }
     }
 
@@ -84,7 +84,7 @@ final class NonAuditableResource implements Resource
         }
 
         if ($field instanceof Attribute) {
-            $this->values->set($field, $newValue);
+            $this->attributes->set($field, $newValue);
         }
     }
 
@@ -97,7 +97,7 @@ final class NonAuditableResource implements Resource
         }
 
         if ($field instanceof Attribute) {
-            $this->values->addTo($field, $newValue);
+            $this->attributes->addTo($field, $newValue);
         }
     }
 
@@ -108,7 +108,7 @@ final class NonAuditableResource implements Resource
         }
 
         if ($field instanceof Attribute) {
-            return $this->values->has($field);
+            return $this->attributes->has($field);
         }
 
         return false;
@@ -144,7 +144,7 @@ final class NonAuditableResource implements Resource
             yield $field;
         }
 
-        foreach ($this->values->attributes() as $attribute) {
+        foreach ($this->attributes->attributes() as $attribute) {
             yield $attribute;
         }
     }
@@ -153,8 +153,8 @@ final class NonAuditableResource implements Resource
     {
         $data = $this->properties->toArray();
 
-        if ($this->values->count() > 0) {
-            $data['values'] = $this->values->toArray();
+        if ($this->attributes->count() > 0) {
+            $data['values'] = $this->attributes->toArray();
         }
 
         return $data;
@@ -163,6 +163,6 @@ final class NonAuditableResource implements Resource
     public function __clone()
     {
         $this->properties = clone $this->properties;
-        $this->values = clone $this->values;
+        $this->attributes = clone $this->attributes;
     }
 }

@@ -7,7 +7,7 @@ namespace AkeneoEtl\Domain\Resource;
 use Generator;
 use LogicException;
 
-final class ValueCollection
+final class AttributeValues
 {
     /**
      * @var array<string, mixed>
