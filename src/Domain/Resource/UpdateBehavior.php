@@ -1,7 +1,8 @@
 <?php
 
-namespace AkeneoEtl\Domain;
+namespace AkeneoEtl\Domain\Resource;
 
+use AkeneoEtl\Domain\ArrayHelper;
 use LogicException;
 
 /**

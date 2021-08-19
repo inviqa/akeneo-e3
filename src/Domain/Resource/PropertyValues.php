@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Resource;
 
-use AkeneoEtl\Domain\UpdateBehavior;
 use Generator;
 use LogicException;
 

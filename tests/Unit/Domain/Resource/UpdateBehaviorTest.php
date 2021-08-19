@@ -1,8 +1,8 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Domain;
+namespace AkeneoEtl\Tests\Unit\Domain\Resource;
 
-use AkeneoEtl\Domain\UpdateBehavior;
+use AkeneoEtl\Domain\Resource\UpdateBehavior;
 use PHPUnit\Framework\TestCase;
 
 /**
