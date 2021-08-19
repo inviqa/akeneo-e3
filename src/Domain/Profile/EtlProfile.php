@@ -68,7 +68,10 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
     public function setDryRunCodes(array $codes): self
     {
         $this->dryRunCodes = $codes;
-        $this->isDryRun = true;
+
+        if (count($codes) > 0) {
+            $this->isDryRun = true;
+        }
 
         return $this;
     }
