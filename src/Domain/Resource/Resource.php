@@ -16,15 +16,15 @@ interface Resource
     /**
      * @param mixed $newValue
      */
-    public function set(Field $field, $newValue): self;
+    public function set(Field $field, $newValue): void;
 
-    public function addTo(Field $field, array $newValue): self;
+    public function addTo(Field $field, array $newValue): void;
 
     public function has(Field $field): bool;
 
     public function getCode(): string;
 
-    public function setCode(string $code): self;
+    public function setCode(string $code): void;
 
     public function getCodeFieldName(): string;
 

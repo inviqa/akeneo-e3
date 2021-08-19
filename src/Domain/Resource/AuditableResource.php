@@ -50,22 +50,18 @@ final class AuditableResource implements Resource
     /**
      * @param mixed $newValue
      */
-    public function set(Field $field, $newValue): Resource
+    public function set(Field $field, $newValue): void
     {
         $this->track($field, $newValue);
 
         $this->resource->set($field, $newValue);
-
-        return $this;
     }
 
-    public function addTo(Field $field, array $newValue): Resource
+    public function addTo(Field $field, array $newValue): void
     {
         $this->track($field, $newValue);
 
         $this->resource->addTo($field, $newValue);
-
-        return $this;
     }
 
     public function has(Field $field): bool
@@ -78,11 +74,9 @@ final class AuditableResource implements Resource
         return $this->resource->getCode();
     }
 
-    public function setCode(string $code): Resource
+    public function setCode(string $code): void
     {
         $this->resource->setCode($code);
-
-        return $this;
     }
 
     public function getCodeFieldName(): string

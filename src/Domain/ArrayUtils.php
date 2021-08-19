@@ -28,7 +28,7 @@ class ArrayUtils
     /**
      * @param mixed $value
      */
-    public static function isSimpleArray($value)
+    public static function isSimpleArray($value): bool
     {
         return is_array($value) === true && self::isLikeObject($value) === false;
     }

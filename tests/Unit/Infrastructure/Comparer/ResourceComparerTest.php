@@ -20,15 +20,14 @@ class ResourceComparerTest extends TestCase
         $resource1 = AuditableResource::fromArray([
                 'identifier' => '0123456789',
                 'family' => 'ziggy'
-            ], 'product')
-            ->set($description, 'Ziggy The Hydra');
+            ], 'product');
+        $resource1->set($description, 'Ziggy The Hydra');
 
         $resource2 = clone $resource1;
 
-        $resource2
-            ->set($family, 'pet')
-            ->set($name, 'Ziggy')
-            ->set($description, 'Ziggy The Pet');
+        $resource2->set($family, 'pet');
+        $resource2->set($name, 'Ziggy');
+        $resource2->set($description, 'Ziggy The Pet');
 
         $comparer = new ResourceComparer();
         $table = $comparer->compareWithOrigin($resource2);

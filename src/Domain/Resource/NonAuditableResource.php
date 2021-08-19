@@ -13,7 +13,7 @@ use LogicException;
  */
 final class NonAuditableResource implements Resource
 {
-    private array $properties;
+    private PropertyValues $properties;
 
     private ValueCollection $values;
 
@@ -36,7 +36,7 @@ final class NonAuditableResource implements Resource
         $this->values = ValueCollection::fromArray($data['values'] ?? [], $resourceType);
 
         unset($data['values']);
-        $this->properties = $data;
+        $this->properties = PropertyValues::fromArray($data);
     }
 
     public static function fromArray(array $data, string $resourceType): self
@@ -61,116 +61,57 @@ final class NonAuditableResource implements Resource
      */
     public function get(Field $field)
     {
-        $fieldName = $field->getName();
-
         if ($field instanceof Property) {
-            if (array_key_exists($fieldName, $this->properties) === false) {
-                throw new LogicException(sprintf('Field %s is not present in data', $fieldName));
-            }
-
-            return $this->properties[$fieldName];
+            return $this->properties->get($field);
         }
 
-        if (!$field instanceof Attribute) {
-            throw new LogicException('Unsupported type of field');
+        if ($field instanceof Attribute) {
+            return $this->values->get($field);
         }
-
-        return $this->values->get($field);
     }
 
     /**
      * @param mixed $newValue
      */
-    public function set(Field $field, $newValue): Resource
+    public function set(Field $field, $newValue): void
     {
         // @todo: check if new value and old value are different
 
         $this->isChanged = true;
 
-        $name = $field->getName();
-
         if ($field instanceof Property) {
-
-            if ($newValue === null || $this->isScalarOrSimpleArray($newValue) === true) {
-                $this->properties[$name] = $newValue;
-            } elseif ($this->isObjectLikeArray($newValue) === true) {
-
-                foreach ($newValue as $key => $valueElement) {
-                    $this->properties[$name][$key] = $valueElement;
-                }
-
-            } else {
-                $this->properties[$name] = $newValue;
-            }
-
-
-            return $this;
+            $this->properties->set($field, $newValue);
         }
 
-        if (!$field instanceof Attribute) {
-            throw new LogicException('Unsupported type of field');
+        if ($field instanceof Attribute) {
+            $this->values->set($field, $newValue);
         }
-
-        $this->values->set($field, $newValue);
-
-        return $this;
     }
 
-    private function isObjectLikeArray(array $data): bool
-    {
-        return is_string(array_key_first($data));
-    }
-
-    /**
-     * @param mixed $data
-     */
-    private function isScalarOrSimpleArray($data): bool
-    {
-        if (is_scalar($data) === true) {
-            return true;
-        }
-
-        if (is_array($data) === true) {
-            return $this->isObjectLikeArray($data) === false;
-        }
-
-        return false;
-    }
-
-    public function addTo(Field $field, array $newValue): Resource
+    public function addTo(Field $field, array $newValue): void
     {
         $this->isChanged = true;
 
         if ($field instanceof Property) {
-            $existingValue = $this->properties[$field->getName()];
-
-            $this->properties[$field->getName()] = array_unique(array_merge($existingValue, $newValue));
-
-            return $this;
+            $this->properties->addTo($field, $newValue);
         }
 
-        if (!$field instanceof Attribute) {
-            throw new LogicException('Unsupported type of field');
+        if ($field instanceof Attribute) {
+            $this->values->addTo($field, $newValue);
         }
-
-        $this->values->addTo($field, $newValue);
-
-        return $this;
     }
 
     public function has(Field $field): bool
     {
-        $fieldName = $field->getName();
-
         if ($field instanceof Property) {
-            return array_key_exists($fieldName, $this->properties);
+            return $this->properties->has($field);
         }
 
-        if (!$field instanceof Attribute) {
-            throw new LogicException('Unsupported type of field');
+        if ($field instanceof Attribute) {
+            return $this->values->has($field);
         }
 
-        return $this->values->has($field);
+        return false;
     }
 
     public function getCode(): string
@@ -178,11 +119,10 @@ final class NonAuditableResource implements Resource
         return $this->code;
     }
 
-    public function setCode(string $code): Resource
+    public function setCode(string $code): void
     {
-        $this->properties[$this->getCodeFieldName()] = $code;
-
-        return $this;
+        $codeField = Property::create($this->getCodeFieldName());
+        $this->properties->set($codeField, $code);
     }
 
     public function getCodeFieldName(): string
@@ -200,8 +140,8 @@ final class NonAuditableResource implements Resource
      */
     public function fields(): Generator
     {
-        foreach (array_keys($this->properties) as $propertyName) {
-            yield Property::create($propertyName);
+        foreach ($this->properties->fields() as $field) {
+            yield $field;
         }
 
         foreach ($this->values->attributes() as $attribute) {
@@ -211,10 +151,7 @@ final class NonAuditableResource implements Resource
 
     public function toArray(): array
     {
-        $data = array_merge(
-            [$this->getCodeFieldName() => $this->code],
-            $this->properties
-        );
+        $data = $this->properties->toArray();
 
         if ($this->values->count() > 0) {
             $data['values'] = $this->values->toArray();
@@ -225,6 +162,7 @@ final class NonAuditableResource implements Resource
 
     public function __clone()
     {
+        $this->properties = clone $this->properties;
         $this->values = clone $this->values;
     }
 }

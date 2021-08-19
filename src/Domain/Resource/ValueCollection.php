@@ -48,13 +48,7 @@ final class ValueCollection
         $hash = $this->attributeHash($attribute);
 
         if (array_key_exists($hash, $this->values) === false) {
-            throw new LogicException(sprintf(
-                'Attribute %s (%s=%s, locale=%s) is not present in data',
-                $attribute->getName(),
-                $this->channelFieldName,
-                $attribute->getScope() ?? 'null',
-                $attribute->getLocale() ?? 'null'
-            ));
+            $this->checkAttributeExists($attribute);
         }
 
         return $this->values[$hash];
@@ -73,6 +67,8 @@ final class ValueCollection
 
     public function addTo(Attribute $attribute, array $value): self
     {
+        // @todo: check if exist
+
         $existingValue = $this->get($attribute);
 
         $hash = $this->attributeHash($attribute);
@@ -91,35 +87,6 @@ final class ValueCollection
     public function count(): int
     {
         return count($this->values);
-    }
-
-    public function diff(ValueCollection $collection): self
-    {
-        $diff = [];
-        foreach ($this->values as $hash => $value) {
-            if (array_key_exists($hash, $collection->values) === false ||
-                $value !== $collection->values[$hash]) {
-                $diff[$hash] = $value;
-            }
-        }
-
-        $diffCollection = new self([], $this->resourceType);
-        $diffCollection->values = $diff;
-
-        return $diffCollection;
-    }
-
-    public function merge(ValueCollection $collection): self
-    {
-        $merge = $this->values;
-        foreach ($collection->values as $hash => $value) {
-            $merge[$hash] = $value;
-        }
-
-        $mergeCollection = new self([], $this->resourceType);
-        $mergeCollection->values = $merge;
-
-        return $mergeCollection;
     }
 
     /**
@@ -162,6 +129,19 @@ final class ValueCollection
             $pieces[0],
             $pieces[1] !== '' ? $pieces[1] : null,
             $pieces[2] !== '' ? $pieces[2] : null
+        );
+    }
+
+    private function checkAttributeExists(Attribute $attribute): void
+    {
+        throw new LogicException(
+            sprintf(
+                'Attribute %s (%s=%s, locale=%s) is not present in data',
+                $attribute->getName(),
+                $this->channelFieldName,
+                $attribute->getScope() ?? 'null',
+                $attribute->getLocale() ?? 'null'
+            )
         );
     }
 }
