@@ -14,6 +14,31 @@ class TestData
         ];
     }
 
+    public static function getProperties(): array
+    {
+        return [
+            'identifier' => 'the-ziggy',
+            'family' => 'ziggy',
+            'categories' => ['hydra', 'pim'],
+            'labels' => [
+                'en_GB' => 'The Ziggy',
+                'de_DE' => 'Die Ziggy',
+            ],
+            'associations' => [
+                'FRIENDS' => [
+                    'products' => ['yoggi', 'shoggi'],
+                    'product_models' => ['moggi'],
+                    'groups' => ['greggi'],
+                ],
+                'RELATIVES' => [
+                    'products' => ['rueggi'],
+                    'product_models' => [],
+                    'groups' => [],
+                ],
+            ],
+        ];
+    }
+
     public static function getValues(): array
     {
         return [
