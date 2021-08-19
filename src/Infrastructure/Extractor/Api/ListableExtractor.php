@@ -8,6 +8,7 @@ use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\Pim\ApiClient\Api\Operation\ListableResourceInterface;
 use AkeneoEtl\Domain\Extractor;
 use AkeneoEtl\Domain\Profile\ExtractProfile;
+use AkeneoEtl\Domain\Resource\AuditableResource;
 use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Infrastructure\Api\ApiSelector;
 use AkeneoEtl\Infrastructure\Extractor\Query;
@@ -50,7 +51,7 @@ final class ListableExtractor implements Extractor
         $cursor = $this->api->all(100, $this->query->toArray());
 
         foreach ($cursor as $resource) {
-            yield Resource::fromArray($resource, $this->resourceType);
+            yield AuditableResource::fromArray($resource, $this->resourceType);
         }
     }
 }

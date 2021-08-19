@@ -8,6 +8,7 @@ use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityRecordApiInterface;
 use AkeneoEtl\Domain\Extractor;
 use AkeneoEtl\Domain\Profile\ExtractProfile;
+use AkeneoEtl\Domain\Resource\AuditableResource;
 use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Infrastructure\Extractor\Query;
 use Generator;
@@ -41,7 +42,7 @@ final class ReferenceEntityRecordExtractor implements Extractor
 
         foreach ($cursor as $resource) {
             $resource['reference_entity_code'] = 'suppliers';
-            yield Resource::fromArray($resource, $this->resourceType);
+            yield AuditableResource::fromArray($resource, $this->resourceType);
         }
     }
 }

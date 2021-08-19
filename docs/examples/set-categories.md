@@ -1,7 +1,7 @@
 [comment]: <> (This file is auto-generated based on example-provider.)
 # Modify categories of a product or a product model
 
-**Task:** set `categories`
+## Task: set `categories`
 
 ### Rules
 
@@ -22,6 +22,7 @@ Field: `categories`
 Before applying actions: <pre>pim, pet</pre>
 
 After applying actions: <pre>pxm, akeneo</pre>
+
 **Task:** add new items to `categories`
 
 ### Rules
@@ -42,7 +43,7 @@ Field: `categories`
 
 Before applying actions: <pre>pim, pet</pre>
 
-After applying actions: <pre>pim, pet, pxm, akeneo</pre>
+After applying actions: <pre>pxm, akeneo</pre>
 **Task:** add new items to `categories` using an expression
 
 ### Rules
@@ -61,4 +62,4 @@ Field: `categories`
 
 Before applying actions: <pre>pim, pet</pre>
 
-After applying actions: <pre>pim, pet, pxm, THE-ZIGGY</pre>
+After applying actions: <pre>pxm, THE-ZIGGY</pre>

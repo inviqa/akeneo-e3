@@ -8,6 +8,7 @@ use AkeneoEtl\Application\Expression\FunctionProvider;
 use AkeneoEtl\Domain\EtlProcess;
 use AkeneoEtl\Domain\Profile\EtlProfile;
 use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoEtl\Domain\Resource\AuditableResource;
 use AkeneoEtl\Infrastructure\Comparer\ResourceComparer;
 use AkeneoEtl\Infrastructure\EtlFactory;
 use AkeneoEtl\Tests\Acceptance\bootstrap\InMemoryExtractor;
@@ -146,7 +147,7 @@ final class GenerateDocsCommand extends Command
                 $profileData = $task['profile'];
 
                 $profile = EtlProfile::fromArray($profileData);
-                $resource = Resource::fromArray($task['resource'], $task['resource-type'] ?? 'product');
+                $resource = AuditableResource::fromArray($task['resource'], $task['resource-type'] ?? 'product');
 
                 $task['results'] = $this->getTransformationResults(
                     $resource,

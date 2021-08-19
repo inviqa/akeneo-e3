@@ -5,7 +5,7 @@ namespace AkeneoEtl\Tests\Acceptance\bootstrap;
 use AkeneoEtl\Domain\EtlProcess;
 use AkeneoEtl\Domain\Profile\EtlProfile;
 use AkeneoEtl\Domain\Resource\Attribute;
-use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoEtl\Domain\Resource\AuditableResource;
 use AkeneoEtl\Domain\Transformer;
 use AkeneoEtl\Infrastructure\EtlFactory;
 use Behat\Behat\Context\Context;
@@ -97,7 +97,7 @@ class EtlContext implements Context
      */
     public function transformationIsExecuted(): void
     {
-        $resource = Resource::fromArray($this->resourceData, $this->resourceType);
+        $resource = AuditableResource::fromArray($this->resourceData, $this->resourceType);
         $this->extractor = new InMemoryExtractor($resource);
 
         $this->loader = new InMemoryLoader($resource);
@@ -214,11 +214,13 @@ class EtlContext implements Context
         foreach ($table as $row) {
             $type = $row['type'];
 
-            $data[$type] = [
-                'products' => $this->convertTableValue($row['products']),
-                'product_models' => $this->convertTableValue($row['product_models']),
-                'groups' => $this->convertTableValue($row['groups']),
-            ];
+            foreach (['products', 'product_models', 'groups'] as $codeGroup) {
+                $cellContent = $this->convertTableValue($row[$codeGroup]);
+
+                if ($cellContent !== '' && $cellContent !== []) {
+                    $data[$type][$codeGroup] = $cellContent;
+                }
+            }
         }
 
         return $data;
@@ -246,6 +248,10 @@ class EtlContext implements Context
         $matches = [];
         if (preg_match('/^\[(.*)\]$/', $value, $matches) !== 1) {
             return $value;
+        }
+
+        if ($matches[1] === '') {
+            return [];
         }
 
         return explode(',', $matches[1]);

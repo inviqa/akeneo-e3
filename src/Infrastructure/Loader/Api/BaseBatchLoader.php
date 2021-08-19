@@ -12,6 +12,7 @@ use AkeneoEtl\Domain\Load\LoadResult\LoadResult;
 use AkeneoEtl\Domain\Loader;
 use AkeneoEtl\Domain\Profile\EtlProfile;
 use AkeneoEtl\Domain\Profile\LoadProfile;
+use AkeneoEtl\Domain\Resource\AuditableResource;
 use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Infrastructure\Api\ApiSelector;
 use LogicException;
@@ -45,10 +46,6 @@ abstract class BaseBatchLoader implements Loader
         if ($this->codeFieldName === '') {
             $this->codeFieldName = $resource->getCodeFieldName();
             $this->resourceType = $resource->getResourceType();
-        }
-
-        if ($this->isUpdateMode === true && $resource->getOrigin() === null) {
-            throw new LogicException('Resource must have origin for the update mode.');
         }
 
         if ($resource->isChanged() === false) {
@@ -147,10 +144,8 @@ abstract class BaseBatchLoader implements Loader
 
         $list = array_map(
             function (Resource $resource) use ($isUpdateMode) {
-                if ($isUpdateMode === true && $resource->getOrigin() !== null) {
-                    $patch = $resource->diff($resource->getOrigin());
-
-                    return $patch->toArray();
+                if ($isUpdateMode === true && $resource instanceof AuditableResource) {
+                    return $resource->changes()->toArray();
                 }
 
                 return $resource->toArray();

@@ -42,8 +42,7 @@ final class EtlProcess
         $progress = Progress::create($this->extractor->count());
         $resources = $this->extractor->extract();
 
-        foreach ($resources as $initialResource) {
-            $resource = Resource::fromResource($initialResource);
+        foreach ($resources as $resource) {
             $isOk = $this->transform($resource, $progress);
 
             if ($isOk === true) {

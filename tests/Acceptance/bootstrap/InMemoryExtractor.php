@@ -8,7 +8,7 @@ use Generator;
 
 class InMemoryExtractor implements Extractor
 {
-    private \AkeneoEtl\Domain\Resource\Resource $resource;
+    private Resource $resource;
 
     public function __construct(Resource $resource)
     {

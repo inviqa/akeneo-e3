@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Infrastructure\Comparer;
 
+use AkeneoEtl\Domain\Resource\AuditableResource;
 use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Infrastructure\Command\ResourceDataNormaliser;
 
@@ -21,38 +22,27 @@ final class ResourceComparer
      */
     public function compareWithOrigin(Resource $resource): array
     {
-        if ($resource->getOrigin() === null) {
-            return $this->compareResources(null, $resource);
+        if (!$resource instanceof AuditableResource) {
+            return [];
         }
 
-        return $this->compareResources(
-            $resource->getOrigin()->diff($resource),
-            $resource->diff($resource->getOrigin())
-        );
-    }
-
-    /**
-     * @return array|DiffLine[]
-     */
-    protected function compareResources(?Resource $resource1, Resource $resource2): array
-    {
         $comparison = [];
 
-        foreach ($resource2->fields() as $field) {
-            if ($field->getName() === $resource2->getCodeFieldName()) {
+        foreach ($resource->changes()->fields() as $field) {
+
+            // skip code
+            if ($field->getName() === $resource->getCodeFieldName()) {
                 continue;
             }
 
-            $originalValue = $resource1 !== null && $resource1->has($field) ?
-                $this->normaliser->normalise($resource1->get($field)) : '';
-
-            $newValue = $this->normaliser->normalise($resource2->get($field));
+            $originalValue = $resource->origins()->has($field) ? $resource->origins()->get($field) : '';
+            $newValue = $resource->changes()->get($field);
 
             $comparison[] = DiffLine::create(
-                $resource2->getCode() ?? '',
+                $resource->getCode() ?? '',
                 $field,
-                $originalValue,
-                $newValue
+                $this->normaliser->normalise($originalValue),
+                $this->normaliser->normalise($newValue)
             );
         }
 

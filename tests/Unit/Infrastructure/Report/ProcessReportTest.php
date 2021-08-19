@@ -2,7 +2,7 @@
 
 namespace AkeneoEtl\Tests\Unit\Infrastructure\Report;
 
-use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoEtl\Domain\Resource\AuditableResource;
 use AkeneoEtl\Domain\Transform\TransformResult;
 use AkeneoEtl\Domain\Load\LoadResult;
 use AkeneoEtl\Infrastructure\Report\ProcessReport;
@@ -28,8 +28,8 @@ class ProcessReportTest extends TestCase
     {
         $report = new ProcessReport();
 
-        $report->add(Resource::fromCode('123', 'product'));
-        $report->add(Resource::fromCode('124', 'product'));
+        $report->add(AuditableResource::fromCode('123', 'product'));
+        $report->add(AuditableResource::fromCode('124', 'product'));
 
         $this->assertEquals(2, $report->total());
     }
@@ -38,7 +38,7 @@ class ProcessReportTest extends TestCase
     {
         $report = new ProcessReport();
 
-        $resource = Resource::fromCode('123', 'product');
+        $resource = AuditableResource::fromCode('123', 'product');
 
         $report->addTransformResult(TransformResult\Transformed::create($resource));
         $report->addTransformResult(TransformResult\Failed::create($resource, 'error1'));
@@ -59,7 +59,7 @@ class ProcessReportTest extends TestCase
     {
         $report = new ProcessReport();
 
-        $resource = Resource::fromCode('123', 'product');
+        $resource = AuditableResource::fromCode('123', 'product');
 
         $report->addLoadResult(LoadResult\Loaded::create($resource));
         $report->addLoadResult(LoadResult\Loaded::create($resource));

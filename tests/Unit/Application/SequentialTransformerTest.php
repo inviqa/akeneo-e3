@@ -6,6 +6,7 @@ use AkeneoEtl\Application\SequentialTransformer;
 use AkeneoEtl\Domain\Action;
 use AkeneoEtl\Domain\Resource\Property;
 use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoEtl\Domain\Resource\AuditableResource;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -15,7 +16,7 @@ class SequentialTransformerTest extends TestCase
     public function test_it_transforms()
     {
         $transform = new SequentialTransformer([new FakeAction()]);
-        $resource = Resource::fromArray(['identifier' => 123], 'product');
+        $resource = AuditableResource::fromArray(['identifier' => 123], 'product');
 
         $transform->transform($resource);
 
@@ -31,13 +32,13 @@ class SequentialTransformerTest extends TestCase
 
         $transform = new SequentialTransformer([new FailAction()]);
 
-        $transform->transform(Resource::fromArray(['identifier' => 123], 'product'));
+        $transform->transform(AuditableResource::fromArray(['identifier' => 123], 'product'));
     }
 
     public function test_it_returns_an_empty_changeset_no_actions_executed()
     {
         $transform = new SequentialTransformer([new NullAction()]);
-        $resource = Resource::fromArray(['identifier' => 123], 'product');
+        $resource = AuditableResource::fromArray(['identifier' => 123], 'product');
 
         $transform->transform($resource);
 

@@ -5,6 +5,7 @@ namespace AkeneoEtl\Tests\Shared;
 use AkeneoEtl\Application\Expression\FunctionProvider;
 use AkeneoEtl\Application\Expression\StateHolder;
 use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoEtl\Domain\Resource\AuditableResource;
 use phpDocumentor\Reflection\DocBlock\Tags\Generic;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\DocBlockFactory;
@@ -27,7 +28,7 @@ class FunctionDocumentor
 
         $factory = DocBlockFactory::createInstance();
 
-        StateHolder::$resource = Resource::fromArray([
+        StateHolder::$resource = AuditableResource::fromArray([
             'identifier' => 'the-ziggy',
             'family' => 'akeneo',
             'values' => [
