@@ -4,7 +4,6 @@ namespace AkeneoEtl\Domain\Resource;
 
 use AkeneoEtl\Domain\ArrayHelper;
 use AkeneoEtl\Domain\Exception\TransformException;
-use LogicException;
 
 /**
  * Update Behavior rules
@@ -21,44 +20,59 @@ class UpdateBehavior
 {
     private ArrayHelper $arrayHelper;
 
-    public function __construct()
+    private array $original;
+
+    public function __construct(array &$original)
     {
         $this->arrayHelper = new ArrayHelper();
+
+        $this->original = &$original;
     }
 
     /**
      * @param mixed $patch
      */
-    public function patch(array &$original, string $fieldName, $patch): void
+    public function patch(string $fieldName, $patch): void
     {
         $this->patchRecursive(
-            $original,
+            $this->original,
             $fieldName,
             $patch,
-            function (array &$original, string $fieldName, $patch) {
-                $original[$fieldName] = $patch;
+            function ($oldValue, $newValue) {
+                return $newValue;
             }
         );
     }
 
-    public function addTo(array &$original, string $fieldName, array $itemsToAdd): void
+    public function addTo(string $fieldName, array $itemsToAdd): void
     {
         $this->patchRecursive(
-            $original,
+            $this->original,
             $fieldName,
             $itemsToAdd,
-            function (array &$original, string $fieldName, $patch) {
-                $before = $original[$fieldName] ?? [];
-                $original[$fieldName] = array_unique(array_merge($before, $patch));
-            }
+            [$this->arrayHelper, 'merge']
         );
+    }
+
+    /**
+     * @param mixed $oldValue
+     *
+     * @return mixed
+     */
+    public function getMergeValue($oldValue, array $newValue)
+    {
+        return array_unique(array_merge($oldValue ?? [], $newValue));
     }
 
     /**
      * @param mixed $patch
      */
-    public function patchRecursive(array &$original, string $fieldName, $patch, callable $valuePatcher): void
-    {
+    public function patchRecursive(
+        array &$original,
+        string $fieldName,
+        $patch,
+        callable $valuePatcher
+    ): void {
         // Update Behavior: Rule 3 (validation on data types)
         // For non-scalar values (objects and arrays) data types must match.
         // Throw an exception that can be processes by caller.
@@ -70,9 +84,7 @@ class UpdateBehavior
         // Update Behavior: Rule 2 (non object update)
         // If the value is not an object, it will replace the old value.
         if ($patch === null || $this->arrayHelper->isScalarOrSimpleArray($patch) === true) {
-            //$original[$fieldName] = $patch;
-
-            $valuePatcher($original, $fieldName, $patch);
+            $original[$fieldName] = $valuePatcher($original[$fieldName] ?? null, $patch);
 
             return;
         }
@@ -87,27 +99,4 @@ class UpdateBehavior
             $this->patchRecursive($original[$fieldName], $key, $value, $valuePatcher);
         }
     }
-
-//    public function addTo(array &$original, string $fieldName, array $itemsToAdd): void
-//    {
-//        if ($this->arrayHelper->isSimpleArray($itemsToAdd) === true) {
-//            if (isset($original[$fieldName]) && $this->arrayHelper->isSimpleArray($original[$fieldName]) === false) {
-//                throw new LogicException(sprintf('%s must be an array for using with `add`', $fieldName));
-//            }
-//
-//            $before = $original[$fieldName] ?? [];
-//            // @todo: check if types match
-//            $original[$fieldName] = array_unique(array_merge($before, $itemsToAdd));
-//
-//            return;
-//        }
-//
-//        foreach ($itemsToAdd as $key => $value) {
-//            if (array_key_exists($fieldName, $original) === false) {
-//                $original[$fieldName] = [];
-//            }
-//
-//            $this->addTo($original[$fieldName], $key, $value);
-//        }
-//    }
 }

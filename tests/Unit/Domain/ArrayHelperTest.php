@@ -95,4 +95,12 @@ class ArrayHelperTest extends TestCase
         $this->assertFalse($this->arrayHelper->haveMatchingTypes(null, ['a' => 42.5]));
         $this->assertFalse($this->arrayHelper->haveMatchingTypes(888, ['a' => 42.5]));
     }
+
+    public function test_it_merges()
+    {
+        $this->assertEquals(
+            [42.5, 'b', 'c'],
+            $this->arrayHelper->merge([42.5, 'b'], ['b', 'c'])
+        );
+    }
 }

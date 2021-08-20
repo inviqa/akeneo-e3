@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Resource;
 
+use AkeneoEtl\Domain\ArrayHelper;
 use Generator;
 use LogicException;
 
@@ -18,10 +19,14 @@ final class AttributeValues
 
     private string $resourceType;
 
+    private ArrayHelper $arrayHelper;
+
     private function __construct(array $data, string $resourceType)
     {
         $this->channelFieldName = $resourceType === 'reference-entity-record' ? 'channel' : 'scope';
         $this->resourceType = $resourceType;
+
+        $this->arrayHelper = new ArrayHelper();
 
         foreach ($data as $name => $localisedValues) {
             foreach ($localisedValues as $localisedValue) {
@@ -60,17 +65,18 @@ final class AttributeValues
     public function set(Attribute $attribute, $value): void
     {
         $hash = $this->attributeHash($attribute);
+
         $this->values[$hash] = $value;
     }
 
     public function addTo(Attribute $attribute, array $value): void
     {
-        // @todo: check if exist
-
-        $existingValue = $this->get($attribute);
+        $existingValue =
+            $this->has($attribute) ?
+            $this->get($attribute) : [];
 
         $hash = $this->attributeHash($attribute);
-        $this->values[$hash] = array_unique(array_merge($existingValue, $value));
+        $this->values[$hash] = $this->arrayHelper->merge($existingValue, $value);
     }
 
     public function has(Attribute $attribute): bool

@@ -18,7 +18,7 @@ final class PropertyValues
         unset($data['values']);
         $this->values = $data;
 
-        $this->updateBehavior = new UpdateBehavior();
+        $this->updateBehavior = new UpdateBehavior($this->values);
     }
 
     public static function fromArray(array $data): self
@@ -59,14 +59,14 @@ final class PropertyValues
     {
         $name = $property->getName();
 
-        $this->updateBehavior->patch($this->values, $name, $value);
+        $this->updateBehavior->patch($name, $value);
     }
 
     public function addTo(Property $property, array $value): void
     {
         $name = $property->getName();
 
-        $this->updateBehavior->addTo($this->values, $name, $value);
+        $this->updateBehavior->addTo($name, $value);
     }
 
     /**

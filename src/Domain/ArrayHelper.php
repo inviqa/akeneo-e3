@@ -71,4 +71,9 @@ final class ArrayHelper
 
         return false;
     }
+
+    public function merge(?array $array1, array $array2): array
+    {
+        return array_values(array_unique(array_merge($array1 ?? [], $array2)));
+    }
 }

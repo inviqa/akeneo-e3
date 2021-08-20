@@ -156,7 +156,6 @@ Feature: Data transformations using `set` actions
       | type      | products | product_models | groups |
       | FRIENDS   | [fuzzy]  | []             | []     |
       | RELATIVES | [izzy]   | []             | []     |
-
     And I apply transformations using the profile:
       """
       actions:
@@ -184,7 +183,7 @@ Feature: Data transformations using `set` actions
       | RELATIVES | [izzy]        | [unicorn,mermaid] | [magical_creatures] |
       | NEW       | []            | []                | [magical_creatures] |
 
-  Scenario: Ensure that rules that use unknown field don't change data in the PIM
+  Scenario: Ensure that rules that use unknown field don't change data
     Given a product in the PIM with properties:
       | field      | value |
       | identifier | ziggy |
