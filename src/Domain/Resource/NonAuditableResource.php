@@ -34,8 +34,6 @@ final class NonAuditableResource implements Resource
 
         $this->code = (string)$data[$idFieldName];
         $this->attributes = AttributeValues::fromArray($data['values'] ?? [], $resourceType);
-
-        unset($data['values']);
         $this->properties = PropertyValues::fromArray($data);
     }
 

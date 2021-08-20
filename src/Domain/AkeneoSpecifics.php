@@ -10,4 +10,9 @@ final class AkeneoSpecifics
     {
         return $resourceType !== 'product' ? 'code' : 'identifier';
     }
+
+    public static function getChannelFieldName(string $resourceType): string
+    {
+        return $resourceType === 'reference-entity-record' ? 'channel' : 'scope';
+    }
 }

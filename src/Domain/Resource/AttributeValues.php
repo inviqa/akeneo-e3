@@ -4,38 +4,33 @@ declare(strict_types=1);
 
 namespace AkeneoEtl\Domain\Resource;
 
+use AkeneoEtl\Domain\AkeneoSpecifics;
 use AkeneoEtl\Domain\ArrayHelper;
 use Generator;
 use LogicException;
 
 final class AttributeValues
 {
-    /**
-     * @var array<string, mixed>
-     */
     private array $values = [];
 
     private string $channelFieldName;
-
-    private string $resourceType;
 
     private ArrayHelper $arrayHelper;
 
     private function __construct(array $data, string $resourceType)
     {
-        $this->channelFieldName = $resourceType === 'reference-entity-record' ? 'channel' : 'scope';
-        $this->resourceType = $resourceType;
+        $this->channelFieldName = AkeneoSpecifics::getChannelFieldName($resourceType);
 
         $this->arrayHelper = new ArrayHelper();
 
         foreach ($data as $name => $localisedValues) {
             foreach ($localisedValues as $localisedValue) {
-                $attribute = Attribute::create(
+                $hash = $this->hash(
                     $name,
-                    $localisedValue[$this->channelFieldName],
-                    $localisedValue['locale']
+                    $localisedValue[$this->channelFieldName] ?? '',
+                    $localisedValue['locale'] ?? ''
                 );
-                $this->values[$this->attributeHash($attribute)] = $localisedValue['data'];
+                $this->values[$hash] = $localisedValue['data'] ?? null;
             }
         }
     }
@@ -118,9 +113,14 @@ final class AttributeValues
         return $result;
     }
 
+    private function hash(string $name, ?string $scope, ?string $locale): string
+    {
+        return implode('.', [$name, $scope ?? '', $locale ?? '']);
+    }
+
     private function attributeHash(Attribute $attribute): string
     {
-        return implode('.', [$attribute->getName(), $attribute->getScope(), $attribute->getLocale()]);
+        return $this->hash($attribute->getName(), $attribute->getScope(), $attribute->getLocale());
     }
 
     private function hashToAttribute(string $hash): Attribute
