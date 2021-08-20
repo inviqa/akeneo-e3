@@ -2,6 +2,7 @@
 
 namespace AkeneoEtl\Tests\Unit\Domain;
 
+use AkeneoEtl\Domain\Exception\TransformException;
 use AkeneoEtl\Domain\Resource\Property;
 use AkeneoEtl\Domain\Resource\PropertyValues;
 use LogicException;
@@ -47,8 +48,6 @@ class PropertyValuesTest extends TestCase
 
     /**
      * @dataProvider setDataProvider
-     *
-     * @group fail
      */
     public function test_it_sets_values(string $field, $setValue, $expected)
     {
@@ -195,7 +194,7 @@ class PropertyValuesTest extends TestCase
 
         $property = Property::create('family');
 
-        $this->expectException(LogicException::class);
+        $this->expectException(TransformException::class);
 
         $collection->addTo($property, ['x']);
     }

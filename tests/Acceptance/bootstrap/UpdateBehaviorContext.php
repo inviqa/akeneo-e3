@@ -2,12 +2,14 @@
 
 namespace AkeneoEtl\Tests\Acceptance\bootstrap;
 
+use AkeneoEtl\Domain\Exception\TransformException;
 use AkeneoEtl\Domain\Resource\Attribute;
 use AkeneoEtl\Domain\Resource\AuditableResource;
 use AkeneoEtl\Domain\Resource\NonAuditableResource;
 use AkeneoEtl\Domain\Resource\Property;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
+use Exception;
 use Webmozart\Assert\Assert;
 
 class UpdateBehaviorContext implements Context
@@ -34,8 +36,30 @@ class UpdateBehaviorContext implements Context
     {
         $patch = json_decode($json, true);
 
-        $attributeValues = $patch['values'] ?? [];
+        try {
+            $attributeValues = $patch['values'] ?? [];
+            $this->setAttributeValues($attributeValues);
+            unset($patch['values']);
+            $this->applyPropertyValues($patch);
+        } catch (TransformException $e) {
+            if ($e->canBeSkipped() === true) {
+                return;
+            }
+        }
+    }
 
+    /**
+     * @Then the resulting resource should be:
+     */
+    public function theResultingResourceShouldBe(PyStringNode $json): void
+    {
+        $expected = json_decode($json, true);
+
+        Assert::eq($expected, $this->resource->toArray());
+    }
+
+    private function setAttributeValues(array $attributeValues): void
+    {
         foreach ($attributeValues as $fieldName => $values) {
             foreach ($values as $value) {
                 $this->resource->set(
@@ -48,19 +72,12 @@ class UpdateBehaviorContext implements Context
                 );
             }
         }
-
-        foreach ($patch as $fieldName => $value) {
-            $this->resource->set(Property::create($fieldName), $value);
-        }
     }
 
-    /**
-     * @Then the resulting resource should be:
-     */
-    public function theResultingResourceShouldBe(PyStringNode $json): void
+    private function applyPropertyValues(array $properties): void
     {
-        $expected = json_decode($json, true);
-
-        Assert::eq($expected, $this->resource->toArray());
+        foreach ($properties as $fieldName => $value) {
+            $this->resource->set(Property::create($fieldName), $value);
+        }
     }
 }

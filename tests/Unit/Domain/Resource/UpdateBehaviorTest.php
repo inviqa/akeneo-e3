@@ -2,6 +2,7 @@
 
 namespace AkeneoEtl\Tests\Unit\Domain\Resource;
 
+use AkeneoEtl\Domain\Exception\TransformException;
 use AkeneoEtl\Domain\Resource\UpdateBehavior;
 use PHPUnit\Framework\TestCase;
 
@@ -17,11 +18,7 @@ use PHPUnit\Framework\TestCase;
  *      Rule 4: Any data in non specified properties will be left untouched.
  *
  * Implementation:
- *      Rule 1: implemented
- *      Rule 2: implemented
- *      Rule 3: not implemented - type mismatches should be controlled by Akeneo.
- *              Users can send any data and E3 should not restrict them.
- *      Rule 3: not implemented - not possible by design
+ *      Rule 4: not implemented - not possible by design of the class
  */
 class UpdateBehaviorTest extends TestCase
 {
@@ -169,5 +166,25 @@ class UpdateBehaviorTest extends TestCase
         $this->updateBehavior->patch($original, 'categories', $patch);
 
         $this->assertEquals($expected, $original);
+    }
+
+    /**
+     * @testdox Rule 3: For non-scalar values (objects and arrays) data types must match.
+     */
+    public function test_rule_3_throw_an_exception_if_types_mismatch()
+    {
+        $original = [
+            'categories' => ['boots'],
+        ];
+
+        $patch = 'boots';
+
+        $expected = [
+            'categories' => 'boots',
+        ];
+
+        $this->expectException(TransformException::class);
+
+        $this->updateBehavior->patch($original, 'categories', $patch);
     }
 }
