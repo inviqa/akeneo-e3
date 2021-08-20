@@ -6,9 +6,21 @@ namespace AkeneoEtl\Domain;
 
 final class ArrayHelper
 {
-    public function isLikeObject(array $array): bool
+    /**
+     * @param mixed|null $value
+     */
+    public function isLikeObject($value): bool
     {
-        return is_string(array_key_first($array));
+        // Check only first key - it should be sufficient
+        return is_array($value) === true && is_string(array_key_first($value));
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function isSimpleArray($value): bool
+    {
+        return is_array($value) === true && $this->isLikeObject($value) === false;
     }
 
     /**
@@ -20,18 +32,14 @@ final class ArrayHelper
             return true;
         }
 
-        if (is_array($value) === true) {
-            return self::isLikeObject($value) === false;
-        }
-
-        return false;
+        return $this->isSimpleArray($value) === true;
     }
 
     /**
-     * @param mixed $value
+     * @param mixed|null $value
      */
-    public function isSimpleArray($value): bool
+    public function isSimpleArrayOrLikeObject($value): bool
     {
-        return is_array($value) === true && self::isLikeObject($value) === false;
+        return $this->isSimpleArray($value) === true || $this->isLikeObject($value) === true;
     }
 }

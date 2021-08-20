@@ -64,4 +64,18 @@ class ArrayHelperTest extends TestCase
         $this->assertFalse($this->arrayHelper->isSimpleArray(123));
         $this->assertFalse($this->arrayHelper->isSimpleArray(true));
     }
+
+    public function test_it_returns_true_if_value_is_a_plain_array_or_a_json_like_object()
+    {
+        $this->assertTrue($this->arrayHelper->isSimpleArrayOrLikeObject([42.5, 'b']));
+        $this->assertTrue($this->arrayHelper->isSimpleArrayOrLikeObject(['a' => 42.5, 'b' => 'abc']));
+    }
+
+    public function test_it_returns_false_if_value_is_not_a_plain_array_and_not_a_json_like_object()
+    {
+        $this->assertFalse($this->arrayHelper->isSimpleArrayOrLikeObject('abc'));
+        $this->assertFalse($this->arrayHelper->isSimpleArrayOrLikeObject(42.5));
+        $this->assertFalse($this->arrayHelper->isSimpleArrayOrLikeObject(true));
+        $this->assertFalse($this->arrayHelper->isSimpleArrayOrLikeObject(null));
+    }
 }
