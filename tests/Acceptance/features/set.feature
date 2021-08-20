@@ -169,6 +169,8 @@ Feature: Data transformations using `set` actions
                   RELATIVES:
                       product_models: ['unicorn', 'mermaid']
                       groups: ['magical_creatures']
+                  NEW:
+                      groups: ['magical_creatures']
 
       """
 
@@ -180,16 +182,15 @@ Feature: Data transformations using `set` actions
       | type      | products      | product_models    | groups              |
       | FRIENDS   | [gizzy,jazzy] | []                | []                  |
       | RELATIVES | [izzy]        | [unicorn,mermaid] | [magical_creatures] |
+      | NEW       | []            | []                | [magical_creatures] |
 
   Scenario: Ensure that rules that use unknown field don't change data in the PIM
-  - use a rule that calls an unknown attribute
-
     Given a product in the PIM with properties:
-      | field      | value     |
-      | identifier | ziggy     |
+      | field      | value |
+      | identifier | ziggy |
     And attributes:
-      | attribute | scope | locale | value            |
-      | name      | web   | en_GB  | The Ziggy        |
+      | attribute | scope | locale | value     |
+      | name      | web   | en_GB  | The Ziggy |
 
     And I apply transformations using the profile:
       """

@@ -41,3 +41,40 @@ Feature: Data transformations using `add` actions
       | field      | value                         |
       | identifier | ziggy                         |
       | categories | [pim,pet,pxm,ziggy-the-hydra] |
+
+
+  Scenario: Add product associations
+
+    Given a product in the PIM with properties:
+      | field      | value |
+      | identifier | ziggy |
+    And associations:
+      | type      | products | product_models | groups |
+      | FRIENDS   | [fuzzy]  | []             | []     |
+      | RELATIVES | []       | [izzy]         | []     |
+
+    And I apply transformations using the profile:
+      """
+      actions:
+          -
+              type: add
+              field: associations
+              items:
+                  FRIENDS:
+                      products: ['gizzy', 'jazzy']
+                  RELATIVES:
+                      product_models: ['unicorn', 'mermaid']
+                      groups: ['magical_creatures']
+                  NEW:
+                      groups: ['magical_creatures']
+
+      """
+    When transformation is executed
+    Then the product in the PIM should have properties:
+      | field      | value |
+      | identifier | ziggy |
+    And should have associations:
+      | type      | products            | product_models         | groups              |
+      | FRIENDS   | [fuzzy,gizzy,jazzy] | []                     | []                  |
+      | RELATIVES | []                  | [izzy,unicorn,mermaid] | [magical_creatures] |
+      | NEW       | []                  | []                     | [magical_creatures] |
