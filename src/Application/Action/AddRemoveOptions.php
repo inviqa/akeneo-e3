@@ -7,7 +7,7 @@ namespace AkeneoEtl\Application\Action;
 use LogicException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class AddOptions
+final class AddRemoveOptions
 {
     private string $field;
 

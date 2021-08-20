@@ -16,7 +16,7 @@ final class Add implements Action
 {
     private Field $field;
 
-    private AddOptions $options;
+    private AddRemoveOptions $options;
 
     private ExpressionLanguage $expressionLanguage;
 
@@ -24,7 +24,7 @@ final class Add implements Action
     {
         $this->expressionLanguage = $expressionLanguage;
         $this->field = FieldFactory::fromOptions($options);
-        $this->options = AddOptions::fromArray($options);
+        $this->options = AddRemoveOptions::fromArray($options);
     }
 
     public function execute(Resource $resource): void
