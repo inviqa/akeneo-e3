@@ -12,7 +12,7 @@ use AkeneoEtl\Domain\Resource\Field;
 use AkeneoEtl\Domain\Resource\FieldFactory;
 use AkeneoEtl\Domain\Resource\Resource;
 
-final class Add implements Action
+final class Remove implements Action
 {
     private Field $field;
 
@@ -31,7 +31,7 @@ final class Add implements Action
     {
         $resultValue = $this->evaluateValue($resource);
 
-        $resource->addTo($this->field, $resultValue);
+        $resource->removeFrom($this->field, $resultValue);
     }
 
     protected function evaluateValue(Resource $resource): array

@@ -21,6 +21,9 @@ final class ActionFactory
             case 'add':
                 $action = new Actions\Add(new ExpressionLanguage(), $options);
                 break;
+            case 'remove':
+                $action = new Actions\Remove(new ExpressionLanguage(), $options);
+                break;
             default:
                 throw new LogicException(sprintf('No registered action with the name %s', $type));
         }
