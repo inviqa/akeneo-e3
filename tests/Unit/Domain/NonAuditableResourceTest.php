@@ -20,9 +20,9 @@ class NonAuditableResourceTest extends TestCase
     }
 
     /**
-     * @dataProvider valueProviders
+     * @dataProvider getProviders
      */
-    public function test_it_retrieves_values(array $options, $expectedValue)
+    public function test_it_gets_values(array $options, $expectedValue)
     {
         $resource = NonAuditableResource::fromArray(TestData::getProduct(), 'product');
         $field = FieldFactory::fromOptions($options);
@@ -31,7 +31,7 @@ class NonAuditableResourceTest extends TestCase
         Assert::assertEquals($expectedValue, $value);
     }
 
-    public function test_it_returns_a_property()
+    public function test_it_returns_true_if_a_field_exists()
     {
         $resource = NonAuditableResource::fromArray(TestData::getProduct(), 'product');
         $field = Property::create('family');
@@ -39,7 +39,7 @@ class NonAuditableResourceTest extends TestCase
         $this->assertTrue($resource->has($field));
     }
 
-    public function test_it_throws_an_exception_if_property_does_not_exist()
+    public function test_it_throws_an_exception_by_getting_a_property_that_does_not_exist()
     {
         $resource = NonAuditableResource::fromArray(TestData::getProduct(), 'product');
         $field = Property::create('reality');
@@ -48,7 +48,7 @@ class NonAuditableResourceTest extends TestCase
         $resource->get($field);
     }
 
-    public function test_it_throws_an_exception_if_attribute_does_not_exist()
+    public function test_it_throws_an_exception_by_getting_an_attribute_that_does_not_exist()
     {
         $resource = NonAuditableResource::fromArray(TestData::getProduct(), 'product');
         $field = Attribute::create('colour', 'reality', null);
@@ -104,7 +104,7 @@ class NonAuditableResourceTest extends TestCase
         $this->assertEquals('en_GB', $fields[2]->getLocale());
     }
 
-    public function valueProviders(): array
+    public function getProviders(): array
     {
         return [
             'for a top-level field value' =>

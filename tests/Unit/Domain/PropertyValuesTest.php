@@ -47,6 +47,8 @@ class PropertyValuesTest extends TestCase
 
     /**
      * @dataProvider setDataProvider
+     *
+     * @group fail
      */
     public function test_it_sets_values(string $field, $setValue, $expected)
     {

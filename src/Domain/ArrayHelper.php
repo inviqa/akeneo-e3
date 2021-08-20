@@ -36,10 +36,39 @@ final class ArrayHelper
     }
 
     /**
+     * @param mixed $value
+     */
+    public function isScalarOrNull($value): bool
+    {
+        return $value === null || is_scalar($value) === true;
+    }
+
+    /**
      * @param mixed|null $value
      */
     public function isSimpleArrayOrLikeObject($value): bool
     {
         return $this->isSimpleArray($value) === true || $this->isLikeObject($value) === true;
+    }
+
+    /**
+     * @param mixed|null $value1
+     * @param mixed|null $value2
+     */
+    public function haveMatchingTypes($value1, $value2): bool
+    {
+        if ($this->isSimpleArray($value1) && $this->isSimpleArray($value2)) {
+            return true;
+        }
+
+        if ($this->isLikeObject($value1) && $this->isLikeObject($value2)) {
+            return true;
+        }
+
+        if ($this->isScalarOrNull($value1) && $this->isScalarOrNull($value2)) {
+            return true;
+        }
+
+        return false;
     }
 }

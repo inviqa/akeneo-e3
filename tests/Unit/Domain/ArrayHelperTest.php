@@ -78,4 +78,21 @@ class ArrayHelperTest extends TestCase
         $this->assertFalse($this->arrayHelper->isSimpleArrayOrLikeObject(true));
         $this->assertFalse($this->arrayHelper->isSimpleArrayOrLikeObject(null));
     }
+
+    public function test_it_returns_true_if_types_match()
+    {
+        $this->assertTrue($this->arrayHelper->haveMatchingTypes([42.5], ['a']));
+        $this->assertTrue($this->arrayHelper->haveMatchingTypes(['a' => 42.5], ['c' => 'ddd']));
+        $this->assertTrue($this->arrayHelper->haveMatchingTypes(null, 333));
+        $this->assertTrue($this->arrayHelper->haveMatchingTypes('null?', true));
+    }
+
+    public function test_it_returns_false_if_types_do_not_match()
+    {
+        $this->assertFalse($this->arrayHelper->haveMatchingTypes([42.5], ['a' => 1]));
+        $this->assertFalse($this->arrayHelper->haveMatchingTypes(['a' => 42.5], 'abc'));
+        $this->assertFalse($this->arrayHelper->haveMatchingTypes(null, [42.5]));
+        $this->assertFalse($this->arrayHelper->haveMatchingTypes(null, ['a' => 42.5]));
+        $this->assertFalse($this->arrayHelper->haveMatchingTypes(888, ['a' => 42.5]));
+    }
 }

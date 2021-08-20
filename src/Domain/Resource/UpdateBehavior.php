@@ -37,12 +37,24 @@ class UpdateBehavior
      */
     public function patch(array &$original, string $fieldName, $patch): void
     {
+        // Update Behavior: Rule 3 (validation on data types)
+        // For non-scalar values (objects and arrays) data types must match.
+        // Otherwise, skip.
+        if (array_key_exists($fieldName, $original) === true &&
+            $this->arrayHelper->haveMatchingTypes($patch, $original[$fieldName] ?? null) === false) {
+            return;
+        }
+
+        // Update Behavior: Rule 2 (non object update)
+        // If the value is not an object, it will replace the old value.
         if ($patch === null || $this->arrayHelper->isScalarOrSimpleArray($patch) === true) {
             $original[$fieldName] = $patch;
 
             return;
         }
 
+        // Update Behavior: Rule 1 (object update)
+        // If the value is an object, it will be merged with the old value.
         foreach ($patch as $key => $value) {
             if (array_key_exists($fieldName, $original) === false) {
                 $original[$fieldName] = [];
@@ -60,6 +72,7 @@ class UpdateBehavior
             }
 
             $before = $original[$fieldName] ?? [];
+            // @todo: check if types match
             $original[$fieldName] = array_unique(array_merge($before, $itemsToAdd));
 
             return;

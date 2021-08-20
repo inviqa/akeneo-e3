@@ -16,7 +16,6 @@ class AuditableResourceTest extends TestCase
         $this->assertEquals('123', $resource->getCode());
     }
 
-
     public function test_it_accumulates_changes_and_origins_data()
     {
         $resource = AuditableResource::fromArray(TestData::getProduct(), 'product');
