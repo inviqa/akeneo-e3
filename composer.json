@@ -22,7 +22,8 @@
         "phpstan/phpstan": "^0.12.94",
         "phpunit/phpunit": "^9",
         "qossmic/deptrac-shim": "^0.14.1",
-        "twig/twig": "^3.0"
+        "twig/twig": "^3.0",
+        "ext-json": "*"
     },
     "config": {
         "optimize-autoloader": true,
