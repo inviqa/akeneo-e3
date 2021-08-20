@@ -46,6 +46,21 @@ class PropertyValuesTest extends TestCase
         Assert::assertFalse($collection->has(Property::create('~no-property~')));
     }
 
+    public function test_it_returns_properties()
+    {
+        $collection = PropertyValues::fromArray([
+            'identifier' => 'the-ziggy',
+            'family' => 'ziggy',
+            'categories' => ['hydra', 'pim']
+        ]);
+
+        $properties = iterator_to_array($collection->fields());
+
+        $this->assertEquals('identifier', $properties[0]->getName());
+        $this->assertEquals('family', $properties[1]->getName());
+        $this->assertEquals('categories', $properties[2]->getName());
+    }
+
     /**
      * @dataProvider setDataProvider
      */
@@ -130,12 +145,12 @@ class PropertyValuesTest extends TestCase
     /**
      * @dataProvider addToDataProvider
      */
-    public function test_it_adds_values(string $field, $setValue, $expected)
+    public function test_it_adds_values(string $field, $addValue, $expected)
     {
         $collection = PropertyValues::fromArray(TestData::getProperties());
 
         $property = Property::create($field);
-        $collection->addTo($property, $setValue);
+        $collection->addTo($property, $addValue);
 
         Assert::assertEquals($expected, $collection->get($property));
     }
@@ -145,19 +160,19 @@ class PropertyValuesTest extends TestCase
         return [
             'adding items to categories' => [
                 'field'    => 'categories',
-                'setValue' => ['akeneo', 'pim'],
+                'addValue' => ['akeneo', 'pim'],
                 'expected' => ['hydra', 'pim', 'akeneo'],
             ],
 
             'adding a value to a property that was not set' => [
                 'field'    => 'new_array',
-                'setValue' => ['Akeneo'],
+                'addValue' => ['Akeneo'],
                 'expected' => ['Akeneo'],
             ],
 
             'adding associations' => [
                 'field'    => 'associations',
-                'setValue' => [
+                'addValue' => [
                     'FRIENDS' => [
                         'products' => ['peggi'],
                         'product_models' => [],
@@ -199,18 +214,67 @@ class PropertyValuesTest extends TestCase
         $collection->addTo($property, ['x']);
     }
 
-    public function test_it_returns_properties()
+    /**
+     * @dataProvider removeFromDataProvider
+     */
+    public function test_it_removes_values(string $field, $removeValue, $expected)
     {
-        $collection = PropertyValues::fromArray([
-            'identifier' => 'the-ziggy',
-            'family' => 'ziggy',
-            'categories' => ['hydra', 'pim']
-        ]);
+        $collection = PropertyValues::fromArray(TestData::getProperties());
 
-        $properties = iterator_to_array($collection->fields());
+        $property = Property::create($field);
+        $collection->removeFrom($property, $removeValue);
 
-        $this->assertEquals('identifier', $properties[0]->getName());
-        $this->assertEquals('family', $properties[1]->getName());
-        $this->assertEquals('categories', $properties[2]->getName());
+        Assert::assertEquals($expected, $collection->get($property));
+    }
+
+    public function removeFromDataProvider(): array
+    {
+        return [
+            'removing items from categories' => [
+                'field'    => 'categories',
+                'removeValue' => ['hydra'],
+                'expected' => ['pim'],
+            ],
+
+            'removing associations' => [
+                'field' => 'associations',
+                'removeValue' => [
+                    'FRIENDS' => [
+                        'products' => ['yoggi'],
+                        'product_models' => [],
+                        'groups' => ['greggi'],
+                    ],
+                    'RELATIVES' => [
+                        'products' => ['rueggi', 'reggi'],
+                        'product_models' => ['doggi'],
+                        'groups' => [],
+                    ],
+                ],
+                'expected' => [
+                    'FRIENDS' => [
+                        'products' => ['shoggi'],
+                        'product_models' => ['moggi'],
+                        'groups' => [],
+                    ],
+                    'RELATIVES' => [
+                        'products' => [],
+                        'product_models' => [],
+                        'groups' => [],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+
+    public function test_it_throws_an_exception_by_removing_items_to_non_arrays()
+    {
+        $collection = PropertyValues::fromArray(TestData::getProperties());
+
+        $property = Property::create('family');
+
+        $this->expectException(TransformException::class);
+
+        $collection->removeFrom($property, ['x']);
     }
 }

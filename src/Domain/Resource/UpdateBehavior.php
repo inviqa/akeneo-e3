@@ -54,6 +54,17 @@ class UpdateBehavior
         );
     }
 
+
+    public function removeFrom(string $fieldName, array $itemsToAdd): void
+    {
+        $this->patchRecursive(
+            $this->original,
+            $fieldName,
+            $itemsToAdd,
+            [$this->arrayHelper, 'subtract']
+        );
+    }
+
     /**
      * @param mixed $oldValue
      *

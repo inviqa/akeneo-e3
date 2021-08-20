@@ -69,6 +69,13 @@ final class PropertyValues
         $this->updateBehavior->addTo($name, $value);
     }
 
+    public function removeFrom(Property $property, array $value): void
+    {
+        $name = $property->getName();
+
+        $this->updateBehavior->removeFrom($name, $value);
+    }
+
     /**
      * @return Generator|Property[]
      */

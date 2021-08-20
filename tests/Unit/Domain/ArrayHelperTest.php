@@ -103,4 +103,18 @@ class ArrayHelperTest extends TestCase
             $this->arrayHelper->merge([42.5, 'b'], ['b', 'c'])
         );
     }
+
+
+    public function test_it_subtracts()
+    {
+        $this->assertEquals(
+            [1],
+            $this->arrayHelper->subtract([1, 2, 3], [2, 3])
+        );
+
+        $this->assertEquals(
+            [42.5],
+            $this->arrayHelper->subtract([42.5, 'b'], ['b', 'c'])
+        );
+    }
 }

@@ -74,6 +74,17 @@ final class AttributeValues
         $this->values[$hash] = $this->arrayHelper->merge($existingValue, $value);
     }
 
+
+    public function removeFrom(Attribute $attribute, array $value): void
+    {
+        $existingValue =
+            $this->has($attribute) ?
+            $this->get($attribute) : [];
+
+        $hash = $this->attributeHash($attribute);
+        $this->values[$hash] = $this->arrayHelper->subtract($existingValue, $value);
+    }
+
     public function has(Attribute $attribute): bool
     {
         $hash = $this->attributeHash($attribute);

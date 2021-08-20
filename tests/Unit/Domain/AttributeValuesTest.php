@@ -88,6 +88,30 @@ class AttributeValuesTest extends TestCase
         Assert::assertEquals(['Lyon', 'Paris', 'Nantes'], $collection->get($attribute));
     }
 
+    public function test_it_removes_items_from_an_existing_attribute()
+    {
+        $collection = AttributeValues::fromArray(
+            TestData::getValuesWithArrayData()
+        );
+
+        $attribute = Attribute::create('head_names', 'web', null);
+        $collection->removeFrom($attribute, ['Paris']);
+
+        Assert::assertEquals(['Lyon'], $collection->get($attribute));
+    }
+
+    public function test_it_does_not_change_value_by_removing_items_that_were_not_in_attribute_values()
+    {
+        $collection = AttributeValues::fromArray(
+            TestData::getValuesWithArrayData()
+        );
+
+        $attribute = Attribute::create('head_names', 'web', null);
+        $collection->removeFrom($attribute, ['London']);
+
+        Assert::assertEquals(['Lyon', 'Paris'], $collection->get($attribute));
+    }
+
     public function test_it_converts_to_array_with_scope_fields()
     {
         $collection = AttributeValues::fromArray([]);
