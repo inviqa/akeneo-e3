@@ -13,6 +13,10 @@
 - [ ] concatenate :question: ([akeneo rule engine concatenate](https://docs.akeneo.com/5.0/manipulate_pim_data/rule/general_information_on_rule_format.html#concatenate)) - expressions are better here
 - [ ] clear :question: ([akeneo rule engine clear](https://docs.akeneo.com/5.0/manipulate_pim_data/rule/general_information_on_rule_format.html#clear)) - set to null?
 - [ ] calculate :question: ([akeneo rule engine calculate](https://docs.akeneo.com/5.0/manipulate_pim_data/rule/general_information_on_rule_format.html#calculate)) - expressions are **much** better here
+- [ ] duplicate? no
+- [ ] transform-to? another resource type (smart transform of attributes?)
+- [ ] change-resource-type / change-type
+
 
 ### Supported data types / features
 
@@ -26,13 +30,13 @@
 
 - [x] value (attributeValue() ?)
 - [x] strip html tags
-- [ ] string functions: replace, etc - how to expose all UnicodeString stuff?
+- [ ] string functions  : replace, etc - how to expose all UnicodeString stuff?
 - [ ] array functions: merge, search, etc.
 - [x] hasAttribute(name, scope, locale) - hasAttribute
 - [x] hasProperty(name)
 - [ ] priceValue(name, scope, locale, currency)
 - [ ] metricValue(name, scope, locale, unit)
-   
+- [ ] lastRunDateTime(runId)   
 
 
  
@@ -46,7 +50,7 @@
 - [ ] generate ETL profile :question:
 - [ ] validate ETL profile against schema (optionresolver)
 - [ ] validate ETL profile against Akeneo (do attributes exist, are they configured accordingly, e.g. scopable if scope configured)
- 
+- [ ] condition-based DELETE (products, attributes, etc.)  
 
 ## More ideas
 
