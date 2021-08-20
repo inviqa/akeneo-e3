@@ -20,6 +20,8 @@ interface Resource
 
     public function addTo(Field $field, array $newValue): void;
 
+    public function removeFrom(Field $field, array $newValue): void;
+
     public function has(Field $field): bool;
 
     public function getCode(): string;

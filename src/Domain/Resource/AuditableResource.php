@@ -52,16 +52,29 @@ final class AuditableResource implements Resource
      */
     public function set(Field $field, $newValue): void
     {
-        $this->track($field, $newValue);
+        $this->trackOrigins($field, $newValue);
 
         $this->resource->set($field, $newValue);
+
+        $this->trackCahnges($field, $newValue);
     }
 
     public function addTo(Field $field, array $newValue): void
     {
-        $this->track($field, $newValue);
+        $this->trackOrigins($field, $newValue);
 
         $this->resource->addTo($field, $newValue);
+
+        $this->trackCahnges($field, $newValue);
+    }
+
+    public function removeFrom(Field $field, array $newValue): void
+    {
+        $this->trackOrigins($field, $newValue);
+
+        $this->resource->removeFrom($field, $newValue);
+
+        $this->trackCahnges($field, $newValue);
     }
 
     public function has(Field $field): bool
@@ -120,12 +133,18 @@ final class AuditableResource implements Resource
     /**
      * @param mixed $newValue
      */
-    private function track(Field $field, $newValue): void
+    private function trackOrigins(Field $field, $newValue): void
     {
         if ($this->resource->has($field) === true) {
             $this->origins->set($field, $this->resource->get($field));
         }
+    }
 
-        $this->changes->set($field, $newValue);
+    /**
+     * @param mixed $newValue
+     */
+    private function trackCahnges(Field $field, $newValue): void
+    {
+        $this->changes->set($field, $this->resource->get($field));
     }
 }

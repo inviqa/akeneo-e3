@@ -99,6 +99,19 @@ final class NonAuditableResource implements Resource
         }
     }
 
+    public function removeFrom(Field $field, array $newValue): void
+    {
+        $this->isChanged = true;
+
+        if ($field instanceof Property) {
+            $this->properties->removeFrom($field, $newValue);
+        }
+
+        if ($field instanceof Attribute) {
+            $this->attributes->removeFrom($field, $newValue);
+        }
+    }
+
     public function has(Field $field): bool
     {
         if ($field instanceof Property) {
