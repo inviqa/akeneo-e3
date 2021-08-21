@@ -1,9 +1,9 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Domain\Resource;
+namespace AkeneoE3\Tests\Unit\Domain\Resource;
 
-use AkeneoEtl\Domain\Exception\TransformException;
-use AkeneoEtl\Domain\Resource\UpdateBehavior;
+use AkeneoE3\Domain\Exception\TransformException;
+use AkeneoE3\Domain\Resource\UpdateBehavior;
 use PHPUnit\Framework\TestCase;
 
 /**

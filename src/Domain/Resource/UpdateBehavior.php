@@ -1,9 +1,9 @@
 <?php
 
-namespace AkeneoEtl\Domain\Resource;
+namespace AkeneoE3\Domain\Resource;
 
-use AkeneoEtl\Domain\ArrayHelper;
-use AkeneoEtl\Domain\Exception\TransformException;
+use AkeneoE3\Domain\ArrayHelper;
+use AkeneoE3\Domain\Exception\TransformException;
 
 /**
  * Update Behavior rules

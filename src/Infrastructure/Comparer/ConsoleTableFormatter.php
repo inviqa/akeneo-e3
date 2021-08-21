@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Comparer;
+namespace AkeneoE3\Infrastructure\Comparer;
 
 final class ConsoleTableFormatter
 {

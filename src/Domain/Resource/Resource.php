@@ -1,6 +1,6 @@
 <?php
 
-namespace AkeneoEtl\Domain\Resource;
+namespace AkeneoE3\Domain\Resource;
 
 use Generator;
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace AkeneoEtl\Infrastructure\Report;
+namespace AkeneoE3\Infrastructure\Report;
 
-use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Domain\Transform\TransformResult;
-use AkeneoEtl\Domain\Load\LoadResult;
+use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Transform\TransformResult;
+use AkeneoE3\Domain\Load\LoadResult;
 
 class ProcessReport
 {

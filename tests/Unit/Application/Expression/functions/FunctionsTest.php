@@ -1,19 +1,19 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Application\Expression\functions;
+namespace AkeneoE3\Tests\Unit\Application\Expression\functions;
 
-use AkeneoEtl\Application\Expression\StateHolder;
-use AkeneoEtl\Domain\Exception\TransformException;
-use AkeneoEtl\Domain\Resource\Attribute;
-use AkeneoEtl\Domain\Resource\Property;
-use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Domain\Resource\AuditableResource;
-use AkeneoEtl\Tests\Unit\Domain\TestData;
+use AkeneoE3\Application\Expression\StateHolder;
+use AkeneoE3\Domain\Exception\TransformException;
+use AkeneoE3\Domain\Resource\Attribute;
+use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Tests\Unit\Domain\TestData;
 use PHPUnit\Framework\TestCase;
-use function AkeneoEtl\Application\Expression\Functions\value;
-use function AkeneoEtl\Application\Expression\Functions\hasAttribute;
-use function AkeneoEtl\Application\Expression\Functions\hasProperty;
-use function AkeneoEtl\Application\Expression\Functions\replace;
+use function AkeneoE3\Application\Expression\Functions\value;
+use function AkeneoE3\Application\Expression\Functions\hasAttribute;
+use function AkeneoE3\Application\Expression\Functions\hasProperty;
+use function AkeneoE3\Application\Expression\Functions\replace;
 
 require_once('src/Application/Expression/Functions/functions.php');
 

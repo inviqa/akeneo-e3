@@ -1,12 +1,12 @@
 <?php
 
-namespace AkeneoEtl\Tests\Acceptance\bootstrap;
+namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
-use AkeneoEtl\Domain\Exception\TransformException;
-use AkeneoEtl\Domain\Resource\Attribute;
-use AkeneoEtl\Domain\Resource\AuditableResource;
-use AkeneoEtl\Domain\Resource\NonAuditableResource;
-use AkeneoEtl\Domain\Resource\Property;
+use AkeneoE3\Domain\Exception\TransformException;
+use AkeneoE3\Domain\Resource\Attribute;
+use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Resource\NonAuditableResource;
+use AkeneoE3\Domain\Resource\Property;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Exception;

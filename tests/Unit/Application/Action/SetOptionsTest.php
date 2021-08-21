@@ -1,8 +1,8 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Application\Action;
+namespace AkeneoE3\Tests\Unit\Application\Action;
 
-use AkeneoEtl\Application\Action\SetOptions;
+use AkeneoE3\Application\Action\SetOptions;
 use LogicException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;

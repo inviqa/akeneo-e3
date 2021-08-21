@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Domain;
+namespace AkeneoE3\Domain;
 
-use AkeneoEtl\Domain\Load\LoadResult\LoadResult;
-use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoE3\Domain\Load\LoadResult\LoadResult;
+use AkeneoE3\Domain\Resource\Resource;
 
 interface Loader
 {

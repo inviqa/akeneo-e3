@@ -1,8 +1,8 @@
 <?php
 
-namespace AkeneoEtl\Infrastructure\Comparer;
+namespace AkeneoE3\Infrastructure\Comparer;
 
-use AkeneoEtl\Domain\Resource\Field;
+use AkeneoE3\Domain\Resource\Field;
 
 class DiffLine
 {

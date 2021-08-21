@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Domain\Profile;
+namespace AkeneoE3\Domain\Profile;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

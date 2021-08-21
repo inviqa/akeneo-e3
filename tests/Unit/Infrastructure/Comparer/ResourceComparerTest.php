@@ -1,12 +1,12 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Infrastructure\Comparer;
+namespace AkeneoE3\Tests\Unit\Infrastructure\Comparer;
 
-use AkeneoEtl\Domain\Resource\Property;
-use AkeneoEtl\Domain\Resource\AuditableResource;
-use AkeneoEtl\Domain\Resource\Attribute;
-use AkeneoEtl\Infrastructure\Comparer\DiffLine;
-use AkeneoEtl\Infrastructure\Comparer\ResourceComparer;
+use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Resource\Attribute;
+use AkeneoE3\Infrastructure\Comparer\DiffLine;
+use AkeneoE3\Infrastructure\Comparer\ResourceComparer;
 use PHPUnit\Framework\TestCase;
 
 class ResourceComparerTest extends TestCase

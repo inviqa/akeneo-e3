@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Application;
+namespace AkeneoE3\Application;
 
-use AkeneoEtl\Domain\Action;
-use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Domain\Transformer;
+use AkeneoE3\Domain\Action;
+use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Transformer;
 
 final class SequentialTransformer implements Transformer
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace AkeneoEtl\Tests\Shared;
+namespace AkeneoE3\Tests\Shared;
 
-use AkeneoEtl\Application\Expression\FunctionProvider;
-use AkeneoEtl\Application\Expression\StateHolder;
-use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Domain\Resource\AuditableResource;
+use AkeneoE3\Application\Expression\FunctionProvider;
+use AkeneoE3\Application\Expression\StateHolder;
+use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\AuditableResource;
 use phpDocumentor\Reflection\DocBlock\Tags\Generic;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\DocBlockFactory;

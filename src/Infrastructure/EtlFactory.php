@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure;
+namespace AkeneoE3\Infrastructure;
 
 use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientBuilder;
-use AkeneoEtl\Application\ActionFactory;
-use AkeneoEtl\Application\SequentialTransformer;
-use AkeneoEtl\Domain\Extractor;
-use AkeneoEtl\Domain\Profile\ConnectionProfile;
-use AkeneoEtl\Domain\Profile\ExtractProfile;
-use AkeneoEtl\Domain\Profile\LoadProfile;
-use AkeneoEtl\Domain\EtlProcess;
-use AkeneoEtl\Domain\Profile\EtlProfile;
-use AkeneoEtl\Domain\Profile\TransformProfile;
-use AkeneoEtl\Domain\Loader;
-use AkeneoEtl\Domain\Transformer;
-use AkeneoEtl\Infrastructure\Api\ApiSelector;
-use AkeneoEtl\Infrastructure\Extractor\ExtractorFactory;
-use AkeneoEtl\Infrastructure\Loader\LoaderFactory;
+use AkeneoE3\Application\ActionFactory;
+use AkeneoE3\Application\SequentialTransformer;
+use AkeneoE3\Domain\Extractor;
+use AkeneoE3\Domain\Profile\ConnectionProfile;
+use AkeneoE3\Domain\Profile\ExtractProfile;
+use AkeneoE3\Domain\Profile\LoadProfile;
+use AkeneoE3\Domain\EtlProcess;
+use AkeneoE3\Domain\Profile\EtlProfile;
+use AkeneoE3\Domain\Profile\TransformProfile;
+use AkeneoE3\Domain\Loader;
+use AkeneoE3\Domain\Transformer;
+use AkeneoE3\Infrastructure\Api\ApiSelector;
+use AkeneoE3\Infrastructure\Extractor\ExtractorFactory;
+use AkeneoE3\Infrastructure\Loader\LoaderFactory;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class EtlFactory

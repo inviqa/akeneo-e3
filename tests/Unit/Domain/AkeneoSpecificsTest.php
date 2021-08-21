@@ -1,8 +1,8 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Domain;
+namespace AkeneoE3\Tests\Unit\Domain;
 
-use AkeneoEtl\Domain\AkeneoSpecifics;
+use AkeneoE3\Domain\AkeneoSpecifics;
 use PHPUnit\Framework\TestCase;
 
 class AkeneoSpecificsTest extends TestCase

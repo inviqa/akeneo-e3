@@ -1,6 +1,6 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Domain;
+namespace AkeneoE3\Tests\Unit\Domain;
 
 class TestData
 {

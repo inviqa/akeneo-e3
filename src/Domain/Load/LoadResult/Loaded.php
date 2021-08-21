@@ -1,8 +1,8 @@
 <?php
 
-namespace AkeneoEtl\Domain\Load\LoadResult;
+namespace AkeneoE3\Domain\Load\LoadResult;
 
-use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\Resource;
 
 class Loaded implements LoadResult
 {

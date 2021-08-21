@@ -1,8 +1,8 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Domain;
+namespace AkeneoE3\Tests\Unit\Domain;
 
-use AkeneoEtl\Domain\ArrayHelper;
+use AkeneoE3\Domain\ArrayHelper;
 use PHPUnit\Framework\TestCase;
 
 class ArrayHelperTest extends TestCase

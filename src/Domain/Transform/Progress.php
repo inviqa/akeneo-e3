@@ -1,6 +1,6 @@
 <?php
 
-namespace AkeneoEtl\Domain\Transform;
+namespace AkeneoE3\Domain\Transform;
 
 class Progress
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Domain;
+namespace AkeneoE3\Tests\Unit\Domain;
 
-use AkeneoEtl\Domain\Resource\Attribute;
-use AkeneoEtl\Domain\Resource\FieldFactory;
-use AkeneoEtl\Domain\Resource\NonAuditableResource;
-use AkeneoEtl\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\Attribute;
+use AkeneoE3\Domain\Resource\FieldFactory;
+use AkeneoE3\Domain\Resource\NonAuditableResource;
+use AkeneoE3\Domain\Resource\Property;
 use LogicException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;

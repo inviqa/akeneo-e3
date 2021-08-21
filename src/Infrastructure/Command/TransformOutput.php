@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Command;
+namespace AkeneoE3\Infrastructure\Command;
 
-use AkeneoEtl\Domain\Load\Event\AfterLoadEvent;
-use AkeneoEtl\Domain\Load\LoadResult\Failed;
-use AkeneoEtl\Domain\Load\LoadResult\Loaded;
-use AkeneoEtl\Domain\Load\LoadResult\LoadResult;
-use AkeneoEtl\Domain\Transform\Event\AfterTransformEvent;
-use AkeneoEtl\Domain\Transform\Progress;
-use AkeneoEtl\Infrastructure\Comparer\DiffLine;
-use AkeneoEtl\Infrastructure\Comparer\ResourceComparer;
-use AkeneoEtl\Infrastructure\Report\ProcessReport;
+use AkeneoE3\Domain\Load\Event\AfterLoadEvent;
+use AkeneoE3\Domain\Load\LoadResult\Failed;
+use AkeneoE3\Domain\Load\LoadResult\Loaded;
+use AkeneoE3\Domain\Load\LoadResult\LoadResult;
+use AkeneoE3\Domain\Transform\Event\AfterTransformEvent;
+use AkeneoE3\Domain\Transform\Progress;
+use AkeneoE3\Infrastructure\Comparer\DiffLine;
+use AkeneoE3\Infrastructure\Comparer\ResourceComparer;
+use AkeneoE3\Infrastructure\Report\ProcessReport;
 use LogicException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;

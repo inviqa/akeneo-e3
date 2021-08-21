@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Domain\Transform\Event;
+namespace AkeneoE3\Domain\Transform\Event;
 
-use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Domain\Transform\Progress;
+use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Transform\Progress;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Symfony\Contracts\EventDispatcher\Event;
@@ -14,7 +14,7 @@ final class BeforeTransformEvent extends Event
 {
     private Progress $progress;
 
-    private \AkeneoEtl\Domain\Resource\Resource $resource;
+    private \AkeneoE3\Domain\Resource\Resource $resource;
 
     private DateTimeInterface $dateTime;
 
@@ -35,7 +35,7 @@ final class BeforeTransformEvent extends Event
         return $this->progress;
     }
 
-    public function getResource(): \AkeneoEtl\Domain\Resource\Resource
+    public function getResource(): \AkeneoE3\Domain\Resource\Resource
     {
         return $this->resource;
     }

@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Extractor\Api;
+namespace AkeneoE3\Infrastructure\Extractor\Api;
 
 use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\Pim\ApiClient\Api\Operation\ListableResourceInterface;
-use AkeneoEtl\Domain\Extractor;
-use AkeneoEtl\Domain\Profile\ExtractProfile;
-use AkeneoEtl\Domain\Resource\AuditableResource;
-use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Infrastructure\Api\ApiSelector;
-use AkeneoEtl\Infrastructure\Extractor\Query;
+use AkeneoE3\Domain\Extractor;
+use AkeneoE3\Domain\Profile\ExtractProfile;
+use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Infrastructure\Api\ApiSelector;
+use AkeneoE3\Infrastructure\Extractor\Query;
 use Generator;
 use LogicException;
 

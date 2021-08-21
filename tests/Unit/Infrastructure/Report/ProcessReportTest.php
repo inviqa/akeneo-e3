@@ -1,11 +1,11 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Infrastructure\Report;
+namespace AkeneoE3\Tests\Unit\Infrastructure\Report;
 
-use AkeneoEtl\Domain\Resource\AuditableResource;
-use AkeneoEtl\Domain\Transform\TransformResult;
-use AkeneoEtl\Domain\Load\LoadResult;
-use AkeneoEtl\Infrastructure\Report\ProcessReport;
+use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Transform\TransformResult;
+use AkeneoE3\Domain\Load\LoadResult;
+use AkeneoE3\Infrastructure\Report\ProcessReport;
 use PHPUnit\Framework\TestCase;
 
 class ProcessReportTest extends TestCase

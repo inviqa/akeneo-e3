@@ -1,13 +1,13 @@
 <?php
 
-namespace AkeneoEtl\Tests\Acceptance\bootstrap;
+namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
-use AkeneoEtl\Domain\EtlProcess;
-use AkeneoEtl\Domain\Profile\EtlProfile;
-use AkeneoEtl\Domain\Resource\Attribute;
-use AkeneoEtl\Domain\Resource\AuditableResource;
-use AkeneoEtl\Domain\Transformer;
-use AkeneoEtl\Infrastructure\EtlFactory;
+use AkeneoE3\Domain\EtlProcess;
+use AkeneoE3\Domain\Profile\EtlProfile;
+use AkeneoE3\Domain\Resource\Attribute;
+use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Transformer;
+use AkeneoE3\Infrastructure\EtlFactory;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;

@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Loader\Api;
+namespace AkeneoE3\Infrastructure\Loader\Api;
 
 use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\Pim\ApiClient\Api\Operation\UpsertableResourceListInterface;
-use AkeneoEtl\Domain\Load\LoadResult\Failed;
-use AkeneoEtl\Domain\Load\LoadResult\Loaded;
-use AkeneoEtl\Domain\Load\LoadResult\LoadResult;
-use AkeneoEtl\Domain\Loader;
-use AkeneoEtl\Domain\Profile\EtlProfile;
-use AkeneoEtl\Domain\Profile\LoadProfile;
-use AkeneoEtl\Domain\Resource\AuditableResource;
-use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Infrastructure\Api\ApiSelector;
+use AkeneoE3\Domain\Load\LoadResult\Failed;
+use AkeneoE3\Domain\Load\LoadResult\Loaded;
+use AkeneoE3\Domain\Load\LoadResult\LoadResult;
+use AkeneoE3\Domain\Loader;
+use AkeneoE3\Domain\Profile\EtlProfile;
+use AkeneoE3\Domain\Profile\LoadProfile;
+use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Infrastructure\Api\ApiSelector;
 use LogicException;
 use Traversable;
 

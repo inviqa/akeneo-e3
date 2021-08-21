@@ -1,9 +1,9 @@
 <?php
 
-namespace AkeneoEtl\Tests\Acceptance\bootstrap;
+namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
-use AkeneoEtl\Domain\Extractor;
-use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoE3\Domain\Extractor;
+use AkeneoE3\Domain\Resource\Resource;
 use Generator;
 
 class InMemoryExtractor implements Extractor

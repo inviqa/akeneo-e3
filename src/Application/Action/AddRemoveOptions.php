@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Application\Action;
+namespace AkeneoE3\Application\Action;
 
 use LogicException;
 use Symfony\Component\OptionsResolver\OptionsResolver;

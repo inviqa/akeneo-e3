@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Application\Expression\Functions;
+namespace AkeneoE3\Application\Expression\Functions;
 
-use AkeneoEtl\Application\Expression\StateHolder;
-use AkeneoEtl\Domain\Exception\TransformException;
-use AkeneoEtl\Domain\Resource\Attribute;
-use AkeneoEtl\Domain\Resource\Property;
+use AkeneoE3\Application\Expression\StateHolder;
+use AkeneoE3\Domain\Exception\TransformException;
+use AkeneoE3\Domain\Resource\Attribute;
+use AkeneoE3\Domain\Resource\Property;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Symfony\Component\String\UnicodeString;
 

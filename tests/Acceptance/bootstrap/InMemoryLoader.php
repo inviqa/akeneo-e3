@@ -1,11 +1,11 @@
 <?php
 
-namespace AkeneoEtl\Tests\Acceptance\bootstrap;
+namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
-use AkeneoEtl\Domain\Loader;
-use AkeneoEtl\Domain\Profile\EtlProfile;
-use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Loader;
+use AkeneoE3\Domain\Profile\EtlProfile;
+use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\AuditableResource;
 use LogicException;
 use Webmozart\Assert\Assert;
 

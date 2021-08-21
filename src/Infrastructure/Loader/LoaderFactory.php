@@ -1,13 +1,13 @@
 <?php
 
-namespace AkeneoEtl\Infrastructure\Loader;
+namespace AkeneoE3\Infrastructure\Loader;
 
 use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
-use AkeneoEtl\Domain\Loader;
-use AkeneoEtl\Domain\Profile\LoadProfile;
-use AkeneoEtl\Infrastructure\Loader\Api\ReferenceEntityRecordLoader;
-use AkeneoEtl\Infrastructure\Loader\Api\UpsertableLoader;
+use AkeneoE3\Domain\Loader;
+use AkeneoE3\Domain\Profile\LoadProfile;
+use AkeneoE3\Infrastructure\Loader\Api\ReferenceEntityRecordLoader;
+use AkeneoE3\Infrastructure\Loader\Api\UpsertableLoader;
 use LogicException;
 
 class LoaderFactory

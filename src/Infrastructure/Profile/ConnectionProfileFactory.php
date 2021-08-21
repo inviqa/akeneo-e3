@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Profile;
+namespace AkeneoE3\Infrastructure\Profile;
 
-use AkeneoEtl\Domain\Profile\ConnectionProfile;
+use AkeneoE3\Domain\Profile\ConnectionProfile;
 use Symfony\Component\Yaml\Yaml;
 
 final class ConnectionProfileFactory

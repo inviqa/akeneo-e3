@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Domain\Load\Event;
+namespace AkeneoE3\Domain\Load\Event;
 
-use AkeneoEtl\Domain\Load\LoadResult\LoadResult;
+use AkeneoE3\Domain\Load\LoadResult\LoadResult;
 use DateTimeImmutable;
 use DateTimeInterface;
 use Symfony\Contracts\EventDispatcher\Event;

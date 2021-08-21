@@ -3,10 +3,10 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
-use AkeneoEtl\Infrastructure\Command;
-use AkeneoEtl\Infrastructure\EtlFactory;
-use AkeneoEtl\Infrastructure\Profile\ConnectionProfileFactory;
-use AkeneoEtl\Infrastructure\Profile\EtlProfileFactory;
+use AkeneoE3\Infrastructure\Command;
+use AkeneoE3\Infrastructure\EtlFactory;
+use AkeneoE3\Infrastructure\Profile\ConnectionProfileFactory;
+use AkeneoE3\Infrastructure\Profile\EtlProfileFactory;
 use Symfony\Component\Console\Application;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -16,6 +16,6 @@ $etlFactory = new EtlFactory($eventDispatcher);
 $connectionProfileFactory = new ConnectionProfileFactory();
 $etlProfileFactory = new EtlProfileFactory();
 
-$application = new Application('AkeneoEtl', 'git_version');
+$application = new Application('AkeneoE3', 'git_version');
 $application->add(new Command\TransformCommand($etlFactory, $connectionProfileFactory, $etlProfileFactory, $eventDispatcher));
 $application->run();

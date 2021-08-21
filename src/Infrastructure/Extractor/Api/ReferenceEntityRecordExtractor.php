@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Extractor\Api;
+namespace AkeneoE3\Infrastructure\Extractor\Api;
 
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityRecordApiInterface;
-use AkeneoEtl\Domain\Extractor;
-use AkeneoEtl\Domain\Profile\ExtractProfile;
-use AkeneoEtl\Domain\Resource\AuditableResource;
-use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Infrastructure\Extractor\Query;
+use AkeneoE3\Domain\Extractor;
+use AkeneoE3\Domain\Profile\ExtractProfile;
+use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Infrastructure\Extractor\Query;
 use Generator;
 
 final class ReferenceEntityRecordExtractor implements Extractor

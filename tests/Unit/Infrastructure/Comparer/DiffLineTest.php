@@ -1,9 +1,9 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Infrastructure\Comparer;
+namespace AkeneoE3\Tests\Unit\Infrastructure\Comparer;
 
-use AkeneoEtl\Domain\Resource\Attribute;
-use AkeneoEtl\Infrastructure\Comparer\DiffLine;
+use AkeneoE3\Domain\Resource\Attribute;
+use AkeneoE3\Infrastructure\Comparer\DiffLine;
 use PHPUnit\Framework\TestCase;
 
 class DiffLineTest extends TestCase

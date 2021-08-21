@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Domain\Resource;
+namespace AkeneoE3\Domain\Resource;
 
-use AkeneoEtl\Domain\AkeneoSpecifics;
-use AkeneoEtl\Domain\ArrayHelper;
+use AkeneoE3\Domain\AkeneoSpecifics;
+use AkeneoE3\Domain\ArrayHelper;
 use Generator;
 use LogicException;
 

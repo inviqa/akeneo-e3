@@ -34,12 +34,12 @@
     },
     "autoload": {
         "psr-4": {
-            "AkeneoEtl\\": "src/"
+            "AkeneoE3\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "AkeneoEtl\\Tests\\": "tests/"
+            "AkeneoE3\\Tests\\": "tests/"
         }
     },
     "scripts": {

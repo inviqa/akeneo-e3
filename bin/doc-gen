@@ -3,9 +3,9 @@
 
 require __DIR__.'/../vendor/autoload.php';
 
-use AkeneoEtl\Application\Expression\FunctionProvider;
-use AkeneoEtl\Tests\Shared\Command;
-use AkeneoEtl\Infrastructure\EtlFactory;
+use AkeneoE3\Application\Expression\FunctionProvider;
+use AkeneoE3\Tests\Shared\Command;
+use AkeneoE3\Infrastructure\EtlFactory;
 use Symfony\Component\Console\Application;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Twig\Environment;

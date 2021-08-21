@@ -1,9 +1,9 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Application;
+namespace AkeneoE3\Tests\Unit\Application;
 
-use AkeneoEtl\Application\ActionFactory;
-use AkeneoEtl\Domain\Action;
+use AkeneoE3\Application\ActionFactory;
+use AkeneoE3\Domain\Action;
 use LogicException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;

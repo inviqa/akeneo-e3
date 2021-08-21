@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Application\Expression;
+namespace AkeneoE3\Application\Expression;
 
-use AkeneoEtl\Domain\Resource\Field;
+use AkeneoE3\Domain\Resource\Field;
 
 /**
  * @internal
  */
 final class StateHolder
 {
-    public static \AkeneoEtl\Domain\Resource\Resource $resource;
+    public static \AkeneoE3\Domain\Resource\Resource $resource;
 
     public static Field $field;
 }

@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Domain;
+namespace AkeneoE3\Domain;
 
-use AkeneoEtl\Domain\Exception\TransformException;
-use AkeneoEtl\Domain\Load\Event\AfterLoadEvent;
-use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Domain\Transform\Event\AfterTransformEvent;
-use AkeneoEtl\Domain\Transform\Event\BeforeTransformEvent;
-use AkeneoEtl\Domain\Transform\Progress;
-use AkeneoEtl\Domain\Transform\TransformResult\Failed;
-use AkeneoEtl\Domain\Transform\TransformResult\Transformed;
-use AkeneoEtl\Domain\Transform\TransformResult\TransformResult;
+use AkeneoE3\Domain\Exception\TransformException;
+use AkeneoE3\Domain\Load\Event\AfterLoadEvent;
+use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Transform\Event\AfterTransformEvent;
+use AkeneoE3\Domain\Transform\Event\BeforeTransformEvent;
+use AkeneoE3\Domain\Transform\Progress;
+use AkeneoE3\Domain\Transform\TransformResult\Failed;
+use AkeneoE3\Domain\Transform\TransformResult\Transformed;
+use AkeneoE3\Domain\Transform\TransformResult\TransformResult;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class EtlProcess
@@ -54,7 +54,7 @@ final class EtlProcess
     }
 
     /**
-     * @throws \AkeneoEtl\Domain\Exception\TransformException
+     * @throws \AkeneoE3\Domain\Exception\TransformException
      */
     private function transform(Resource $resource, Progress $progress): bool
     {

@@ -1,8 +1,8 @@
 <?php
 
-namespace AkeneoEtl\Domain\Transform\TransformResult;
+namespace AkeneoE3\Domain\Transform\TransformResult;
 
-use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\Resource;
 
 class Failed implements TransformResult
 {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Application;
+namespace AkeneoE3\Application;
 
-use AkeneoEtl\Domain\Action;
-use AkeneoEtl\Application\Action as Actions;
-use AkeneoEtl\Domain\Profile\TransformProfile;
+use AkeneoE3\Domain\Action;
+use AkeneoE3\Application\Action as Actions;
+use AkeneoE3\Domain\Profile\TransformProfile;
 use LogicException;
-use AkeneoEtl\Application\Expression\ExpressionLanguage;
+use AkeneoE3\Application\Expression\ExpressionLanguage;
 
 final class ActionFactory
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace AkeneoEtl\Domain\Exception;
+namespace AkeneoE3\Domain\Exception;
 
 use Exception;
 

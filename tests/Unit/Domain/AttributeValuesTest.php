@@ -1,9 +1,9 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Domain;
+namespace AkeneoE3\Tests\Unit\Domain;
 
-use AkeneoEtl\Domain\Resource\Attribute;
-use AkeneoEtl\Domain\Resource\AttributeValues;
+use AkeneoE3\Domain\Resource\Attribute;
+use AkeneoE3\Domain\Resource\AttributeValues;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Application\Expression;
+namespace AkeneoE3\Application\Expression;
 
 use Symfony\Component\ExpressionLanguage\ExpressionFunction;
 use Symfony\Component\ExpressionLanguage\ExpressionFunctionProviderInterface;
@@ -11,7 +11,7 @@ require_once('src/Application/Expression/Functions/functions.php');
 
 final class FunctionProvider implements ExpressionFunctionProviderInterface
 {
-    public const EXPRESSION_FUNCTIONS_NAMESPACE = '\AkeneoEtl\Application\Expression\Functions\\';
+    public const EXPRESSION_FUNCTIONS_NAMESPACE = '\AkeneoE3\Application\Expression\Functions\\';
 
     /**
      * @return array|ExpressionFunction[]

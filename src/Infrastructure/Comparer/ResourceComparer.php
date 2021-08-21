@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Comparer;
+namespace AkeneoE3\Infrastructure\Comparer;
 
-use AkeneoEtl\Domain\Resource\AuditableResource;
-use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Infrastructure\Command\ResourceDataNormaliser;
+use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Infrastructure\Command\ResourceDataNormaliser;
 
 final class ResourceComparer
 {

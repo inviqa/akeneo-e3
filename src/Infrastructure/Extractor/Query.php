@@ -1,10 +1,10 @@
 <?php
 
-namespace AkeneoEtl\Infrastructure\Extractor;
+namespace AkeneoE3\Infrastructure\Extractor;
 
 use Akeneo\Pim\ApiClient\Search\SearchBuilder;
-use AkeneoEtl\Domain\AkeneoSpecifics;
-use AkeneoEtl\Domain\Profile\ExtractProfile;
+use AkeneoE3\Domain\AkeneoSpecifics;
+use AkeneoE3\Domain\Profile\ExtractProfile;
 
 class Query
 {

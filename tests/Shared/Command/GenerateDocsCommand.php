@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Tests\Shared\Command;
+namespace AkeneoE3\Tests\Shared\Command;
 
-use AkeneoEtl\Application\Expression\FunctionProvider;
-use AkeneoEtl\Domain\EtlProcess;
-use AkeneoEtl\Domain\Profile\EtlProfile;
-use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Domain\Resource\AuditableResource;
-use AkeneoEtl\Infrastructure\Comparer\ResourceComparer;
-use AkeneoEtl\Infrastructure\EtlFactory;
-use AkeneoEtl\Tests\Acceptance\bootstrap\InMemoryExtractor;
-use AkeneoEtl\Tests\Acceptance\bootstrap\InMemoryLoader;
-use AkeneoEtl\Tests\Shared\FunctionDocumentor;
+use AkeneoE3\Application\Expression\FunctionProvider;
+use AkeneoE3\Domain\EtlProcess;
+use AkeneoE3\Domain\Profile\EtlProfile;
+use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Infrastructure\Comparer\ResourceComparer;
+use AkeneoE3\Infrastructure\EtlFactory;
+use AkeneoE3\Tests\Acceptance\bootstrap\InMemoryExtractor;
+use AkeneoE3\Tests\Acceptance\bootstrap\InMemoryLoader;
+use AkeneoE3\Tests\Shared\FunctionDocumentor;
 use LogicException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

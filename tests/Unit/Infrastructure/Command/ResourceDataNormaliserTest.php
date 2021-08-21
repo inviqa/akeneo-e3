@@ -1,8 +1,8 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Infrastructure\Command;
+namespace AkeneoE3\Tests\Unit\Infrastructure\Command;
 
-use AkeneoEtl\Infrastructure\Command\ResourceDataNormaliser;
+use AkeneoE3\Infrastructure\Command\ResourceDataNormaliser;
 use PHPUnit\Framework\TestCase;
 
 class ResourceDataNormaliserTest extends TestCase

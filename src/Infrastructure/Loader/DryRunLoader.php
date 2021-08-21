@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Loader;
+namespace AkeneoE3\Infrastructure\Loader;
 
-use AkeneoEtl\Domain\Loader;
-use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoE3\Domain\Loader;
+use AkeneoE3\Domain\Resource\Resource;
 
 final class DryRunLoader implements Loader
 {

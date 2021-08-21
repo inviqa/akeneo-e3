@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Command;
+namespace AkeneoE3\Infrastructure\Command;
 
 class ResourceDataNormaliser
 {

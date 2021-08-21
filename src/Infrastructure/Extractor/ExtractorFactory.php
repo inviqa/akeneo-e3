@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Extractor;
+namespace AkeneoE3\Infrastructure\Extractor;
 
 use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
-use AkeneoEtl\Domain\Extractor;
-use AkeneoEtl\Domain\Profile\ExtractProfile;
-use AkeneoEtl\Infrastructure\Extractor\Api\ListableExtractor;
-use AkeneoEtl\Infrastructure\Extractor\Api\ReferenceEntityRecordExtractor;
+use AkeneoE3\Domain\Extractor;
+use AkeneoE3\Domain\Profile\ExtractProfile;
+use AkeneoE3\Infrastructure\Extractor\Api\ListableExtractor;
+use AkeneoE3\Infrastructure\Extractor\Api\ReferenceEntityRecordExtractor;
 use LogicException;
 
 final class ExtractorFactory

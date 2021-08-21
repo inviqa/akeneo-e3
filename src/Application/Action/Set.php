@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Application\Action;
+namespace AkeneoE3\Application\Action;
 
-use AkeneoEtl\Application\Expression\StateHolder;
-use AkeneoEtl\Application\Expression\ExpressionLanguage;
-use AkeneoEtl\Domain\Action;
-use AkeneoEtl\Domain\Resource\Field;
-use AkeneoEtl\Domain\Resource\FieldFactory;
-use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoE3\Application\Expression\StateHolder;
+use AkeneoE3\Application\Expression\ExpressionLanguage;
+use AkeneoE3\Domain\Action;
+use AkeneoE3\Domain\Resource\Field;
+use AkeneoE3\Domain\Resource\FieldFactory;
+use AkeneoE3\Domain\Resource\Resource;
 
 final class Set implements Action
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Domain;
+namespace AkeneoE3\Tests\Unit\Domain;
 
-use AkeneoEtl\Domain\Exception\TransformException;
-use AkeneoEtl\Domain\Resource\Property;
-use AkeneoEtl\Domain\Resource\PropertyValues;
+use AkeneoE3\Domain\Exception\TransformException;
+use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\PropertyValues;
 use LogicException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;

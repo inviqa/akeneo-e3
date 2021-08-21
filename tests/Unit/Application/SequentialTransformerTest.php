@@ -1,12 +1,12 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Application;
+namespace AkeneoE3\Tests\Unit\Application;
 
-use AkeneoEtl\Application\SequentialTransformer;
-use AkeneoEtl\Domain\Action;
-use AkeneoEtl\Domain\Resource\Property;
-use AkeneoEtl\Domain\Resource\Resource;
-use AkeneoEtl\Domain\Resource\AuditableResource;
+use AkeneoE3\Application\SequentialTransformer;
+use AkeneoE3\Domain\Action;
+use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\AuditableResource;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;

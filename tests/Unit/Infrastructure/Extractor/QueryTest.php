@@ -1,9 +1,9 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Infrastructure\Extractor;
+namespace AkeneoE3\Tests\Unit\Infrastructure\Extractor;
 
-use AkeneoEtl\Domain\Profile\ExtractProfile;
-use AkeneoEtl\Infrastructure\Extractor\Query;
+use AkeneoE3\Domain\Profile\ExtractProfile;
+use AkeneoE3\Infrastructure\Extractor\Query;
 use PHPUnit\Framework\TestCase;
 
 class QueryTest extends TestCase

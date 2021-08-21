@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Command;
+namespace AkeneoE3\Infrastructure\Command;
 
-use AkeneoEtl\Domain\Profile\ConnectionProfile;
-use AkeneoEtl\Domain\Profile\EtlProfile;
-use AkeneoEtl\Infrastructure\EtlFactory;
-use AkeneoEtl\Infrastructure\Profile\ConnectionProfileFactory;
-use AkeneoEtl\Infrastructure\Profile\EtlProfileFactory;
+use AkeneoE3\Domain\Profile\ConnectionProfile;
+use AkeneoE3\Domain\Profile\EtlProfile;
+use AkeneoE3\Infrastructure\EtlFactory;
+use AkeneoE3\Infrastructure\Profile\ConnectionProfileFactory;
+use AkeneoE3\Infrastructure\Profile\EtlProfileFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Domain\Resource;
+namespace AkeneoE3\Domain\Resource;
 
-use AkeneoEtl\Domain\AkeneoSpecifics;
+use AkeneoE3\Domain\AkeneoSpecifics;
 use Generator;
 use LogicException;
 

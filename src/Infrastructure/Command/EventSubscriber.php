@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Command;
+namespace AkeneoE3\Infrastructure\Command;
 
-use AkeneoEtl\Domain\Load\Event\AfterLoadEvent;
-use AkeneoEtl\Domain\Transform\Event\AfterTransformEvent;
+use AkeneoE3\Domain\Load\Event\AfterLoadEvent;
+use AkeneoE3\Domain\Transform\Event\AfterTransformEvent;
 use LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;

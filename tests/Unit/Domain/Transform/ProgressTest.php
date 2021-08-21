@@ -1,9 +1,9 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Domain\Transform;
+namespace AkeneoE3\Tests\Unit\Domain\Transform;
 
 use PHPUnit\Framework\TestCase;
-use AkeneoEtl\Domain\Transform\Progress;
+use AkeneoE3\Domain\Transform\Progress;
 
 class ProgressTest extends TestCase
 {

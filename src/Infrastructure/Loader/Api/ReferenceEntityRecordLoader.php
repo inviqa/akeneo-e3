@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace AkeneoEtl\Infrastructure\Loader\Api;
+namespace AkeneoE3\Infrastructure\Loader\Api;
 
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
-use AkeneoEtl\Domain\Profile\LoadProfile;
-use AkeneoEtl\Domain\Resource\Property;
-use AkeneoEtl\Domain\Resource\Resource;
+use AkeneoE3\Domain\Profile\LoadProfile;
+use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\Resource;
 
 class ReferenceEntityRecordLoader extends BaseBatchLoader
 {

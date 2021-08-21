@@ -1,5 +1,5 @@
 {
     "git-version": "package_version",
-    "main": "bin/akeneo-etl",
-    "output": "phar/akeneo-etl.phar"
+    "main": "bin/akeneo-e3",
+    "output": "phar/akeneo-e3.phar"
 }

@@ -1,8 +1,8 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Domain\Profile;
+namespace AkeneoE3\Tests\Unit\Domain\Profile;
 
-use AkeneoEtl\Domain\Profile\EtlProfile;
+use AkeneoE3\Domain\Profile\EtlProfile;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace AkeneoEtl\Domain\Profile;
+namespace AkeneoE3\Domain\Profile;
 
 interface LoadProfile
 {

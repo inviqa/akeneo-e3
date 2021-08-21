@@ -1,10 +1,10 @@
 <?php
 
-namespace AkeneoEtl\Tests\Unit\Domain;
+namespace AkeneoE3\Tests\Unit\Domain;
 
-use AkeneoEtl\Domain\Resource\Attribute;
-use AkeneoEtl\Domain\Resource\AuditableResource;
-use AkeneoEtl\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\Attribute;
+use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Resource\Property;
 use PHPUnit\Framework\TestCase;
 
 class AuditableResourceTest extends TestCase
