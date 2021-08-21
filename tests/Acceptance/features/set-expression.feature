@@ -30,7 +30,7 @@ Feature: Data transformations using `set` actions and specific expressions
       """
 
     When transformation is executed
-    Then the product in the PIM should have properties:
+    Then the upload result should have properties:
       | field      | value     |
       | identifier | ziggy     |
     And should have the text attribute description:
@@ -65,10 +65,40 @@ Vestibulum auctor dapibus neque.
       """
 
     When transformation is executed
-    Then the product in the PIM should have properties:
+    Then the upload result should have properties:
       | field      | value     |
       | identifier | ziggy     |
     And should have the text attribute description:
       """
 Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aliquam tincidunt mauris eu risus. Vestibulum auctor dapibus neque.
       """
+
+  Scenario: (Regression) Apply series of set action to the same
+  object property to ensure that actions use modified results
+
+    Given an object in the PIM with properties:
+      | field      | value     |
+      | code       | ziggy     |
+      | family       | hydra     |
+    And the list of labels:
+      | locale | value  |
+      | en_GB  | Akeneo |
+      | de_DE  | Akënëo |
+    And I apply transformations using the profile:
+      """
+      actions:
+          -
+              type: set
+              field: family
+              expression: 'upperCase(value())'
+          -
+              type: set
+              field: family
+              expression: 'value()~"TIOn"'
+
+      """
+    When transformation is executed
+    Then the upload result should have properties:
+      | field      | value     |
+      | code       | ziggy     |
+      | family     | HYDRATIOn |

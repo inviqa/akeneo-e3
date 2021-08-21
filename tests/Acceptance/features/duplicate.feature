@@ -26,17 +26,17 @@ Feature: Data transformations in `duplicate` mode
       """
 
     When transformation is executed
-    Then the product in the PIM should have properties:
+    Then the upload result should have properties:
       | field      | value     |
       | identifier | ziggy     |
       | family     | hydra     |
       | parent     | akeneo    |
       | categories | [monster] |
-    And should have attributes:
+    And the upload result should have attributes:
       | attribute | scope | locale | value     |
       | name      | web   | en_GB  | The Ziggy |
       | name      | web   | de_DE  | Der Ziggy |
-    And should have associations:
+    And the upload result should have associations:
       | type      | products | product_models | groups |
       | FRIENDS   | [fuzzy]  | []             | []     |
       | RELATIVES | []       | [izzy]         | []     |
@@ -90,18 +90,18 @@ Feature: Data transformations in `duplicate` mode
       """
 
     When transformation is executed
-    Then the product in the PIM should have properties:
+    Then the upload result should have properties:
       | field      | value     |
       | identifier | ziggy     |
       | family     |           |
       | parent     | me        |
       | categories | [monster] |
-    And should have attributes:
+    And the upload result should have attributes:
       | attribute | scope | locale | value     |
       | name      | web   | en_GB  | The Ziggy |
       | name      | web   | de_DE  | Der Ziggy |
       | name      | web   | uk_UA  | Зіггі     |
-    And should have associations:
+    And the upload result should have associations:
       | type      | products | product_models | groups              |
       | FRIENDS   | [fuzzy]  | []             | []                  |
       | RELATIVES | []       | [izzy]         | [magical_creatures] |

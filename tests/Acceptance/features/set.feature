@@ -45,18 +45,15 @@ Feature: Data transformations using `set` actions
       """
 
     When transformation is executed
-    Then the product in the PIM should have properties:
+    Then the upload result should have properties:
       | field      | value     |
       | identifier | ziggy     |
       | family     | pet       |
       | parent     |           |
-      | categories | [monster] |
-    And should have attributes:
+    And the upload result should have attributes:
       | attribute | scope | locale | value     |
-      | name      | web   | en_GB  | The Ziggy |
       | name      | web   | de_DE  | Die Ziggy |
       | name      | web   | uk_UA  | Зіггі     |
-
 
   Scenario: Transform scalar values using expressions:
   - change family (concatenate with a prefix)
@@ -95,15 +92,13 @@ Feature: Data transformations using `set` actions
       """
 
     When transformation is executed
-    Then the product in the PIM should have properties:
+    Then the upload result should have properties:
       | field      | value     |
       | identifier | ziggy     |
       | family     | hydra_new |
-      | categories | [monster] |
-    And should have attributes:
+    And the upload result should have attributes:
       | attribute | scope | locale | value            |
       | name      | web   | en_GB  | THE ZIGGY        |
-      | name      | web   | de_DE  | Dēr Süße $Zïggy$ |
       | url_slug  |       | de_DE  | der-susse-ziggy  |
 
 
@@ -136,11 +131,11 @@ Feature: Data transformations using `set` actions
       """
 
     When transformation is executed
-    Then the product in the PIM should have properties:
+    Then the upload result should have properties:
       | field      | value     |
       | code       | ziggy     |
       | categories | [pet,pim] |
-    And should have the list of labels:
+    And the upload result should have the list of labels:
       | locale | value  |
       | en_GB  | Akeneo |
       | de_DE  | Akeneö |
@@ -148,7 +143,6 @@ Feature: Data transformations using `set` actions
 
 
   Scenario: Transform product associations
-
     Given a product in the PIM with properties:
       | field      | value |
       | identifier | ziggy |
@@ -174,10 +168,10 @@ Feature: Data transformations using `set` actions
       """
 
     When transformation is executed
-    Then the product in the PIM should have properties:
+    Then the upload result should have properties:
       | field      | value |
       | identifier | ziggy |
-    And should have associations:
+    And the upload result should have associations:
       | type      | products      | product_models    | groups              |
       | FRIENDS   | [gizzy,jazzy] | []                | []                  |
       | RELATIVES | [izzy]        | [unicorn,mermaid] | [magical_creatures] |
@@ -201,6 +195,5 @@ Feature: Data transformations using `set` actions
               locale: de_DE
               expression: 'upperCase(value())'
       """
-
     When transformation is executed
-    Then the product in the PIM is not modified
+    Then the upload result is empty

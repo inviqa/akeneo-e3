@@ -17,7 +17,7 @@ Feature: Data transformations using `remove` actions
                   - pim
       """
     When transformation is executed
-    Then the product in the PIM should have properties:
+    Then the upload result should have properties:
       | field      | value |
       | identifier | ziggy |
       | categories | [pet] |
@@ -36,7 +36,7 @@ Feature: Data transformations using `remove` actions
               expression: '[lowerCase("PET")]'
       """
     When transformation is executed
-    Then the product in the PIM should have properties:
+    Then the upload result should have properties:
       | field      | value     |
       | identifier | ziggy     |
       | categories | [pim,pxm] |
@@ -66,10 +66,10 @@ Feature: Data transformations using `remove` actions
                       product_models: ['izzy']
       """
     When transformation is executed
-    Then the product in the PIM should have properties:
+    Then the upload result should have properties:
       | field      | value |
       | identifier | ziggy |
-    And should have associations:
+    And the upload result should have associations:
       | type      | products | product_models | groups  |
       | FRIENDS   | [fizzy]  | []             | [gozzi] |
       | RELATIVES | []       | [chezzi]       | []      |
@@ -96,4 +96,4 @@ Feature: Data transformations using `remove` actions
 
       """
     When transformation is executed
-    Then the product in the PIM is not modified
+    Then the upload result is empty

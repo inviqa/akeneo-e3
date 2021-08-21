@@ -6,5 +6,5 @@ default:
             paths:
                 - tests/Acceptance/features
             contexts:
-                - AkeneoEtl\Tests\Acceptance\bootstrap\EtlContext
+                - AkeneoEtl\Tests\Acceptance\bootstrap\TransformContext
                 - AkeneoEtl\Tests\Acceptance\bootstrap\UpdateBehaviorContext

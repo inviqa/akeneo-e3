@@ -15,7 +15,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
 use Webmozart\Assert\Assert;
 
-class EtlContext implements Context
+class TransformContext implements Context
 {
     private InMemoryExtractor $extractor;
 
@@ -28,6 +28,8 @@ class EtlContext implements Context
     private string $resourceType;
 
     private EventDispatcher $eventDispatcher;
+
+    private EtlProfile $profile;
 
     public function __construct()
     {
@@ -87,9 +89,9 @@ class EtlContext implements Context
         $config = Yaml::parse($string);
 
         $factory = new EtlFactory($this->eventDispatcher);
-        $profile = EtlProfile::fromArray($config);
+        $this->profile = EtlProfile::fromArray($config);
 
-        $this->transformer = $factory->createTransformer($profile);
+        $this->transformer = $factory->createTransformer($this->profile);
     }
 
     /**
@@ -100,7 +102,7 @@ class EtlContext implements Context
         $resource = AuditableResource::fromArray($this->resourceData, $this->resourceType);
         $this->extractor = new InMemoryExtractor($resource);
 
-        $this->loader = new InMemoryLoader($resource);
+        $this->loader = new InMemoryLoader($resource, $this->profile->getUploadMode());
 
         $etl = new EtlProcess(
             $this->extractor,
@@ -113,9 +115,9 @@ class EtlContext implements Context
     }
 
     /**
-     * @Then the :resourceType in the PIM should have properties:
+     * @Then the upload result should have properties:
      */
-    public function checkProperties(string $resourceType, TableNode $table): void
+    public function checkResultProperties(TableNode $table): void
     {
         $expected = $this->readPropertiesFromTable($table);
 
@@ -126,7 +128,7 @@ class EtlContext implements Context
     }
 
     /**
-     * @Then should have attributes:
+     * @Then the upload result should have attributes:
      */
     public function checkValues(TableNode $table): void
     {
@@ -136,8 +138,9 @@ class EtlContext implements Context
         Assert::eq($expected, $loaderData['values']);
     }
 
+
     /**
-     * @Then should have the list of :listCode:
+     * @Then the upload result should have the list of :listCode:
      */
     public function checkLocalisedList(string $listCode, TableNode $table): void
     {
@@ -149,7 +152,7 @@ class EtlContext implements Context
     }
 
     /**
-     * @Then should have associations:
+     * @Then the upload result should have associations:
      */
     public function checkAssociations(TableNode $table): void
     {
@@ -159,6 +162,7 @@ class EtlContext implements Context
 
         Assert::eq($expected, $loaderData['associations']);
     }
+
 
     /**
      * @Then should have the text attribute :attributeName:
@@ -171,9 +175,9 @@ class EtlContext implements Context
     }
 
     /**
-     * @Then the :resourceType in the PIM is not modified
+     * @Then the upload result is empty
      */
-    public function resourceIsNotModified(string $resourceType)
+    public function resourceIsNotModified()
     {
         Assert::true($this->loader->isResultEmpty());
     }

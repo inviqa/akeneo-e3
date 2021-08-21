@@ -18,7 +18,7 @@ Feature: Data transformations using `add` actions
                   - fun
       """
     When transformation is executed
-    Then the product in the PIM should have properties:
+    Then the upload result should have properties:
       | field      | value             |
       | identifier | ziggy             |
       | categories | [pim,pet,pxm,fun] |
@@ -37,7 +37,7 @@ Feature: Data transformations using `add` actions
               expression: '["pxm", identifier ~ "-the-hydra"]'
       """
     When transformation is executed
-    Then the product in the PIM should have properties:
+    Then the upload result should have properties:
       | field      | value                         |
       | identifier | ziggy                         |
       | categories | [pim,pet,pxm,ziggy-the-hydra] |
@@ -52,6 +52,7 @@ Feature: Data transformations using `add` actions
       | type      | products | product_models | groups |
       | FRIENDS   | [fuzzy]  | []             | []     |
       | RELATIVES | []       | [izzy]         | []     |
+      | OLD       | []       | [oldry]        | []     |
 
     And I apply transformations using the profile:
       """
@@ -70,24 +71,25 @@ Feature: Data transformations using `add` actions
 
       """
     When transformation is executed
-    Then the product in the PIM should have properties:
+    Then the upload result should have properties:
       | field      | value |
       | identifier | ziggy |
-    And should have associations:
+    And the upload result should have associations:
       | type      | products            | product_models         | groups              |
       | FRIENDS   | [fuzzy,gizzy,jazzy] | []                     | []                  |
       | RELATIVES | []                  | [izzy,unicorn,mermaid] | [magical_creatures] |
+      | OLD       | []                  | [oldry]                | []                  |
       | NEW       | []                  | []                     | [magical_creatures] |
 
   Scenario: Ensure that adding invalid items to associations
-    don't change data (Rule 3 of the Update Behavior)
+  don't change data (Rule 3 of the Update Behavior)
 
     Given a product in the PIM with properties:
       | field      | value |
       | identifier | ziggy |
     And associations:
-      | type      | products | product_models | groups |
-      | FRIENDS   | [fuzzy]  | []             | []     |
+      | type    | products | product_models | groups |
+      | FRIENDS | [fuzzy]  | []             | []     |
 
     And I apply transformations using the profile:
       """
@@ -101,4 +103,4 @@ Feature: Data transformations using `add` actions
 
       """
     When transformation is executed
-    Then the product in the PIM is not modified
+    Then the upload result is empty

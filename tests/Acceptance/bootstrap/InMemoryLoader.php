@@ -3,6 +3,7 @@
 namespace AkeneoEtl\Tests\Acceptance\bootstrap;
 
 use AkeneoEtl\Domain\Loader;
+use AkeneoEtl\Domain\Profile\EtlProfile;
 use AkeneoEtl\Domain\Resource\Resource;
 use AkeneoEtl\Domain\Resource\AuditableResource;
 use LogicException;
@@ -12,24 +13,19 @@ class InMemoryLoader implements Loader
 {
     private Resource $originalResource;
 
-    private ?\AkeneoEtl\Domain\Resource\Resource $result;
+    private ?AuditableResource $result;
 
-    private bool $isMergeMode;
+    private string $uploadMode;
 
-    public function __construct(Resource $originalResource, bool $mergeResource = true)
+    public function __construct(Resource $originalResource, string $uploadMode = EtlProfile::MODE_UPDATE)
     {
         $this->originalResource = $originalResource;
-        $this->isMergeMode = $mergeResource;
+        $this->uploadMode = $uploadMode;
         $this->result = null;
     }
 
     public function load(Resource $resource): array
     {
-//        if ($this->isMergeMode === false) {
-//            $this->result = $resource;
-//
-//            return [];
-//        }
         if (!$resource instanceof AuditableResource) {
             throw new LogicException('Resource must be auditable for merge');
         }
@@ -44,9 +40,13 @@ class InMemoryLoader implements Loader
         return [];
     }
 
-    public function getResult(): \AkeneoEtl\Domain\Resource\Resource
+    public function getResult(): Resource
     {
         Assert::notNull($this->result, 'Transformation result is not defined.');
+
+        if ($this->uploadMode === EtlProfile::MODE_UPDATE) {
+            return $this->result->changes();
+        }
 
         return $this->result;
     }
@@ -54,17 +54,5 @@ class InMemoryLoader implements Loader
     public function isResultEmpty(): bool
     {
         return $this->result === null;
-    }
-
-    private function merge(Resource $resource)
-    {
-        if (!$resource instanceof AuditableResource) {
-            throw new LogicException('Resource must be auditable for merge');
-        }
-
-        foreach ($resource->changes()->fields() as $field) {
-        }
-
-        return $this->originalResource->merge($resource);
     }
 }
