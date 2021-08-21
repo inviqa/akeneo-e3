@@ -6,6 +6,7 @@ use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Domain\Loader;
 use AkeneoE3\Domain\Profile\LoadProfile;
+use AkeneoE3\Infrastructure\Loader\Api\ReferenceEntityLoader;
 use AkeneoE3\Infrastructure\Loader\Api\ReferenceEntityRecordLoader;
 use AkeneoE3\Infrastructure\Loader\Api\UpsertableLoader;
 use LogicException;
@@ -22,6 +23,13 @@ class LoaderFactory
         }
 
         switch ($resourceType) {
+            case 'reference-entity':
+                if (!$client instanceof AkeneoPimEnterpriseClientInterface) {
+                    throw new LogicException(sprintf('%s is supported only in Enterprise Edition', $resourceType));
+                }
+
+                return new ReferenceEntityLoader($loadProfile, $client);
+
             case 'reference-entity-record':
 
                 if (!$client instanceof AkeneoPimEnterpriseClientInterface) {

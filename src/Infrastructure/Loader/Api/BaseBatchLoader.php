@@ -48,7 +48,7 @@ abstract class BaseBatchLoader implements Loader
             $this->resourceType = $resource->getResourceType();
         }
 
-        if ($resource->isChanged() === false) {
+        if ($resource->isChanged() === false && $this->profile->getUploadMode() === EtlProfile::MODE_UPDATE) {
             return [];
         }
 
