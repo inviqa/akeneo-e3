@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace AkeneoE3\Infrastructure\Extractor\Api;
 
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
-use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityApiInterface;
-use AkeneoE3\Domain\Extractor;
+use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityRecordApiInterface;
 use AkeneoE3\Domain\Profile\ExtractProfile;
 use AkeneoE3\Domain\Resource\AuditableResource;
 use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Infrastructure\Extractor\ExtractConnector;
 use AkeneoE3\Infrastructure\Extractor\Query;
 use Generator;
 
-final class ReferenceEntityExtractor implements Extractor
+final class ReferenceEntityRecord implements ExtractConnector
 {
-    private ReferenceEntityApiInterface $api;
+    private ReferenceEntityRecordApiInterface $api;
 
     private Query $query;
 
@@ -24,23 +24,24 @@ final class ReferenceEntityExtractor implements Extractor
     public function __construct(string $resourceType, ExtractProfile $profile, AkeneoPimEnterpriseClientInterface $client)
     {
         $this->resourceType = $resourceType;
-        $this->api = $client->getReferenceEntityApi();
+        $this->api = $client->getReferenceEntityRecordApi();
         $this->query = Query::fromProfile($profile, $resourceType);
     }
 
     public function count(): int
     {
-        return 100;
+        return -1;
     }
 
     /**
-     * @return Generator|Resource[]
+     * @return iterable<Resource>
      */
-    public function extract(): Generator
+    public function extract(): iterable
     {
-        $cursor = $this->api->all($this->query->toArray());
+        $cursor = $this->api->all('suppliers', $this->query->toArray());
 
         foreach ($cursor as $resource) {
+            $resource['reference_entity_code'] = 'suppliers';
             yield AuditableResource::fromArray($resource, $this->resourceType);
         }
     }

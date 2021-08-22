@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Infrastructure\Extractor\Api;
 
-use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\Pim\ApiClient\Api\Operation\ListableResourceInterface;
-use AkeneoE3\Domain\Extractor;
+use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Domain\Profile\ExtractProfile;
 use AkeneoE3\Domain\Resource\AuditableResource;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Infrastructure\Api\ApiSelector;
+use AkeneoE3\Infrastructure\Extractor\ExtractConnector;
 use AkeneoE3\Infrastructure\Extractor\Query;
-use Generator;
 use LogicException;
 
-final class ListableExtractor implements Extractor
+final class Standard implements ExtractConnector
 {
     private string $resourceType;
 
@@ -23,14 +22,16 @@ final class ListableExtractor implements Extractor
 
     private ListableResourceInterface $api;
 
-    public function __construct(string $resourceType, ExtractProfile $profile, AkeneoPimClientInterface $client)
+    public function __construct(string $resourceType, ExtractProfile $profile, AkeneoPimEnterpriseClientInterface $client)
     {
         $this->resourceType = $resourceType;
 
         $api = (new ApiSelector())->getApi($client, $resourceType);
+
         if (!$api instanceof ListableResourceInterface) {
             throw new LogicException(sprintf('%s API does not support listing', $resourceType));
         }
+
         $this->api = $api;
 
         $this->query = Query::fromProfile($profile, $resourceType);
@@ -44,9 +45,9 @@ final class ListableExtractor implements Extractor
     }
 
     /**
-     * @return Generator|Resource[]
+     * @return iterable<Resource>
      */
-    public function extract(): Generator
+    public function extract(): iterable
     {
         $cursor = $this->api->all(100, $this->query->toArray());
 
