@@ -160,7 +160,7 @@ final class NonAuditableResource implements Resource
         }
     }
 
-    public function toArray(): array
+    public function toArray(bool $full): array
     {
         $data = $this->properties->toArray();
 

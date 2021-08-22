@@ -45,7 +45,7 @@ final class Add implements Action
         StateHolder::$resource = $resource;
         StateHolder::$field = $this->field;
 
-        $result = $this->expressionLanguage->evaluate($expression, $resource->toArray());
+        $result = $this->expressionLanguage->evaluate($expression, $resource->toArray(true));
 
         if (is_array($result) === false) {
             throw new TransformException(sprintf('Expected result type of the expression %s is array', $expression), true);

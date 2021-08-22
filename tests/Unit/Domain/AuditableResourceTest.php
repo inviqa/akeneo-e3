@@ -31,7 +31,7 @@ class AuditableResourceTest extends TestCase
                     ['scope' => 'web', 'locale' => 'de_DE', 'data' => 'Die Mutter von Ziggy'],
                 ]
             ]
-        ], $changes->toArray());
+        ], $changes->toArray(true));
 
         $origins = $resource->origins();
         $this->assertEquals([
@@ -42,6 +42,6 @@ class AuditableResourceTest extends TestCase
                     ['scope' => 'web', 'locale' => 'de_DE', 'data' => 'Süßer Ziggy'],
                 ]
             ]
-        ], $origins->toArray());
+        ], $origins->toArray(true));
     }
 }

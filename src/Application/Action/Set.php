@@ -47,6 +47,6 @@ final class Set implements Action
         StateHolder::$resource = $resource;
         StateHolder::$field = $this->field;
 
-        return $this->expressionLanguage->evaluate($expression, $resource->toArray());
+        return $this->expressionLanguage->evaluate($expression, $resource->toArray(true));
     }
 }
