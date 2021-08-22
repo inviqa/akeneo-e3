@@ -7,13 +7,12 @@ use AkeneoE3\Domain\Action;
 use LogicException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 class ActionFactoryTest extends TestCase
 {
     public function test_it_creates_a_action()
     {
-        $factory = new ActionFactory(new EventDispatcher());
+        $factory = new ActionFactory();
         $action = $factory->create('set', [
             'field' => 'name',
             'value' => 'nemo',
@@ -26,7 +25,7 @@ class ActionFactoryTest extends TestCase
     {
         $this->expectException(LogicException::class);
 
-        $factory = new ActionFactory(new EventDispatcher());
+        $factory = new ActionFactory();
         $factory->create('??? unknown ???', []);
     }
 }
