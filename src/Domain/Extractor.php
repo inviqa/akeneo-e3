@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Domain;
 
-use Generator;
+use AkeneoE3\Domain\Resource\Resource;
 
 interface Extractor
 {
     public function count(): int;
 
     /**
-     * @return \Generator|\AkeneoE3\Domain\Resource\Resource[]
+     * @return iterable<Resource>
      */
-    public function extract(): Generator;
+    public function extract(): iterable;
 }

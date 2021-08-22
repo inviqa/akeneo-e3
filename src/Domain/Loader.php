@@ -10,14 +10,14 @@ use AkeneoE3\Domain\Resource\Resource;
 interface Loader
 {
     /**
-     * @return array|LoadResult[]
+     * @return LoadResult[]
      */
-    public function load(Resource $resource): array;
+    public function load(Resource $resource): iterable;
 
     /**
      * Finish loading, e.g. load remaining resources in bulk.
      *
-     * @return array|LoadResult[]
+     * @return LoadResult[]
      */
-    public function finish(): array;
+    public function finish(): iterable;
 }
