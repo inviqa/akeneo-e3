@@ -50,6 +50,11 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
         return $this->mode;
     }
 
+    public function isDuplicateMode(): bool
+    {
+        return $this->mode === EtlProfile::MODE_DUPLICATE;
+    }
+
     public function getConditions(): array
     {
         return $this->conditions;
@@ -104,5 +109,10 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
         }
 
         return $resolver->resolve($data);
+    }
+
+    public function getBatchSize(): int
+    {
+        return 100;
     }
 }
