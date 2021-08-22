@@ -20,7 +20,7 @@ It is similar and compatible with Akeneo Enrichment Rules but is more powerful. 
 * copy number data to a metric attribute
 
 :star:&nbsp;**Data model changes** e.g.
-* add an attribute to all families
+* [add an attribute to families](docs/examples/add-attribute-to-families.md)
 
 :star:&nbsp;**Migration** e.g. 
 * copy a product range from UAT to production  

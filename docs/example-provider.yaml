@@ -281,9 +281,9 @@ modify-associations:
                               product_models: [ 'mermaid']
                           NEW:
                               groups: ['magical_creatures']
-add-attributes-to-families:
+add-attribute-to-families:
     category: resource-types
-    file_name: add-attributes-to-families
+    file_name: add-attribute-to-families
     header: Add attributes to families
     tasks:
         - description: add an attribute to families.
