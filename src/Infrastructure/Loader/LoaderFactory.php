@@ -5,6 +5,7 @@ namespace AkeneoE3\Infrastructure\Loader;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Domain\Loader;
 use AkeneoE3\Domain\Profile\LoadProfile;
+use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Loader\Api\ReferenceEntity;
 use AkeneoE3\Infrastructure\Loader\Api\ReferenceEntityRecord;
 use AkeneoE3\Infrastructure\Loader\Api\Standard;
@@ -12,7 +13,7 @@ use AkeneoE3\Infrastructure\Loader\Api\Standard;
 class LoaderFactory
 {
     public function createLoader(
-        string $resourceType,
+        ResourceType $resourceType,
         LoadProfile $loadProfile,
         AkeneoPimEnterpriseClientInterface $client
     ): Loader {
@@ -20,7 +21,7 @@ class LoaderFactory
             return new DryRunLoader();
         }
 
-        switch ($resourceType) {
+        switch ((string)$resourceType) {
             case 'reference-entity':
                 return new ApiLoader(
                     new ReferenceEntity($loadProfile, $client)

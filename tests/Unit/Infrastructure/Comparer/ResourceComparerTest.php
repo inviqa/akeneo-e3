@@ -5,6 +5,7 @@ namespace AkeneoE3\Tests\Unit\Infrastructure\Comparer;
 use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\AuditableResource;
 use AkeneoE3\Domain\Resource\Attribute;
+use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Comparer\DiffLine;
 use AkeneoE3\Infrastructure\Comparer\ResourceComparer;
 use PHPUnit\Framework\TestCase;
@@ -20,7 +21,7 @@ class ResourceComparerTest extends TestCase
         $resource1 = AuditableResource::fromArray([
                 'identifier' => '0123456789',
                 'family' => 'ziggy'
-            ], 'product');
+            ], ResourceType::create('product'));
         $resource1->set($description, 'Ziggy The Hydra');
 
         $resource2 = clone $resource1;

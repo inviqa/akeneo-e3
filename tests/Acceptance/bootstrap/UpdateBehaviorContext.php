@@ -6,6 +6,7 @@ use AkeneoE3\Domain\Exception\TransformException;
 use AkeneoE3\Domain\Resource\Attribute;
 use AkeneoE3\Domain\Resource\AuditableResource;
 use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\ResourceType;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Webmozart\Assert\Assert;
@@ -14,7 +15,7 @@ class UpdateBehaviorContext implements Context
 {
     private AuditableResource $resource;
 
-    private string $resourceType;
+    private ResourceType $resourceType;
 
     /**
      * @Given an original resource:
@@ -22,7 +23,7 @@ class UpdateBehaviorContext implements Context
     public function readOriginalResource(PyStringNode $json): void
     {
         $data = json_decode($json, true);
-        $this->resourceType = isset($data['identifier']) ? 'product' : 'object';
+        $this->resourceType = ResourceType::create(isset($data['identifier']) ? 'product' : 'object');
 
         $this->resource = AuditableResource::fromArray($data, $this->resourceType);
     }

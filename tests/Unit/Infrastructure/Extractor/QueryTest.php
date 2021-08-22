@@ -3,6 +3,7 @@
 namespace AkeneoE3\Tests\Unit\Infrastructure\Extractor;
 
 use AkeneoE3\Domain\Profile\ExtractProfile;
+use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Extractor\Query;
 use LogicException;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +17,7 @@ class QueryTest extends TestCase
             [
                 ['field' => 'family', 'operator' => 'IN', 'value' => ['pim']],
             ]
-        ), 'product');
+        ), ResourceType::create('product'));
 
         $expected = [
             'search' => [
@@ -36,7 +37,7 @@ class QueryTest extends TestCase
                 ['field' => 'reference_entity_code', 'value' => 'toys'],
                 ['field' => 'complete', 'operator' => '=', 'value' => 'true'],
             ]
-        ), 'reference-entity-record');
+        ), ResourceType::create('reference-entity-record'));
 
 
         $this->assertEquals('toys', $query->getValue('reference_entity_code'));
@@ -52,7 +53,7 @@ class QueryTest extends TestCase
             [
                 ['field' => 'complete', 'operator' => '=', 'true'],
             ]
-        ), 'reference-entity-record');
+        ), ResourceType::create('reference-entity-record'));
     }
 }
 

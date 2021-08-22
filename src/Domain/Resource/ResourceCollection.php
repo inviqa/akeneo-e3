@@ -31,7 +31,7 @@ class ResourceCollection
         );
     }
 
-    public function getResourceType(): string
+    public function getResourceType(): ResourceType
     {
         $firstKey = array_key_first($this->items);
 

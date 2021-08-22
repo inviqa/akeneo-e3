@@ -9,6 +9,7 @@ use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityRecordApiInterface;
 use AkeneoE3\Domain\Profile\ExtractProfile;
 use AkeneoE3\Domain\Resource\AuditableResource;
 use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Extractor\ExtractConnector;
 use AkeneoE3\Infrastructure\Extractor\Query;
 use Generator;
@@ -19,9 +20,9 @@ final class ReferenceEntityRecord implements ExtractConnector
 
     private Query $query;
 
-    private string $resourceType;
+    private ResourceType $resourceType;
 
-    public function __construct(string $resourceType, ExtractProfile $profile, AkeneoPimEnterpriseClientInterface $client)
+    public function __construct(ResourceType $resourceType, ExtractProfile $profile, AkeneoPimEnterpriseClientInterface $client)
     {
         $this->resourceType = $resourceType;
         $this->api = $client->getReferenceEntityRecordApi();

@@ -9,6 +9,7 @@ use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Domain\Profile\ExtractProfile;
 use AkeneoE3\Domain\Resource\AuditableResource;
 use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\ApiSelector;
 use AkeneoE3\Infrastructure\Extractor\ExtractConnector;
 use AkeneoE3\Infrastructure\Extractor\Query;
@@ -16,13 +17,13 @@ use LogicException;
 
 final class Standard implements ExtractConnector
 {
-    private string $resourceType;
+    private ResourceType $resourceType;
 
     private Query $query;
 
     private ListableResourceInterface $api;
 
-    public function __construct(string $resourceType, ExtractProfile $profile, AkeneoPimEnterpriseClientInterface $client)
+    public function __construct(ResourceType $resourceType, ExtractProfile $profile, AkeneoPimEnterpriseClientInterface $client)
     {
         $this->resourceType = $resourceType;
 

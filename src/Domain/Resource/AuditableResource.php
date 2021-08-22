@@ -14,7 +14,7 @@ final class AuditableResource implements Resource
 
     private Resource $origins;
 
-    private function __construct(array $data, string $resourceType)
+    private function __construct(array $data, ResourceType $resourceType)
     {
         $this->resource = NonAuditableResource::fromArray($data, $resourceType);
 
@@ -22,19 +22,19 @@ final class AuditableResource implements Resource
         $this->origins = NonAuditableResource::fromCode($this->resource->getCode(), $this->resource->getResourceType());
     }
 
-    public static function fromArray(array $data, string $resourceType): self
+    public static function fromArray(array $data, ResourceType $resourceType): self
     {
         return new self($data, $resourceType);
     }
 
-    public static function fromCode(string $code, string $resourceType): self
+    public static function fromCode(string $code, ResourceType $resourceType): self
     {
         return new self([
-            'identifier' => $code
+            $resourceType->getCodeFieldName() => $code
         ], $resourceType);
     }
 
-    public function getResourceType(): string
+    public function getResourceType(): ResourceType
     {
         return $this->resource->getResourceType();
     }
@@ -52,29 +52,29 @@ final class AuditableResource implements Resource
      */
     public function set(Field $field, $newValue): void
     {
-        $this->trackOrigins($field, $newValue);
+        $this->trackOrigins($field);
 
         $this->resource->set($field, $newValue);
 
-        $this->trackCahnges($field, $newValue);
+        $this->trackChanges($field, $newValue);
     }
 
     public function addTo(Field $field, array $newValue): void
     {
-        $this->trackOrigins($field, $newValue);
+        $this->trackOrigins($field);
 
         $this->resource->addTo($field, $newValue);
 
-        $this->trackCahnges($field, $newValue);
+        $this->trackChanges($field, $newValue);
     }
 
     public function removeFrom(Field $field, array $newValue): void
     {
-        $this->trackOrigins($field, $newValue);
+        $this->trackOrigins($field);
 
         $this->resource->removeFrom($field, $newValue);
 
-        $this->trackCahnges($field, $newValue);
+        $this->trackChanges($field, $newValue);
     }
 
     public function has(Field $field): bool
@@ -134,10 +134,7 @@ final class AuditableResource implements Resource
         return $this->origins;
     }
 
-    /**
-     * @param mixed $newValue
-     */
-    private function trackOrigins(Field $field, $newValue): void
+    private function trackOrigins(Field $field): void
     {
         if ($this->resource->has($field) === true) {
             $this->origins->set($field, $this->resource->get($field));
@@ -147,7 +144,7 @@ final class AuditableResource implements Resource
     /**
      * @param mixed $newValue
      */
-    private function trackCahnges(Field $field, $newValue): void
+    private function trackChanges(Field $field, $newValue): void
     {
         $this->changes->set($field, $this->resource->get($field));
     }

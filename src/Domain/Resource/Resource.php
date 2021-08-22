@@ -6,7 +6,7 @@ use Generator;
 
 interface Resource
 {
-    public function getResourceType(): string;
+    public function getResourceType(): ResourceType;
 
     /**
      * @return mixed

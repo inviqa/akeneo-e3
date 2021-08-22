@@ -17,13 +17,13 @@ final class NonAuditableResource implements Resource
 
     private AttributeValues $attributes;
 
-    private string $resourceType;
+    private ResourceType $resourceType;
 
     private bool $isChanged = false;
 
     private string $code;
 
-    private function __construct(array $data, string $resourceType)
+    private function __construct(array $data, ResourceType $resourceType)
     {
         $this->resourceType = $resourceType;
 
@@ -37,19 +37,19 @@ final class NonAuditableResource implements Resource
         $this->properties = PropertyValues::fromArray($data);
     }
 
-    public static function fromArray(array $data, string $resourceType): self
+    public static function fromArray(array $data, ResourceType $resourceType): self
     {
         return new self($data, $resourceType);
     }
 
-    public static function fromCode(string $code, string $resourceType): self
+    public static function fromCode(string $code, ResourceType $resourceType): self
     {
         return new self([
-            AkeneoSpecifics::getCodeFieldName($resourceType) => $code
+            $resourceType->getCodeFieldName() => $code
         ], $resourceType);
     }
 
-    public function getResourceType(): string
+    public function getResourceType(): ResourceType
     {
         return $this->resourceType;
     }
@@ -136,9 +136,14 @@ final class NonAuditableResource implements Resource
         $this->properties->set($codeField, $code);
     }
 
+    /**
+     * @deprecated
+     *
+     * use Resource::getResourceType::getCodeFieldName()
+     */
     public function getCodeFieldName(): string
     {
-        return AkeneoSpecifics::getCodeFieldName($this->resourceType);
+        return $this->resourceType->getCodeFieldName();
     }
 
     public function isChanged(): bool

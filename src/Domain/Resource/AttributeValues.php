@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Domain\Resource;
 
-use AkeneoE3\Domain\AkeneoSpecifics;
 use AkeneoE3\Domain\ArrayHelper;
 use Generator;
 use LogicException;
@@ -13,31 +12,34 @@ final class AttributeValues
 {
     private array $values = [];
 
-    private string $channelFieldName;
-
     private ArrayHelper $arrayHelper;
 
-    private function __construct(array $data, string $resourceType)
-    {
-        $this->channelFieldName = AkeneoSpecifics::getChannelFieldName($resourceType);
+    /**
+     * @var \AkeneoE3\Domain\Resource\ResourceType
+     */
+    private ResourceType $resourceType;
 
+    private function __construct(array $data, ResourceType $resourceType)
+    {
         $this->arrayHelper = new ArrayHelper();
 
         foreach ($data as $name => $localisedValues) {
             foreach ($localisedValues as $localisedValue) {
                 $hash = $this->hash(
                     $name,
-                    $localisedValue[$this->channelFieldName] ?? '',
+                    $localisedValue[$resourceType->getChannelFieldName()] ?? '',
                     $localisedValue['locale'] ?? ''
                 );
                 $this->values[$hash] = $localisedValue['data'] ?? null;
             }
         }
+
+        $this->resourceType = $resourceType;
     }
 
-    public static function fromArray(array $data, string $resourceType = 'product'): self
+    public static function fromArray(array $data, ResourceType $resourceType = null): self
     {
-        return new self($data, $resourceType);
+        return new self($data, $resourceType ?? ResourceType::create('product'));
     }
 
     /**
@@ -115,7 +117,7 @@ final class AttributeValues
             $attribute = $this->hashToAttribute($hash);
 
             $result[$attribute->getName()][] = [
-                $this->channelFieldName => $attribute->getScope(),
+                $this->resourceType->getChannelFieldName() => $attribute->getScope(),
                 'locale' => $attribute->getLocale(),
                 'data' => $value,
             ];
@@ -151,7 +153,7 @@ final class AttributeValues
             sprintf(
                 'Attribute %s (%s=%s, locale=%s) is not present in data',
                 $attribute->getName(),
-                $this->channelFieldName,
+                $this->resourceType->getChannelFieldName(),
                 $attribute->getScope() ?? 'null',
                 $attribute->getLocale() ?? 'null'
             )

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AkeneoE3\Infrastructure\Api;
 
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
+use AkeneoE3\Domain\Resource\ResourceType;
 use LogicException;
 
 final class ApiSelector
@@ -12,7 +13,7 @@ final class ApiSelector
     /**
      * @return mixed
      */
-    public function getApi(AkeneoPimEnterpriseClientInterface $client, string $dataType)
+    public function getApi(AkeneoPimEnterpriseClientInterface $client, ResourceType $dataType)
     {
         $supportedApis = [
             'association-type'   => $client->getAssociationTypeApi(),
@@ -32,25 +33,21 @@ final class ApiSelector
             'family-variant'     => $client->getFamilyVariantApi(),
 
             'measurement-family' => $client->getMeasurementFamilyApi(),
-        ];
 
-        if ($client instanceof AkeneoPimEnterpriseClientInterface) {
-            $supportedApis += [
-                'reference-entity'                  => $client->getReferenceEntityApi(),
-                'reference-entity-attribute'        => $client->getReferenceEntityAttributeApi(),
-                'reference-entity-attribute-option' => $client->getReferenceEntityAttributeOptionApi(),
-                'reference-entity-record'           => $client->getReferenceEntityRecordApi(),
-                'reference-entity-media-file'       => $client->getReferenceEntityMediaFileApi(),
+            'reference-entity'                  => $client->getReferenceEntityApi(),
+            'reference-entity-attribute'        => $client->getReferenceEntityAttributeApi(),
+            'reference-entity-attribute-option' => $client->getReferenceEntityAttributeOptionApi(),
+            'reference-entity-record'           => $client->getReferenceEntityRecordApi(),
+            'reference-entity-media-file'       => $client->getReferenceEntityMediaFileApi(),
 
-                'asset'                             => $client->getAssetManagerApi(),
-                'asset-attribute'                   => $client->getAssetAttributeApi(),
-                'asset-attribute-option'            => $client->getAssetAttributeOptionApi(),
-                'asset-family'                      => $client->getAssetFamilyApi(),
-                'asset-media-file'                  => $client->getAssetMediaFileApi(),
+            'asset'                             => $client->getAssetManagerApi(),
+            'asset-attribute'                   => $client->getAssetAttributeApi(),
+            'asset-attribute-option'            => $client->getAssetAttributeOptionApi(),
+            'asset-family'                      => $client->getAssetFamilyApi(),
+            'asset-media-file'                  => $client->getAssetMediaFileApi(),
             ];
-        }
 
-        if (isset($supportedApis[$dataType]) === false) {
+        if (isset($supportedApis[(string)$dataType]) === false) {
             throw new LogicException(sprintf(
                 'Unsupported data type: %s. Please, select one of following types: %s.',
                 $dataType,
@@ -58,6 +55,6 @@ final class ApiSelector
             ));
         }
 
-        return $supportedApis[$dataType];
+        return $supportedApis[(string)$dataType];
     }
 }

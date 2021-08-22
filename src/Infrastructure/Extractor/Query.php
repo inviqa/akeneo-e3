@@ -5,6 +5,7 @@ namespace AkeneoE3\Infrastructure\Extractor;
 use Akeneo\Pim\ApiClient\Search\SearchBuilder;
 use AkeneoE3\Domain\AkeneoSpecifics;
 use AkeneoE3\Domain\Profile\ExtractProfile;
+use AkeneoE3\Domain\Resource\ResourceType;
 use LogicException;
 
 class Query
@@ -13,7 +14,7 @@ class Query
 
     private array $searchFilters = [];
 
-    public function __construct(ExtractProfile $profile, string $resourceType)
+    public function __construct(ExtractProfile $profile, ResourceType $resourceType)
     {
         $indexedConditions = [];
 
@@ -53,7 +54,7 @@ class Query
         $this->searchFilters = ['search' => $builder->getFilters()];
     }
 
-    public static function fromProfile(ExtractProfile $profile, string $resourceType): self
+    public static function fromProfile(ExtractProfile $profile, ResourceType $resourceType): self
     {
         return new self($profile, $resourceType);
     }

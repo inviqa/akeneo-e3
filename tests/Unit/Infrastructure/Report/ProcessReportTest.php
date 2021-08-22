@@ -3,6 +3,7 @@
 namespace AkeneoE3\Tests\Unit\Infrastructure\Report;
 
 use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Domain\Transform\TransformResult;
 use AkeneoE3\Domain\Load\LoadResult;
 use AkeneoE3\Infrastructure\Report\ProcessReport;
@@ -26,7 +27,7 @@ class ProcessReportTest extends TestCase
     public function test_it_return_total_amount_of_processed_resources()
     {
         $report = new ProcessReport();
-        $resource = AuditableResource::fromCode('123', 'product');
+        $resource = AuditableResource::fromCode('123', ResourceType::create('product'));
 
         $report->add(LoadResult\Loaded::create($resource));
         $report->add(LoadResult\Loaded::create($resource));
@@ -37,7 +38,7 @@ class ProcessReportTest extends TestCase
     public function test_it_returns_transform_stats()
     {
         $report = new ProcessReport();
-        $resource = AuditableResource::fromCode('123', 'product');
+        $resource = AuditableResource::fromCode('123', ResourceType::create('product'));
 
         $report->add(LoadResult\TransformFailed::create($resource, TransformResult\Failed::create($resource, 'error1')));
         $report->add(LoadResult\TransformFailed::create($resource, TransformResult\Failed::create($resource, 'error1')));
@@ -55,7 +56,7 @@ class ProcessReportTest extends TestCase
     {
         $report = new ProcessReport();
 
-        $resource = AuditableResource::fromCode('123', 'product');
+        $resource = AuditableResource::fromCode('123', ResourceType::create('product'));
 
         $report->add(LoadResult\Loaded::create($resource));
         $report->add(LoadResult\Loaded::create($resource));

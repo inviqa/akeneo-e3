@@ -4,6 +4,7 @@ namespace AkeneoE3\Tests\Unit\Domain;
 
 use AkeneoE3\Domain\Resource\Attribute;
 use AkeneoE3\Domain\Resource\AttributeValues;
+use AkeneoE3\Domain\Resource\ResourceType;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
 
@@ -135,7 +136,7 @@ class AttributeValuesTest extends TestCase
 
     public function test_it_converts_to_array_with_channel_fields()
     {
-        $collection = AttributeValues::fromArray([], 'reference-entity-record');
+        $collection = AttributeValues::fromArray([], ResourceType::create('reference-entity-record'));
 
         $collection->set(Attribute::create('a1', 's1', null), 1);
         $collection->set(Attribute::create('a1', 's2', null), 2);

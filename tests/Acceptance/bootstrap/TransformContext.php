@@ -8,6 +8,7 @@ use AkeneoE3\Domain\IterableTransformer;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Resource\Attribute;
 use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\EtlFactory;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
@@ -25,7 +26,7 @@ class TransformContext implements Context
 
     private array $resourceData = [];
 
-    private string $resourceType;
+    private ResourceType $resourceType;
 
     private EtlProfile $profile;
 
@@ -34,7 +35,7 @@ class TransformContext implements Context
      */
     public function readResourceProperties(string $resourceType, TableNode $table): void
     {
-        $this->resourceType = $resourceType;
+        $this->resourceType = ResourceType::create($resourceType);
         $this->resourceData = $this->readPropertiesFromTable($table);
     }
 

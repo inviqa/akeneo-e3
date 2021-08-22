@@ -7,19 +7,19 @@ namespace AkeneoE3\Infrastructure\Extractor;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Domain\Extractor;
 use AkeneoE3\Domain\Profile\ExtractProfile;
+use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Extractor\Api\Standard;
 use AkeneoE3\Infrastructure\Extractor\Api\ReferenceEntity;
 use AkeneoE3\Infrastructure\Extractor\Api\ReferenceEntityRecord;
-use LogicException;
 
 final class ExtractorFactory
 {
     public function create(
-        string $resourceType,
+        ResourceType $resourceType,
         ExtractProfile $profile,
         AkeneoPimEnterpriseClientInterface $client
     ): Extractor {
-        switch ($resourceType) {
+        switch ((string)$resourceType) {
             case 'reference-entity':
                 return new ApiExtractor(new ReferenceEntity($resourceType, $profile, $client));
 

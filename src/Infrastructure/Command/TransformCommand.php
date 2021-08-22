@@ -6,6 +6,7 @@ namespace AkeneoE3\Infrastructure\Command;
 
 use AkeneoE3\Domain\Profile\ConnectionProfile;
 use AkeneoE3\Domain\Profile\EtlProfile;
+use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\EtlFactory;
 use AkeneoE3\Infrastructure\Profile\ConnectionProfileFactory;
 use AkeneoE3\Infrastructure\Profile\EtlProfileFactory;
@@ -29,7 +30,7 @@ final class TransformCommand extends Command
 
     private EtlProfile $ruleProfile;
 
-    private string $resourceType;
+    private ResourceType $resourceType;
 
     private TransformOutput $output;
 
@@ -70,7 +71,7 @@ final class TransformCommand extends Command
         $this->ruleProfile = $this->getEtlProfile($input);
         $this->ruleProfile->setDryRunCodes($this->getDryRunCodes($input));
 
-        $this->resourceType = (string)$input->getOption('resource-type');
+        $this->resourceType = ResourceType::create((string)$input->getOption('resource-type'));
 
         $this->output = new TransformOutput($input, $output);
     }

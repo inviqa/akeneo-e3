@@ -6,6 +6,7 @@ use AkeneoE3\Domain\Resource\Attribute;
 use AkeneoE3\Domain\Resource\FieldFactory;
 use AkeneoE3\Domain\Resource\NonAuditableResource;
 use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\ResourceType;
 use LogicException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
@@ -14,7 +15,7 @@ class NonAuditableResourceTest extends TestCase
 {
     public function test_it_can_be_created_from_a_code()
     {
-        $resource = NonAuditableResource::fromCode('123', 'product');
+        $resource = NonAuditableResource::fromCode('123', ResourceType::create('product'));
 
         $this->assertEquals('123', $resource->getCode());
     }
@@ -24,7 +25,7 @@ class NonAuditableResourceTest extends TestCase
      */
     public function test_it_gets_values(array $options, $expectedValue)
     {
-        $resource = NonAuditableResource::fromArray(TestData::getProduct(), 'product');
+        $resource = NonAuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
         $field = FieldFactory::fromOptions($options);
         $value = $resource->get($field);
 
@@ -33,7 +34,7 @@ class NonAuditableResourceTest extends TestCase
 
     public function test_it_returns_true_if_a_field_exists()
     {
-        $resource = NonAuditableResource::fromArray(TestData::getProduct(), 'product');
+        $resource = NonAuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
         $field = Property::create('family');
 
         $this->assertTrue($resource->has($field));
@@ -41,7 +42,7 @@ class NonAuditableResourceTest extends TestCase
 
     public function test_it_throws_an_exception_by_getting_a_property_that_does_not_exist()
     {
-        $resource = NonAuditableResource::fromArray(TestData::getProduct(), 'product');
+        $resource = NonAuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
         $field = Property::create('reality');
         $this->expectException(LogicException::class);
 
@@ -50,7 +51,7 @@ class NonAuditableResourceTest extends TestCase
 
     public function test_it_throws_an_exception_by_getting_an_attribute_that_does_not_exist()
     {
-        $resource = NonAuditableResource::fromArray(TestData::getProduct(), 'product');
+        $resource = NonAuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
         $field = Attribute::create('colour', 'reality', null);
         $this->expectException(LogicException::class);
 
@@ -59,7 +60,7 @@ class NonAuditableResourceTest extends TestCase
 
     public function test_it_should_be_changed_if_set_applied()
     {
-        $resource = NonAuditableResource::fromArray(TestData::getProduct(), 'product');
+        $resource = NonAuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
         $resource->set(Property::create('family'), 'ziggy-mama');
 
         Assert::assertTrue($resource->isChanged());
@@ -67,14 +68,14 @@ class NonAuditableResourceTest extends TestCase
 
     public function test_it_should_not_be_changed_if_set_not_applied()
     {
-        $resource = NonAuditableResource::fromArray(TestData::getProduct(), 'product');
+        $resource = NonAuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
         Assert::assertFalse($resource->isChanged());
     }
 
     public function test_it_should_be_changed_if_add_to_applied()
     {
-        $resource = NonAuditableResource::fromArray(TestData::getProduct(), 'product');
+        $resource = NonAuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
         $resource->addTo(Property::create('categories'), ['pxm']);
 
         Assert::assertTrue($resource->isChanged());
@@ -92,7 +93,7 @@ class NonAuditableResourceTest extends TestCase
             ]
         ];
 
-        $resource = NonAuditableResource::fromArray($product, 'product');
+        $resource = NonAuditableResource::fromArray($product, ResourceType::create('product'));
 
         $fields = iterator_to_array($resource->fields());
 

@@ -16,6 +16,7 @@ use AkeneoE3\Domain\Profile\LoadProfile;
 use AkeneoE3\Domain\EtlProcess;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Profile\TransformProfile;
+use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\ApiSelector;
 use AkeneoE3\Infrastructure\Extractor\ExtractorFactory;
 use AkeneoE3\Infrastructure\Loader\LoaderFactory;
@@ -44,7 +45,7 @@ final class EtlFactory
     }
 
     public function createEtlProcess(
-        string $resourceType,
+        ResourceType $resourceType,
         ConnectionProfile $sourceConnectionProfile,
         ConnectionProfile $destinationConnectionProfile,
         EtlProfile $etlProfile
@@ -73,7 +74,7 @@ final class EtlFactory
     }
 
     public function createExtractor(
-        string $resourceType,
+        ResourceType $resourceType,
         ConnectionProfile $profile,
         ExtractProfile $extractProfile
     ): Extractor {
@@ -94,7 +95,7 @@ final class EtlFactory
     }
 
     public function createLoader(
-        string $resourceType,
+        ResourceType $resourceType,
         ConnectionProfile $connectionProfile,
         LoadProfile $loadProfile
     ): IterableLoader {
