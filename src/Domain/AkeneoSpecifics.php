@@ -6,6 +6,16 @@ namespace AkeneoE3\Domain;
 
 final class AkeneoSpecifics
 {
+    public static function getQueryFields(string $resourceType): array
+    {
+        switch ($resourceType) {
+            case 'reference-entity-record':
+                return ['reference_entity_code'];
+        }
+
+        return [];
+    }
+
     public static function getCodeFieldName(string $resourceType): string
     {
         return $resourceType !== 'product' ? 'code' : 'identifier';
