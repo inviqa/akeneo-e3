@@ -4,111 +4,44 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Domain;
 
-use AkeneoE3\Domain\Exception\TransformException;
-use AkeneoE3\Domain\Load\Event\AfterLoadEvent;
-use AkeneoE3\Domain\Resource\Resource;
-use AkeneoE3\Domain\Transform\Event\AfterTransformEvent;
-use AkeneoE3\Domain\Transform\Event\BeforeTransformEvent;
-use AkeneoE3\Domain\Transform\Progress;
-use AkeneoE3\Domain\Transform\TransformResult\Failed;
-use AkeneoE3\Domain\Transform\TransformResult\Transformed;
-use AkeneoE3\Domain\Transform\TransformResult\TransformResult;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use AkeneoE3\Domain\Load\LoadResult\LoadResult;
 
 final class EtlProcess
 {
     private Extractor $extractor;
 
-    private Transformer $transformer;
+    private IterableTransformer $transformer;
 
-    private Loader $loader;
-
-    private EventDispatcherInterface $eventDispatcher;
+    private IterableLoader $loader;
 
     public function __construct(
         Extractor $extractor,
-        Transformer $transformer,
-        Loader $loader,
-        EventDispatcherInterface $eventDispatcher
+        IterableTransformer $transformer,
+        IterableLoader $loader
     ) {
         $this->extractor = $extractor;
         $this->transformer = $transformer;
         $this->loader = $loader;
-        $this->eventDispatcher = $eventDispatcher;
-    }
-
-    public function execute(): void
-    {
-        $progress = Progress::create($this->extractor->count());
-        $resources = $this->extractor->extract();
-
-        foreach ($resources as $resource) {
-            $isOk = $this->transform($resource, $progress);
-
-            if ($isOk === true) {
-                $this->load($resource);
-            }
-        }
-
-        $this->finishLoading();
     }
 
     /**
+     * @return LoadResult[]
+     *
      * @throws \AkeneoE3\Domain\Exception\TransformException
      */
-    private function transform(Resource $resource, Progress $progress): bool
+    public function execute(): iterable
     {
-        $this->onBeforeTransform($progress, $resource);
+        $resources = $this->extractor->extract();
 
-        $result = Transformed::create($resource);
+        $transformResults = $this->transformer->transform($resources);
 
-        try {
-            $this->transformer->transform($resource);
-        } catch (TransformException $e) {
-            $result = Failed::create($resource, $e->getMessage());
+        $loadResults = $this->loader->load($transformResults);
 
-            if ($e->canBeSkipped() === false) {
-                throw $e;
-            }
-        } finally {
-            $this->onAfterTransform($progress->advance(), $resource, $result);
-        }
-
-        return (!$result instanceof Failed);
+        yield from $loadResults;
     }
 
-    private function load(Resource $resource): void
+    public function total(): int
     {
-        $results = $this->loader->load($resource);
-
-        $this->onAfterLoad($results);
-    }
-
-    private function finishLoading(): void
-    {
-        $results = $this->loader->finish();
-
-        $this->onAfterLoad($results);
-    }
-
-    private function onBeforeTransform(Progress $progress, Resource $resource): void
-    {
-        $this->eventDispatcher->dispatch(
-            BeforeTransformEvent::create($progress, $resource)
-        );
-    }
-
-    private function onAfterTransform(Progress $progress, Resource $resource, TransformResult $result): void
-    {
-        $this->eventDispatcher->dispatch(
-            AfterTransformEvent::create($progress, $resource, $result)
-        );
-    }
-
-    private function onAfterLoad(array $results): void
-    {
-        $this->eventDispatcher->dispatch(
-            AfterLoadEvent::create($results)
-        );
+        return $this->extractor->count();
     }
 }
