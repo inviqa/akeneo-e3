@@ -44,9 +44,9 @@ class InMemoryLoader implements Loader
     {
         Assert::notNull($this->result, 'Transformation result is not defined.');
 
-        if ($this->uploadMode === EtlProfile::MODE_UPDATE) {
-            return $this->result->changes();
-        }
+//        if ($this->uploadMode === EtlProfile::MODE_UPDATE) {
+//            return $this->result->changes();
+//        }
 
         return $this->result;
     }

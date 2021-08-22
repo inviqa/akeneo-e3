@@ -3,15 +3,15 @@
 namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
 use AkeneoE3\Domain\EtlProcess;
+use AkeneoE3\Domain\IterableLoader;
+use AkeneoE3\Domain\IterableTransformer;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Resource\Attribute;
 use AkeneoE3\Domain\Resource\AuditableResource;
-use AkeneoE3\Domain\Transformer;
 use AkeneoE3\Infrastructure\EtlFactory;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Yaml\Yaml;
 use Webmozart\Assert\Assert;
 
@@ -19,7 +19,7 @@ class TransformContext implements Context
 {
     private InMemoryExtractor $extractor;
 
-    private Transformer $transformer;
+    private IterableTransformer $transformer;
 
     private InMemoryLoader $loader;
 
@@ -27,14 +27,7 @@ class TransformContext implements Context
 
     private string $resourceType;
 
-    private EventDispatcher $eventDispatcher;
-
     private EtlProfile $profile;
-
-    public function __construct()
-    {
-        $this->eventDispatcher = new EventDispatcher();
-    }
 
     /**
      * @Given /^(a|an) (?P<resourceType>[^"]+) in the PIM( with properties)?:$/
@@ -88,7 +81,7 @@ class TransformContext implements Context
     {
         $config = Yaml::parse($string);
 
-        $factory = new EtlFactory($this->eventDispatcher);
+        $factory = new EtlFactory();
         $this->profile = EtlProfile::fromArray($config);
 
         $this->transformer = $factory->createTransformer($this->profile);
@@ -107,11 +100,10 @@ class TransformContext implements Context
         $etl = new EtlProcess(
             $this->extractor,
             $this->transformer,
-            $this->loader,
-            $this->eventDispatcher
+            new IterableLoader($this->loader, $this->profile)
         );
 
-        $etl->execute();
+        iterator_count($etl->execute());
     }
 
     /**
@@ -121,7 +113,7 @@ class TransformContext implements Context
     {
         $expected = $this->readPropertiesFromTable($table);
 
-        $loaderData = $this->loader->getResult()->toArray();
+        $loaderData = $this->loader->getResult()->toArray($this->profile->isDuplicateMode());
         unset($loaderData['values'], $loaderData['labels'], $loaderData['associations']);
 
         Assert::eq($expected, $loaderData);
@@ -134,7 +126,7 @@ class TransformContext implements Context
     {
         $expected = $this->readValuesFromTable($table);
 
-        $loaderData = $this->loader->getResult()->toArray();
+        $loaderData = $this->loader->getResult()->toArray($this->profile->isDuplicateMode());
         Assert::eq($expected, $loaderData['values']);
     }
 
@@ -146,7 +138,7 @@ class TransformContext implements Context
     {
         $expected = $this->readLocalisedListFromTable($table);
 
-        $loaderData = $this->loader->getResult()->toArray();
+        $loaderData = $this->loader->getResult()->toArray($this->profile->isDuplicateMode());
 
         Assert::eq($expected, $loaderData[$listCode]);
     }
@@ -158,7 +150,7 @@ class TransformContext implements Context
     {
         $expected = $this->readAssociationsFromTable($table);
 
-        $loaderData = $this->loader->getResult()->toArray();
+        $loaderData = $this->loader->getResult()->toArray($this->profile->isDuplicateMode());
 
         Assert::eq($expected, $loaderData['associations']);
     }

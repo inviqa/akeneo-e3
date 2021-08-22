@@ -5,11 +5,9 @@ namespace AkeneoE3\Tests\Acceptance\bootstrap;
 use AkeneoE3\Domain\Exception\TransformException;
 use AkeneoE3\Domain\Resource\Attribute;
 use AkeneoE3\Domain\Resource\AuditableResource;
-use AkeneoE3\Domain\Resource\NonAuditableResource;
 use AkeneoE3\Domain\Resource\Property;
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\PyStringNode;
-use Exception;
 use Webmozart\Assert\Assert;
 
 class UpdateBehaviorContext implements Context
@@ -55,7 +53,7 @@ class UpdateBehaviorContext implements Context
     {
         $expected = json_decode($json, true);
 
-        Assert::eq($expected, $this->resource->toArray());
+        Assert::eq($expected, $this->resource->toArray(true));
     }
 
     private function setAttributeValues(array $attributeValues): void

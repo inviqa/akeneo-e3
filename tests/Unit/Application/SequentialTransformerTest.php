@@ -23,7 +23,7 @@ class SequentialTransformerTest extends TestCase
         Assert::assertEquals([
             'identifier' => 123,
             'fake' => '!',
-        ], $resource->toArray());
+        ], $resource->toArray(false));
     }
 
     public function test_it_throws_an_exception_if_action_fails()
@@ -45,7 +45,7 @@ class SequentialTransformerTest extends TestCase
         Assert::assertFalse($resource->isChanged());
         Assert::assertEquals([
             'identifier' => 123,
-        ], $resource->toArray());
+        ], $resource->toArray(false));
     }
 }
 

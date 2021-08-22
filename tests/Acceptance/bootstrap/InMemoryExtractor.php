@@ -4,7 +4,6 @@ namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
 use AkeneoE3\Domain\Extractor;
 use AkeneoE3\Domain\Resource\Resource;
-use Generator;
 
 class InMemoryExtractor implements Extractor
 {
@@ -23,7 +22,7 @@ class InMemoryExtractor implements Extractor
     /**
      * @inheritDoc
      */
-    public function extract(): Generator
+    public function extract(): iterable
     {
         yield $this->resource;
     }
