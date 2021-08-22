@@ -2,14 +2,12 @@
 
 namespace AkeneoE3\Infrastructure\Report;
 
-use AkeneoE3\Domain\Resource\Resource;
-use AkeneoE3\Domain\Transform\TransformResult;
 use AkeneoE3\Domain\Load\LoadResult;
+use AkeneoE3\Domain\Transform\TransformResult;
 
 class ProcessReport
 {
     private int $total = 0;
-    private int $transformedCount = 0;
     private int $transformFailedCount = 0;
 
     private int $loadedCount = 0;
@@ -24,31 +22,16 @@ class ProcessReport
         return $this->total;
     }
 
-    public function add(Resource $fromCode): void
+    public function add(LoadResult\LoadResult $result): void
     {
         $this->total++;
-    }
 
-    public function addTransformResult(TransformResult\TransformResult $result): void
-    {
-        if ($result instanceof TransformResult\Transformed) {
-            $this->transformedCount++;
+        if ($result instanceof LoadResult\TransformFailed) {
+            $this->addTransformResult($result->getTransformResult());
 
             return;
         }
 
-        if ($result instanceof TransformResult\Failed) {
-            $this->transformFailedCount++;
-
-            $error = $result->getError();
-            $currentCount = $this->transformErrorSummary[$error] ?? 0;
-            $this->transformErrorSummary[$error] = $currentCount + 1;
-        }
-    }
-
-
-    public function addLoadResult(LoadResult\LoadResult $result): void
-    {
         if ($result instanceof LoadResult\Loaded) {
             $this->loadedCount++;
 
@@ -62,11 +45,6 @@ class ProcessReport
             $currentCount = $this->loadErrorSummary[$error] ?? 0;
             $this->loadErrorSummary[$error] = $currentCount + 1;
         }
-    }
-
-    public function transformedCount(): int
-    {
-        return $this->transformedCount;
     }
 
     public function transformFailedCount(): int
@@ -92,5 +70,18 @@ class ProcessReport
     public function loadErrorSummary(): array
     {
         return $this->loadErrorSummary;
+    }
+
+    private function addTransformResult(TransformResult\TransformResult $result): void
+    {
+        if (!$result instanceof TransformResult\Failed) {
+            return;
+        }
+
+        $this->transformFailedCount++;
+
+        $error = $result->getError();
+        $currentCount = $this->transformErrorSummary[$error] ?? 0;
+        $this->transformErrorSummary[$error] = $currentCount + 1;
     }
 }

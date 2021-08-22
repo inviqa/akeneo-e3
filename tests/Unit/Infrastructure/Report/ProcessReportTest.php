@@ -15,7 +15,6 @@ class ProcessReportTest extends TestCase
         $report = new ProcessReport();
 
         $this->assertEquals(0, $report->total());
-        $this->assertEquals(0, $report->transformedCount());
         $this->assertEquals(0, $report->transformFailedCount());
         $this->assertCount(0, $report->transformErrorSummary());
 
@@ -27,9 +26,10 @@ class ProcessReportTest extends TestCase
     public function test_it_return_total_amount_of_processed_resources()
     {
         $report = new ProcessReport();
+        $resource = AuditableResource::fromCode('123', 'product');
 
-        $report->add(AuditableResource::fromCode('123', 'product'));
-        $report->add(AuditableResource::fromCode('124', 'product'));
+        $report->add(LoadResult\Loaded::create($resource));
+        $report->add(LoadResult\Loaded::create($resource));
 
         $this->assertEquals(2, $report->total());
     }
@@ -37,15 +37,12 @@ class ProcessReportTest extends TestCase
     public function test_it_returns_transform_stats()
     {
         $report = new ProcessReport();
-
         $resource = AuditableResource::fromCode('123', 'product');
 
-        $report->addTransformResult(TransformResult\Transformed::create($resource));
-        $report->addTransformResult(TransformResult\Failed::create($resource, 'error1'));
-        $report->addTransformResult(TransformResult\Failed::create($resource, 'error1'));
-        $report->addTransformResult(TransformResult\Failed::create($resource, 'error2'));
+        $report->add(LoadResult\TransformFailed::create($resource, TransformResult\Failed::create($resource, 'error1')));
+        $report->add(LoadResult\TransformFailed::create($resource, TransformResult\Failed::create($resource, 'error1')));
+        $report->add(LoadResult\TransformFailed::create($resource, TransformResult\Failed::create($resource, 'error2')));
 
-        $this->assertEquals(1, $report->transformedCount());
         $this->assertEquals(3, $report->transformFailedCount());
 
         $this->assertEquals([
@@ -54,18 +51,17 @@ class ProcessReportTest extends TestCase
         ], $report->transformErrorSummary());
     }
 
-
     public function test_it_returns_load_stats()
     {
         $report = new ProcessReport();
 
         $resource = AuditableResource::fromCode('123', 'product');
 
-        $report->addLoadResult(LoadResult\Loaded::create($resource));
-        $report->addLoadResult(LoadResult\Loaded::create($resource));
-        $report->addLoadResult(LoadResult\Failed::create($resource, 'error1'));
-        $report->addLoadResult(LoadResult\Failed::create($resource, 'error2'));
-        $report->addLoadResult(LoadResult\Failed::create($resource, 'error2'));
+        $report->add(LoadResult\Loaded::create($resource));
+        $report->add(LoadResult\Loaded::create($resource));
+        $report->add(LoadResult\Failed::create($resource, 'error1'));
+        $report->add(LoadResult\Failed::create($resource, 'error2'));
+        $report->add(LoadResult\Failed::create($resource, 'error2'));
 
         $this->assertEquals(2, $report->loadedCount());
         $this->assertEquals(3, $report->loadFailedCount());
