@@ -131,7 +131,7 @@ set-categories:
                   -
                       type: add
                       field: categories
-                      expression: "['pxm', upperCase(identifier)]"
+                      expression: '["pxm", upperCase(identifier)]'
 set-metric:
     category: attributes
     file_name: set-metric
