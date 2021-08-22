@@ -44,7 +44,6 @@ Feature: Data transformations using `add` actions
 
 
   Scenario: Add items to associations
-
     Given a product in the PIM with properties:
       | field      | value |
       | identifier | ziggy |
@@ -104,3 +103,23 @@ Feature: Data transformations using `add` actions
       """
     When transformation is executed
     Then the upload result is empty
+
+  Scenario: Add attributes to families
+    Given a family in the PIM with properties:
+      | field      | value                |
+      | code       | ziggy-family         |
+      | attributes | [sku,name,description] |
+
+    And I apply transformations using the profile:
+      """
+      actions:
+          -
+              type: add
+              field: attributes
+              items: ['colour']
+      """
+    When transformation is executed
+    Then the upload result should have properties:
+      | field      | value                       |
+      | code       | ziggy-family                |
+      | attributes | [sku,name,description,colour] |
