@@ -8,14 +8,12 @@ use AkeneoE3\Infrastructure\EtlFactory;
 use AkeneoE3\Infrastructure\Profile\ConnectionProfileFactory;
 use AkeneoE3\Infrastructure\Profile\EtlProfileFactory;
 use Symfony\Component\Console\Application;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 
-$eventDispatcher = new EventDispatcher();
-$etlFactory = new EtlFactory($eventDispatcher);
+$etlFactory = new EtlFactory();
 $connectionProfileFactory = new ConnectionProfileFactory();
 $etlProfileFactory = new EtlProfileFactory();
 
 $application = new Application('AkeneoE3', 'git_version');
-$application->add(new Command\TransformCommand($etlFactory, $connectionProfileFactory, $etlProfileFactory, $eventDispatcher));
+$application->add(new Command\TransformCommand($etlFactory, $connectionProfileFactory, $etlProfileFactory));
 $application->run();
