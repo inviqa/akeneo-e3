@@ -4,8 +4,8 @@ namespace AkeneoE3\Tests\Shared;
 
 use AkeneoE3\Application\Expression\FunctionProvider;
 use AkeneoE3\Application\Expression\StateHolder;
-use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Resource\ResourceType;
 use phpDocumentor\Reflection\DocBlock\Tags\Generic;
 use phpDocumentor\Reflection\DocBlock\Tags\Param;
 use phpDocumentor\Reflection\DocBlockFactory;
@@ -35,7 +35,7 @@ class FunctionDocumentor
                 'name' =>[['scope' => null, 'locale' => 'en_GB', 'data' => 'Ziggy']],
                 'description' =>[['scope' => 'web', 'locale' => 'en_GB', 'data' => 'Ziggy The Hydra']],
             ]
-        ], 'product');
+        ], ResourceType::create('product'));
 
         foreach ($this->functionProvider->getFunctions() as $function) {
             $name = $function->getName();
