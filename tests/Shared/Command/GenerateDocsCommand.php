@@ -6,6 +6,7 @@ namespace AkeneoE3\Tests\Shared\Command;
 
 use AkeneoE3\Application\Expression\FunctionProvider;
 use AkeneoE3\Domain\EtlProcess;
+use AkeneoE3\Domain\IterableLoader;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\AuditableResource;
@@ -18,7 +19,6 @@ use LogicException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Yaml\Yaml;
 use Twig\Environment;
 
@@ -28,8 +28,6 @@ final class GenerateDocsCommand extends Command
 
     private Environment $twig;
 
-    private EventDispatcherInterface $eventDispatcher;
-
     private ResourceComparer $resourceComparer;
 
     private FunctionDocumentor $functionDocumentor;
@@ -37,11 +35,9 @@ final class GenerateDocsCommand extends Command
     public function __construct(
         EtlFactory $factory,
         Environment $twig,
-        FunctionProvider $functionProvider,
-        EventDispatcherInterface $eventDispatcher
+        FunctionProvider $functionProvider
     ) {
         $this->factory = $factory;
-        $this->eventDispatcher = $eventDispatcher;
         $this->twig = $twig;
 
         $this->resourceComparer = new ResourceComparer();
@@ -82,17 +78,16 @@ final class GenerateDocsCommand extends Command
         string $taskCode
     ): array {
         $extractor = new InMemoryExtractor($resource);
-        $loader = new InMemoryLoader($resource, false);
+        $loader = new InMemoryLoader($resource);
         $transformer = $this->factory->createTransformer($profile);
 
         $etl = new EtlProcess(
             $extractor,
             $transformer,
-            $loader,
-            $this->eventDispatcher
+            new IterableLoader($loader, $profile)
         );
 
-        $etl->execute();
+        iterator_count($etl->execute());
 
         $compareTable = $this->resourceComparer->compareWithOrigin($loader->getResult());
 

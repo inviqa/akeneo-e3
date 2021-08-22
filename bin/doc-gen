@@ -17,11 +17,10 @@ $twigLoader = new FilesystemLoader([
 ]);
 
 $twig = new Environment($twigLoader);
-$eventDispatcher = new EventDispatcher();
-$factory = new EtlFactory($eventDispatcher);
+$factory = new EtlFactory();
 $functionProvider = new FunctionProvider();
 
-$command = new Command\GenerateDocsCommand($factory, $twig, $functionProvider, $eventDispatcher);
+$command = new Command\GenerateDocsCommand($factory, $twig, $functionProvider);
 $application = new Application('Akeneo Rules - Documentation Generator', 'alpha');
 $application->add($command);
 $application->setDefaultCommand($command->getName(), true);
