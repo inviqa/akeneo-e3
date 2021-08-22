@@ -11,6 +11,7 @@
 ## How to modify property values
 
 - [Modify categories of a product or a product model](examples/set-categories.md)
+- [Modify associations](examples/modify-associations.md)
 
 ## How to modify attribute values
 

@@ -226,3 +226,58 @@ modify-reference-entity-records:
                         scope: null
                         locale: de_DE
                         expression: 'trim(value())'
+
+modify-associations:
+    category: properties
+    file_name: modify-associations
+    header: Modify associations
+    tasks:
+        - description: set `associations` to products or product models.
+          resource-type: product
+          resource:
+              identifier: ziggy
+              associations:
+                  FRIENDS:
+                      products: ['buzzy']
+                      product_models: []
+                      groups: []
+                  RELATIVES:
+                      products: []
+                      product_models: ['unicorn']
+                      groups: []
+          profile:
+            actions:
+                -   type: set
+                    field: associations
+                    value:
+                        FRIENDS:
+                            products: ['gizzy', 'jazzy']
+                        RELATIVES:
+                            product_models: [ 'mermaid']
+
+        - description: add new `associations` to products or product models.
+          resource-type: product
+          resource:
+              identifier: ziggy
+              associations:
+                  FRIENDS:
+                      products: ['buzzy']
+                      product_models: []
+                      groups: []
+                  RELATIVES:
+                      products: []
+                      product_models: ['unicorn']
+                      groups: []
+                  NEW:
+                      groups: ['magical_creatures']
+          profile:
+              actions:
+                  -   type: add
+                      field: associations
+                      items:
+                          FRIENDS:
+                              products: ['gizzy', 'jazzy']
+                          RELATIVES:
+                              product_models: [ 'mermaid']
+                          NEW:
+                              groups: ['magical_creatures']
