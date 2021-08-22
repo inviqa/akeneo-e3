@@ -2,21 +2,19 @@
 
 namespace AkeneoE3\Infrastructure\Loader;
 
-use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Domain\Loader;
 use AkeneoE3\Domain\Profile\LoadProfile;
-use AkeneoE3\Infrastructure\Loader\Api\ReferenceEntityLoader;
-use AkeneoE3\Infrastructure\Loader\Api\ReferenceEntityRecordLoader;
-use AkeneoE3\Infrastructure\Loader\Api\UpsertableLoader;
-use LogicException;
+use AkeneoE3\Infrastructure\Loader\Api\ReferenceEntity;
+use AkeneoE3\Infrastructure\Loader\Api\ReferenceEntityRecord;
+use AkeneoE3\Infrastructure\Loader\Api\Standard;
 
 class LoaderFactory
 {
     public function createLoader(
         string $resourceType,
         LoadProfile $loadProfile,
-        AkeneoPimClientInterface $client
+        AkeneoPimEnterpriseClientInterface $client
     ): Loader {
         if ($loadProfile->isDryRun() === true) {
             return new DryRunLoader();
@@ -24,21 +22,20 @@ class LoaderFactory
 
         switch ($resourceType) {
             case 'reference-entity':
-                if (!$client instanceof AkeneoPimEnterpriseClientInterface) {
-                    throw new LogicException(sprintf('%s is supported only in Enterprise Edition', $resourceType));
-                }
-
-                return new ReferenceEntityLoader($loadProfile, $client);
+                return new ApiLoader(
+                    new ReferenceEntity($loadProfile, $client)
+                );
 
             case 'reference-entity-record':
-
-                if (!$client instanceof AkeneoPimEnterpriseClientInterface) {
-                    throw new LogicException(sprintf('%s is supported only in Enterprise Edition', $resourceType));
-                }
-
-                return new ReferenceEntityRecordLoader($loadProfile, $client);
+                return new ApiBatchLoader(
+                    new ReferenceEntityRecord($loadProfile, $client),
+                    $loadProfile->getBatchSize()
+                );
         }
 
-        return new UpsertableLoader($loadProfile, $client);
+        return new ApiBatchLoader(
+            new Standard($loadProfile, $client),
+            $loadProfile->getBatchSize()
+        );
     }
 }

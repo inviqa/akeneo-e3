@@ -4,23 +4,21 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Infrastructure;
 
-use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientBuilder;
+use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Application\ActionFactory;
-use AkeneoE3\Application\SequentialTransformer;
 use AkeneoE3\Domain\Extractor;
+use AkeneoE3\Domain\IterableLoader;
+use AkeneoE3\Domain\IterableTransformer;
 use AkeneoE3\Domain\Profile\ConnectionProfile;
 use AkeneoE3\Domain\Profile\ExtractProfile;
 use AkeneoE3\Domain\Profile\LoadProfile;
 use AkeneoE3\Domain\EtlProcess;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Profile\TransformProfile;
-use AkeneoE3\Domain\Loader;
-use AkeneoE3\Domain\Transformer;
 use AkeneoE3\Infrastructure\Api\ApiSelector;
 use AkeneoE3\Infrastructure\Extractor\ExtractorFactory;
 use AkeneoE3\Infrastructure\Loader\LoaderFactory;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class EtlFactory
 {
@@ -30,20 +28,15 @@ final class EtlFactory
 
     private ActionFactory $actionFactory;
 
-    private EventDispatcherInterface $eventDispatcher;
-
     private LoaderFactory $loaderFactory;
 
     private ExtractorFactory $extractorFactory;
 
     public function __construct(
-        EventDispatcherInterface $eventDispatcher,
         ActionFactory $actionFactory = null,
         ExtractorFactory $extractorFactory = null,
         LoaderFactory $loaderFactory = null
     ) {
-        $this->eventDispatcher = $eventDispatcher;
-
         $this->apiSelector = new ApiSelector();
         $this->extractorFactory = $extractorFactory ?? new ExtractorFactory();
         $this->actionFactory = $actionFactory ?? new ActionFactory();
@@ -72,7 +65,11 @@ final class EtlFactory
             $etlProfile
         );
 
-        return new EtlProcess($extractor, $transformer, $loader, $this->eventDispatcher);
+        return new EtlProcess(
+            $extractor,
+            $transformer,
+            $loader
+        );
     }
 
     public function createExtractor(
@@ -82,29 +79,39 @@ final class EtlFactory
     ): Extractor {
         $client = $this->getClient($profile);
 
-        return $this->extractorFactory->create($resourceType, $extractProfile, $client);
+        return $this->extractorFactory->create(
+            $resourceType,
+            $extractProfile,
+            $client
+        );
     }
 
-    public function createTransformer(TransformProfile $transformProfile): Transformer
+    public function createTransformer(TransformProfile $transformProfile): IterableTransformer
     {
         $actions = $this->actionFactory->createActions($transformProfile);
 
-        return new SequentialTransformer($actions);
+        return new IterableTransformer($actions);
     }
 
     public function createLoader(
         string $resourceType,
         ConnectionProfile $connectionProfile,
         LoadProfile $loadProfile
-    ): Loader {
+    ): IterableLoader {
         $client = $this->getClient($connectionProfile);
 
-        return $this->loaderFactory->createLoader($resourceType, $loadProfile, $client);
+        return new IterableLoader(
+            $this->loaderFactory->createLoader(
+                $resourceType,
+                $loadProfile,
+                $client
+            ),
+            $loadProfile
+        );
     }
 
-    private function getClient(
-        ConnectionProfile $profile
-    ): AkeneoPimClientInterface {
+    private function getClient(ConnectionProfile $profile): AkeneoPimEnterpriseClientInterface
+    {
         $profileKey = $profile->getHost().$profile->getUserName();
 
         if (isset($this->clients[$profileKey]) === false) {
@@ -114,9 +121,12 @@ final class EtlFactory
         return $this->clients[$profileKey];
     }
 
-    private function createClient(ConnectionProfile $profile): AkeneoPimClientInterface
-    {
-        $clientBuilder = new AkeneoPimEnterpriseClientBuilder($profile->getHost());
+    private function createClient(
+        ConnectionProfile $profile
+    ): AkeneoPimEnterpriseClientInterface {
+        $clientBuilder = new AkeneoPimEnterpriseClientBuilder(
+            $profile->getHost()
+        );
 
         return $clientBuilder->buildAuthenticatedByPassword(
             $profile->getClientId(),
