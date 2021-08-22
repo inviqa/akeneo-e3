@@ -40,7 +40,7 @@ final class Standard implements ExtractConnector
     public function count(): int
     {
         return (int)$this->api
-            ->listPerPage(1, true, $this->query->toArray())
+            ->listPerPage(1, true, $this->query->getSearchFilters())
             ->getCount();
     }
 
@@ -49,7 +49,7 @@ final class Standard implements ExtractConnector
      */
     public function extract(): iterable
     {
-        $cursor = $this->api->all(100, $this->query->toArray());
+        $cursor = $this->api->all(100, $this->query->getSearchFilters());
 
         foreach ($cursor as $resource) {
             yield AuditableResource::fromArray($resource, $this->resourceType);

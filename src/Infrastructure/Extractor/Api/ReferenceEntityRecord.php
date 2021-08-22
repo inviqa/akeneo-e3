@@ -38,10 +38,12 @@ final class ReferenceEntityRecord implements ExtractConnector
      */
     public function extract(): iterable
     {
-        $cursor = $this->api->all('suppliers', $this->query->toArray());
+        $entityCode = (string)$this->query->getValue('reference_entity_code');
+
+        $cursor = $this->api->all($entityCode, $this->query->getSearchFilters());
 
         foreach ($cursor as $resource) {
-            $resource['reference_entity_code'] = 'suppliers';
+            $resource['reference_entity_code'] = $entityCode;
             yield AuditableResource::fromArray($resource, $this->resourceType);
         }
     }

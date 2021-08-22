@@ -37,7 +37,7 @@ final class ReferenceEntity implements ExtractConnector
      */
     public function extract(): iterable
     {
-        $cursor = $this->api->all($this->query->toArray());
+        $cursor = $this->api->all($this->query->getSearchFilters());
 
         foreach ($cursor as $resource) {
             yield AuditableResource::fromArray($resource, $this->resourceType);
