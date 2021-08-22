@@ -281,3 +281,37 @@ modify-associations:
                               product_models: [ 'mermaid']
                           NEW:
                               groups: ['magical_creatures']
+add-attributes-to-families:
+    category: resource-types
+    file_name: add-attributes-to-families
+    header: Add attributes to families
+    tasks:
+        - description: add an attribute to families.
+          resource-type: family
+          resource:
+              code: ziggy-family
+              attributes: ['sku', 'name', 'description']
+          profile:
+            actions:
+                -
+                    type: add
+                    field: attributes
+                    items: ['colour']
+        - description: add an attribute to families and set it as required for the channel `ecommerce`.
+          resource-type: family
+          resource:
+              code: ziggy-family
+              attributes: ['sku', 'name', 'description']
+              attribute_requirements:
+                  ecommerce: ['sku', 'name']
+          profile:
+              actions:
+                  -
+                      type: add
+                      field: attributes
+                      items: ['colour']
+                  -
+                      type: add
+                      field: attribute_requirements
+                      items:
+                            ecommerce: ['colour']

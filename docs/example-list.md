@@ -23,6 +23,7 @@
 ## How to modify non-product data
 
 - [Modify reference entity records](examples/modify-reference-entity-records.md)
+- [Add attributes to families](examples/add-attributes-to-families.md)
 
 ## See also
 
