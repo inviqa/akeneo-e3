@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Infrastructure\Api;
 
-use Akeneo\Pim\ApiClient\AkeneoPimClientInterface;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use LogicException;
 
@@ -13,7 +12,7 @@ final class ApiSelector
     /**
      * @return mixed
      */
-    public function getApi(AkeneoPimClientInterface $client, string $dataType)
+    public function getApi(AkeneoPimEnterpriseClientInterface $client, string $dataType)
     {
         $supportedApis = [
             'association-type'   => $client->getAssociationTypeApi(),
