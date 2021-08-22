@@ -22,4 +22,9 @@ class Transformed implements TransformResult
     {
         return $this->resource;
     }
+
+    public function __toString(): string
+    {
+        return 'transformed';
+    }
 }

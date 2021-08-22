@@ -30,4 +30,9 @@ class Failed implements TransformResult
     {
         return $this->resource;
     }
+
+    public function __toString(): string
+    {
+        return $this->getError();
+    }
 }

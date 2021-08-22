@@ -30,4 +30,10 @@ class Failed implements LoadResult
     {
         return $this->resource;
     }
+
+
+    public function __toString(): string
+    {
+        return $this->getError();
+    }
 }

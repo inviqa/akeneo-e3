@@ -7,4 +7,6 @@ use AkeneoE3\Domain\Resource\Resource;
 interface TransformResult
 {
     public function getResource(): Resource;
+
+    public function __toString(): string;
 }
