@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Infrastructure\Command;
 
-use AkeneoE3\Domain\Load\Event\AfterLoadEvent;
 use AkeneoE3\Domain\Load\LoadResult\Failed;
 use AkeneoE3\Domain\Load\LoadResult\Loaded;
 use AkeneoE3\Domain\Load\LoadResult\LoadResult;
-use AkeneoE3\Domain\Transform\Event\AfterTransformEvent;
-use AkeneoE3\Domain\Transform\Progress;
 use AkeneoE3\Infrastructure\Comparer\DiffLine;
 use AkeneoE3\Infrastructure\Comparer\ResourceComparer;
 use AkeneoE3\Infrastructure\Report\ProcessReport;
@@ -64,41 +61,42 @@ class TransformOutput
         $this->style = new SymfonyStyle($this->input, $loadTableSection);
     }
 
-    public function outputAfterTransform(AfterTransformEvent $event): void
-    {
-        $this->report->add($event->getResource());
-        $this->report->addTransformResult($event->getTransformResult());
 
-        $this->outputProgress($event->getProgress());
+    public function askToConnect(string $host, bool $dryRun): bool
+    {
+        if ($dryRun === true) {
+            return true;
+        }
+
+        $phrase = sprintf("You're going to connect to %s to transform data. Continue?", $host);
+
+        return $this->style->confirm($phrase);
+    }
+
+    public function render(LoadResult $result, int $estimatedTotal): void
+    {
+        if ($this->progressBar->getMaxSteps() === 0) {
+            $this->progressBar->setMaxSteps($estimatedTotal);
+        }
+
+        $this->progressBar->advance();
+
+        $this->report->add($result);
 
         $this->progressBar->clear();
 
         $this->outputTransformSummary();
-        if ($event->getProgress()->current() === $event->getProgress()->total()) {
-            $this->outputLoadSummary();
-        }
-
-        $this->progressBar->display();
-    }
-
-    public function outputAfterLoad(AfterLoadEvent $event): void
-    {
-        foreach ($event->getLoadResults() as $loadResult) {
-            $this->report->addLoadResult($loadResult);
-        }
-
-        $this->progressBar->clear();
-
         $this->outputLoadSummary();
-        $this->outputLoadResults($event->getLoadResults());
+        $this->outputTransformation($result);
 
         $this->progressBar->display();
     }
+
 
     /**
      * @param array|DiffLine[] $comparison
      */
-    public function outputCompareTable(array $comparison, LoadResult $loadResult): void
+    private function outputCompareTable(array $comparison, LoadResult $loadResult): void
     {
         if (count($comparison) === 0) {
             return;
@@ -114,15 +112,15 @@ class TransformOutput
         }
 
         if ($loadResult instanceof Failed) {
-            $this->style->warning($loadResult->getError());
+            $this->style->warning((string)$loadResult);
         }
 
         if ($loadResult instanceof Loaded) {
-            $this->style->success('updated');
+            $this->style->success((string)$loadResult);
         }
     }
 
-    public function outputTransformSummary(): void
+    private function outputTransformSummary(): void
     {
         $this->transformReportSection->overwrite(
             sprintf('Processed: %d', $this->report->total())
@@ -138,7 +136,7 @@ class TransformOutput
         }
     }
 
-    public function outputLoadSummary(): void
+    private function outputLoadSummary(): void
     {
         $errorSummary = $this->report->loadErrorSummary();
         if (count($errorSummary) !== 0) {
@@ -147,41 +145,16 @@ class TransformOutput
         }
     }
 
-    public function outputProgress(Progress $progress): void
-    {
-        if ($this->progressBar->getMaxSteps() === 0) {
-            $this->progressBar->setMaxSteps($progress->total());
-        }
-
-        $this->progressBar->setProgress($progress->current());
-    }
-
-    /**
-     * @param array|LoadResult[] $loadResults
-     */
-    public function outputLoadResults(array $loadResults): void
+    private function outputTransformation(LoadResult $loadResult): void
     {
         if ($this->outputTransformations === false) {
             return;
         }
 
-        foreach ($loadResults as $loadResult) {
-            $comparison = $this->resourceComparer->compareWithOrigin(
-                $loadResult->getResource()
-            );
-            $this->outputCompareTable($comparison, $loadResult);
-        }
-    }
-
-    public function askToConnect(string $host, bool $dryRun): bool
-    {
-        if ($dryRun === true) {
-            return true;
-        }
-
-        $phrase = sprintf("You're going to connect to %s to transform data. Continue?", $host);
-
-        return $this->style->confirm($phrase);
+        $comparison = $this->resourceComparer->compareWithOrigin(
+            $loadResult->getResource()
+        );
+        $this->outputCompareTable($comparison, $loadResult);
     }
 
     private function formatErrorSummary(array $errorSummary, string $title): array

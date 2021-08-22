@@ -14,8 +14,6 @@ use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final class TransformCommand extends Command
 {
@@ -24,8 +22,6 @@ final class TransformCommand extends Command
     private ConnectionProfileFactory $connectionProfileFactory;
 
     private EtlProfileFactory $etlProfileFactory;
-
-    private EventDispatcherInterface $eventDispatcher;
 
     private ConnectionProfile $sourceConnection;
 
@@ -40,13 +36,11 @@ final class TransformCommand extends Command
     public function __construct(
         EtlFactory $factory,
         ConnectionProfileFactory $connectionProfileFactory,
-        EtlProfileFactory $etlProfileFactory,
-        EventDispatcherInterface $eventDispatcher
+        EtlProfileFactory $etlProfileFactory
     ) {
         $this->factory = $factory;
         $this->connectionProfileFactory = $connectionProfileFactory;
         $this->etlProfileFactory = $etlProfileFactory;
-        $this->eventDispatcher = $eventDispatcher;
 
         parent::__construct();
     }
@@ -79,7 +73,6 @@ final class TransformCommand extends Command
         $this->resourceType = (string)$input->getOption('resource-type');
 
         $this->output = new TransformOutput($input, $output);
-        EventSubscriber::init($this->eventDispatcher, $this->output);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -100,7 +93,12 @@ final class TransformCommand extends Command
             $this->ruleProfile
         );
 
-        $etl->execute();
+        $total = $etl->total();
+        $results = $etl->execute();
+
+        foreach ($results as $result) {
+            $this->output->render($result, $total);
+        }
 
         return Command::SUCCESS;
     }
