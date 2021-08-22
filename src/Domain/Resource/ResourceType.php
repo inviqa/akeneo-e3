@@ -32,4 +32,14 @@ class ResourceType implements Stringable
     {
         return $this->code === 'reference-entity-record' ? 'channel' : 'scope';
     }
+
+    public function getQueryFields(): array
+    {
+        switch ($this->code) {
+            case 'reference-entity-record':
+                return ['reference_entity_code'];
+        }
+
+        return [];
+    }
 }

@@ -23,7 +23,7 @@ class Query
             $indexedConditions[$fieldName] = $condition;
         }
 
-        $requiredFieldNames = AkeneoSpecifics::getQueryFields($resourceType);
+        $requiredFieldNames = $resourceType->getQueryFields();
 
         foreach ($requiredFieldNames as $requiredFieldName) {
             if (isset($indexedConditions[$requiredFieldName]) === false) {
@@ -47,7 +47,7 @@ class Query
         }
 
         if (count($profile->getDryRunCodes()) > 0) {
-            $codeFieldName = AkeneoSpecifics::getCodeFieldName($resourceType);
+            $codeFieldName = $resourceType->getCodeFieldName();
             $builder->addFilter($codeFieldName, 'IN', $profile->getDryRunCodes());
         }
 

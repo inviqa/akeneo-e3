@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Domain\Resource;
 
-use AkeneoE3\Domain\AkeneoSpecifics;
 use Generator;
 use LogicException;
 

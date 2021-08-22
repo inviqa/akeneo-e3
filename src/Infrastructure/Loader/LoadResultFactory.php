@@ -14,7 +14,7 @@ class LoadResultFactory
 {
     public static function createFromResponse(iterable $response, ResourceCollection $resources): iterable
     {
-        $codeFieldName = AkeneoSpecifics::getCodeFieldName($resources->getResourceType());
+        $codeFieldName = $resources->getResourceType()->getCodeFieldName();
 
         foreach ($response as $line) {
             // In some cases when a PATCH body is invalid,
