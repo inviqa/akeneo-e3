@@ -57,6 +57,7 @@ actions:
 
 See also 
  * [examples of rules](docs/example-list.md) 
+ * [supported actions](docs/actions.md) 
  * [supported expression functions](docs/function-list.md)
 
 
