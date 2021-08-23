@@ -8,13 +8,14 @@ use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 
-class QueryTest extends TestCase
+class ApiQueryTest extends TestCase
 {
     public function test_it_returns_search_filters()
     {
         $query = ApiQuery::fromProfile(new FakeExtractProfile(
             ['123', 'abc'],
             [
+                ['field' => 'ignore', 'value' => null],
                 ['field' => 'family', 'operator' => 'IN', 'value' => ['pim']],
             ]
         ), ResourceType::create('product'));
@@ -26,7 +27,7 @@ class QueryTest extends TestCase
             ]
         ];
 
-        $this->assertEquals($expected, $query->getSearchFilters());
+        $this->assertEquals($expected, $query->getSearchFilters(['ignore']));
     }
 
     public function test_it_returns_filter_values_by_field_names()
@@ -39,21 +40,47 @@ class QueryTest extends TestCase
             ]
         ), ResourceType::create('reference-entity-record'));
 
-
         $this->assertEquals('toys', $query->getValue('reference_entity_code'));
     }
 
-
-    public function test_it_throws_an_exception_if_required_field_is_not_provided()
+    public function test_it_throws_an_exception_by_getting_an_unknown_field()
     {
-        $this->expectException(LogicException::class);
-
-        ApiQuery::fromProfile(new FakeExtractProfile(
+        $query = ApiQuery::fromProfile(new FakeExtractProfile(
             [],
             [
-                ['field' => 'complete', 'operator' => '=', 'true'],
+                ['field' => 'reference_entity_code', 'value' => 'toys'],
+                ['field' => 'complete', 'operator' => '=', 'value' => 'true'],
             ]
         ), ResourceType::create('reference-entity-record'));
+
+        $this->expectException(LogicException::class);
+
+        $query->getValue('unknown');
+    }
+
+    public function test_it_returns_true_if_a_field_is_present_in_filters()
+    {
+        $query = ApiQuery::fromProfile(new FakeExtractProfile(
+            [],
+            [
+                ['field' => 'reference_entity_code', 'value' => 'toys'],
+                ['field' => 'complete', 'operator' => '=', 'value' => 'true'],
+            ]
+        ), ResourceType::create('reference-entity-record'));
+
+        $this->assertTrue($query->hasValue('reference_entity_code'));
+    }
+
+    public function test_it_returns_false_if_a_field_is_not_present_in_filters()
+    {
+        $query = ApiQuery::fromProfile(new FakeExtractProfile(
+            [],
+            [
+                ['field' => 'complete', 'operator' => '=', 'value' => 'true'],
+            ]
+        ), ResourceType::create('reference-entity-record'));
+
+        $this->assertFalse($query->hasValue('reference_entity_code'));
     }
 }
 

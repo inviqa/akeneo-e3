@@ -6,6 +6,8 @@ use Stringable;
 
 class ResourceType implements Stringable
 {
+    public const FAMILY_CODE_FIELD = 'family_code';
+
     private string $code;
 
     public function __construct(string $code)
@@ -31,15 +33,5 @@ class ResourceType implements Stringable
     public function getChannelFieldName(): string
     {
         return $this->code === 'reference-entity-record' ? 'channel' : 'scope';
-    }
-
-    public function getQueryFields(): array
-    {
-        switch ($this->code) {
-            case 'reference-entity-record':
-                return ['reference_entity_code'];
-        }
-
-        return [];
     }
 }

@@ -10,48 +10,21 @@ use LogicException;
 
 class ApiQuery implements Query
 {
-    private array $requiredValues = [];
+    private ExtractProfile $profile;
 
-    private array $searchFilters = [];
+    private ResourceType $resourceType;
+
+    private array $indexedConditions = [];
 
     public function __construct(ExtractProfile $profile, ResourceType $resourceType)
     {
-        $indexedConditions = [];
-
         foreach ($profile->getConditions() as $condition) {
             $fieldName = $condition['field'];
-            $indexedConditions[$fieldName] = $condition;
+            $this->indexedConditions[$fieldName] = $condition;
         }
 
-        $requiredFieldNames = $resourceType->getQueryFields();
-
-        foreach ($requiredFieldNames as $requiredFieldName) {
-            if (isset($indexedConditions[$requiredFieldName]) === false) {
-                throw new LogicException(sprintf('% field is required for %s', $requiredFieldName, $resourceType));
-            }
-            if (isset($indexedConditions[$requiredFieldName]['value']) === false) {
-                throw new LogicException(sprintf('% field must have a value', $requiredFieldName));
-            }
-
-            $this->requiredValues[$requiredFieldName] = $indexedConditions[$requiredFieldName]['value'];
-
-            unset($indexedConditions[$requiredFieldName]);
-        }
-
-        $builder = new SearchBuilder();
-
-        foreach ($indexedConditions as $fieldName => $condition) {
-            $value = $condition['value'] ?? null;
-            $operator = $condition['operator'] ?? '=';
-            $builder->addFilter((string)$fieldName, $operator, $value);
-        }
-
-        if (count($profile->getDryRunCodes()) > 0) {
-            $codeFieldName = $resourceType->getCodeFieldName();
-            $builder->addFilter($codeFieldName, 'IN', $profile->getDryRunCodes());
-        }
-
-        $this->searchFilters = ['search' => $builder->getFilters()];
+        $this->profile = $profile;
+        $this->resourceType = $resourceType;
     }
 
     public static function fromProfile(ExtractProfile $profile, ResourceType $resourceType): self
@@ -59,9 +32,26 @@ class ApiQuery implements Query
         return new self($profile, $resourceType);
     }
 
-    public function getSearchFilters(): array
+    public function getSearchFilters(array $excludedFieldNames): array
     {
-        return $this->searchFilters;
+        $builder = new SearchBuilder();
+
+        foreach ($this->indexedConditions as $fieldName => $condition) {
+            if (in_array($fieldName, $excludedFieldNames)) {
+                continue;
+            }
+
+            $value = $condition['value'] ?? null;
+            $operator = $condition['operator'] ?? '=';
+            $builder->addFilter((string)$fieldName, $operator, $value);
+        }
+
+        if (count($this->profile->getDryRunCodes()) > 0) {
+            $codeFieldName = $this->resourceType->getCodeFieldName();
+            $builder->addFilter($codeFieldName, 'IN', $this->profile->getDryRunCodes());
+        }
+
+        return ['search' => $builder->getFilters()];
     }
 
     /**
@@ -69,6 +59,15 @@ class ApiQuery implements Query
      */
     public function getValue(string $field)
     {
-        return $this->requiredValues[$field];
+        if ($this->hasValue($field) === false) {
+            throw new LogicException(sprintf('The field %s is not defined in conditions', $field));
+        }
+
+        return $this->indexedConditions[$field]['value'];
+    }
+
+    public function hasValue(string $field): bool
+    {
+        return array_key_exists($field, $this->indexedConditions);
     }
 }
