@@ -1,10 +1,10 @@
 <?php
 
-namespace AkeneoE3\Tests\Unit\Infrastructure\Extractor;
+namespace AkeneoE3\Tests\Unit\Infrastructure\Api;
 
 use AkeneoE3\Domain\Profile\ExtractProfile;
 use AkeneoE3\Domain\Resource\ResourceType;
-use AkeneoE3\Infrastructure\Extractor\ApiQuery;
+use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 

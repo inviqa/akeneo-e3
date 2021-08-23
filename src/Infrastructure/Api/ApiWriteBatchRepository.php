@@ -1,12 +1,13 @@
 <?php
 
-namespace AkeneoE3\Infrastructure\Loader;
+namespace AkeneoE3\Infrastructure\Api;
 
 use AkeneoE3\Domain\Repository\WriteRepository;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
+use AkeneoE3\Infrastructure\Api\Repository\WriteResourcesRepository;
 
-class ApiBatchLoader implements WriteRepository
+class ApiWriteBatchRepository implements WriteRepository
 {
     private WriteResourcesRepository $connector;
 

@@ -12,10 +12,8 @@ use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use AkeneoE3\Domain\Resource\ResourceType;
-use AkeneoE3\Infrastructure\Extractor\ReadResourcesRepository;
-use AkeneoE3\Infrastructure\Extractor\ApiQuery;
+use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
 use AkeneoE3\Infrastructure\Loader\LoadResultFactory;
-use AkeneoE3\Infrastructure\Loader\WriteResourcesRepository;
 
 final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResourcesRepository
 {

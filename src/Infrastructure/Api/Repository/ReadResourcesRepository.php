@@ -1,8 +1,9 @@
 <?php
 
-namespace AkeneoE3\Infrastructure\Extractor;
+namespace AkeneoE3\Infrastructure\Api\Repository;
 
 use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
 
 interface ReadResourcesRepository
 {

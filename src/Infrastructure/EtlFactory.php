@@ -18,7 +18,7 @@ use AkeneoE3\Domain\EtlProcess;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Profile\TransformProfile;
 use AkeneoE3\Domain\Resource\ResourceType;
-use AkeneoE3\Infrastructure\Api\ApiQueryFactory;
+use AkeneoE3\Infrastructure\Api\Query\ApiQueryFactory;
 use AkeneoE3\Infrastructure\Api\RepositoryFactory;
 
 final class EtlFactory
@@ -74,8 +74,8 @@ final class EtlFactory
         $client = $this->getClient($profile);
 
         $repository = $this->repositoryFactory->createReadRepository($resourceType, $extractProfile, $client);
-        $queryFactory = new ApiQueryFactory();
 
+        $queryFactory = new ApiQueryFactory();
         $query = $queryFactory->fromProfile($extractProfile, $resourceType);
 
         return new IterableExtractor($repository, $query);

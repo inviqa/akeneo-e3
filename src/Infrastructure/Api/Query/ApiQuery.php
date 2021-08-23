@@ -1,6 +1,6 @@
 <?php
 
-namespace AkeneoE3\Infrastructure\Extractor;
+namespace AkeneoE3\Infrastructure\Api\Query;
 
 use Akeneo\Pim\ApiClient\Search\SearchBuilder;
 use AkeneoE3\Domain\Profile\ExtractProfile;

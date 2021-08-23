@@ -13,9 +13,6 @@ use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntity;
 use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntityRecord;
 use AkeneoE3\Infrastructure\Api\Repository\Standard;
-use AkeneoE3\Infrastructure\Extractor\ApiReadRepository;
-use AkeneoE3\Infrastructure\Loader\ApiBatchLoader;
-use AkeneoE3\Infrastructure\Loader\ApiLoader;
 use AkeneoE3\Infrastructure\Loader\DryRunLoader;
 
 final class RepositoryFactory
@@ -47,18 +44,18 @@ final class RepositoryFactory
 
         switch ((string)$resourceType) {
             case 'reference-entity':
-                return new ApiLoader(
+                return new ApiWriteRepository(
                     new ReferenceEntity($resourceType, $client)
                 );
 
             case 'reference-entity-record':
-                return new ApiBatchLoader(
+                return new ApiWriteBatchRepository(
                     new ReferenceEntityRecord($resourceType, $client),
                     $profile->getBatchSize()
                 );
         }
 
-        return new ApiBatchLoader(
+        return new ApiWriteBatchRepository(
             new Standard($resourceType, $client),
             $profile->getBatchSize()
         );
