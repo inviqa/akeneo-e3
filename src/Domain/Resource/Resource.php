@@ -37,5 +37,5 @@ interface Resource
      */
     public function fields(): Generator;
 
-    public function toArray(bool $full): array;
+    public function toArray(bool $full, array $ignoredFields = []): array;
 }

@@ -87,8 +87,14 @@ final class PropertyValues
         }
     }
 
-    public function toArray(): array
+    public function toArray(array $ignoredFields = []): array
     {
-        return $this->values;
+        $array = $this->values;
+
+        foreach ($ignoredFields as $ignoredField) {
+            unset($array[$ignoredField]);
+        }
+
+        return $array;
     }
 }

@@ -164,9 +164,9 @@ final class NonAuditableResource implements Resource
         }
     }
 
-    public function toArray(bool $full): array
+    public function toArray(bool $full, array $ignoredFields = []): array
     {
-        $data = $this->properties->toArray();
+        $data = $this->properties->toArray($ignoredFields);
 
         if ($this->attributes->count() > 0) {
             $data['values'] = $this->attributes->toArray();

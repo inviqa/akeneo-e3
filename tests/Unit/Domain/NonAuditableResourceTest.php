@@ -149,4 +149,43 @@ class NonAuditableResourceTest extends TestCase
                 ],
         ];
     }
+
+    public function test_it_normalises_to_array()
+    {
+        $resource = NonAuditableResource::fromArray([
+            'code' => 'ziggy',
+            'labels' => ['de_DE' => 'Die Ziggy'],
+            'values' => [
+                'name' => [['scope' => null, 'locale' => null, 'data' => 'Ziggy']]
+            ],
+        ], ResourceType::create('object'));
+
+        $this->assertEquals([
+            'code' => 'ziggy',
+            'labels' => ['de_DE' => 'Die Ziggy'],
+            'values' => [
+                'name' => [['scope' => null, 'locale' => null, 'data' => 'Ziggy']]
+            ]
+        ], $resource->toArray(true));
+    }
+
+
+    public function test_it_normalises_to_array_without_excluded_fields()
+    {
+        $resource = NonAuditableResource::fromArray([
+            'code' => 'ziggy',
+            'ignoreA' => 'A',
+            'ignoreB' => 'B',
+            'values' => [
+                'name' => [['scope' => null, 'locale' => null, 'data' => 'Ziggy']]
+            ],
+        ], ResourceType::create('object'));
+
+        $this->assertEquals([
+            'code' => 'ziggy',
+            'values' => [
+                'name' => [['scope' => null, 'locale' => null, 'data' => 'Ziggy']]
+            ]
+        ], $resource->toArray(true, ['ignoreA', 'ignoreB']));
+    }
 }
