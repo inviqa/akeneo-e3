@@ -3,6 +3,7 @@
 namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
 use AkeneoE3\Domain\EtlProcess;
+use AkeneoE3\Domain\IterableExtractor;
 use AkeneoE3\Domain\IterableLoader;
 use AkeneoE3\Domain\IterableTransformer;
 use AkeneoE3\Domain\Profile\EtlProfile;
@@ -94,12 +95,12 @@ class TransformContext implements Context
     public function transformationIsExecuted(): void
     {
         $resource = AuditableResource::fromArray($this->resourceData, $this->resourceType);
-        $this->extractor = new InMemoryExtractor($resource);
 
+        $this->extractor = new InMemoryExtractor($resource);
         $this->loader = new InMemoryLoader($resource, $this->profile->getUploadMode());
 
         $etl = new EtlProcess(
-            $this->extractor,
+            new IterableExtractor($this->extractor, new EmptyQuery()),
             $this->transformer,
             new IterableLoader($this->loader, $this->profile)
         );

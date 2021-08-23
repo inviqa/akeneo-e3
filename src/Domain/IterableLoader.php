@@ -45,9 +45,9 @@ class IterableLoader
                 continue;
             }
 
-            yield from $this->repository->persist($resource);
+            yield from $this->repository->persist($resource, !$this->profile->isDuplicateMode());
         }
 
-        yield from $this->repository->flush();
+        yield from $this->repository->flush(!$this->profile->isDuplicateMode());
     }
 }

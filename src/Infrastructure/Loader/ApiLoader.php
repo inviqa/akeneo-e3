@@ -7,21 +7,21 @@ use AkeneoE3\Domain\Resource\Resource;
 
 class ApiLoader implements WriteRepository
 {
-    private LoadConnector $connector;
+    private WriteResourceRepository $connector;
 
-    public function __construct(LoadConnector $connector)
+    public function __construct(WriteResourceRepository $connector)
     {
         $this->connector = $connector;
     }
 
-    public function persist(Resource $resource): iterable
+    public function persist(Resource $resource, bool $patch): iterable
     {
-        $result = $this->connector->load($resource);
+        $result = $this->connector->write($resource, $patch);
 
         return [$result];
     }
 
-    public function flush(): iterable
+    public function flush(bool $patch): iterable
     {
         return [];
     }

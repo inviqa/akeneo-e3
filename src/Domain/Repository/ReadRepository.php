@@ -8,10 +8,10 @@ use AkeneoE3\Domain\Resource\Resource;
 
 interface ReadRepository
 {
-    public function count(): int;
+    public function count(Query $query): int;
 
     /**
      * @return iterable<Resource>
      */
-    public function extract(Query $query): iterable;
+    public function read(Query $query): iterable;
 }

@@ -6,6 +6,9 @@ namespace AkeneoE3\Domain;
 
 use AkeneoE3\Domain\Resource\Resource;
 
+/**
+ * @deprecated
+ */
 interface Extractor
 {
     public function count(): int;

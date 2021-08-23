@@ -2,10 +2,11 @@
 
 namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
-use AkeneoE3\Domain\Extractor;
+use AkeneoE3\Domain\Repository\Query;
+use AkeneoE3\Domain\Repository\ReadRepository;
 use AkeneoE3\Domain\Resource\Resource;
 
-class InMemoryExtractor implements Extractor
+class InMemoryExtractor implements ReadRepository
 {
     private Resource $resource;
 
@@ -14,7 +15,7 @@ class InMemoryExtractor implements Extractor
         $this->resource = $resource;
     }
 
-    public function count(): int
+    public function count(Query $query): int
     {
         return 1;
     }
@@ -22,7 +23,7 @@ class InMemoryExtractor implements Extractor
     /**
      * @inheritDoc
      */
-    public function extract(): iterable
+    public function read(Query $query): iterable
     {
         yield $this->resource;
     }

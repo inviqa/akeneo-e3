@@ -5,17 +5,19 @@ declare(strict_types=1);
 namespace AkeneoE3\Domain;
 
 use AkeneoE3\Domain\Load\LoadResult\LoadResult;
+use AkeneoE3\Domain\Repository\ReadRepository;
+use AkeneoE3\Domain\Resource\ResourceType;
 
 final class EtlProcess
 {
-    private Extractor $extractor;
+    private IterableExtractor $extractor;
 
     private IterableTransformer $transformer;
 
     private IterableLoader $loader;
 
     public function __construct(
-        Extractor $extractor,
+        IterableExtractor $extractor,
         IterableTransformer $transformer,
         IterableLoader $loader
     ) {

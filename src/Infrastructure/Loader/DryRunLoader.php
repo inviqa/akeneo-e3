@@ -9,12 +9,12 @@ use AkeneoE3\Domain\Resource\Resource;
 
 final class DryRunLoader implements WriteRepository
 {
-    public function persist(Resource $resource): iterable
+    public function persist(Resource $resource, bool $patch): iterable
     {
         return [];
     }
 
-    public function flush(): iterable
+    public function flush(bool $patch): iterable
     {
         return [];
     }

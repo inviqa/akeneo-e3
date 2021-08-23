@@ -12,12 +12,12 @@ interface WriteRepository
     /**
      * @return LoadResult[]
      */
-    public function persist(Resource $resource): iterable;
+    public function persist(Resource $resource, bool $patch): iterable;
 
     /**
      * Finish persist, e.g. save remaining resources in bulk.
      *
      * @return LoadResult[]
      */
-    public function flush(): iterable;
+    public function flush(bool $patch): iterable;
 }

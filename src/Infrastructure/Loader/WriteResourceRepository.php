@@ -7,7 +7,7 @@ namespace AkeneoE3\Infrastructure\Loader;
 use AkeneoE3\Domain\Load\LoadResult\LoadResult;
 use AkeneoE3\Domain\Resource\Resource;
 
-interface LoadConnector
+interface WriteResourceRepository
 {
-    public function load(Resource $resource): LoadResult;
+    public function write(Resource $resource, bool $patch = true): LoadResult;
 }

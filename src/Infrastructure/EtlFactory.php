@@ -8,6 +8,7 @@ use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientBuilder;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Application\ActionFactory;
 use AkeneoE3\Domain\Extractor;
+use AkeneoE3\Domain\IterableExtractor;
 use AkeneoE3\Domain\IterableLoader;
 use AkeneoE3\Domain\IterableTransformer;
 use AkeneoE3\Domain\Profile\ConnectionProfile;
@@ -17,31 +18,23 @@ use AkeneoE3\Domain\EtlProcess;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Profile\TransformProfile;
 use AkeneoE3\Domain\Resource\ResourceType;
-use AkeneoE3\Infrastructure\Api\ApiSelector;
-use AkeneoE3\Infrastructure\Extractor\ExtractorFactory;
-use AkeneoE3\Infrastructure\Loader\LoaderFactory;
+use AkeneoE3\Infrastructure\Api\ApiQueryFactory;
+use AkeneoE3\Infrastructure\Api\RepositoryFactory;
 
 final class EtlFactory
 {
     private array $clients = [];
 
-    private ApiSelector $apiSelector;
-
     private ActionFactory $actionFactory;
 
-    private LoaderFactory $loaderFactory;
-
-    private ExtractorFactory $extractorFactory;
+    private RepositoryFactory $repositoryFactory;
 
     public function __construct(
         ActionFactory $actionFactory = null,
-        ExtractorFactory $extractorFactory = null,
-        LoaderFactory $loaderFactory = null
+        RepositoryFactory $repositoryFactory = null
     ) {
-        $this->apiSelector = new ApiSelector();
-        $this->extractorFactory = $extractorFactory ?? new ExtractorFactory();
         $this->actionFactory = $actionFactory ?? new ActionFactory();
-        $this->loaderFactory = $loaderFactory ?? new LoaderFactory();
+        $this->repositoryFactory = $repositoryFactory ?? new RepositoryFactory();
     }
 
     public function createEtlProcess(
@@ -77,14 +70,15 @@ final class EtlFactory
         ResourceType $resourceType,
         ConnectionProfile $profile,
         ExtractProfile $extractProfile
-    ): Extractor {
+    ): IterableExtractor {
         $client = $this->getClient($profile);
 
-        return $this->extractorFactory->create(
-            $resourceType,
-            $extractProfile,
-            $client
-        );
+        $repository = $this->repositoryFactory->createReadRepository($resourceType, $extractProfile, $client);
+        $queryFactory = new ApiQueryFactory();
+
+        $query = $queryFactory->fromProfile($extractProfile, $resourceType);
+
+        return new IterableExtractor($repository, $query);
     }
 
     public function createTransformer(TransformProfile $transformProfile): IterableTransformer
@@ -102,11 +96,7 @@ final class EtlFactory
         $client = $this->getClient($connectionProfile);
 
         return new IterableLoader(
-            $this->loaderFactory->createLoader(
-                $resourceType,
-                $loadProfile,
-                $client
-            ),
+            $this->repositoryFactory->createWriteRepository($resourceType, $loadProfile, $client),
             $loadProfile
         );
     }

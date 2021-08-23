@@ -4,12 +4,12 @@ namespace AkeneoE3\Infrastructure\Extractor;
 
 use AkeneoE3\Domain\Resource\Resource;
 
-interface ExtractConnector
+interface ReadResourcesRepository
 {
-    public function count(): int;
+    public function count(ApiQuery $query): int;
 
     /**
      * @return iterable<Resource>
      */
-    public function extract(): iterable;
+    public function read(ApiQuery $query): iterable;
 }

@@ -24,7 +24,7 @@ class InMemoryLoader implements WriteRepository
         $this->result = null;
     }
 
-    public function persist(Resource $resource): iterable
+    public function persist(Resource $resource, bool $patch): iterable
     {
         if (!$resource instanceof AuditableResource) {
             throw new LogicException('Resource must be auditable for merge');
@@ -35,7 +35,7 @@ class InMemoryLoader implements WriteRepository
         return [];
     }
 
-    public function flush(): iterable
+    public function flush(bool $patch): iterable
     {
         return [];
     }

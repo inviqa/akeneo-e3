@@ -7,6 +7,9 @@ namespace AkeneoE3\Domain;
 use AkeneoE3\Domain\Load\LoadResult\LoadResult;
 use AkeneoE3\Domain\Resource\Resource;
 
+/**
+ * @deprecated
+ */
 interface Loader
 {
     /**
