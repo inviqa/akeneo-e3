@@ -13,7 +13,7 @@ use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
-use AkeneoE3\Infrastructure\Loader\WriteResultFactory;
+use AkeneoE3\Infrastructure\WriteResultFactory;
 
 final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResourcesRepository
 {

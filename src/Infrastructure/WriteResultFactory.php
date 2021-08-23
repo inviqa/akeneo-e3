@@ -1,6 +1,6 @@
 <?php
 
-namespace AkeneoE3\Infrastructure\Loader;
+namespace AkeneoE3\Infrastructure;
 
 use AkeneoE3\Domain\Result\Write\Failed;
 use AkeneoE3\Domain\Result\Write\Loaded;
