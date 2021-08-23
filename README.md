@@ -27,9 +27,11 @@ It is similar and compatible with Akeneo Enrichment Rules but is more powerful. 
 
 ## How to use E3
 
-Step 1. Create a connection in Akeneo or use one of existing connections.
+**Step 0.** [Install the Akeneo E3 command line script](docs/install.md). 
 
-Step 2. Create a connection profile.
+**Step 1.** Create a connection in Akeneo or use one of existing connections.
+
+**Step 2.** Create a connection profile.
 
 Create a file `connection.yaml` and configure it using your connection credentials.
 
@@ -41,7 +43,7 @@ userName: ' {{ Username }}'
 userPassword: '{{ Password }}'
 ```
 
-Step 3. Define your rules
+**Step 3.** Define your rules.
 
 Create a file `rules.yaml`, e.g. this configuration allows you to trim values of the `name` attribute for the `en_GB` locale:
 
@@ -61,7 +63,8 @@ See also
  * [supported expression functions](docs/function-list.md)
 
 
-Step 4. Run the script:
+**Step 4.** Run the script:
+
 ```bash
-bin/akeneo-etl transform --resource-type=product --connection=connection.yaml --profile=rules.yaml
+php akeneo-e3.phar transform --resource-type=product --connection=connection.yaml --profile=rules.yaml
 ```
