@@ -57,7 +57,7 @@ actions:
 
 See also 
  * [examples of rules](docs/example-list.md) 
- * [supported expression functions](docs/function-list.md).
+ * [supported expression functions](docs/function-list.md)
 
 
 Step 4. Run the script:
