@@ -15,7 +15,6 @@ use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntity;
 use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntityRecord;
 use AkeneoE3\Infrastructure\Api\Repository\Standard;
 
-
 final class RepositoryFactory
 {
     public function createReadRepository(
