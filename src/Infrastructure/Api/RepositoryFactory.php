@@ -7,13 +7,14 @@ namespace AkeneoE3\Infrastructure\Api;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Domain\Profile\ExtractProfile;
 use AkeneoE3\Domain\Profile\LoadProfile;
+use AkeneoE3\Domain\Repository\NonPersistingWriteRepository;
 use AkeneoE3\Domain\Repository\ReadRepository;
 use AkeneoE3\Domain\Repository\WriteRepository;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntity;
 use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntityRecord;
 use AkeneoE3\Infrastructure\Api\Repository\Standard;
-use AkeneoE3\Infrastructure\Loader\DryRunLoader;
+
 
 final class RepositoryFactory
 {
@@ -39,7 +40,7 @@ final class RepositoryFactory
         AkeneoPimEnterpriseClientInterface $client
     ): WriteRepository {
         if ($profile->isDryRun() === true) {
-            return new DryRunLoader();
+            return new NonPersistingWriteRepository();
         }
 
         switch ((string)$resourceType) {

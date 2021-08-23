@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace AkeneoE3\Infrastructure\Loader;
+namespace AkeneoE3\Domain\Repository;
 
-use AkeneoE3\Domain\Repository\WriteRepository;
 use AkeneoE3\Domain\Resource\Resource;
 
-final class DryRunLoader implements WriteRepository
+final class NonPersistingWriteRepository implements WriteRepository
 {
     public function persist(Resource $resource, bool $patch): iterable
     {
