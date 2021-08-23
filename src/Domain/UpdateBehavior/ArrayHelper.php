@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkeneoE3\Domain;
+namespace AkeneoE3\Domain\UpdateBehavior;
 
 final class ArrayHelper
 {

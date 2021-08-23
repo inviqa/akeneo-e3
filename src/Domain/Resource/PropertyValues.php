@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Domain\Resource;
 
+use AkeneoE3\Domain\UpdateBehavior\UpdateBehavior;
 use Generator;
 use LogicException;
 
@@ -18,7 +19,7 @@ final class PropertyValues
         unset($data['values']);
         $this->values = $data;
 
-        $this->updateBehavior = new UpdateBehavior($this->values);
+        $this->updateBehavior = UpdateBehavior::fromArray($this->values);
     }
 
     public static function fromArray(array $data): self

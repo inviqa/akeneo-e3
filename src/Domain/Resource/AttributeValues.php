@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Domain\Resource;
 
-use AkeneoE3\Domain\ArrayHelper;
+use AkeneoE3\Domain\UpdateBehavior\UpdateBehavior;
 use Generator;
 use LogicException;
 
@@ -12,7 +12,7 @@ final class AttributeValues
 {
     private array $values = [];
 
-    private ArrayHelper $arrayHelper;
+    private UpdateBehavior $updateBehavior;
 
     /**
      * @var \AkeneoE3\Domain\Resource\ResourceType
@@ -21,7 +21,7 @@ final class AttributeValues
 
     private function __construct(array $data, ResourceType $resourceType)
     {
-        $this->arrayHelper = new ArrayHelper();
+        $this->updateBehavior = new UpdateBehavior();
 
         foreach ($data as $name => $localisedValues) {
             foreach ($localisedValues as $localisedValue) {
@@ -73,7 +73,7 @@ final class AttributeValues
             $this->get($attribute) : [];
 
         $hash = $this->attributeHash($attribute);
-        $this->values[$hash] = $this->arrayHelper->merge($existingValue, $value);
+        $this->values[$hash] = $this->updateBehavior->merge($existingValue, $value);
     }
 
 
@@ -84,7 +84,7 @@ final class AttributeValues
             $this->get($attribute) : [];
 
         $hash = $this->attributeHash($attribute);
-        $this->values[$hash] = $this->arrayHelper->subtract($existingValue, $value);
+        $this->values[$hash] = $this->updateBehavior->subtract($existingValue, $value);
     }
 
     public function has(Attribute $attribute): bool

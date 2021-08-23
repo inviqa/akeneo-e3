@@ -1,9 +1,9 @@
 <?php
 
-namespace AkeneoE3\Tests\Unit\Domain\Resource;
+namespace AkeneoE3\Tests\Unit\Domain\UpdateBehavior;
 
 use AkeneoE3\Domain\Exception\TransformException;
-use AkeneoE3\Domain\Resource\UpdateBehavior;
+use AkeneoE3\Domain\UpdateBehavior\UpdateBehavior;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,7 +49,7 @@ class UpdateBehaviorTest extends TestCase
             ],
         ];
 
-        $updateBehavior = new UpdateBehavior($original);
+        $updateBehavior = UpdateBehavior::fromArray($original);
 
         $updateBehavior->patch('labels', $patch);
 
@@ -80,7 +80,7 @@ class UpdateBehaviorTest extends TestCase
             ],
         ];
 
-        $updateBehavior = new UpdateBehavior($original);
+        $updateBehavior = UpdateBehavior::fromArray($original);
 
         $updateBehavior->patch('labels', $patch);
 
@@ -107,7 +107,7 @@ class UpdateBehaviorTest extends TestCase
             ],
         ];
 
-        $updateBehavior = new UpdateBehavior($original);
+        $updateBehavior = UpdateBehavior::fromArray($original);
 
         $updateBehavior->patch('labels', $patch);
 
@@ -130,7 +130,7 @@ class UpdateBehaviorTest extends TestCase
             'parent' => 'clothes',
         ];
 
-        $updateBehavior = new UpdateBehavior($original);
+        $updateBehavior = UpdateBehavior::fromArray($original);
 
         $updateBehavior->patch('parent', $patch);
 
@@ -153,7 +153,7 @@ class UpdateBehaviorTest extends TestCase
             'categories' => ['boots'],
         ];
 
-        $updateBehavior = new UpdateBehavior($original);
+        $updateBehavior = UpdateBehavior::fromArray($original);
 
         $updateBehavior->patch('categories', $patch);
 
@@ -174,7 +174,7 @@ class UpdateBehaviorTest extends TestCase
             'categories' => ['boots'],
         ];
 
-        $updateBehavior = new UpdateBehavior($original);
+        $updateBehavior = UpdateBehavior::fromArray($original);
 
         $updateBehavior->patch('categories', $patch);
 
@@ -195,7 +195,7 @@ class UpdateBehaviorTest extends TestCase
 
         $this->expectException(TransformException::class);
 
-        $updateBehavior = new UpdateBehavior($original);
+        $updateBehavior = UpdateBehavior::fromArray($original);
 
         $updateBehavior->patch('categories', $patch);
     }

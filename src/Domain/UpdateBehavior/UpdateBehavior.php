@@ -1,8 +1,7 @@
 <?php
 
-namespace AkeneoE3\Domain\Resource;
+namespace AkeneoE3\Domain\UpdateBehavior;
 
-use AkeneoE3\Domain\ArrayHelper;
 use AkeneoE3\Domain\Exception\TransformException;
 
 /**
@@ -22,11 +21,17 @@ class UpdateBehavior
 
     private array $original;
 
-    public function __construct(array &$original)
+    public function __construct()
     {
         $this->arrayHelper = new ArrayHelper();
+    }
 
-        $this->original = &$original;
+    public static function fromArray(array &$original): self
+    {
+        $self = new self();
+        $self->original = &$original;
+
+        return $self;
     }
 
     /**
@@ -70,15 +75,24 @@ class UpdateBehavior
      *
      * @return mixed
      */
-    public function getMergeValue($oldValue, array $newValue)
+    public function merge($oldValue, array $newValue)
     {
         return array_unique(array_merge($oldValue ?? [], $newValue));
     }
 
     /**
+     * @param mixed $oldValue
+     */
+    public function subtract($oldValue, array $newValue): array
+    {
+        return array_values(array_diff($oldValue ?? [], $newValue));
+    }
+
+
+    /**
      * @param mixed $patch
      */
-    public function patchRecursive(
+    private function patchRecursive(
         array &$original,
         string $fieldName,
         $patch,
