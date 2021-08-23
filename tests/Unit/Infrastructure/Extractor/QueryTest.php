@@ -4,7 +4,7 @@ namespace AkeneoE3\Tests\Unit\Infrastructure\Extractor;
 
 use AkeneoE3\Domain\Profile\ExtractProfile;
 use AkeneoE3\Domain\Resource\ResourceType;
-use AkeneoE3\Infrastructure\Extractor\Query;
+use AkeneoE3\Infrastructure\Extractor\ApiQuery;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 
@@ -12,7 +12,7 @@ class QueryTest extends TestCase
 {
     public function test_it_returns_search_filters()
     {
-        $query = Query::fromProfile(new FakeExtractProfile(
+        $query = ApiQuery::fromProfile(new FakeExtractProfile(
             ['123', 'abc'],
             [
                 ['field' => 'family', 'operator' => 'IN', 'value' => ['pim']],
@@ -31,7 +31,7 @@ class QueryTest extends TestCase
 
     public function test_it_returns_filter_values_by_field_names()
     {
-        $query = Query::fromProfile(new FakeExtractProfile(
+        $query = ApiQuery::fromProfile(new FakeExtractProfile(
             [],
             [
                 ['field' => 'reference_entity_code', 'value' => 'toys'],
@@ -48,7 +48,7 @@ class QueryTest extends TestCase
     {
         $this->expectException(LogicException::class);
 
-        Query::fromProfile(new FakeExtractProfile(
+        ApiQuery::fromProfile(new FakeExtractProfile(
             [],
             [
                 ['field' => 'complete', 'operator' => '=', 'true'],

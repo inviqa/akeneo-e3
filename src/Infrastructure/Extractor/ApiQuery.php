@@ -3,12 +3,12 @@
 namespace AkeneoE3\Infrastructure\Extractor;
 
 use Akeneo\Pim\ApiClient\Search\SearchBuilder;
-use AkeneoE3\Domain\AkeneoSpecifics;
 use AkeneoE3\Domain\Profile\ExtractProfile;
+use AkeneoE3\Domain\Repository\Query;
 use AkeneoE3\Domain\Resource\ResourceType;
 use LogicException;
 
-class Query
+class ApiQuery implements Query
 {
     private array $requiredValues = [];
 
