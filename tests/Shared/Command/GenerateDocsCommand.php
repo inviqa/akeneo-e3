@@ -6,7 +6,7 @@ namespace AkeneoE3\Tests\Shared\Command;
 
 use AkeneoE3\Application\Expression\FunctionProvider;
 use AkeneoE3\Domain\EtlProcess;
-use AkeneoE3\Domain\IterableLoader;
+use AkeneoE3\Domain\Loader;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\AuditableResource;
@@ -85,7 +85,7 @@ final class GenerateDocsCommand extends Command
         $etl = new EtlProcess(
             $extractor,
             $transformer,
-            new IterableLoader($loader, $profile)
+            new Loader($loader, $profile)
         );
 
         iterator_count($etl->execute());

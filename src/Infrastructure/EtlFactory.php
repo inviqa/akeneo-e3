@@ -7,9 +7,9 @@ namespace AkeneoE3\Infrastructure;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientBuilder;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Application\ActionFactory;
-use AkeneoE3\Domain\IterableExtractor;
-use AkeneoE3\Domain\IterableLoader;
-use AkeneoE3\Domain\IterableTransformer;
+use AkeneoE3\Domain\Extractor;
+use AkeneoE3\Domain\Loader;
+use AkeneoE3\Domain\Transformer;
 use AkeneoE3\Domain\Profile\ConnectionProfile;
 use AkeneoE3\Domain\Profile\ExtractProfile;
 use AkeneoE3\Domain\Profile\LoadProfile;
@@ -69,7 +69,7 @@ final class EtlFactory
         ResourceType $resourceType,
         ConnectionProfile $profile,
         ExtractProfile $extractProfile
-    ): IterableExtractor {
+    ): Extractor {
         $client = $this->getClient($profile);
 
         $repository = $this->repositoryFactory->createReadRepository($resourceType, $extractProfile, $client);
@@ -77,24 +77,24 @@ final class EtlFactory
         $queryFactory = new ApiQueryFactory();
         $query = $queryFactory->fromProfile($extractProfile, $resourceType);
 
-        return new IterableExtractor($repository, $query);
+        return new Extractor($repository, $query);
     }
 
-    public function createTransformer(TransformProfile $transformProfile): IterableTransformer
+    public function createTransformer(TransformProfile $transformProfile): Transformer
     {
         $actions = $this->actionFactory->createActions($transformProfile);
 
-        return new IterableTransformer($actions);
+        return new Transformer($actions);
     }
 
     public function createLoader(
         ResourceType $resourceType,
         ConnectionProfile $connectionProfile,
         LoadProfile $loadProfile
-    ): IterableLoader {
+    ): Loader {
         $client = $this->getClient($connectionProfile);
 
-        return new IterableLoader(
+        return new Loader(
             $this->repositoryFactory->createWriteRepository($resourceType, $loadProfile, $client),
             $loadProfile
         );

@@ -3,9 +3,9 @@
 namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
 use AkeneoE3\Domain\EtlProcess;
-use AkeneoE3\Domain\IterableExtractor;
-use AkeneoE3\Domain\IterableLoader;
-use AkeneoE3\Domain\IterableTransformer;
+use AkeneoE3\Domain\Extractor;
+use AkeneoE3\Domain\Loader;
+use AkeneoE3\Domain\Transformer;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Resource\Attribute;
 use AkeneoE3\Domain\Resource\AuditableResource;
@@ -21,7 +21,7 @@ class TransformContext implements Context
 {
     private InMemoryExtractor $extractor;
 
-    private IterableTransformer $transformer;
+    private Transformer $transformer;
 
     private InMemoryLoader $loader;
 
@@ -100,9 +100,9 @@ class TransformContext implements Context
         $this->loader = new InMemoryLoader($resource, $this->profile->getUploadMode());
 
         $etl = new EtlProcess(
-            new IterableExtractor($this->extractor, new EmptyQuery()),
+            new Extractor($this->extractor, new EmptyQuery()),
             $this->transformer,
-            new IterableLoader($this->loader, $this->profile)
+            new Loader($this->loader, $this->profile)
         );
 
         iterator_count($etl->execute());

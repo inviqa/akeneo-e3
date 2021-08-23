@@ -8,7 +8,7 @@ use AkeneoE3\Domain\Result\Transform\Failed;
 use AkeneoE3\Domain\Result\Transform\Transformed;
 use AkeneoE3\Domain\Result\Transform\TransformResult;
 
-class IterableTransformer
+class Transformer
 {
     /**
      * @var iterable|Action[]

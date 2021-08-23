@@ -11,7 +11,7 @@ use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Profile\LoadProfile;
 use AkeneoE3\Domain\Repository\WriteRepository;
 
-class IterableLoader
+class Loader
 {
     private WriteRepository $repository;
 

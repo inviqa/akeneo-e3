@@ -8,16 +8,16 @@ use AkeneoE3\Domain\Result\Write\WriteResult;
 
 final class EtlProcess
 {
-    private IterableExtractor $extractor;
+    private Extractor $extractor;
 
-    private IterableTransformer $transformer;
+    private Transformer $transformer;
 
-    private IterableLoader $loader;
+    private Loader $loader;
 
     public function __construct(
-        IterableExtractor $extractor,
-        IterableTransformer $transformer,
-        IterableLoader $loader
+        Extractor $extractor,
+        Transformer $transformer,
+        Loader $loader
     ) {
         $this->extractor = $extractor;
         $this->transformer = $transformer;
