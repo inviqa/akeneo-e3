@@ -3,6 +3,20 @@
 
 Expressions allow manipulating data using functions, like in Excel/Google sheets.
 
+### Supported functions
+* [value](#value)
+* [hasAttribute](#hasAttribute)
+* [hasProperty](#hasProperty)
+* [removeHtmlTags](#removeHtmlTags)
+* [trim](#trim)
+* [slug](#slug)
+* [replace](#replace)
+* [lowerCase](#lowerCase)
+* [upperCase](#upperCase)
+* [camelCase](#camelCase)
+* [snakeCase](#snakeCase)
+
+
 
 ## value
 
