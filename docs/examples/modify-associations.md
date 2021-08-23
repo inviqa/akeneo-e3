@@ -1,7 +1,7 @@
 [comment]: <> (This file is auto-generated based on example-provider.)
 # Modify associations
 
-**Task:** set `associations` to products or product models.
+## Task: set `associations` to products or product models.
 
 ### Rules
 
@@ -32,7 +32,7 @@ FRIENDS.groups:
 RELATIVES.products: 
 RELATIVES.product_models: mermaid
 RELATIVES.groups: </pre>
-**Task:** add new `associations` to products or product models.
+## Task: add new `associations` to products or product models.
 
 ### Rules
 

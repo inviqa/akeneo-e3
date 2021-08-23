@@ -1,7 +1,7 @@
 [comment]: <> (This file is auto-generated based on example-provider.)
 # How to replace strings in values
 
-**Task:** replace all `\n` occurrences with spaces.
+## Task: replace all `\n` occurrences with spaces.
 
 ### Rules
 

@@ -1,7 +1,7 @@
 [comment]: <> (This file is auto-generated based on example-provider.)
 # How to trim values
 
-**Task:** trim values of a `name` attribute of `en_GB` locale.
+## Task: trim values of a `name` attribute of `en_GB` locale.
 
 ### Rules
 

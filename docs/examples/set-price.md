@@ -1,7 +1,7 @@
 [comment]: <> (This file is auto-generated based on example-provider.)
 # Set values of price attributes
 
-**Task:** set value of a price attribute `price_initial`
+## Task: set value of a price attribute `price_initial`
 
 ### Rules
 

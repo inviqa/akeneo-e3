@@ -1,7 +1,7 @@
 [comment]: <> (This file is auto-generated based on example-provider.)
 # Add attributes to families
 
-**Task:** add an attribute to families.
+## Task: add an attribute to families.
 
 ### Rules
 
@@ -21,7 +21,7 @@ Field: `attributes`
 Before applying actions: <pre>sku, name, description</pre>
 
 After applying actions: <pre>sku, name, description, colour</pre>
-**Task:** add an attribute to families and set it as required for the channel `ecommerce`.
+## Task: add an attribute to families and set it as required for the channel `ecommerce`.
 
 ### Rules
 

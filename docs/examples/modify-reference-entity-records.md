@@ -1,7 +1,7 @@
 [comment]: <> (This file is auto-generated based on example-provider.)
 # Modify reference entity records
 
-**Task:** trim values of a `description` attribute of all `suppliers` reference entity records.
+## Task: trim values of a `description` attribute of all `suppliers` reference entity records.
 
 ### Rules
 

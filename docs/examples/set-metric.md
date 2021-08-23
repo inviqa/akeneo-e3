@@ -1,7 +1,7 @@
 [comment]: <> (This file is auto-generated based on example-provider.)
 # Set value of a metric type attribute
 
-**Task:** set value of a metric attribute `gross_weight`
+## Task: set value of a metric attribute `gross_weight`
 
 ### Rules
 
