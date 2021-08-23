@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Application\Expression\Functions;
 
-use AkeneoE3\Application\Expression\StateHolder;
+use AkeneoE3\Application\Expression\ActionState;
 use AkeneoE3\Domain\Exception\TransformException;
 use AkeneoE3\Domain\Resource\Attribute;
 use AkeneoE3\Domain\Resource\Property;
@@ -137,10 +137,10 @@ function trim(string $string, string $chars = " \t\n\r\0\x0B\x0C\u{A0}\u{FEFF}")
  */
 function value(string $name = '', ?string $channel = null, ?string $locale = null)
 {
-    $resource = StateHolder::$resource;
+    $resource = ActionState::$resource;
 
     $field = ($name === '') ?
-        StateHolder::$field :
+        ActionState::$field :
         Attribute::create($name, $channel, $locale);
 
     if ($resource->has($field) === false) {
@@ -180,10 +180,10 @@ function value(string $name = '', ?string $channel = null, ?string $locale = nul
  */
 function hasAttribute(string $name = '', ?string $channel = null, ?string $locale = null): bool
 {
-    $resource = StateHolder::$resource;
+    $resource = ActionState::$resource;
 
     $field = ($name === '') ?
-        StateHolder::$field :
+        ActionState::$field :
         Attribute::create($name, $channel, $locale);
 
     if (!$field instanceof Attribute) {
@@ -219,10 +219,10 @@ function hasAttribute(string $name = '', ?string $channel = null, ?string $local
  */
 function hasProperty(string $name = ''): bool
 {
-    $resource = StateHolder::$resource;
+    $resource = ActionState::$resource;
 
     $field = ($name === '') ?
-        StateHolder::$field :
+        ActionState::$field :
         Property::create($name);
 
     if (!$field instanceof Property) {

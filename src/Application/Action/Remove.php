@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Application\Action;
 
-use AkeneoE3\Application\Expression\StateHolder;
+use AkeneoE3\Application\Expression\ActionState;
 use AkeneoE3\Application\Expression\ExpressionLanguage;
 use AkeneoE3\Domain\Action;
 use AkeneoE3\Domain\Exception\TransformException;
@@ -40,11 +40,9 @@ final class Remove implements Action
             return $this->options->getItems();
         }
 
+        ActionState::setResourceAndField($resource, $this->field);
+
         $expression = $this->options->getExpression() ?? '';
-
-        StateHolder::$resource = $resource;
-        StateHolder::$field = $this->field;
-
         $result = $this->expressionLanguage->evaluate($expression, $resource->toArray(true));
 
         if (is_array($result) === false) {

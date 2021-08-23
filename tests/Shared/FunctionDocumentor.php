@@ -3,7 +3,7 @@
 namespace AkeneoE3\Tests\Shared;
 
 use AkeneoE3\Application\Expression\FunctionProvider;
-use AkeneoE3\Application\Expression\StateHolder;
+use AkeneoE3\Application\Expression\ActionState;
 use AkeneoE3\Domain\Resource\AuditableResource;
 use AkeneoE3\Domain\Resource\ResourceType;
 use phpDocumentor\Reflection\DocBlock\Tags\Generic;
@@ -28,7 +28,7 @@ class FunctionDocumentor
 
         $factory = DocBlockFactory::createInstance();
 
-        StateHolder::$resource = AuditableResource::fromArray([
+        ActionState::$resource = AuditableResource::fromArray([
             'identifier' => 'the-ziggy',
             'family' => 'akeneo',
             'values' => [

@@ -2,7 +2,7 @@
 
 namespace AkeneoE3\Tests\Unit\Application\Expression\functions;
 
-use AkeneoE3\Application\Expression\StateHolder;
+use AkeneoE3\Application\Expression\ActionState;
 use AkeneoE3\Domain\Exception\TransformException;
 use AkeneoE3\Domain\Resource\Attribute;
 use AkeneoE3\Domain\Resource\Property;
@@ -24,7 +24,7 @@ class FunctionsTest extends TestCase
     {
         $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
-        StateHolder::$resource = $resource;
+        ActionState::$resource = $resource;
 
         $this->assertEquals('violet', value('colour', 'erp', null));
     }
@@ -33,7 +33,7 @@ class FunctionsTest extends TestCase
     {
         $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
-        StateHolder::$resource = $resource;
+        ActionState::$resource = $resource;
 
         $this->expectException(TransformException::class);
 
@@ -44,8 +44,8 @@ class FunctionsTest extends TestCase
     {
         $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
-        StateHolder::$resource = $resource;
-        StateHolder::$field = Attribute::create('colour', 'erp', null);
+        ActionState::$resource = $resource;
+        ActionState::$field = Attribute::create('colour', 'erp', null);
 
         $this->assertEquals('violet', value());
     }
@@ -54,8 +54,8 @@ class FunctionsTest extends TestCase
     {
         $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
-        StateHolder::$resource = $resource;
-        StateHolder::$field = Attribute::create('colour', 'erp', 'es_ES');
+        ActionState::$resource = $resource;
+        ActionState::$field = Attribute::create('colour', 'erp', 'es_ES');
 
         $this->expectException(TransformException::class);
 
@@ -66,7 +66,7 @@ class FunctionsTest extends TestCase
     {
         $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
-        StateHolder::$resource = $resource;
+        ActionState::$resource = $resource;
 
         $this->assertTrue(hasAttribute('colour', 'erp', null));
     }
@@ -75,7 +75,7 @@ class FunctionsTest extends TestCase
     {
         $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
-        StateHolder::$resource = $resource;
+        ActionState::$resource = $resource;
 
         $this->assertFalse(hasAttribute('colour', 'mobile', null));
     }
@@ -83,8 +83,8 @@ class FunctionsTest extends TestCase
     public function test_function_has_attribute_throws_an_exception_if_called_without_arguments_and_a_current_field_is_not_an_attribute()
     {
         $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
-        StateHolder::$resource = $resource;
-        StateHolder::$field = Property::create('categories');
+        ActionState::$resource = $resource;
+        ActionState::$field = Property::create('categories');
 
         $this->expectException(TransformException::class);
 
@@ -95,7 +95,7 @@ class FunctionsTest extends TestCase
     {
         $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
-        StateHolder::$resource = $resource;
+        ActionState::$resource = $resource;
 
         $this->assertTrue(hasProperty('categories'));
     }
@@ -104,7 +104,7 @@ class FunctionsTest extends TestCase
     {
         $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
-        StateHolder::$resource = $resource;
+        ActionState::$resource = $resource;
 
         $this->assertFalse(hasProperty('friends'));
     }
@@ -112,8 +112,8 @@ class FunctionsTest extends TestCase
     public function test_function_has_property_throws_an_exception_if_called_without_arguments_and_a_current_field_is_not_an_property()
     {
         $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
-        StateHolder::$resource = $resource;
-        StateHolder::$field = Attribute::create('colour', null, null);
+        ActionState::$resource = $resource;
+        ActionState::$field = Attribute::create('colour', null, null);
 
         $this->expectException(TransformException::class);
 
