@@ -6,6 +6,7 @@ namespace AkeneoE3\Tests\Shared\Command;
 
 use AkeneoE3\Application\Expression\FunctionProvider;
 use AkeneoE3\Domain\EtlProcess;
+use AkeneoE3\Domain\Extractor;
 use AkeneoE3\Domain\Loader;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Resource\Resource;
@@ -13,6 +14,7 @@ use AkeneoE3\Domain\Resource\AuditableResource;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Comparer\ResourceComparer;
 use AkeneoE3\Infrastructure\EtlFactory;
+use AkeneoE3\Tests\Acceptance\bootstrap\EmptyQuery;
 use AkeneoE3\Tests\Acceptance\bootstrap\InMemoryExtractor;
 use AkeneoE3\Tests\Acceptance\bootstrap\InMemoryLoader;
 use AkeneoE3\Tests\Shared\FunctionDocumentor;
@@ -83,7 +85,7 @@ final class GenerateDocsCommand extends Command
         $transformer = $this->factory->createTransformer($profile);
 
         $etl = new EtlProcess(
-            $extractor,
+            new Extractor($extractor, new EmptyQuery()),
             $transformer,
             new Loader($loader, $profile)
         );
