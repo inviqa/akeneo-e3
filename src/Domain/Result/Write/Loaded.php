@@ -1,10 +1,10 @@
 <?php
 
-namespace AkeneoE3\Domain\Load\LoadResult;
+namespace AkeneoE3\Domain\Result\Write;
 
 use AkeneoE3\Domain\Resource\Resource;
 
-class Skipped implements LoadResult
+class Loaded implements WriteResult
 {
     private Resource $resource;
 
@@ -25,6 +25,6 @@ class Skipped implements LoadResult
 
     public function __toString(): string
     {
-        return 'skipped';
+        return 'ok';
     }
 }

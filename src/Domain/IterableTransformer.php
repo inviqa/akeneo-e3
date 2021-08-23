@@ -4,9 +4,9 @@ namespace AkeneoE3\Domain;
 
 use AkeneoE3\Domain\Exception\TransformException;
 use AkeneoE3\Domain\Resource\Resource;
-use AkeneoE3\Domain\Transform\TransformResult\Failed;
-use AkeneoE3\Domain\Transform\TransformResult\Transformed;
-use AkeneoE3\Domain\Transform\TransformResult\TransformResult;
+use AkeneoE3\Domain\Result\Transform\Failed;
+use AkeneoE3\Domain\Result\Transform\Transformed;
+use AkeneoE3\Domain\Result\Transform\TransformResult;
 
 class IterableTransformer
 {

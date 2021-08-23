@@ -1,11 +1,11 @@
 <?php
 
-namespace AkeneoE3\Domain\Load\LoadResult;
+namespace AkeneoE3\Domain\Result\Write;
 
 use AkeneoE3\Domain\Resource\Resource;
-use AkeneoE3\Domain\Transform\TransformResult\TransformResult;
+use AkeneoE3\Domain\Result\Transform\TransformResult;
 
-class TransformFailed implements LoadResult
+class TransformFailed implements WriteResult
 {
     private Resource $resource;
 

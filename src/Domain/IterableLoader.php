@@ -2,14 +2,14 @@
 
 namespace AkeneoE3\Domain;
 
-use AkeneoE3\Domain\Load\LoadResult\LoadResult;
-use AkeneoE3\Domain\Load\LoadResult\Skipped;
-use AkeneoE3\Domain\Load\LoadResult\TransformFailed;
+use AkeneoE3\Domain\Result\Transform\Failed;
+use AkeneoE3\Domain\Result\Transform\TransformResult;
+use AkeneoE3\Domain\Result\Write\WriteResult;
+use AkeneoE3\Domain\Result\Write\Skipped;
+use AkeneoE3\Domain\Result\Write\TransformFailed;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Profile\LoadProfile;
 use AkeneoE3\Domain\Repository\WriteRepository;
-use AkeneoE3\Domain\Transform\TransformResult\Failed;
-use AkeneoE3\Domain\Transform\TransformResult\TransformResult;
 
 class IterableLoader
 {
@@ -26,7 +26,7 @@ class IterableLoader
     /**
      * @param TransformResult[] $transformResults
      *
-     * @returns LoadResult[]
+     * @returns WriteResult[]
      */
     public function load(iterable $transformResults): iterable
     {

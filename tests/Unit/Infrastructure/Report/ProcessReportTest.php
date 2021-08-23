@@ -4,8 +4,8 @@ namespace AkeneoE3\Tests\Unit\Infrastructure\Report;
 
 use AkeneoE3\Domain\Resource\AuditableResource;
 use AkeneoE3\Domain\Resource\ResourceType;
-use AkeneoE3\Domain\Transform\TransformResult;
-use AkeneoE3\Domain\Load\LoadResult;
+use AkeneoE3\Domain\Result\Write;
+use AkeneoE3\Domain\Result\Transform;
 use AkeneoE3\Infrastructure\Report\ProcessReport;
 use PHPUnit\Framework\TestCase;
 
@@ -29,8 +29,8 @@ class ProcessReportTest extends TestCase
         $report = new ProcessReport();
         $resource = AuditableResource::fromCode('123', ResourceType::create('product'));
 
-        $report->add(LoadResult\Loaded::create($resource));
-        $report->add(LoadResult\Loaded::create($resource));
+        $report->add(Write\Loaded::create($resource));
+        $report->add(Write\Loaded::create($resource));
 
         $this->assertEquals(2, $report->total());
     }
@@ -40,9 +40,9 @@ class ProcessReportTest extends TestCase
         $report = new ProcessReport();
         $resource = AuditableResource::fromCode('123', ResourceType::create('product'));
 
-        $report->add(LoadResult\TransformFailed::create($resource, TransformResult\Failed::create($resource, 'error1')));
-        $report->add(LoadResult\TransformFailed::create($resource, TransformResult\Failed::create($resource, 'error1')));
-        $report->add(LoadResult\TransformFailed::create($resource, TransformResult\Failed::create($resource, 'error2')));
+        $report->add(Write\TransformFailed::create($resource, Transform\Failed::create($resource, 'error1')));
+        $report->add(Write\TransformFailed::create($resource, Transform\Failed::create($resource, 'error1')));
+        $report->add(Write\TransformFailed::create($resource, Transform\Failed::create($resource, 'error2')));
 
         $this->assertEquals(3, $report->transformFailedCount());
 
@@ -58,11 +58,11 @@ class ProcessReportTest extends TestCase
 
         $resource = AuditableResource::fromCode('123', ResourceType::create('product'));
 
-        $report->add(LoadResult\Loaded::create($resource));
-        $report->add(LoadResult\Loaded::create($resource));
-        $report->add(LoadResult\Failed::create($resource, 'error1'));
-        $report->add(LoadResult\Failed::create($resource, 'error2'));
-        $report->add(LoadResult\Failed::create($resource, 'error2'));
+        $report->add(Write\Loaded::create($resource));
+        $report->add(Write\Loaded::create($resource));
+        $report->add(Write\Failed::create($resource, 'error1'));
+        $report->add(Write\Failed::create($resource, 'error2'));
+        $report->add(Write\Failed::create($resource, 'error2'));
 
         $this->assertEquals(2, $report->loadedCount());
         $this->assertEquals(3, $report->loadFailedCount());

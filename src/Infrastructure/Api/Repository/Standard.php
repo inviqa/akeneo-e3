@@ -7,14 +7,14 @@ namespace AkeneoE3\Infrastructure\Api\Repository;
 use Akeneo\Pim\ApiClient\Api\Operation\ListableResourceInterface;
 use Akeneo\Pim\ApiClient\Api\Operation\UpsertableResourceListInterface;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
-use AkeneoE3\Domain\Load\LoadResult\LoadResult;
+use AkeneoE3\Domain\Result\Write\WriteResult;
 use AkeneoE3\Domain\Resource\AuditableResource;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\ApiSelector;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
-use AkeneoE3\Infrastructure\Loader\LoadResultFactory;
+use AkeneoE3\Infrastructure\Loader\WriteResultFactory;
 use LogicException;
 
 final class Standard implements ReadResourcesRepository, WriteResourcesRepository
@@ -63,7 +63,7 @@ final class Standard implements ReadResourcesRepository, WriteResourcesRepositor
     }
 
     /**
-     * @return iterable<LoadResult>
+     * @return iterable<WriteResult>
      */
     public function write(ResourceCollection $resources, bool $patch = true): iterable
     {
@@ -73,6 +73,6 @@ final class Standard implements ReadResourcesRepository, WriteResourcesRepositor
 
         $response = $this->api->upsertList($resources->toArray(!$patch));
 
-        yield from LoadResultFactory::createFromResponse($response, $resources);
+        yield from WriteResultFactory::createFromResponse($response, $resources);
     }
 }

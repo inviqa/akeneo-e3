@@ -2,15 +2,14 @@
 
 namespace AkeneoE3\Infrastructure\Loader;
 
-use AkeneoE3\Domain\AkeneoSpecifics;
-use AkeneoE3\Domain\Load\LoadResult\Failed;
-use AkeneoE3\Domain\Load\LoadResult\Loaded;
-use AkeneoE3\Domain\Load\LoadResult\LoadResult;
+use AkeneoE3\Domain\Result\Write\Failed;
+use AkeneoE3\Domain\Result\Write\Loaded;
+use AkeneoE3\Domain\Result\Write\WriteResult;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use LogicException;
 
-class LoadResultFactory
+class WriteResultFactory
 {
     public static function createFromResponse(iterable $response, ResourceCollection $resources): iterable
     {
@@ -31,7 +30,7 @@ class LoadResultFactory
         }
     }
 
-    public static function createFromResponseLine(array $line, Resource $resource): LoadResult
+    public static function createFromResponseLine(array $line, Resource $resource): WriteResult
     {
         if ($line['status_code'] !== 422) {
             return Loaded::create($resource);

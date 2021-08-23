@@ -7,7 +7,6 @@ namespace AkeneoE3\Infrastructure;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientBuilder;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Application\ActionFactory;
-use AkeneoE3\Domain\Extractor;
 use AkeneoE3\Domain\IterableExtractor;
 use AkeneoE3\Domain\IterableLoader;
 use AkeneoE3\Domain\IterableTransformer;

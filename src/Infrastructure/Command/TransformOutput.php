@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Infrastructure\Command;
 
-use AkeneoE3\Domain\Load\LoadResult\Failed;
-use AkeneoE3\Domain\Load\LoadResult\Loaded;
-use AkeneoE3\Domain\Load\LoadResult\LoadResult;
+use AkeneoE3\Domain\Result\Write\Failed;
+use AkeneoE3\Domain\Result\Write\Loaded;
+use AkeneoE3\Domain\Result\Write\WriteResult;
 use AkeneoE3\Infrastructure\Comparer\DiffLine;
 use AkeneoE3\Infrastructure\Comparer\ResourceComparer;
 use AkeneoE3\Infrastructure\Report\ProcessReport;
@@ -73,7 +73,7 @@ class TransformOutput
         return $this->style->confirm($phrase);
     }
 
-    public function render(LoadResult $result, int $estimatedTotal): void
+    public function render(WriteResult $result, int $estimatedTotal): void
     {
         if ($this->progressBar->getMaxSteps() === 0) {
             $this->progressBar->setMaxSteps($estimatedTotal);
@@ -96,7 +96,7 @@ class TransformOutput
     /**
      * @param array|DiffLine[] $comparison
      */
-    private function outputCompareTable(array $comparison, LoadResult $loadResult): void
+    private function outputCompareTable(array $comparison, WriteResult $loadResult): void
     {
         if (count($comparison) === 0) {
             return;
@@ -145,7 +145,7 @@ class TransformOutput
         }
     }
 
-    private function outputTransformation(LoadResult $loadResult): void
+    private function outputTransformation(WriteResult $loadResult): void
     {
         if ($this->outputTransformations === false) {
             return;
@@ -154,6 +154,7 @@ class TransformOutput
         $comparison = $this->resourceComparer->compareWithOrigin(
             $loadResult->getResource()
         );
+
         $this->outputCompareTable($comparison, $loadResult);
     }
 

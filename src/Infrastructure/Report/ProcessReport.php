@@ -2,8 +2,8 @@
 
 namespace AkeneoE3\Infrastructure\Report;
 
-use AkeneoE3\Domain\Load\LoadResult;
-use AkeneoE3\Domain\Transform\TransformResult;
+use AkeneoE3\Domain\Result\Write;
+use AkeneoE3\Domain\Result\Transform;
 
 class ProcessReport
 {
@@ -22,23 +22,23 @@ class ProcessReport
         return $this->total;
     }
 
-    public function add(LoadResult\LoadResult $result): void
+    public function add(Write\WriteResult $result): void
     {
         $this->total++;
 
-        if ($result instanceof LoadResult\TransformFailed) {
+        if ($result instanceof Write\TransformFailed) {
             $this->addTransformResult($result->getTransformResult());
 
             return;
         }
 
-        if ($result instanceof LoadResult\Loaded) {
+        if ($result instanceof Write\Loaded) {
             $this->loadedCount++;
 
             return;
         }
 
-        if ($result instanceof LoadResult\Failed) {
+        if ($result instanceof Write\Failed) {
             $this->loadFailedCount++;
 
             $error = $result->getError();
@@ -72,9 +72,9 @@ class ProcessReport
         return $this->loadErrorSummary;
     }
 
-    private function addTransformResult(TransformResult\TransformResult $result): void
+    private function addTransformResult(Transform\TransformResult $result): void
     {
-        if (!$result instanceof TransformResult\Failed) {
+        if (!$result instanceof Transform\Failed) {
             return;
         }
 

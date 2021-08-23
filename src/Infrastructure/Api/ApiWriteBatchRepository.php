@@ -15,9 +15,9 @@ class ApiWriteBatchRepository implements WriteRepository
 
     private int $batchSize;
 
-    public function __construct(WriteResourcesRepository $connector, int $batchSize)
+    public function __construct(WriteResourcesRepository $repository, int $batchSize)
     {
-        $this->connector = $connector;
+        $this->connector = $repository;
         $this->batchSize = $batchSize;
 
         $this->buffer = new ResourceCollection();

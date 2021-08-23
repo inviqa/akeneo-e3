@@ -1,6 +1,6 @@
 <?php
 
-namespace AkeneoE3\Domain\Transform\TransformResult;
+namespace AkeneoE3\Domain\Result\Transform;
 
 use AkeneoE3\Domain\Resource\Resource;
 

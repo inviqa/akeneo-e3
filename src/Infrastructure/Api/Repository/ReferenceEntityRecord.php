@@ -6,14 +6,14 @@ namespace AkeneoE3\Infrastructure\Api\Repository;
 
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityRecordApiInterface;
-use AkeneoE3\Domain\Load\LoadResult\LoadResult;
+use AkeneoE3\Domain\Result\Write\WriteResult;
 use AkeneoE3\Domain\Resource\AuditableResource;
 use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
-use AkeneoE3\Infrastructure\Loader\LoadResultFactory;
+use AkeneoE3\Infrastructure\Loader\WriteResultFactory;
 
 final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResourcesRepository
 {
@@ -48,7 +48,7 @@ final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResou
     }
 
     /**
-     * @return LoadResult[]
+     * @return WriteResult[]
      */
     public function write(ResourceCollection $resources, bool $patch = true): iterable
     {
@@ -60,6 +60,6 @@ final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResou
 
         $response = $this->api->upsertList($entityCode, $resources->toArray(!$patch));
 
-        yield from LoadResultFactory::createFromResponse($response, $resources);
+        yield from WriteResultFactory::createFromResponse($response, $resources);
     }
 }

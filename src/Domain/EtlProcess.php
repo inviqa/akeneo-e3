@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Domain;
 
-use AkeneoE3\Domain\Load\LoadResult\LoadResult;
-use AkeneoE3\Domain\Repository\ReadRepository;
-use AkeneoE3\Domain\Resource\ResourceType;
+use AkeneoE3\Domain\Result\Write\WriteResult;
 
 final class EtlProcess
 {
@@ -27,7 +25,7 @@ final class EtlProcess
     }
 
     /**
-     * @return LoadResult[]
+     * @return WriteResult[]
      *
      * @throws \AkeneoE3\Domain\Exception\TransformException
      */
@@ -37,9 +35,7 @@ final class EtlProcess
 
         $transformResults = $this->transformer->transform($resources);
 
-        $loadResults = $this->loader->load($transformResults);
-
-        yield from $loadResults;
+        yield from $this->loader->load($transformResults);
     }
 
     public function total(): int

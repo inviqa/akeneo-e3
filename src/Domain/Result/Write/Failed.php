@@ -1,10 +1,10 @@
 <?php
 
-namespace AkeneoE3\Domain\Transform\TransformResult;
+namespace AkeneoE3\Domain\Result\Write;
 
 use AkeneoE3\Domain\Resource\Resource;
 
-class Failed implements TransformResult
+class Failed implements WriteResult
 {
     private string $error;
 
@@ -30,6 +30,7 @@ class Failed implements TransformResult
     {
         return $this->resource;
     }
+
 
     public function __toString(): string
     {
