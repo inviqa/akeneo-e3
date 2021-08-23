@@ -2,11 +2,11 @@
 
 namespace AkeneoE3\Infrastructure\Loader;
 
-use AkeneoE3\Domain\Loader;
+use AkeneoE3\Domain\Repository\WriteRepository;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 
-class ApiBatchLoader implements Loader
+class ApiBatchLoader implements WriteRepository
 {
     private LoadListConnector $connector;
 
@@ -22,18 +22,18 @@ class ApiBatchLoader implements Loader
         $this->buffer = new ResourceCollection();
     }
 
-    public function load(Resource $resource): iterable
+    public function persist(Resource $resource): iterable
     {
         $this->buffer->add($resource);
 
         if ($this->buffer->count() === $this->batchSize) {
-            yield from $this->finish();
+            yield from $this->flush();
         }
 
         return [];
     }
 
-    public function finish(): iterable
+    public function flush(): iterable
     {
         yield from $this->connector->load($this->buffer);
 

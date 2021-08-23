@@ -7,19 +7,19 @@ use AkeneoE3\Domain\Load\LoadResult\Skipped;
 use AkeneoE3\Domain\Load\LoadResult\TransformFailed;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Profile\LoadProfile;
-use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Repository\WriteRepository;
 use AkeneoE3\Domain\Transform\TransformResult\Failed;
 use AkeneoE3\Domain\Transform\TransformResult\TransformResult;
 
 class IterableLoader
 {
-    private Loader $loader;
+    private WriteRepository $repository;
 
     private LoadProfile $profile;
 
-    public function __construct(Loader $loader, LoadProfile $profile)
+    public function __construct(WriteRepository $repository, LoadProfile $profile)
     {
-        $this->loader = $loader;
+        $this->repository = $repository;
         $this->profile = $profile;
     }
 
@@ -45,9 +45,9 @@ class IterableLoader
                 continue;
             }
 
-            yield from $this->loader->load($resource);
+            yield from $this->repository->persist($resource);
         }
 
-        yield from $this->loader->finish();
+        yield from $this->repository->flush();
     }
 }

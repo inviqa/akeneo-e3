@@ -2,10 +2,10 @@
 
 namespace AkeneoE3\Infrastructure\Loader;
 
-use AkeneoE3\Domain\Loader;
+use AkeneoE3\Domain\Repository\WriteRepository;
 use AkeneoE3\Domain\Resource\Resource;
 
-class ApiLoader implements Loader
+class ApiLoader implements WriteRepository
 {
     private LoadConnector $connector;
 
@@ -14,14 +14,14 @@ class ApiLoader implements Loader
         $this->connector = $connector;
     }
 
-    public function load(Resource $resource): iterable
+    public function persist(Resource $resource): iterable
     {
         $result = $this->connector->load($resource);
 
         return [$result];
     }
 
-    public function finish(): array
+    public function flush(): iterable
     {
         return [];
     }

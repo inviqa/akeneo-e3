@@ -3,8 +3,8 @@
 namespace AkeneoE3\Infrastructure\Loader;
 
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
-use AkeneoE3\Domain\Loader;
 use AkeneoE3\Domain\Profile\LoadProfile;
+use AkeneoE3\Domain\Repository\WriteRepository;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Loader\Api\ReferenceEntity;
 use AkeneoE3\Infrastructure\Loader\Api\ReferenceEntityRecord;
@@ -16,7 +16,7 @@ class LoaderFactory
         ResourceType $resourceType,
         LoadProfile $loadProfile,
         AkeneoPimEnterpriseClientInterface $client
-    ): Loader {
+    ): WriteRepository {
         if ($loadProfile->isDryRun() === true) {
             return new DryRunLoader();
         }

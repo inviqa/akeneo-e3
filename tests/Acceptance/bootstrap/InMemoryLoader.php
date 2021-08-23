@@ -2,14 +2,14 @@
 
 namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
-use AkeneoE3\Domain\Loader;
 use AkeneoE3\Domain\Profile\EtlProfile;
+use AkeneoE3\Domain\Repository\WriteRepository;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\AuditableResource;
 use LogicException;
 use Webmozart\Assert\Assert;
 
-class InMemoryLoader implements Loader
+class InMemoryLoader implements WriteRepository
 {
     private Resource $originalResource;
 
@@ -24,7 +24,7 @@ class InMemoryLoader implements Loader
         $this->result = null;
     }
 
-    public function load(Resource $resource): array
+    public function persist(Resource $resource): iterable
     {
         if (!$resource instanceof AuditableResource) {
             throw new LogicException('Resource must be auditable for merge');
@@ -35,7 +35,7 @@ class InMemoryLoader implements Loader
         return [];
     }
 
-    public function finish(): array
+    public function flush(): iterable
     {
         return [];
     }
@@ -43,10 +43,6 @@ class InMemoryLoader implements Loader
     public function getResult(): Resource
     {
         Assert::notNull($this->result, 'Transformation result is not defined.');
-
-//        if ($this->uploadMode === EtlProfile::MODE_UPDATE) {
-//            return $this->result->changes();
-//        }
 
         return $this->result;
     }
