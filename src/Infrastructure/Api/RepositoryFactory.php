@@ -7,9 +7,9 @@ namespace AkeneoE3\Infrastructure\Api;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Domain\Profile\ExtractProfile;
 use AkeneoE3\Domain\Profile\LoadProfile;
-use AkeneoE3\Domain\Repository\NonPersistingWriteRepository;
-use AkeneoE3\Domain\Repository\ReadRepository;
-use AkeneoE3\Domain\Repository\WriteRepository;
+use AkeneoE3\Domain\Repository\NonPersistingRepository;
+use AkeneoE3\Domain\Repository\ReadRepository as BaseReadRepository;
+use AkeneoE3\Domain\Repository\PersistRepository as BasePersistRepository;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Repository\FamilyVariant;
 use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntity;
@@ -22,37 +22,37 @@ final class RepositoryFactory
         ResourceType $resourceType,
         ExtractProfile $profile,
         AkeneoPimEnterpriseClientInterface $client
-    ): ReadRepository {
+    ): BaseReadRepository {
 
         // @todo: extract createRepository method and then check by interface with what Read/WriteRepository to wrap
         switch ((string)$resourceType) {
             case 'family-variant':
-                return new ApiReadRepository(new FamilyVariant($resourceType, $client));
+                return new ReadRepository(new FamilyVariant($resourceType, $client));
 
             case 'reference-entity':
-                return new ApiReadRepository(new ReferenceEntity($resourceType, $client));
+                return new ReadRepository(new ReferenceEntity($resourceType, $client));
 
             case 'reference-entity-record':
-                return new ApiReadRepository(new ReferenceEntityRecord($resourceType, $client));
+                return new ReadRepository(new ReferenceEntityRecord($resourceType, $client));
         }
 
-        return new ApiReadRepository(new Standard($resourceType, $client));
+        return new ReadRepository(new Standard($resourceType, $client));
     }
 
     public function createWriteRepository(
         ResourceType $resourceType,
         LoadProfile $profile,
         AkeneoPimEnterpriseClientInterface $client
-    ): WriteRepository {
+    ): BasePersistRepository {
         if ($profile->isDryRun() === true) {
-            return new NonPersistingWriteRepository();
+            return new NonPersistingRepository();
         }
 
         switch ((string)$resourceType) {
             case 'family-variant':
                 return
-                    new ApiWriteGroupRepository(
-                        new ApiWriteBatchRepository(
+                    new PersistGroupRepository(
+                        new PersistBatchRepository(
                             new FamilyVariant($resourceType, $client),
                             $profile->getBatchSize()
                         ),
@@ -60,13 +60,13 @@ final class RepositoryFactory
                     );
 
             case 'reference-entity':
-                return new ApiWriteRepository(
+                return new PersistRepository(
                     new ReferenceEntity($resourceType, $client)
                 );
 
             case 'reference-entity-record':
-                new ApiWriteGroupRepository(
-                    new ApiWriteBatchRepository(
+                new PersistGroupRepository(
+                    new PersistBatchRepository(
                         new ReferenceEntityRecord($resourceType, $client),
                         $profile->getBatchSize()
                     ),
@@ -74,7 +74,7 @@ final class RepositoryFactory
                 );
         }
 
-        return new ApiWriteBatchRepository(
+        return new PersistBatchRepository(
             new Standard($resourceType, $client),
             $profile->getBatchSize()
         );

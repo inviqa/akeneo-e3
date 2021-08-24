@@ -2,12 +2,12 @@
 
 namespace AkeneoE3\Infrastructure\Api;
 
-use AkeneoE3\Domain\Repository\WriteRepository;
+use AkeneoE3\Domain\Repository\PersistRepository;
 use AkeneoE3\Domain\Resource\ImmutableResource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use AkeneoE3\Infrastructure\Api\Repository\WriteResourcesRepository;
 
-class ApiWriteBatchRepository implements WriteRepository
+class PersistBatchRepository implements PersistRepository
 {
     private WriteResourcesRepository $connector;
 

@@ -7,7 +7,7 @@ namespace AkeneoE3\Domain\Repository;
 use AkeneoE3\Domain\Resource\ImmutableResource;
 use AkeneoE3\Domain\Result\Write\WriteResult;
 
-interface WriteRepository
+interface PersistRepository
 {
     /**
      * @return iterable<WriteResult>

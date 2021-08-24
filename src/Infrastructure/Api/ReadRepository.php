@@ -3,13 +3,13 @@
 namespace AkeneoE3\Infrastructure\Api;
 
 use AkeneoE3\Domain\Repository\Query;
-use AkeneoE3\Domain\Repository\ReadRepository;
+use AkeneoE3\Domain\Repository\ReadRepository as BaseReadRepository;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
 use AkeneoE3\Infrastructure\Api\Repository\ReadResourcesRepository;
 use LogicException;
 
-class ApiReadRepository implements ReadRepository
+class ReadRepository implements BaseReadRepository
 {
     private ReadResourcesRepository $repository;
 

@@ -9,15 +9,15 @@ use AkeneoE3\Domain\Result\Write\Skipped;
 use AkeneoE3\Domain\Result\Write\TransformFailed;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Profile\LoadProfile;
-use AkeneoE3\Domain\Repository\WriteRepository;
+use AkeneoE3\Domain\Repository\PersistRepository;
 
 class Loader
 {
-    private WriteRepository $repository;
+    private PersistRepository $repository;
 
     private LoadProfile $profile;
 
-    public function __construct(WriteRepository $repository, LoadProfile $profile)
+    public function __construct(PersistRepository $repository, LoadProfile $profile)
     {
         $this->repository = $repository;
         $this->profile = $profile;

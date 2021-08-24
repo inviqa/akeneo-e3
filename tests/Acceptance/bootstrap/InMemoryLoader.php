@@ -3,14 +3,14 @@
 namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
 use AkeneoE3\Domain\Profile\EtlProfile;
-use AkeneoE3\Domain\Repository\WriteRepository;
+use AkeneoE3\Domain\Repository\PersistRepository;
 use AkeneoE3\Domain\Resource\ImmutableResource;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\AuditableResource;
 use LogicException;
 use Webmozart\Assert\Assert;
 
-class InMemoryLoader implements WriteRepository
+class InMemoryLoader implements PersistRepository
 {
     private Resource $originalResource;
 

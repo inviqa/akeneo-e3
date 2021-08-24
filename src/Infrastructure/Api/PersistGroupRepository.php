@@ -2,22 +2,22 @@
 
 namespace AkeneoE3\Infrastructure\Api;
 
-use AkeneoE3\Domain\Repository\WriteRepository;
+use AkeneoE3\Domain\Repository\PersistRepository;
 use AkeneoE3\Domain\Resource\ImmutableResource;
 use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use AkeneoE3\Infrastructure\Api\Repository\WriteResourcesRepository;
 use phpDocumentor\Reflection\DocBlock\Tags\Return_;
 
-class ApiWriteGroupRepository implements WriteRepository
+class PersistGroupRepository implements PersistRepository
 {
-    private WriteRepository $repository;
+    private PersistRepository $repository;
 
     private iterable $groupFieldNames;
 
     private string $currentGroup;
 
-    public function __construct(WriteRepository $repository, array $groupFieldNames)
+    public function __construct(PersistRepository $repository, array $groupFieldNames)
     {
         $this->repository = $repository;
         $this->groupFieldNames = $groupFieldNames;

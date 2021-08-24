@@ -6,7 +6,7 @@ namespace AkeneoE3\Domain\Repository;
 
 use AkeneoE3\Domain\Resource\ImmutableResource;
 
-final class NonPersistingWriteRepository implements WriteRepository
+final class NonPersistingRepository implements PersistRepository
 {
     public function persist(ImmutableResource $resource, bool $patch): iterable
     {
