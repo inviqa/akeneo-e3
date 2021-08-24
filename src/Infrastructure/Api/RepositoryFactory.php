@@ -11,6 +11,7 @@ use AkeneoE3\Domain\Repository\NonPersistingWriteRepository;
 use AkeneoE3\Domain\Repository\ReadRepository;
 use AkeneoE3\Domain\Repository\WriteRepository;
 use AkeneoE3\Domain\Resource\ResourceType;
+use AkeneoE3\Infrastructure\Api\Repository\FamilyVariant;
 use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntity;
 use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntityRecord;
 use AkeneoE3\Infrastructure\Api\Repository\Standard;
@@ -22,7 +23,12 @@ final class RepositoryFactory
         ExtractProfile $profile,
         AkeneoPimEnterpriseClientInterface $client
     ): ReadRepository {
+
+        // @todo: extract createRepository method and then check by interface with what Read/WriteRepository to wrap
         switch ((string)$resourceType) {
+            case 'family-variant':
+                return new ApiReadRepository(new FamilyVariant($resourceType, $client));
+
             case 'reference-entity':
                 return new ApiReadRepository(new ReferenceEntity($resourceType, $client));
 
@@ -43,15 +49,28 @@ final class RepositoryFactory
         }
 
         switch ((string)$resourceType) {
+            case 'family-variant':
+                return
+                    new ApiWriteGroupRepository(
+                        new ApiWriteBatchRepository(
+                            new FamilyVariant($resourceType, $client),
+                            $profile->getBatchSize()
+                        ),
+                        [ResourceType::FAMILY_CODE_FIELD]
+                    );
+
             case 'reference-entity':
                 return new ApiWriteRepository(
                     new ReferenceEntity($resourceType, $client)
                 );
 
             case 'reference-entity-record':
-                return new ApiWriteBatchRepository(
-                    new ReferenceEntityRecord($resourceType, $client),
-                    $profile->getBatchSize()
+                new ApiWriteGroupRepository(
+                    new ApiWriteBatchRepository(
+                        new ReferenceEntityRecord($resourceType, $client),
+                        $profile->getBatchSize()
+                    ),
+                    [ResourceType::REFERENCE_ENTITY_CODE_FIELD]
                 );
         }
 
