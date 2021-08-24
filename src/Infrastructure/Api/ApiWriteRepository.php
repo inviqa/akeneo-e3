@@ -3,6 +3,7 @@
 namespace AkeneoE3\Infrastructure\Api;
 
 use AkeneoE3\Domain\Repository\WriteRepository;
+use AkeneoE3\Domain\Resource\ImmutableResource;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Infrastructure\Api\Repository\WriteResourceRepository;
 
@@ -15,7 +16,7 @@ class ApiWriteRepository implements WriteRepository
         $this->connector = $connector;
     }
 
-    public function persist(Resource $resource, bool $patch): iterable
+    public function persist(ImmutableResource $resource, bool $patch): iterable
     {
         $result = $this->connector->write($resource, $patch);
 

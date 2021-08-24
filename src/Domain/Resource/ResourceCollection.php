@@ -2,16 +2,16 @@
 
 namespace AkeneoE3\Domain\Resource;
 
-use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\ImmutableResource;
 
 class ResourceCollection
 {
     /**
-     * @var Resource[]
+     * @var ImmutableResource[]
      */
     private array $items = [];
 
-    public function add(Resource $resource): void
+    public function add(ImmutableResource $resource): void
     {
         $this->items[$resource->getCode()] = $resource;
     }
@@ -38,12 +38,12 @@ class ResourceCollection
         return $this->items[$firstKey]->getResourceType();
     }
 
-    public function get(string $code): Resource
+    public function get(string $code): ImmutableResource
     {
         return $this->items[$code];
     }
 
-    public function getFirst(): Resource
+    public function getFirst(): ImmutableResource
     {
         $firstKey = array_key_first($this->items);
 

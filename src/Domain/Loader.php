@@ -30,6 +30,8 @@ class Loader
      */
     public function load(iterable $transformResults): iterable
     {
+        $patch = !$this->profile->isDuplicateMode();
+
         foreach ($transformResults as $transformResult) {
             $resource = $transformResult->getResource();
 
@@ -45,9 +47,9 @@ class Loader
                 continue;
             }
 
-            yield from $this->repository->persist($resource, !$this->profile->isDuplicateMode());
+            yield from $this->repository->persist($resource, $patch);
         }
 
-        yield from $this->repository->flush(!$this->profile->isDuplicateMode());
+        yield from $this->repository->flush($patch);
     }
 }

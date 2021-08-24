@@ -39,7 +39,7 @@ final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResou
     {
         $entityCode = (string)$query->getValue('reference_entity_code');
 
-        $cursor = $this->api->all($entityCode, $query->getSearchFilters());
+        $cursor = $this->api->all($entityCode, $query->getSearchFilters(['reference_entity_code']));
 
         foreach ($cursor as $resource) {
             $resource['reference_entity_code'] = $entityCode;

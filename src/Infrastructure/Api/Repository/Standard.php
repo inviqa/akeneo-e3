@@ -46,7 +46,7 @@ final class Standard implements ReadResourcesRepository, WriteResourcesRepositor
     public function count(ApiQuery $query): int
     {
         return (int)$this->api
-            ->listPerPage(1, true, $query->getSearchFilters())
+            ->listPerPage(1, true, $query->getSearchFilters([]))
             ->getCount();
     }
 
@@ -55,7 +55,7 @@ final class Standard implements ReadResourcesRepository, WriteResourcesRepositor
      */
     public function read(ApiQuery $query): iterable
     {
-        $cursor = $this->api->all(100, $query->getSearchFilters());
+        $cursor = $this->api->all(100, $query->getSearchFilters([]));
 
         foreach ($cursor as $resource) {
             yield AuditableResource::fromArray($resource, $this->resourceType);

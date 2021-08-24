@@ -3,7 +3,7 @@
 namespace AkeneoE3\Infrastructure\Api;
 
 use AkeneoE3\Domain\Repository\WriteRepository;
-use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\ImmutableResource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use AkeneoE3\Infrastructure\Api\Repository\WriteResourcesRepository;
 
@@ -23,12 +23,12 @@ class ApiWriteBatchRepository implements WriteRepository
         $this->buffer = new ResourceCollection();
     }
 
-    public function persist(Resource $resource, bool $patch): iterable
+    public function persist(ImmutableResource $resource, bool $patch): iterable
     {
         $this->buffer->add($resource);
 
         if ($this->buffer->count() === $this->batchSize) {
-            yield from $this->flush($patch);
+            return $this->flush($patch);
         }
 
         return [];

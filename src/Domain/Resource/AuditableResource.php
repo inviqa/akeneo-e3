@@ -110,13 +110,11 @@ final class AuditableResource implements Resource
         return $this->resource->fields();
     }
 
-    public function toArray(bool $full): array
+    public function toArray(bool $full, array $ignoredFields = []): array
     {
-        if ($full === false) {
-            return $this->changes->toArray($full);
-        }
-
-        return $this->resource->toArray($full);
+        return ($full === false) ?
+            $this->changes->toArray($full, $ignoredFields) :
+            $this->resource->toArray($full, $ignoredFields);
     }
 
     public function __clone()

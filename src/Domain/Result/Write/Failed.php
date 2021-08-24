@@ -2,21 +2,21 @@
 
 namespace AkeneoE3\Domain\Result\Write;
 
-use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\ImmutableResource;
 
 class Failed implements WriteResult
 {
     private string $error;
 
-    private Resource $resource;
+    private ImmutableResource $resource;
 
-    public function __construct(Resource $resource, string $error)
+    public function __construct(ImmutableResource $resource, string $error)
     {
         $this->error = $error;
         $this->resource = $resource;
     }
 
-    public static function create(Resource $resource, string $error): self
+    public static function create(ImmutableResource $resource, string $error): self
     {
         return new self($resource, $error);
     }
@@ -26,7 +26,7 @@ class Failed implements WriteResult
         return $this->error;
     }
 
-    public function getResource(): Resource
+    public function getResource(): ImmutableResource
     {
         return $this->resource;
     }

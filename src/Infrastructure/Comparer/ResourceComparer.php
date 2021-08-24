@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AkeneoE3\Infrastructure\Comparer;
 
 use AkeneoE3\Domain\Resource\AuditableResource;
-use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\ImmutableResource;
 use AkeneoE3\Infrastructure\Command\ResourceDataNormaliser;
 
 final class ResourceComparer
@@ -20,7 +20,7 @@ final class ResourceComparer
     /**
      * @return array|DiffLine[]
      */
-    public function compareWithOrigin(Resource $resource): array
+    public function compareWithOrigin(ImmutableResource $resource): array
     {
         if (!$resource instanceof AuditableResource) {
             return [];

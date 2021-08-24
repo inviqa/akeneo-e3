@@ -4,6 +4,7 @@ namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Repository\WriteRepository;
+use AkeneoE3\Domain\Resource\ImmutableResource;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\AuditableResource;
 use LogicException;
@@ -24,7 +25,7 @@ class InMemoryLoader implements WriteRepository
         $this->result = null;
     }
 
-    public function persist(Resource $resource, bool $patch): iterable
+    public function persist(ImmutableResource $resource, bool $patch): iterable
     {
         if (!$resource instanceof AuditableResource) {
             throw new LogicException('Resource must be auditable for merge');

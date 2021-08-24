@@ -7,6 +7,7 @@ namespace AkeneoE3\Infrastructure\Api\Repository;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityApiInterface;
 use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Resource\ImmutableResource;
 use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Domain\Result\Write\Failed;
@@ -37,14 +38,14 @@ final class ReferenceEntity implements ReadResourcesRepository, WriteResourceRep
      */
     public function read(ApiQuery $query): iterable
     {
-        $cursor = $this->api->all($query->getSearchFilters());
+        $cursor = $this->api->all($query->getSearchFilters([]));
 
         foreach ($cursor as $resource) {
             yield AuditableResource::fromArray($resource, $this->resourceType);
         }
     }
 
-    public function write(Resource $resource, bool $patch = true): WriteResult
+    public function write(ImmutableResource $resource, bool $patch = true): WriteResult
     {
         $entityCode = $resource->getCode();
 

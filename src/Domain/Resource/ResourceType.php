@@ -7,6 +7,7 @@ use Stringable;
 class ResourceType implements Stringable
 {
     public const FAMILY_CODE_FIELD = 'family_code';
+    public const REFERENCE_ENTITY_CODE_FIELD = 'reference_entity_code';
 
     private string $code;
 
