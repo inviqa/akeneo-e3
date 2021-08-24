@@ -13,7 +13,6 @@ use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
-use AkeneoE3\Infrastructure\Api\SignalResource;
 use AkeneoE3\Infrastructure\WriteResultFactory;
 
 final class FamilyVariant implements ReadResourcesRepository, WriteResourcesRepository

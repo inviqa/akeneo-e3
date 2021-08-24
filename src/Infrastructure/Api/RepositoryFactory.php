@@ -12,9 +12,13 @@ use AkeneoE3\Domain\Repository\ReadRepository as BaseReadRepository;
 use AkeneoE3\Domain\Repository\PersistRepository as BasePersistRepository;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Repository\FamilyVariant;
+use AkeneoE3\Infrastructure\Api\Repository\ReadResourcesRepository;
 use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntity;
 use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntityRecord;
 use AkeneoE3\Infrastructure\Api\Repository\Standard;
+use AkeneoE3\Infrastructure\Api\Repository\WriteResourceRepository;
+use AkeneoE3\Infrastructure\Api\Repository\WriteResourcesRepository;
+use LogicException;
 
 final class RepositoryFactory
 {
@@ -23,20 +27,13 @@ final class RepositoryFactory
         ExtractProfile $profile,
         AkeneoPimEnterpriseClientInterface $client
     ): BaseReadRepository {
+        $api = $this->createRepository($resourceType, $client);
 
-        // @todo: extract createRepository method and then check by interface with what Read/WriteRepository to wrap
-        switch ((string)$resourceType) {
-            case 'family-variant':
-                return new ReadRepository(new FamilyVariant($resourceType, $client));
-
-            case 'reference-entity':
-                return new ReadRepository(new ReferenceEntity($resourceType, $client));
-
-            case 'reference-entity-record':
-                return new ReadRepository(new ReferenceEntityRecord($resourceType, $client));
+        if (!$api instanceof ReadResourcesRepository) {
+            throw new LogicException('API must support ReadResourcesRepository');
         }
 
-        return new ReadRepository(new Standard($resourceType, $client));
+        return new ReadRepository($api);
     }
 
     public function createWriteRepository(
@@ -48,26 +45,31 @@ final class RepositoryFactory
             return new NonPersistingRepository();
         }
 
+        $api = $this->createRepository($resourceType, $client);
+
+        if (!$api instanceof WriteResourceRepository ||
+            !$api instanceof WriteResourcesRepository) {
+            throw new LogicException('API must support WriteResourceRepository or WriteResourcesRepository');
+        }
+
         switch ((string)$resourceType) {
             case 'family-variant':
                 return
                     new PersistGroupRepository(
                         new PersistBatchRepository(
-                            new FamilyVariant($resourceType, $client),
+                            $api,
                             $profile->getBatchSize()
                         ),
                         [ResourceType::FAMILY_CODE_FIELD]
                     );
 
             case 'reference-entity':
-                return new PersistRepository(
-                    new ReferenceEntity($resourceType, $client)
-                );
+                return new PersistRepository($api);
 
             case 'reference-entity-record':
                 new PersistGroupRepository(
                     new PersistBatchRepository(
-                        new ReferenceEntityRecord($resourceType, $client),
+                        $api,
                         $profile->getBatchSize()
                     ),
                     [ResourceType::REFERENCE_ENTITY_CODE_FIELD]
@@ -75,8 +77,29 @@ final class RepositoryFactory
         }
 
         return new PersistBatchRepository(
-            new Standard($resourceType, $client),
+            $api,
             $profile->getBatchSize()
         );
+    }
+
+    /**
+     * @return ReadResourcesRepository|WriteResourceRepository|WriteResourcesRepository
+     */
+    public function createRepository(
+        ResourceType $resourceType,
+        AkeneoPimEnterpriseClientInterface $client
+    ) {
+        switch ((string)$resourceType) {
+            case 'family-variant':
+                return new FamilyVariant($resourceType, $client);
+
+            case 'reference-entity':
+                return new ReferenceEntity($resourceType, $client);
+
+            case 'reference-entity-record':
+                return new ReferenceEntityRecord($resourceType, $client);
+        }
+
+        return new Standard($resourceType, $client);
     }
 }
