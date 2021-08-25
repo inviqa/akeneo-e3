@@ -73,6 +73,6 @@ final class Standard implements ReadResourcesRepository, WriteResourcesRepositor
 
         $response = $this->api->upsertList($resources->toArray(!$patch));
 
-        yield from WriteResultFactory::createFromResponse($response, $resources);
+        return WriteResultFactory::createFromResponse($response, $resources);
     }
 }

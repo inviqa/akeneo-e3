@@ -15,15 +15,12 @@ use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
 use AkeneoE3\Infrastructure\WriteResultFactory;
 
-final class FamilyVariant implements ReadResourcesRepository, WriteResourcesRepository
+final class FamilyVariant implements ReadResourcesRepository, WriteResourcesRepository, DependantResourceApi
 {
     private FamilyVariantApiInterface $api;
 
     private ResourceType $resourceType;
 
-    /**
-     * @var \Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface
-     */
     private AkeneoPimEnterpriseClientInterface $client;
 
     public function __construct(ResourceType $resourceType, AkeneoPimEnterpriseClientInterface $client)
@@ -35,10 +32,8 @@ final class FamilyVariant implements ReadResourcesRepository, WriteResourcesRepo
 
     public function count(ApiQuery $query): int
     {
+        // @todo: if all variants requested - count in all families
         return -1;
-//        (int)$this->api
-//            ->listPerPage(1, true, $query->getSearchFilters())
-//            ->getCount();
     }
 
     /**
@@ -83,5 +78,10 @@ final class FamilyVariant implements ReadResourcesRepository, WriteResourcesRepo
             $resource[ResourceType::FAMILY_CODE_FIELD] = $familyCode;
             yield AuditableResource::fromArray($resource, $this->resourceType);
         }
+    }
+
+    public function getParentFields(): array
+    {
+        return [ResourceType::FAMILY_CODE_FIELD];
     }
 }

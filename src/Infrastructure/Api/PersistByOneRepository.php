@@ -6,7 +6,7 @@ use AkeneoE3\Domain\Repository\PersistRepository as BasePersistRepository;
 use AkeneoE3\Domain\Resource\ImmutableResource;
 use AkeneoE3\Infrastructure\Api\Repository\WriteResourceRepository;
 
-class PersistRepository implements BasePersistRepository
+class PersistByOneRepository implements BasePersistRepository
 {
     private WriteResourceRepository $connector;
 

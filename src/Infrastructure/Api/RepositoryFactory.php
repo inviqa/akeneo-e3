@@ -11,6 +11,8 @@ use AkeneoE3\Domain\Repository\NonPersistingRepository;
 use AkeneoE3\Domain\Repository\ReadRepository as BaseReadRepository;
 use AkeneoE3\Domain\Repository\PersistRepository as BasePersistRepository;
 use AkeneoE3\Domain\Resource\ResourceType;
+use AkeneoE3\Infrastructure\Api\Repository\AttributeOption;
+use AkeneoE3\Infrastructure\Api\Repository\DependantResourceApi;
 use AkeneoE3\Infrastructure\Api\Repository\FamilyVariant;
 use AkeneoE3\Infrastructure\Api\Repository\ReadResourcesRepository;
 use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntity;
@@ -47,39 +49,30 @@ final class RepositoryFactory
 
         $api = $this->createRepository($resourceType, $client);
 
-        if (!$api instanceof WriteResourceRepository ||
-            !$api instanceof WriteResourcesRepository) {
-            throw new LogicException('API must support WriteResourceRepository or WriteResourcesRepository');
+        if ($api instanceof WriteResourceRepository) {
+            return new PersistByOneRepository($api);
         }
 
-        switch ((string)$resourceType) {
-            case 'family-variant':
-                return
-                    new PersistGroupRepository(
-                        new PersistBatchRepository(
-                            $api,
-                            $profile->getBatchSize()
-                        ),
-                        [ResourceType::FAMILY_CODE_FIELD]
-                    );
-
-            case 'reference-entity':
-                return new PersistRepository($api);
-
-            case 'reference-entity-record':
+        if ($api instanceof WriteResourcesRepository && $api instanceof DependantResourceApi) {
+            return
                 new PersistGroupRepository(
                     new PersistBatchRepository(
                         $api,
                         $profile->getBatchSize()
                     ),
-                    [ResourceType::REFERENCE_ENTITY_CODE_FIELD]
+                    $api->getParentFields()
                 );
         }
 
-        return new PersistBatchRepository(
-            $api,
-            $profile->getBatchSize()
-        );
+        if ($api instanceof WriteResourcesRepository) {
+            return
+                new PersistBatchRepository(
+                    $api,
+                    $profile->getBatchSize()
+                );
+        }
+
+        throw new LogicException('API is not supported for writing resources');
     }
 
     /**
@@ -90,6 +83,9 @@ final class RepositoryFactory
         AkeneoPimEnterpriseClientInterface $client
     ) {
         switch ((string)$resourceType) {
+            case 'attribute-option':
+                return new AttributeOption($resourceType, $client);
+
             case 'family-variant':
                 return new FamilyVariant($resourceType, $client);
 

@@ -28,10 +28,10 @@ class PersistBatchRepository implements PersistRepository
         $this->buffer->add($resource);
 
         if ($this->buffer->count() === $this->batchSize) {
-            return $this->flush($patch);
+            yield from $this->flush($patch);
+        } else {
+            return [];
         }
-
-        return [];
     }
 
     public function flush(bool $patch): iterable
@@ -39,5 +39,10 @@ class PersistBatchRepository implements PersistRepository
         yield from $this->connector->write($this->buffer, $patch);
 
         $this->buffer->clear();
+    }
+
+    public function bufferSize(): int
+    {
+        return $this->buffer->count();
     }
 }

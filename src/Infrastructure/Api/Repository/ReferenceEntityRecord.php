@@ -15,7 +15,7 @@ use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
 use AkeneoE3\Infrastructure\WriteResultFactory;
 
-final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResourcesRepository
+final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResourcesRepository, DependantResourceApi
 {
     private ReferenceEntityRecordApiInterface $api;
 
@@ -37,12 +37,12 @@ final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResou
      */
     public function read(ApiQuery $query): iterable
     {
-        $entityCode = (string)$query->getValue('reference_entity_code');
+        $entityCode = (string)$query->getValue(ResourceType::REFERENCE_ENTITY_CODE_FIELD);
 
-        $cursor = $this->api->all($entityCode, $query->getSearchFilters(['reference_entity_code']));
+        $cursor = $this->api->all($entityCode, $query->getSearchFilters([ResourceType::REFERENCE_ENTITY_CODE_FIELD]));
 
         foreach ($cursor as $resource) {
-            $resource['reference_entity_code'] = $entityCode;
+            $resource[ResourceType::REFERENCE_ENTITY_CODE_FIELD] = $entityCode;
             yield AuditableResource::fromArray($resource, $this->resourceType);
         }
     }
@@ -56,10 +56,15 @@ final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResou
             return [];
         }
 
-        $entityCode = $resources->getFirst()->get(Property::create('reference_entity_code'));
+        $entityCode = $resources->getFirst()->get(Property::create(ResourceType::REFERENCE_ENTITY_CODE_FIELD));
 
         $response = $this->api->upsertList($entityCode, $resources->toArray(!$patch));
 
-        yield from WriteResultFactory::createFromResponse($response, $resources);
+        return WriteResultFactory::createFromResponse($response, $resources);
+    }
+
+    public function getParentFields(): array
+    {
+        return [ResourceType::REFERENCE_ENTITY_CODE_FIELD];
     }
 }
