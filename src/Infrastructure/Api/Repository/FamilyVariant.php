@@ -56,8 +56,6 @@ final class FamilyVariant implements ReadResourcesRepository, WriteResourcesRepo
 
         foreach ($familyApi->all(100) as $family) {
             yield from $this->readByFamilyCode($family['code'], $query);
-            // signal to flush
-            //yield new SignalResource();
         }
     }
 
