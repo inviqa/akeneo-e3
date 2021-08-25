@@ -10,26 +10,28 @@ use LogicException;
 
 class ApiQuery implements Query
 {
-    private ExtractProfile $profile;
+    private array $indexedConditions;
 
-    private ResourceType $resourceType;
-
-    private array $indexedConditions = [];
-
-    public function __construct(ExtractProfile $profile, ResourceType $resourceType)
+    public function __construct(array $conditions = [])
     {
-        foreach ($profile->getConditions() as $condition) {
-            $fieldName = $condition['field'];
-            $this->indexedConditions[$fieldName] = $condition;
-        }
-
-        $this->profile = $profile;
-        $this->resourceType = $resourceType;
+        $this->indexedConditions = $conditions;
     }
 
     public static function fromProfile(ExtractProfile $profile, ResourceType $resourceType): self
     {
-        return new self($profile, $resourceType);
+        $conditions = [];
+
+        foreach ($profile->getConditions() as $condition) {
+            $fieldName = $condition['field'];
+            $conditions[$fieldName] = $condition;
+        }
+
+        if (count($profile->getDryRunCodes()) > 0) {
+            $codeFieldName = $resourceType->getCodeFieldName();
+            $conditions[$codeFieldName] = ['operator' => 'IN', 'value' => $profile->getDryRunCodes()];
+        }
+
+        return new self($conditions);
     }
 
     public function getSearchFilters(array $excludedFieldNames): array
@@ -44,11 +46,6 @@ class ApiQuery implements Query
             $value = $condition['value'] ?? null;
             $operator = $condition['operator'] ?? '=';
             $builder->addFilter((string)$fieldName, $operator, $value);
-        }
-
-        if (count($this->profile->getDryRunCodes()) > 0) {
-            $codeFieldName = $this->resourceType->getCodeFieldName();
-            $builder->addFilter($codeFieldName, 'IN', $this->profile->getDryRunCodes());
         }
 
         return ['search' => $builder->getFilters()];
@@ -69,5 +66,13 @@ class ApiQuery implements Query
     public function hasValue(string $field): bool
     {
         return array_key_exists($field, $this->indexedConditions);
+    }
+
+    /**
+     * @param mixed $value
+     */
+    public function addFilter(string $field, string $operator, $value): void
+    {
+        $this->indexedConditions[$field] = ['operator' => $operator, 'value' => $value];
     }
 }

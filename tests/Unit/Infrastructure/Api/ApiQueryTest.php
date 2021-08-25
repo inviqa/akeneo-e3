@@ -82,6 +82,20 @@ class ApiQueryTest extends TestCase
 
         $this->assertFalse($query->hasValue('reference_entity_code'));
     }
+
+    public function test_add_new_filter()
+    {
+        $query = new ApiQuery();
+        $query->addFilter('type', 'IN', ['a', 'b']);
+
+        $expected = [
+            'search' => [
+                'type'     => [['operator' => 'IN', 'value' => ['a', 'b']]],
+            ]
+        ];
+
+        $this->assertEquals($expected, $query->getSearchFilters([]));
+    }
 }
 
 class FakeExtractProfile implements ExtractProfile
