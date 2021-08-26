@@ -172,6 +172,7 @@ final class NonAuditableResource implements Resource
             $data['values'] = $this->attributes->toArray();
         }
 
+        unset($data['_links']);
         unset($data['group_labels']);
 
         return $data;
