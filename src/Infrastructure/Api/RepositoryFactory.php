@@ -16,6 +16,8 @@ use AkeneoE3\Infrastructure\Api\Repository\DependantResourceApi;
 use AkeneoE3\Infrastructure\Api\Repository\FamilyVariant;
 use AkeneoE3\Infrastructure\Api\Repository\ReadResourcesRepository;
 use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntity;
+use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntityAttribute;
+use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntityAttributeOption;
 use AkeneoE3\Infrastructure\Api\Repository\ReferenceEntityRecord;
 use AkeneoE3\Infrastructure\Api\Repository\Standard;
 use AkeneoE3\Infrastructure\Api\Repository\WriteResourceRepository;
@@ -91,6 +93,12 @@ final class RepositoryFactory
 
             case 'reference-entity':
                 return new ReferenceEntity($resourceType, $client);
+
+            case 'reference-entity-attribute':
+                return new ReferenceEntityAttribute($resourceType, $client);
+
+            case 'reference-entity-attribute-option':
+                return new ReferenceEntityAttributeOption($resourceType, $client);
 
             case 'reference-entity-record':
                 return new ReferenceEntityRecord($resourceType, $client);

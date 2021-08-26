@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace AkeneoE3\Infrastructure\Api\Repository;
 
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
+use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityApiInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityRecordApiInterface;
 use AkeneoE3\Domain\Result\Write\WriteResult;
 use AkeneoE3\Domain\Resource\AuditableResource;
@@ -17,14 +18,17 @@ use AkeneoE3\Infrastructure\WriteResultFactory;
 
 final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResourcesRepository, DependantResourceApi
 {
-    private ReferenceEntityRecordApiInterface $api;
+    private ReferenceEntityRecordApiInterface $recordApi;
 
     private ResourceType $resourceType;
+
+    private ReferenceEntityApiInterface $entityApi;
 
     public function __construct(ResourceType $resourceType, AkeneoPimEnterpriseClientInterface $client)
     {
         $this->resourceType = $resourceType;
-        $this->api = $client->getReferenceEntityRecordApi();
+        $this->recordApi = $client->getReferenceEntityRecordApi();
+        $this->entityApi = $client->getReferenceEntityApi();
     }
 
     public function count(ApiQuery $query): int
@@ -37,13 +41,28 @@ final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResou
      */
     public function read(ApiQuery $query): iterable
     {
-        $entityCode = (string)$query->getValue(ResourceType::REFERENCE_ENTITY_CODE_FIELD);
+        // Get given entity code or fetch all entities
+        $entities = $query->hasValue(ResourceType::REFERENCE_ENTITY_CODE_FIELD) === true ?
+            [['code' => $query->getValue(ResourceType::REFERENCE_ENTITY_CODE_FIELD)]] :
+            $this->entityApi->all();
 
-        $cursor = $this->api->all($entityCode, $query->getSearchFilters([ResourceType::REFERENCE_ENTITY_CODE_FIELD]));
+        foreach ($entities as $entity) {
+            $entityCode = $entity['code'];
 
-        foreach ($cursor as $resource) {
-            $resource[ResourceType::REFERENCE_ENTITY_CODE_FIELD] = $entityCode;
-            yield AuditableResource::fromArray($resource, $this->resourceType);
+            $cursor = $this->recordApi->all(
+                $entityCode,
+                $query->getSearchFilters(
+                    [ResourceType::REFERENCE_ENTITY_CODE_FIELD]
+                )
+            );
+
+            foreach ($cursor as $resource) {
+                $resource[ResourceType::REFERENCE_ENTITY_CODE_FIELD] = $entityCode;
+                yield AuditableResource::fromArray(
+                    $resource,
+                    $this->resourceType
+                );
+            }
         }
     }
 
@@ -58,7 +77,7 @@ final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResou
 
         $entityCode = $resources->getFirst()->get(Property::create(ResourceType::REFERENCE_ENTITY_CODE_FIELD));
 
-        $response = $this->api->upsertList($entityCode, $resources->toArray(!$patch));
+        $response = $this->recordApi->upsertList($entityCode, $resources->toArray(!$patch, [ResourceType::REFERENCE_ENTITY_CODE_FIELD, '_links']));
 
         return WriteResultFactory::createFromResponse($response, $resources);
     }
