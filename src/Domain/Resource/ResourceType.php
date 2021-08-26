@@ -6,9 +6,10 @@ use Stringable;
 
 class ResourceType implements Stringable
 {
-    public const ATTRIBUTE_CODE_FIELD = 'attribute_code';
-    public const FAMILY_CODE_FIELD = 'family_code';
-    public const REFERENCE_ENTITY_CODE_FIELD = 'reference_entity_code';
+    public const ATTRIBUTE_CODE_FIELD = '__attribute_code';
+    public const FAMILY_CODE_FIELD = '__family_code';
+    public const REFERENCE_ENTITY_CODE_FIELD = '__reference_entity_code';
+    public const REFERENCE_ENTITY_ATTRIBUTE_CODE_FIELD = '__reference_entity_attribute_code';
 
     private string $code;
 
