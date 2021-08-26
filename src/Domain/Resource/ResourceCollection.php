@@ -23,12 +23,12 @@ class ResourceCollection
 
     public function toArray(bool $full, array $ignoredFields = []): array
     {
-        return array_map(
+        return array_values(array_map(
             function (Resource $resource) use ($full, $ignoredFields) {
                 return $resource->toArray($full, $ignoredFields);
             },
             $this->items
-        );
+        ));
     }
 
     public function getResourceType(): ResourceType
