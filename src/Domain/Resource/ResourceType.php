@@ -39,6 +39,6 @@ class ResourceType implements Stringable
 
     public function getChannelFieldName(): string
     {
-        return $this->code === 'reference-entity-record' ? 'channel' : 'scope';
+        return in_array($this->code, ['reference-entity-record', 'asset']) ? 'channel' : 'scope';
     }
 }

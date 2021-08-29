@@ -112,6 +112,9 @@ final class RepositoryFactory
 
             case 'asset-attribute-option':
                 return new Asset\AttributeOption($resourceType, $client);
+
+            case 'asset':
+                return new Asset\Asset($resourceType, $client);
         }
 
         return new Standard($resourceType, $client);
