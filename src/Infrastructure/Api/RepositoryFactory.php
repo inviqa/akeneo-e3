@@ -106,6 +106,9 @@ final class RepositoryFactory
 
             case 'asset-family':
                 return new Asset\Family($resourceType, $client);
+
+            case 'asset-attribute':
+                return new Asset\Attribute($resourceType, $client);
         }
 
         return new Standard($resourceType, $client);
