@@ -11,6 +11,7 @@ use AkeneoE3\Domain\Repository\NonPersistingRepository;
 use AkeneoE3\Domain\Repository\ReadRepository as BaseReadRepository;
 use AkeneoE3\Domain\Repository\PersistRepository as BasePersistRepository;
 use AkeneoE3\Domain\Resource\ResourceType;
+use AkeneoE3\Infrastructure\Api\Repository\Asset;
 use AkeneoE3\Infrastructure\Api\Repository\AttributeOption;
 use AkeneoE3\Infrastructure\Api\Repository\DependantResourceApi;
 use AkeneoE3\Infrastructure\Api\Repository\FamilyVariant;
@@ -102,6 +103,9 @@ final class RepositoryFactory
 
             case 'reference-entity-record':
                 return new ReferenceEntityRecord($resourceType, $client);
+
+            case 'asset-family':
+                return new Asset\Family($resourceType, $client);
         }
 
         return new Standard($resourceType, $client);
