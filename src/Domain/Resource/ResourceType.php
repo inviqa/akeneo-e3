@@ -12,6 +12,8 @@ class ResourceType implements Stringable
     public const REFERENCE_ENTITY_ATTRIBUTE_CODE_FIELD = '__reference_entity_attribute_code';
 
     public const ASSET_FAMILY_CODE_FIELD = '__asset_family_code';
+    public const ASSET_ATTRIBUTE_CODE_FIELD = '__asset_attribute_code';
+    public const ASSET_CODE_FIELD = '__asset_code';
 
     private string $code;
 
