@@ -6,6 +6,7 @@ namespace AkeneoE3\Infrastructure\Command;
 
 use AkeneoE3\Domain\Result\Write\Failed;
 use AkeneoE3\Domain\Result\Write\Loaded;
+use AkeneoE3\Domain\Result\Write\Skipped;
 use AkeneoE3\Domain\Result\Write\WriteResult;
 use AkeneoE3\Infrastructure\Comparer\DiffLine;
 use AkeneoE3\Infrastructure\Comparer\ResourceComparer;
@@ -98,10 +99,6 @@ class TransformOutput
      */
     private function outputCompareTable(array $comparison, WriteResult $loadResult): void
     {
-        if (count($comparison) === 0) {
-            return;
-        }
-
         foreach ($comparison as $diff) {
             $this->style->definitionList(
                 ['Identifier' => $diff->getCode()],
@@ -117,6 +114,10 @@ class TransformOutput
 
         if ($loadResult instanceof Loaded) {
             $this->style->success((string)$loadResult);
+        }
+
+        if ($loadResult instanceof Skipped) {
+            $this->style->text('Skipped: ' . $loadResult->getResource()->getCode());
         }
     }
 

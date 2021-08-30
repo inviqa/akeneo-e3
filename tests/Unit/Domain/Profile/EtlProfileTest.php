@@ -65,6 +65,5 @@ class EtlProfileTest extends TestCase
         $profile->setDryRunCodes(['123', '456', 'abc']);
 
         $this->assertEquals(['123', '456', 'abc'], $profile->getDryRunCodes());
-        $this->assertTrue($profile->isDryRun());
     }
 }

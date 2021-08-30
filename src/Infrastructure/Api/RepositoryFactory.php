@@ -35,7 +35,9 @@ final class RepositoryFactory
         $api = $this->createRepository($resourceType, $client);
 
         if (!$api instanceof ReadResourcesRepository) {
-            throw new LogicException('API must support ReadResourcesRepository');
+            throw new LogicException(
+                'API must support ReadResourcesRepository'
+            );
         }
 
         return new ReadRepository($api);
@@ -85,38 +87,50 @@ final class RepositoryFactory
         ResourceType $resourceType,
         AkeneoPimEnterpriseClientInterface $client
     ) {
-        switch ((string)$resourceType) {
-            case 'attribute-option':
+        $apis = [
+            'attribute-option' => function ($resourceType, $client) {
                 return new AttributeOption($resourceType, $client);
+            },
 
-            case 'family-variant':
+            'family-variant' => function ($resourceType, $client) {
                 return new FamilyVariant($resourceType, $client);
+            },
 
-            case 'reference-entity':
+            'reference-entity' => function ($resourceType, $client) {
                 return new ReferenceEntity($resourceType, $client);
+            },
 
-            case 'reference-entity-attribute':
+            'reference-entity-attribute' => function ($resourceType, $client) {
                 return new ReferenceEntityAttribute($resourceType, $client);
+            },
 
-            case 'reference-entity-attribute-option':
+            'reference-entity-attribute-option' => function ($resourceType, $client) {
                 return new ReferenceEntityAttributeOption($resourceType, $client);
+            },
 
-            case 'reference-entity-record':
+            'reference-entity-record' => function ($resourceType, $client) {
                 return new ReferenceEntityRecord($resourceType, $client);
+            },
 
-            case 'asset-family':
+            'asset-family' => function ($resourceType, $client) {
                 return new Asset\Family($resourceType, $client);
+            },
 
-            case 'asset-attribute':
+            'asset-attribute' => function ($resourceType, $client) {
                 return new Asset\Attribute($resourceType, $client);
+            },
 
-            case 'asset-attribute-option':
+            'asset-attribute-option' => function ($resourceType, $client) {
                 return new Asset\AttributeOption($resourceType, $client);
+            },
 
-            case 'asset':
+            'asset' => function ($resourceType, $client) {
                 return new Asset\Asset($resourceType, $client);
-        }
+            },
+        ];
 
-        return new Standard($resourceType, $client);
+        return isset($apis[(string)$resourceType]) ?
+            $apis[(string)$resourceType]($resourceType, $client) :
+            new Standard($resourceType, $client);
     }
 }
