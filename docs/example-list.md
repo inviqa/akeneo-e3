@@ -7,6 +7,7 @@
 - [How to trim values](examples/trim.md)
 - [How to remove HTML tags](examples/remove-html-tags.md)
 - [How to replace strings in values](examples/replace.md)
+- [How to generate slugs (e.g. product urls)](examples/slug.md)
 
 ## How to modify property values
 

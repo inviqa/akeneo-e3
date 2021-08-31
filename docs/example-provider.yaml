@@ -68,6 +68,32 @@ replace:
                       locale: en_GB
                       expression: 'replace(value(), "\\n", " ")'
 
+slugify:
+    category: basics
+    file_name: slug
+    header: How to generate slugs (e.g. product urls)
+    tasks:
+        - description: populate an `url_slug` field as a slug of the `name` attribute value.
+          resource:
+              identifier: the-ziggy
+              values:
+                  name:
+                      - scope: web
+                        locale: en_GB
+                        data: 'Ziggy The Hydra'
+                  url_slug:
+                      - scope: web
+                        locale: en_GB
+                        data: ''
+
+          profile:
+              actions:
+                  -
+                      type: set
+                      field: url_slug
+                      scope: web
+                      locale: en_GB
+                      expression: 'lowerCase(slug(value("name", "web", "en_GB")))'
 set-price:
     category: attributes
     file_name: set-price

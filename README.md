@@ -13,7 +13,7 @@ It is similar and compatible with Akeneo Enrichment Rules but is more powerful. 
 
 :star:&nbsp;**Improve data** e.g.
 * lowercase or uppercase attribute values
-* generate slugs
+* [generate slugs](docs/examples/slug.md)
 
 :star:&nbsp;**Attribute type changes** e.g.
 * copy values of a non-localisable attribute to a localisable one
