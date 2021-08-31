@@ -26,16 +26,12 @@ jobs:
                   wget https://github.com/box-project/box/releases/download/3.13.0/box.phar
                   php box.phar compile
 
-            - name: Getting tag name
-              id: get-version
-              run: echo ::set-output name=version::${GITHUB_REF#refs/tags/}
-
             - name: Self-test
-              run: ./akeneo-e3.phar --version
+              run: phar/akeneo-e3.phar --version
 
             - name: Create release
               uses: softprops/action-gh-release@v1
               if: startsWith(github.ref, 'refs/tags/')
               with:
-                  files: ./akeneo-e3.phar
+                  files: phar/akeneo-e3.phar
                   prerelease: true
