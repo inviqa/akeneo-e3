@@ -42,6 +42,9 @@
         }
     },
     "scripts": {
+        "fix": [
+            "php-cs-fixer fix"
+        ],
         "test": [
             "@test-quality",
             "@test-unit",
@@ -49,7 +52,7 @@
         ],
         "test-quality": [
             "find src/ | xargs -n 1 -P 8 -i php -l {} | grep -v 'No syntax errors detected' || echo 'OK'",
-            "php-cs-fixer fix",
+            "php-cs-fixer fix --dry-run",
             "phpmd ./src text ./phpmd.xml",
             "phpstan analyse",
             "deptrac"
