@@ -14,6 +14,6 @@ $etlFactory = new EtlFactory();
 $connectionProfileFactory = new ConnectionProfileFactory();
 $etlProfileFactory = new EtlProfileFactory();
 
-$application = new Application('AkeneoE3', 'git_version');
+$application = new Application('AkeneoE3', '@git_version@');
 $application->add(new Command\TransformCommand($etlFactory, $connectionProfileFactory, $etlProfileFactory));
 $application->run();
