@@ -65,7 +65,7 @@ final class Attribute implements ReadResourcesRepository, WriteResourceRepositor
             $this->api->upsert(
                 $familyCode,
                 $attributeCode,
-                $resource->toArray(!$patch, [ResourceType::ASSET_FAMILY_CODE_FIELD])
+                $resource->toArray(!$patch)
             );
 
             return Loaded::create($resource);

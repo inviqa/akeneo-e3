@@ -67,7 +67,7 @@ final class ReferenceEntityAttribute implements ReadResourcesRepository, WriteRe
             $this->attributeApi->upsert(
                 $entityCode,
                 $attributeCode,
-                $resource->toArray(!$patch, [ResourceType::REFERENCE_ENTITY_CODE_FIELD])
+                $resource->toArray(!$patch)
             );
 
             return Loaded::create($resource);

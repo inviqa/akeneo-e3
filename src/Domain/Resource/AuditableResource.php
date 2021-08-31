@@ -92,11 +92,6 @@ final class AuditableResource implements Resource
         $this->resource->setCode($code);
     }
 
-    public function getCodeFieldName(): string
-    {
-        return $this->resource->getCodeFieldName();
-    }
-
     public function isChanged(): bool
     {
         return $this->resource->isChanged();
@@ -113,8 +108,8 @@ final class AuditableResource implements Resource
     public function toArray(bool $full, array $ignoredFields = []): array
     {
         return ($full === false) ?
-            $this->changes->toArray($full, $ignoredFields) :
-            $this->resource->toArray($full, $ignoredFields);
+            $this->changes->toArray($full) :
+            $this->resource->toArray($full);
     }
 
     public function __clone()

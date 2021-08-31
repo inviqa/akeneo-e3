@@ -21,11 +21,11 @@ class ResourceCollection
         return count($this->items);
     }
 
-    public function toArray(bool $full, array $ignoredFields = []): array
+    public function toArray(bool $full): array
     {
         return array_values(array_map(
-            function (Resource $resource) use ($full, $ignoredFields) {
-                return $resource->toArray($full, $ignoredFields);
+            function (Resource $resource) use ($full) {
+                return $resource->toArray($full);
             },
             $this->items
         ));

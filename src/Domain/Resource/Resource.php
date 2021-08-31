@@ -6,13 +6,6 @@ use Generator;
 
 interface Resource extends ImmutableResource
 {
-    public function getResourceType(): ResourceType;
-
-    /**
-     * @return mixed
-     */
-    public function get(Field $field);
-
     /**
      * @param mixed $newValue
      */
@@ -22,20 +15,7 @@ interface Resource extends ImmutableResource
 
     public function removeFrom(Field $field, array $newValue): void;
 
-    public function has(Field $field): bool;
-
-    public function getCode(): string;
-
     public function setCode(string $code): void;
 
-    public function getCodeFieldName(): string;
-
     public function isChanged(): bool;
-
-    /**
-     * @return Generator|Field[]
-     */
-    public function fields(): Generator;
-
-    public function toArray(bool $full, array $ignoredFields = []): array;
 }

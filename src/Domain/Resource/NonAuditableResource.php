@@ -26,7 +26,7 @@ final class NonAuditableResource implements Resource
     {
         $this->resourceType = $resourceType;
 
-        $idFieldName = $this->getCodeFieldName();
+        $idFieldName = $resourceType->getCodeFieldName();
         if (array_key_exists($idFieldName, $data) === false) {
             throw new LogicException(sprintf('%s field is expected for %s resource type', $idFieldName, $resourceType));
         }
@@ -131,18 +131,8 @@ final class NonAuditableResource implements Resource
 
     public function setCode(string $code): void
     {
-        $codeField = Property::create($this->getCodeFieldName());
+        $codeField = Property::create($this->resourceType->getCodeFieldName());
         $this->properties->set($codeField, $code);
-    }
-
-    /**
-     * @deprecated
-     *
-     * use Resource::getResourceType::getCodeFieldName()
-     */
-    public function getCodeFieldName(): string
-    {
-        return $this->resourceType->getCodeFieldName();
     }
 
     public function isChanged(): bool
@@ -164,9 +154,9 @@ final class NonAuditableResource implements Resource
         }
     }
 
-    public function toArray(bool $full, array $ignoredFields = []): array
+    public function toArray(bool $full): array
     {
-        $data = $this->properties->toArray($ignoredFields);
+        $data = $this->properties->toArray();
 
         if ($this->attributes->count() > 0) {
             $data['values'] = $this->attributes->toArray();

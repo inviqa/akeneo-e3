@@ -170,12 +170,12 @@ class NonAuditableResourceTest extends TestCase
     }
 
 
-    public function test_it_normalises_to_array_without_excluded_fields()
+    public function test_it_normalises_to_array_without_special_fields()
     {
         $resource = NonAuditableResource::fromArray([
             'code' => 'ziggy',
-            'ignoreA' => 'A',
-            'ignoreB' => 'B',
+            '__ignoreA' => 'A',
+            '__ignoreB' => 'B',
             'values' => [
                 'name' => [['scope' => null, 'locale' => null, 'data' => 'Ziggy']]
             ],
@@ -186,6 +186,6 @@ class NonAuditableResourceTest extends TestCase
             'values' => [
                 'name' => [['scope' => null, 'locale' => null, 'data' => 'Ziggy']]
             ]
-        ], $resource->toArray(true, ['ignoreA', 'ignoreB']));
+        ], $resource->toArray(true));
     }
 }

@@ -31,7 +31,7 @@ final class ResourceComparer
         foreach ($resource->changes()->fields() as $field) {
 
             // skip code
-            if ($field->getName() === $resource->getCodeFieldName()) {
+            if ($field->getName() === $resource->getResourceType()->getCodeFieldName()) {
                 continue;
             }
 

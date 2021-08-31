@@ -87,14 +87,10 @@ final class PropertyValues
         }
     }
 
-    public function toArray(array $ignoredFields = []): array
+    public function toArray(): array
     {
-        $array = $this->values;
-
-        foreach ($ignoredFields as $ignoredField) {
-            unset($array[$ignoredField]);
-        }
-
-        return $array;
+        return array_filter($this->values, function (string $field) {
+            return strpos($field, '__') !== 0;
+        }, ARRAY_FILTER_USE_KEY);
     }
 }

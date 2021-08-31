@@ -77,7 +77,7 @@ final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResou
 
         $entityCode = $resources->getFirst()->get(Property::create(ResourceType::REFERENCE_ENTITY_CODE_FIELD));
 
-        $response = $this->recordApi->upsertList($entityCode, $resources->toArray(!$patch, [ResourceType::REFERENCE_ENTITY_CODE_FIELD]));
+        $response = $this->recordApi->upsertList($entityCode, $resources->toArray(!$patch));
 
         return WriteResultFactory::createFromResponse($response, $resources);
     }

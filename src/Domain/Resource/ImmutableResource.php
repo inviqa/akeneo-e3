@@ -22,5 +22,5 @@ interface ImmutableResource
      */
     public function fields(): Generator;
 
-    public function toArray(bool $full, array $ignoredFields = []): array;
+    public function toArray(bool $full): array;
 }

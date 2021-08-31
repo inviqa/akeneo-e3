@@ -266,7 +266,6 @@ class PropertyValuesTest extends TestCase
         ];
     }
 
-
     public function test_it_throws_an_exception_by_removing_items_to_non_arrays()
     {
         $collection = PropertyValues::fromArray(TestData::getProperties());
@@ -276,5 +275,15 @@ class PropertyValuesTest extends TestCase
         $this->expectException(TransformException::class);
 
         $collection->removeFrom($property, ['x']);
+    }
+
+    public function test_it_normalises_to_array_ignoring_special_fields()
+    {
+        $collection = PropertyValues::fromArray([
+            'identifier' => 'the-ziggy',
+            '__family' => 'ziggy',
+        ]);
+
+        $this->assertEquals(['identifier' => 'the-ziggy'], $collection->toArray());
     }
 }
