@@ -23,10 +23,7 @@ jobs:
 
             - name: Install Box
               run: |
-                  wget \
-                    "https://github.com/box-project/box/releases/download/3.13.0/box.phar" \
-                    --quiet \
-                    -O ./box
+                  wget https://github.com/box-project/box/releases/download/3.13.0/box.phar
                   php ./box/box.phar compile
 
             - name: Getting tag name
