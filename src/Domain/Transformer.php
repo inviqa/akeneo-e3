@@ -3,7 +3,7 @@
 namespace AkeneoE3\Domain;
 
 use AkeneoE3\Domain\Exception\TransformException;
-use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Domain\Result\Transform\Failed;
 use AkeneoE3\Domain\Result\Transform\Transformed;
 use AkeneoE3\Domain\Result\Transform\TransformResult;
@@ -21,7 +21,7 @@ class Transformer
     }
 
     /**
-     * @param Resource[] $resources
+     * @param TransformableResource[] $resources
      *
      * @return TransformResult[]
      */

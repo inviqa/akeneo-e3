@@ -3,7 +3,7 @@
 namespace AkeneoE3\Infrastructure\Api;
 
 use AkeneoE3\Domain\Repository\PersistRepository as BasePersistRepository;
-use AkeneoE3\Domain\Resource\ImmutableResource;
+use AkeneoE3\Domain\Resource\WritableResource;
 use AkeneoE3\Infrastructure\Api\Repository\WriteResourceRepository;
 
 class PersistByOneRepository implements BasePersistRepository
@@ -15,7 +15,7 @@ class PersistByOneRepository implements BasePersistRepository
         $this->connector = $connector;
     }
 
-    public function persist(ImmutableResource $resource, bool $patch): iterable
+    public function persist(WritableResource $resource, bool $patch): iterable
     {
         $result = $this->connector->write($resource, $patch);
 

@@ -7,13 +7,13 @@ namespace AkeneoE3\Infrastructure\Api\Repository;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityApiInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityAttributeApiInterface;
-use AkeneoE3\Domain\Resource\ImmutableResource;
+use AkeneoE3\Domain\Resource\WritableResource;
 use AkeneoE3\Domain\Result\Write\Failed;
 use AkeneoE3\Domain\Result\Write\Loaded;
 use AkeneoE3\Domain\Result\Write\WriteResult;
-use AkeneoE3\Domain\Resource\AuditableResource;
-use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
 use Exception;
@@ -40,7 +40,7 @@ final class ReferenceEntityAttribute implements ReadResourcesRepository, WriteRe
     }
 
     /**
-     * @return iterable<Resource>
+     * @return iterable<TransformableResource>
      */
     public function read(ApiQuery $query): iterable
     {
@@ -54,7 +54,7 @@ final class ReferenceEntityAttribute implements ReadResourcesRepository, WriteRe
         }
     }
 
-    public function write(ImmutableResource $resource, bool $patch = true): WriteResult
+    public function write(WritableResource $resource, bool $patch = true): WriteResult
     {
         $entityCode = $resource->get(Property::create(ResourceType::REFERENCE_ENTITY_CODE_FIELD));
         $attributeCode = $resource->getCode();
@@ -67,7 +67,7 @@ final class ReferenceEntityAttribute implements ReadResourcesRepository, WriteRe
             $this->attributeApi->upsert(
                 $entityCode,
                 $attributeCode,
-                $resource->changes()
+                $resource->changes()->toArray()
             );
 
             return Loaded::create($resource);
@@ -82,7 +82,7 @@ final class ReferenceEntityAttribute implements ReadResourcesRepository, WriteRe
 
         foreach ($cursor as $resource) {
             $resource[ResourceType::REFERENCE_ENTITY_CODE_FIELD] = $entityCode;
-            yield AuditableResource::fromArray($resource, $this->resourceType);
+            yield Resource::fromArray($resource, $this->resourceType);
         }
     }
 

@@ -8,13 +8,13 @@ use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\AssetManager\AssetAttributeApiInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\AssetManager\AssetAttributeOptionApiInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\AssetManager\AssetFamilyApiInterface;
-use AkeneoE3\Domain\Resource\ImmutableResource;
+use AkeneoE3\Domain\Resource\WritableResource;
 use AkeneoE3\Domain\Result\Write\Failed;
 use AkeneoE3\Domain\Result\Write\Loaded;
 use AkeneoE3\Domain\Result\Write\WriteResult;
-use AkeneoE3\Domain\Resource\AuditableResource;
-use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
 use AkeneoE3\Infrastructure\Api\Repository\DependantResourceApi;
@@ -46,7 +46,7 @@ final class AttributeOption implements ReadResourcesRepository, WriteResourceRep
     }
 
     /**
-     * @return iterable<Resource>
+     * @return iterable<TransformableResource>
      */
     public function read(ApiQuery $query): iterable
     {
@@ -75,7 +75,7 @@ final class AttributeOption implements ReadResourcesRepository, WriteResourceRep
         }
     }
 
-    public function write(ImmutableResource $resource, bool $patch = true): WriteResult
+    public function write(WritableResource $resource, bool $patch = true): WriteResult
     {
         $familyCode = $resource->get(Property::create(ResourceType::ASSET_FAMILY_CODE_FIELD));
         $attributeCode = $resource->get(Property::create(ResourceType::ASSET_ATTRIBUTE_CODE_FIELD));
@@ -86,7 +86,7 @@ final class AttributeOption implements ReadResourcesRepository, WriteResourceRep
                 $familyCode,
                 $attributeCode,
                 $optionCode,
-                $resource->changes()
+                $resource->changes()->toArray()
             );
 
             return Loaded::create($resource);
@@ -103,7 +103,7 @@ final class AttributeOption implements ReadResourcesRepository, WriteResourceRep
             $resource[ResourceType::ASSET_FAMILY_CODE_FIELD] = $entityCode;
             $resource[ResourceType::ASSET_ATTRIBUTE_CODE_FIELD] = $attributeCode;
 
-            yield AuditableResource::fromArray($resource, $this->resourceType);
+            yield Resource::fromArray($resource, $this->resourceType);
         }
     }
 

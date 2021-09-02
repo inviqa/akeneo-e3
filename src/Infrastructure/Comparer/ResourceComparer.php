@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Infrastructure\Comparer;
 
-use AkeneoE3\Domain\Resource\AuditableResource;
-use AkeneoE3\Domain\Resource\ImmutableResource;
+use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\WritableResource;
 use AkeneoE3\Infrastructure\Command\ResourceDataNormaliser;
 
 final class ResourceComparer
@@ -20,23 +20,19 @@ final class ResourceComparer
     /**
      * @return array|DiffLine[]
      */
-    public function compareWithOrigin(ImmutableResource $resource): array
+    public function compareWithOrigin(WritableResource $resource): array
     {
-        if (!$resource instanceof AuditableResource) {
-            return [];
-        }
-
         $comparison = [];
 
-        foreach ($resource->changes() as $field => $fieldValue) {
+        foreach ($resource->changes()->fields() as $field) {
 
             // skip code
-            if ($field === $resource->getResourceType()->getCodeFieldName()) {
+            if ($field->getName() === $resource->getResourceType()->getCodeFieldName()) {
                 continue;
             }
 
-            $originalValue = $resource->origins()[$field] ?? '';
-            $newValue = $fieldValue;
+            $originalValue = $resource->origins()->has($field) ? $resource->origins()->get($field) : '';
+            $newValue = $resource->changes()->get($field);
 
             $comparison[] = DiffLine::create(
                 $resource->getCode() ?? '',

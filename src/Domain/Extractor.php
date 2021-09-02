@@ -4,7 +4,7 @@ namespace AkeneoE3\Domain;
 
 use AkeneoE3\Domain\Repository\Query;
 use AkeneoE3\Domain\Repository\ReadRepository;
-use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\TransformableResource;
 
 class Extractor
 {
@@ -19,7 +19,7 @@ class Extractor
     }
 
     /**
-     * @return iterable<Resource>
+     * @return iterable<TransformableResource>
      */
     public function extract(): iterable
     {

@@ -9,7 +9,7 @@ use AkeneoE3\Application\Expression\ExpressionLanguage;
 use AkeneoE3\Domain\Action;
 use AkeneoE3\Domain\Resource\Field;
 use AkeneoE3\Domain\Resource\FieldFactory;
-use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\TransformableResource;
 
 final class Set implements Action
 {
@@ -26,7 +26,7 @@ final class Set implements Action
         $this->options = SetOptions::fromArray($options);
     }
 
-    public function execute(Resource $resource): void
+    public function execute(TransformableResource $resource): void
     {
         $resultValue = $this->evaluateValue($resource);
 
@@ -36,7 +36,7 @@ final class Set implements Action
     /**
      * @return mixed
      */
-    protected function evaluateValue(Resource $resource)
+    protected function evaluateValue(TransformableResource $resource)
     {
         if ($this->options->getExpression() === null) {
             return $this->options->getValue();

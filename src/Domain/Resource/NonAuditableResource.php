@@ -7,10 +7,7 @@ namespace AkeneoE3\Domain\Resource;
 use Generator;
 use LogicException;
 
-/**
- * @internal
- */
-final class NonAuditableResource
+final class NonAuditableResource implements BaseResource
 {
     private PropertyValues $properties;
 

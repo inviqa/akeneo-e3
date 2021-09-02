@@ -7,10 +7,10 @@ namespace AkeneoE3\Infrastructure\Api\Repository\Asset;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\AssetManager\AssetAttributeApiInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\AssetManager\AssetFamilyApiInterface;
-use AkeneoE3\Domain\Resource\AuditableResource;
-use AkeneoE3\Domain\Resource\ImmutableResource;
-use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\WritableResource;
+use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Domain\Result\Write\Failed;
 use AkeneoE3\Domain\Result\Write\Loaded;
@@ -42,7 +42,7 @@ final class Attribute implements ReadResourcesRepository, WriteResourceRepositor
     }
 
     /**
-     * @return iterable<Resource>
+     * @return iterable<TransformableResource>
      */
     public function read(ApiQuery $query): iterable
     {
@@ -56,7 +56,7 @@ final class Attribute implements ReadResourcesRepository, WriteResourceRepositor
         }
     }
 
-    public function write(ImmutableResource $resource, bool $patch = true): WriteResult
+    public function write(WritableResource $resource, bool $patch = true): WriteResult
     {
         $familyCode = $resource->get(Property::create(ResourceType::ASSET_FAMILY_CODE_FIELD));
         $attributeCode = $resource->getCode();
@@ -65,7 +65,7 @@ final class Attribute implements ReadResourcesRepository, WriteResourceRepositor
             $this->api->upsert(
                 $familyCode,
                 $attributeCode,
-                $resource->changes()
+                $resource->changes()->toArray()
             );
 
             return Loaded::create($resource);
@@ -80,7 +80,7 @@ final class Attribute implements ReadResourcesRepository, WriteResourceRepositor
 
         foreach ($cursor as $resource) {
             $resource[ResourceType::ASSET_FAMILY_CODE_FIELD] = $familyCode;
-            yield AuditableResource::fromArray($resource, $this->resourceType);
+            yield Resource::fromArray($resource, $this->resourceType);
         }
     }
 

@@ -8,13 +8,13 @@ use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityApiInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityAttributeApiInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityAttributeOptionApiInterface;
-use AkeneoE3\Domain\Resource\ImmutableResource;
+use AkeneoE3\Domain\Resource\WritableResource;
 use AkeneoE3\Domain\Result\Write\Failed;
 use AkeneoE3\Domain\Result\Write\Loaded;
 use AkeneoE3\Domain\Result\Write\WriteResult;
-use AkeneoE3\Domain\Resource\AuditableResource;
-use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
 use Exception;
@@ -43,7 +43,7 @@ final class ReferenceEntityAttributeOption implements ReadResourcesRepository, W
     }
 
     /**
-     * @return iterable<Resource>
+     * @return iterable<TransformableResource>
      */
     public function read(ApiQuery $query): iterable
     {
@@ -72,7 +72,7 @@ final class ReferenceEntityAttributeOption implements ReadResourcesRepository, W
         }
     }
 
-    public function write(ImmutableResource $resource, bool $patch = true): WriteResult
+    public function write(WritableResource $resource, bool $patch = true): WriteResult
     {
         $entityCode = $resource->get(Property::create(ResourceType::REFERENCE_ENTITY_CODE_FIELD));
         $attributeCode = $resource->get(Property::create(ResourceType::REFERENCE_ENTITY_ATTRIBUTE_CODE_FIELD));
@@ -83,7 +83,7 @@ final class ReferenceEntityAttributeOption implements ReadResourcesRepository, W
                 $entityCode,
                 $attributeCode,
                 $optionCode,
-                $resource->changes()
+                $resource->changes()->toArray()
             );
 
             return Loaded::create($resource);
@@ -100,7 +100,7 @@ final class ReferenceEntityAttributeOption implements ReadResourcesRepository, W
             $resource[ResourceType::REFERENCE_ENTITY_CODE_FIELD] = $entityCode;
             $resource[ResourceType::REFERENCE_ENTITY_ATTRIBUTE_CODE_FIELD] = $attributeCode;
 
-            yield AuditableResource::fromArray($resource, $this->resourceType);
+            yield Resource::fromArray($resource, $this->resourceType);
         }
     }
 

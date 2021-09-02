@@ -6,9 +6,9 @@ namespace AkeneoE3\Infrastructure\Api\Repository\Asset;
 
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\AssetManager\AssetFamilyApiInterface;
-use AkeneoE3\Domain\Resource\AuditableResource;
-use AkeneoE3\Domain\Resource\ImmutableResource;
 use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\WritableResource;
+use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Domain\Result\Write\Failed;
 use AkeneoE3\Domain\Result\Write\Loaded;
@@ -36,23 +36,23 @@ final class Family implements ReadResourcesRepository, WriteResourceRepository
     }
 
     /**
-     * @return iterable<Resource>
+     * @return iterable<TransformableResource>
      */
     public function read(ApiQuery $query): iterable
     {
         $cursor = $this->api->all($query->getSearchFilters([]));
 
         foreach ($cursor as $resource) {
-            yield AuditableResource::fromArray($resource, $this->resourceType);
+            yield Resource::fromArray($resource, $this->resourceType);
         }
     }
 
-    public function write(ImmutableResource $resource, bool $patch = true): WriteResult
+    public function write(WritableResource $resource, bool $patch = true): WriteResult
     {
         $assetFamilyCode = $resource->getCode();
 
         try {
-            $data = $resource->changes();
+            $data = $resource->changes()->toArray();
             //@todo: temp solution is to unset "attribute_as_main_media" and "product_link_rules"
             // in duplicate mode
             // it should first copy assets without any fields

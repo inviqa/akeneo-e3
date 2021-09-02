@@ -8,9 +8,9 @@ use Akeneo\Pim\ApiClient\Api\AttributeApiInterface;
 use Akeneo\Pim\ApiClient\Api\AttributeOptionApiInterface;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Domain\Result\Write\WriteResult;
-use AkeneoE3\Domain\Resource\AuditableResource;
-use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
@@ -42,7 +42,7 @@ final class AttributeOption implements ReadResourcesRepository, WriteResourcesRe
     }
 
     /**
-     * @return iterable<Resource>
+     * @return iterable<TransformableResource>
      */
     public function read(ApiQuery $query): iterable
     {
@@ -81,7 +81,7 @@ final class AttributeOption implements ReadResourcesRepository, WriteResourcesRe
 
         foreach ($cursor as $resource) {
             $resource[ResourceType::ATTRIBUTE_CODE_FIELD] = $attributeCode;
-            yield AuditableResource::fromArray($resource, $this->resourceType);
+            yield Resource::fromArray($resource, $this->resourceType);
         }
     }
 

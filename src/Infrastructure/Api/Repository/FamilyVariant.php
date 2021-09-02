@@ -7,9 +7,9 @@ namespace AkeneoE3\Infrastructure\Api\Repository;
 use Akeneo\Pim\ApiClient\Api\FamilyVariantApiInterface;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Domain\Result\Write\WriteResult;
-use AkeneoE3\Domain\Resource\AuditableResource;
-use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
@@ -37,7 +37,7 @@ final class FamilyVariant implements ReadResourcesRepository, WriteResourcesRepo
     }
 
     /**
-     * @return iterable<Resource>
+     * @return iterable<TransformableResource>
      */
     public function read(ApiQuery $query): iterable
     {
@@ -76,7 +76,7 @@ final class FamilyVariant implements ReadResourcesRepository, WriteResourcesRepo
 
         foreach ($cursor as $resource) {
             $resource[ResourceType::FAMILY_CODE_FIELD] = $familyCode;
-            yield AuditableResource::fromArray($resource, $this->resourceType);
+            yield Resource::fromArray($resource, $this->resourceType);
         }
     }
 

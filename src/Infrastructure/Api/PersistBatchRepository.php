@@ -3,7 +3,7 @@
 namespace AkeneoE3\Infrastructure\Api;
 
 use AkeneoE3\Domain\Repository\PersistRepository;
-use AkeneoE3\Domain\Resource\ImmutableResource;
+use AkeneoE3\Domain\Resource\WritableResource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use AkeneoE3\Infrastructure\Api\Repository\WriteResourcesRepository;
 
@@ -23,7 +23,7 @@ class PersistBatchRepository implements PersistRepository
         $this->buffer = new ResourceCollection();
     }
 
-    public function persist(ImmutableResource $resource, bool $patch): iterable
+    public function persist(WritableResource $resource, bool $patch): iterable
     {
         $this->buffer->add($resource);
 

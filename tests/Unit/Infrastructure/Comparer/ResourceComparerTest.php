@@ -3,7 +3,7 @@
 namespace AkeneoE3\Tests\Unit\Infrastructure\Comparer;
 
 use AkeneoE3\Domain\Resource\Property;
-use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\Attribute;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Comparer\DiffLine;
@@ -18,7 +18,7 @@ class ResourceComparerTest extends TestCase
         $description = Attribute::create('description', 'web', 'en_GB');
         $name = Attribute::create('name', null, 'en_GB');
 
-        $resource1 = AuditableResource::fromArray([
+        $resource1 = Resource::fromArray([
                 'identifier' => '0123456789',
                 'family' => 'ziggy'
             ], ResourceType::create('product'));

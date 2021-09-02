@@ -10,7 +10,7 @@ use AkeneoE3\Domain\Action;
 use AkeneoE3\Domain\Exception\TransformException;
 use AkeneoE3\Domain\Resource\Field;
 use AkeneoE3\Domain\Resource\FieldFactory;
-use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\TransformableResource;
 
 final class Remove implements Action
 {
@@ -27,14 +27,14 @@ final class Remove implements Action
         $this->options = AddRemoveOptions::fromArray($options);
     }
 
-    public function execute(Resource $resource): void
+    public function execute(TransformableResource $resource): void
     {
         $resultValue = $this->evaluateValue($resource);
 
         $resource->removeFrom($this->field, $resultValue);
     }
 
-    protected function evaluateValue(Resource $resource): array
+    protected function evaluateValue(TransformableResource $resource): array
     {
         if ($this->options->getExpression() === null) {
             return $this->options->getItems();

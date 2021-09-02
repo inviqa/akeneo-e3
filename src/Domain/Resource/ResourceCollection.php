@@ -2,16 +2,14 @@
 
 namespace AkeneoE3\Domain\Resource;
 
-use AkeneoE3\Domain\Resource\ImmutableResource;
-
 class ResourceCollection
 {
     /**
-     * @var ImmutableResource[]
+     * @var WritableResource[]
      */
     private array $items = [];
 
-    public function add(ImmutableResource $resource): void
+    public function add(WritableResource $resource): void
     {
         $this->items[$resource->getCode()] = $resource;
     }
@@ -21,21 +19,11 @@ class ResourceCollection
         return count($this->items);
     }
 
-    public function toArray(): array
-    {
-        return array_values(array_map(
-            function (Resource $resource) {
-                return $resource->toArray();
-            },
-            $this->items
-        ));
-    }
-
     public function changes(): array
     {
         return array_values(array_map(
-            function (Resource $resource) {
-                return $resource->changes();
+            function (WritableResource $resource) {
+                return $resource->changes()->toArray();
             },
             $this->items
         ));
@@ -48,12 +36,12 @@ class ResourceCollection
         return $this->items[$firstKey]->getResourceType();
     }
 
-    public function get(string $code): ImmutableResource
+    public function get(string $code): WritableResource
     {
         return $this->items[$code];
     }
 
-    public function getFirst(): ImmutableResource
+    public function getFirst(): WritableResource
     {
         $firstKey = array_key_first($this->items);
 

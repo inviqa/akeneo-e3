@@ -8,7 +8,7 @@ class DiffLine
 {
     private string $code;
 
-    private string $field;
+    private Field $field;
 
     /**
      * @var mixed
@@ -24,7 +24,7 @@ class DiffLine
      * @param mixed $before
      * @param mixed $after
      */
-    private function __construct(string $code, string $field, $before, $after)
+    private function __construct(string $code, Field $field, $before, $after)
     {
         $this->code = $code;
         $this->field = $field;
@@ -36,7 +36,7 @@ class DiffLine
      * @param mixed $before
      * @param mixed $after
      */
-    public static function create(string $code, string $field, $before, $after): self
+    public static function create(string $code, Field $field, $before, $after): self
     {
         return new self($code, $field, $before, $after);
     }
@@ -46,7 +46,7 @@ class DiffLine
         return $this->code;
     }
 
-    public function getField(): string
+    public function getField(): Field
     {
         return $this->field;
     }

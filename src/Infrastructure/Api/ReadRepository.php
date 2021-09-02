@@ -4,7 +4,7 @@ namespace AkeneoE3\Infrastructure\Api;
 
 use AkeneoE3\Domain\Repository\Query;
 use AkeneoE3\Domain\Repository\ReadRepository as BaseReadRepository;
-use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
 use AkeneoE3\Infrastructure\Api\Repository\ReadResourcesRepository;
 use LogicException;
@@ -28,7 +28,7 @@ class ReadRepository implements BaseReadRepository
     }
 
     /**
-     * @return iterable<Resource>
+     * @return iterable<TransformableResource>
      */
     public function read(Query $query): iterable
     {

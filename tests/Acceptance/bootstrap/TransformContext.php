@@ -8,7 +8,7 @@ use AkeneoE3\Domain\Loader;
 use AkeneoE3\Domain\Transformer;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Resource\Attribute;
-use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\EtlFactory;
 use Behat\Behat\Context\Context;
@@ -94,10 +94,10 @@ class TransformContext implements Context
      */
     public function transformationIsExecuted(): void
     {
-        $resource = AuditableResource::fromArray($this->resourceData, $this->resourceType);
+        $resource = Resource::fromArray($this->resourceData, $this->resourceType);
 
         $this->extractor = new InMemoryExtractor($resource);
-        $this->loader = new InMemoryLoader($resource, $this->profile->getUploadMode());
+        $this->loader = new InMemoryLoader();
 
         $etl = new EtlProcess(
             new Extractor($this->extractor, new EmptyQuery()),
@@ -115,7 +115,7 @@ class TransformContext implements Context
     {
         $expected = $this->readPropertiesFromTable($table);
 
-        $loaderData = $this->loader->getResult()->toArray();
+        $loaderData = $this->loader->getResult()->changes()->toArray();
         unset($loaderData['values'], $loaderData['labels'], $loaderData['associations']);
 
         Assert::eq($expected, $loaderData);
@@ -124,11 +124,11 @@ class TransformContext implements Context
     /**
      * @Then the upload result should have attributes:
      */
-    public function checkValues(TableNode $table): void
+    public function checkResultAttributes(TableNode $table): void
     {
         $expected = $this->readValuesFromTable($table);
 
-        $loaderData = $this->loader->getResult()->toArray();
+        $loaderData = $this->loader->getResult()->changes()->toArray();
         Assert::eq($expected, $loaderData['values']);
     }
 
@@ -140,7 +140,7 @@ class TransformContext implements Context
     {
         $expected = $this->readLocalisedListFromTable($table);
 
-        $loaderData = $this->loader->getResult()->toArray();
+        $loaderData = $this->loader->getResult()->changes()->toArray();
 
         Assert::eq($expected, $loaderData[$listCode]);
     }
@@ -152,7 +152,7 @@ class TransformContext implements Context
     {
         $expected = $this->readAssociationsFromTable($table);
 
-        $loaderData = $this->loader->getResult()->toArray();
+        $loaderData = $this->loader->getResult()->changes()->toArray();
 
         Assert::eq($expected, $loaderData['associations']);
     }
@@ -163,7 +163,7 @@ class TransformContext implements Context
      */
     public function checkTextAttributeValue(string $attributeName, PyStringNode $attributeValue)
     {
-        $actualValue = $this->loader->getResult()->get(Attribute::create($attributeName, null, null));
+        $actualValue = $this->loader->getResult()->changes()->get(Attribute::create($attributeName, null, null));
 
         Assert::eq($attributeValue->getRaw(), $actualValue);
     }

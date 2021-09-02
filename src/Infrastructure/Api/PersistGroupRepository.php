@@ -3,7 +3,7 @@
 namespace AkeneoE3\Infrastructure\Api;
 
 use AkeneoE3\Domain\Repository\PersistRepository;
-use AkeneoE3\Domain\Resource\ImmutableResource;
+use AkeneoE3\Domain\Resource\WritableResource;
 use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use AkeneoE3\Infrastructure\Api\Repository\WriteResourcesRepository;
@@ -24,7 +24,7 @@ class PersistGroupRepository implements PersistRepository
         $this->currentGroup = '';
     }
 
-    public function persist(ImmutableResource $resource, bool $patch): iterable
+    public function persist(WritableResource $resource, bool $patch): iterable
     {
         // If the new resource belongs to another group
         // e.g. an attribute option of attribute2
@@ -44,7 +44,7 @@ class PersistGroupRepository implements PersistRepository
         yield from $this->repository->flush($patch);
     }
 
-    private function getGroup(ImmutableResource $resource): string
+    private function getGroup(WritableResource $resource): string
     {
         $values = [];
         foreach ($this->groupFieldNames as $groupFieldName) {
@@ -54,7 +54,7 @@ class PersistGroupRepository implements PersistRepository
         return implode('.', $values);
     }
 
-    private function isGroupChanged(ImmutableResource $resource): bool
+    private function isGroupChanged(WritableResource $resource): bool
     {
         return
             $this->currentGroup !== '' &&

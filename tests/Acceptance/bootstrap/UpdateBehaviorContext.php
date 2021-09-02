@@ -4,7 +4,7 @@ namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
 use AkeneoE3\Domain\Exception\TransformException;
 use AkeneoE3\Domain\Resource\Attribute;
-use AkeneoE3\Domain\Resource\AuditableResource;
+use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\ResourceType;
 use Behat\Behat\Context\Context;
@@ -13,7 +13,7 @@ use Webmozart\Assert\Assert;
 
 class UpdateBehaviorContext implements Context
 {
-    private AuditableResource $resource;
+    private Resource $resource;
 
     private ResourceType $resourceType;
 
@@ -25,7 +25,7 @@ class UpdateBehaviorContext implements Context
         $data = json_decode($json, true);
         $this->resourceType = ResourceType::create(isset($data['identifier']) ? 'product' : 'object');
 
-        $this->resource = AuditableResource::fromArray($data, $this->resourceType);
+        $this->resource = Resource::fromArray($data, $this->resourceType);
     }
 
     /**

@@ -4,33 +4,23 @@ namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Repository\PersistRepository;
-use AkeneoE3\Domain\Resource\ImmutableResource;
+use AkeneoE3\Domain\Resource\WritableResource;
+use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Domain\Resource\Resource;
-use AkeneoE3\Domain\Resource\AuditableResource;
 use LogicException;
 use Webmozart\Assert\Assert;
 
 class InMemoryLoader implements PersistRepository
 {
-    private Resource $originalResource;
+    private ?WritableResource $result;
 
-    private ?AuditableResource $result;
-
-    private string $uploadMode;
-
-    public function __construct(Resource $originalResource, string $uploadMode = EtlProfile::MODE_UPDATE)
+    public function __construct()
     {
-        $this->originalResource = $originalResource;
-        $this->uploadMode = $uploadMode;
         $this->result = null;
     }
 
-    public function persist(ImmutableResource $resource, bool $patch): iterable
+    public function persist(WritableResource $resource, bool $patch): iterable
     {
-        if (!$resource instanceof AuditableResource) {
-            throw new LogicException('Resource must be auditable for merge');
-        }
-
         $this->result = $resource;
 
         return [];
@@ -41,7 +31,7 @@ class InMemoryLoader implements PersistRepository
         return [];
     }
 
-    public function getResult(): Resource
+    public function getResult(): WritableResource
     {
         Assert::notNull($this->result, 'Transformation result is not defined.');
 

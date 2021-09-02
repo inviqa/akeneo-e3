@@ -7,9 +7,9 @@ namespace AkeneoE3\Infrastructure\Api\Repository\Asset;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\AssetManager\AssetApiInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\AssetManager\AssetFamilyApiInterface;
-use AkeneoE3\Domain\Resource\AuditableResource;
-use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
@@ -39,7 +39,7 @@ final class Asset implements ReadResourcesRepository, WriteResourcesRepository, 
     }
 
     /**
-     * @return iterable<Resource>
+     * @return iterable<TransformableResource>
      */
     public function read(ApiQuery $query): iterable
     {
@@ -54,7 +54,7 @@ final class Asset implements ReadResourcesRepository, WriteResourcesRepository, 
 
             foreach ($cursor as $resource) {
                 $resource[ResourceType::ASSET_FAMILY_CODE_FIELD] = $familyCode;
-                yield AuditableResource::fromArray($resource, $this->resourceType);
+                yield Resource::fromArray($resource, $this->resourceType);
             }
         }
     }

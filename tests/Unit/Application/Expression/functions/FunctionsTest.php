@@ -6,8 +6,8 @@ use AkeneoE3\Application\Expression\ActionState;
 use AkeneoE3\Domain\Exception\TransformException;
 use AkeneoE3\Domain\Resource\Attribute;
 use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Domain\Resource\Resource;
-use AkeneoE3\Domain\Resource\AuditableResource;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Tests\Unit\Domain\TestData;
 use PHPUnit\Framework\TestCase;
@@ -22,7 +22,7 @@ class FunctionsTest extends TestCase
 {
     public function test_function_value_returns_a_value()
     {
-        $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
+        $resource = Resource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
         ActionState::$resource = $resource;
 
@@ -31,7 +31,7 @@ class FunctionsTest extends TestCase
 
     public function test_function_value_throws_an_exception_for_an_unknown_attribute()
     {
-        $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
+        $resource = Resource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
         ActionState::$resource = $resource;
 
@@ -42,7 +42,7 @@ class FunctionsTest extends TestCase
 
     public function test_function_value_returns_a_value_for_the_current_field()
     {
-        $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
+        $resource = Resource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
         ActionState::$resource = $resource;
         ActionState::$field = Attribute::create('colour', 'erp', null);
@@ -52,7 +52,7 @@ class FunctionsTest extends TestCase
 
     public function test_function_value_throws_an_exception_if_the_current_field_does_not_exist()
     {
-        $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
+        $resource = Resource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
         ActionState::$resource = $resource;
         ActionState::$field = Attribute::create('colour', 'erp', 'es_ES');
@@ -64,7 +64,7 @@ class FunctionsTest extends TestCase
 
     public function test_function_has_attribute_returns_true_if_attribute_exists()
     {
-        $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
+        $resource = Resource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
         ActionState::$resource = $resource;
 
@@ -73,7 +73,7 @@ class FunctionsTest extends TestCase
 
     public function test_function_has_attribute_returns_false_if_attribute_does_not_exists()
     {
-        $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
+        $resource = Resource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
         ActionState::$resource = $resource;
 
@@ -82,7 +82,7 @@ class FunctionsTest extends TestCase
 
     public function test_function_has_attribute_throws_an_exception_if_called_without_arguments_and_a_current_field_is_not_an_attribute()
     {
-        $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
+        $resource = Resource::fromArray(TestData::getProduct(), ResourceType::create('product'));
         ActionState::$resource = $resource;
         ActionState::$field = Property::create('categories');
 
@@ -93,7 +93,7 @@ class FunctionsTest extends TestCase
 
     public function test_function_has_property_returns_true_if_property_exists()
     {
-        $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
+        $resource = Resource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
         ActionState::$resource = $resource;
 
@@ -102,7 +102,7 @@ class FunctionsTest extends TestCase
 
     public function test_function_has_property_returns_false_if_property_does_not_exists()
     {
-        $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
+        $resource = Resource::fromArray(TestData::getProduct(), ResourceType::create('product'));
 
         ActionState::$resource = $resource;
 
@@ -111,7 +111,7 @@ class FunctionsTest extends TestCase
 
     public function test_function_has_property_throws_an_exception_if_called_without_arguments_and_a_current_field_is_not_an_property()
     {
-        $resource = AuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
+        $resource = Resource::fromArray(TestData::getProduct(), ResourceType::create('product'));
         ActionState::$resource = $resource;
         ActionState::$field = Attribute::create('colour', null, null);
 

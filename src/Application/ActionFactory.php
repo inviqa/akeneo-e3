@@ -24,6 +24,9 @@ final class ActionFactory
             case 'remove':
                 $action = new Actions\Remove(new ExpressionLanguage(), $options);
                 break;
+            case 'duplicate':
+                $action = new Actions\Duplicate($options);
+                break;
             default:
                 throw new LogicException(sprintf('No registered action with the name %s', $type));
         }

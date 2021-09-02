@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Domain\Repository;
 
-use AkeneoE3\Domain\Resource\ImmutableResource;
+use AkeneoE3\Domain\Resource\WritableResource;
 use AkeneoE3\Domain\Result\Write\WriteResult;
 
 interface PersistRepository
@@ -12,7 +12,7 @@ interface PersistRepository
     /**
      * @return iterable<WriteResult>
      */
-    public function persist(ImmutableResource $resource, bool $patch): iterable;
+    public function persist(WritableResource $resource, bool $patch): iterable;
 
     /**
      * Finish persist, e.g. save remaining resources in bulk.

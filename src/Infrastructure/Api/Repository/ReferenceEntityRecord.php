@@ -8,9 +8,9 @@ use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityApiInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityRecordApiInterface;
 use AkeneoE3\Domain\Result\Write\WriteResult;
-use AkeneoE3\Domain\Resource\AuditableResource;
-use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\Property;
+use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Domain\Resource\ResourceCollection;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
@@ -37,7 +37,7 @@ final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResou
     }
 
     /**
-     * @return iterable<Resource>
+     * @return iterable<TransformableResource>
      */
     public function read(ApiQuery $query): iterable
     {
@@ -58,7 +58,7 @@ final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResou
 
             foreach ($cursor as $resource) {
                 $resource[ResourceType::REFERENCE_ENTITY_CODE_FIELD] = $entityCode;
-                yield AuditableResource::fromArray(
+                yield Resource::fromArray(
                     $resource,
                     $this->resourceType
                 );

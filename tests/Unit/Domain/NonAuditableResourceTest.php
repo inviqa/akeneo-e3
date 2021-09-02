@@ -58,29 +58,6 @@ class NonAuditableResourceTest extends TestCase
         $resource->get($field);
     }
 
-    public function test_it_should_be_changed_if_set_applied()
-    {
-        $resource = NonAuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
-        $resource->set(Property::create('family'), 'ziggy-mama');
-
-        Assert::assertTrue($resource->isChanged());
-    }
-
-    public function test_it_should_not_be_changed_if_set_not_applied()
-    {
-        $resource = NonAuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
-
-        Assert::assertFalse($resource->isChanged());
-    }
-
-    public function test_it_should_be_changed_if_add_to_applied()
-    {
-        $resource = NonAuditableResource::fromArray(TestData::getProduct(), ResourceType::create('product'));
-        $resource->addTo(Property::create('categories'), ['pxm']);
-
-        Assert::assertTrue($resource->isChanged());
-    }
-
     public function test_it_returns_fields()
     {
         $product = [

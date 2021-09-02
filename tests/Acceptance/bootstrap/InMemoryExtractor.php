@@ -4,13 +4,13 @@ namespace AkeneoE3\Tests\Acceptance\bootstrap;
 
 use AkeneoE3\Domain\Repository\Query;
 use AkeneoE3\Domain\Repository\ReadRepository;
-use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\TransformableResource;
 
 class InMemoryExtractor implements ReadRepository
 {
-    private Resource $resource;
+    private TransformableResource $resource;
 
-    public function __construct(Resource $resource)
+    public function __construct(TransformableResource $resource)
     {
         $this->resource = $resource;
     }

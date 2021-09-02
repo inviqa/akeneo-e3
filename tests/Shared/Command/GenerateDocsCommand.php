@@ -9,8 +9,8 @@ use AkeneoE3\Domain\EtlProcess;
 use AkeneoE3\Domain\Extractor;
 use AkeneoE3\Domain\Loader;
 use AkeneoE3\Domain\Profile\EtlProfile;
+use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Domain\Resource\Resource;
-use AkeneoE3\Domain\Resource\AuditableResource;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Comparer\ResourceComparer;
 use AkeneoE3\Infrastructure\EtlFactory;
@@ -76,12 +76,12 @@ final class GenerateDocsCommand extends Command
     }
 
     private function getTransformationResults(
-        Resource $resource,
+        TransformableResource $resource,
         EtlProfile $profile,
         string $taskCode
     ): array {
         $extractor = new InMemoryExtractor($resource);
-        $loader = new InMemoryLoader($resource);
+        $loader = new InMemoryLoader();
         $transformer = $this->factory->createTransformer($profile);
 
         $etl = new EtlProcess(
@@ -146,7 +146,7 @@ final class GenerateDocsCommand extends Command
 
                 $profile = EtlProfile::fromArray($profileData);
                 $resourceType = ResourceType::create($task['resource-type'] ?? 'product');
-                $resource = AuditableResource::fromArray($task['resource'], $resourceType);
+                $resource = Resource::fromArray($task['resource'], $resourceType);
 
                 $task['results'] = $this->getTransformationResults(
                     $resource,

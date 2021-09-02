@@ -2,6 +2,7 @@
 
 namespace AkeneoE3\Domain;
 
+use AkeneoE3\Domain\Resource\WritableResource;
 use AkeneoE3\Domain\Result\Transform\Failed;
 use AkeneoE3\Domain\Result\Transform\TransformResult;
 use AkeneoE3\Domain\Result\Write\WriteResult;
@@ -10,6 +11,7 @@ use AkeneoE3\Domain\Result\Write\TransformFailed;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Profile\LoadProfile;
 use AkeneoE3\Domain\Repository\PersistRepository;
+use LogicException;
 
 class Loader
 {
@@ -35,13 +37,17 @@ class Loader
         foreach ($transformResults as $transformResult) {
             $resource = $transformResult->getResource();
 
+            if (!$resource instanceof WritableResource) {
+                throw new LogicException('Resource must support WritableResource');
+            }
+
             if ($transformResult instanceof Failed) {
                 yield TransformFailed::create($resource, $transformResult);
 
                 continue;
             }
 
-            if ($resource->isChanged() === false && $this->profile->getUploadMode() === EtlProfile::MODE_UPDATE) {
+            if ($resource->isChanged() === false) {
                 yield Skipped::create($resource);
 
                 continue;

@@ -2,21 +2,21 @@
 
 namespace AkeneoE3\Domain\Result\Transform;
 
-use AkeneoE3\Domain\Resource\Resource;
+use AkeneoE3\Domain\Resource\BaseResource;
 
 class Failed implements TransformResult
 {
     private string $error;
 
-    private Resource $resource;
+    private BaseResource $resource;
 
-    public function __construct(Resource $resource, string $error)
+    public function __construct(BaseResource $resource, string $error)
     {
         $this->error = $error;
         $this->resource = $resource;
     }
 
-    public static function create(Resource $resource, string $error): self
+    public static function create(BaseResource $resource, string $error): self
     {
         return new self($resource, $error);
     }
@@ -26,7 +26,7 @@ class Failed implements TransformResult
         return $this->error;
     }
 
-    public function getResource(): Resource
+    public function getResource(): BaseResource
     {
         return $this->resource;
     }

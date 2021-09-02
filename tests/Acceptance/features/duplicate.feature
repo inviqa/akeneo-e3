@@ -21,8 +21,7 @@ Feature: Data transformations in `duplicate` mode
 
     And I apply transformations using the profile:
       """
-      actions: []
-      upload-mode: duplicate
+      actions: [type: duplicate]
       """
 
     When transformation is executed
@@ -67,6 +66,8 @@ Feature: Data transformations in `duplicate` mode
       """
       actions:
           -
+              type: duplicate
+          -
               type: set
               field: family
               value: null
@@ -86,7 +87,6 @@ Feature: Data transformations in `duplicate` mode
               value:
                   RELATIVES:
                       groups: ['magical_creatures']
-      upload-mode: duplicate
       """
 
     When transformation is executed
