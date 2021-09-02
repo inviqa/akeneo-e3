@@ -65,7 +65,7 @@ final class Attribute implements ReadResourcesRepository, WriteResourceRepositor
             $this->api->upsert(
                 $familyCode,
                 $attributeCode,
-                $resource->toArray()
+                $resource->changes()
             );
 
             return Loaded::create($resource);

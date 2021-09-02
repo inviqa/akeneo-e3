@@ -86,7 +86,7 @@ final class AttributeOption implements ReadResourcesRepository, WriteResourceRep
                 $familyCode,
                 $attributeCode,
                 $optionCode,
-                $resource->toArray()
+                $resource->changes()
             );
 
             return Loaded::create($resource);

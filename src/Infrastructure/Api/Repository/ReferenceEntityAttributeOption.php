@@ -83,7 +83,7 @@ final class ReferenceEntityAttributeOption implements ReadResourcesRepository, W
                 $entityCode,
                 $attributeCode,
                 $optionCode,
-                $resource->toArray()
+                $resource->changes()
             );
 
             return Loaded::create($resource);

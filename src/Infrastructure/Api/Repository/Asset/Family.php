@@ -52,7 +52,7 @@ final class Family implements ReadResourcesRepository, WriteResourceRepository
         $assetFamilyCode = $resource->getCode();
 
         try {
-            $data = $resource->toArray();
+            $data = $resource->changes();
             //@todo: temp solution is to unset "attribute_as_main_media" and "product_link_rules"
             // in duplicate mode
             // it should first copy assets without any fields

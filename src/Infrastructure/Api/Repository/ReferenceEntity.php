@@ -50,7 +50,7 @@ final class ReferenceEntity implements ReadResourcesRepository, WriteResourceRep
         $entityCode = $resource->getCode();
 
         try {
-            $this->api->upsert($entityCode, $resource->toArray());
+            $this->api->upsert($entityCode, $resource->changes());
 
             return Loaded::create($resource);
         } catch (Exception $e) {
