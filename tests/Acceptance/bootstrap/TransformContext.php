@@ -115,7 +115,7 @@ class TransformContext implements Context
     {
         $expected = $this->readPropertiesFromTable($table);
 
-        $loaderData = $this->loader->getResult()->toArray($this->profile->isDuplicateMode());
+        $loaderData = $this->loader->getResult()->toArray();
         unset($loaderData['values'], $loaderData['labels'], $loaderData['associations']);
 
         Assert::eq($expected, $loaderData);
@@ -128,7 +128,7 @@ class TransformContext implements Context
     {
         $expected = $this->readValuesFromTable($table);
 
-        $loaderData = $this->loader->getResult()->toArray($this->profile->isDuplicateMode());
+        $loaderData = $this->loader->getResult()->toArray();
         Assert::eq($expected, $loaderData['values']);
     }
 
@@ -140,7 +140,7 @@ class TransformContext implements Context
     {
         $expected = $this->readLocalisedListFromTable($table);
 
-        $loaderData = $this->loader->getResult()->toArray($this->profile->isDuplicateMode());
+        $loaderData = $this->loader->getResult()->toArray();
 
         Assert::eq($expected, $loaderData[$listCode]);
     }
@@ -152,7 +152,7 @@ class TransformContext implements Context
     {
         $expected = $this->readAssociationsFromTable($table);
 
-        $loaderData = $this->loader->getResult()->toArray($this->profile->isDuplicateMode());
+        $loaderData = $this->loader->getResult()->toArray();
 
         Assert::eq($expected, $loaderData['associations']);
     }

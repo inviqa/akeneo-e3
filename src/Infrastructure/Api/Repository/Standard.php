@@ -71,7 +71,7 @@ final class Standard implements ReadResourcesRepository, WriteResourcesRepositor
             return [];
         }
 
-        $response = $this->api->upsertList($resources->toArray(!$patch));
+        $response = $this->api->upsertList($resources->toArray());
 
         return WriteResultFactory::createFromResponse($response, $resources);
     }

@@ -30,7 +30,7 @@ final class ReferenceEntity implements ReadResourcesRepository, WriteResourceRep
 
     public function count(ApiQuery $query): int
     {
-        return 100;
+        return -1;
     }
 
     /**
@@ -50,7 +50,7 @@ final class ReferenceEntity implements ReadResourcesRepository, WriteResourceRep
         $entityCode = $resource->getCode();
 
         try {
-            $this->api->upsert($entityCode, $resource->toArray(!$patch));
+            $this->api->upsert($entityCode, $resource->toArray());
 
             return Loaded::create($resource);
         } catch (Exception $e) {

@@ -40,11 +40,10 @@ final class Add implements Action
             return $this->options->getItems();
         }
 
-
         ActionState::setResourceAndField($resource, $this->field);
 
         $expression = $this->options->getExpression() ?? '';
-        $result = $this->expressionLanguage->evaluate($expression, $resource->toArray(true));
+        $result = $this->expressionLanguage->evaluate($expression, $resource->toArray());
 
         if (is_array($result) === false) {
             throw new TransformException(sprintf('Expected result type of the expression %s is array', $expression), true);

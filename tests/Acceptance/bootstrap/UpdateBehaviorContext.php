@@ -54,7 +54,7 @@ class UpdateBehaviorContext implements Context
     {
         $expected = json_decode($json, true);
 
-        Assert::eq($expected, $this->resource->toArray(true));
+        Assert::eq($expected, $this->resource->toArray());
     }
 
     private function setAttributeValues(array $attributeValues): void

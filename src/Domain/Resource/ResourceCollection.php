@@ -21,11 +21,11 @@ class ResourceCollection
         return count($this->items);
     }
 
-    public function toArray(bool $full): array
+    public function toArray(): array
     {
         return array_values(array_map(
-            function (Resource $resource) use ($full) {
-                return $resource->toArray($full);
+            function (Resource $resource) {
+                return $resource->toArray();
             },
             $this->items
         ));

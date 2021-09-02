@@ -65,7 +65,7 @@ final class FamilyVariant implements ReadResourcesRepository, WriteResourcesRepo
 
         $familyCode = $resources->getFirst()->get(Property::create(ResourceType::FAMILY_CODE_FIELD));
 
-        $response = $this->api->upsertList($familyCode, $resources->toArray(!$patch));
+        $response = $this->api->upsertList($familyCode, $resources->toArray());
 
         yield from WriteResultFactory::createFromResponse($response, $resources);
     }

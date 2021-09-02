@@ -67,7 +67,7 @@ final class Asset implements ReadResourcesRepository, WriteResourcesRepository, 
 
         $familyCode = $resources->getFirst()->get(Property::create(ResourceType::ASSET_FAMILY_CODE_FIELD));
 
-        $response = $this->api->upsertList($familyCode, $resources->toArray(!$patch));
+        $response = $this->api->upsertList($familyCode, $resources->toArray());
 
         return WriteResultFactory::createFromResponse($response, $resources);
     }

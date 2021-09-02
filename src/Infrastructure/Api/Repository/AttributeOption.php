@@ -70,7 +70,7 @@ final class AttributeOption implements ReadResourcesRepository, WriteResourcesRe
 
         $attributeCode = $resources->getFirst()->get(Property::create(ResourceType::ATTRIBUTE_CODE_FIELD));
 
-        $response = $this->optionApi->upsertList($attributeCode, $resources->toArray(!$patch));
+        $response = $this->optionApi->upsertList($attributeCode, $resources->toArray());
 
         return WriteResultFactory::createFromResponse($response, $resources);
     }

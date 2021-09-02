@@ -45,6 +45,6 @@ final class Set implements Action
         ActionState::setResourceAndField($resource, $this->field);
         $expression = $this->options->getExpression() ?? '';
 
-        return $this->expressionLanguage->evaluate($expression, $resource->toArray(true));
+        return $this->expressionLanguage->evaluate($expression, $resource->toArray());
     }
 }
