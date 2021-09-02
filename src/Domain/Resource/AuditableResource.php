@@ -8,11 +8,11 @@ use Generator;
 
 final class AuditableResource implements Resource
 {
-    private Resource $resource;
+    private NonAuditableResource $resource;
 
-    private Resource $changes;
+    private NonAuditableResource $changes;
 
-    private Resource $origins;
+    private NonAuditableResource $origins;
 
     private function __construct(array $data, ResourceType $resourceType)
     {
@@ -117,14 +117,14 @@ final class AuditableResource implements Resource
         $this->resource = clone $this->resource;
     }
 
-    public function changes(): Resource
+    public function changes(): array
     {
-        return $this->changes;
+        return $this->changes->toArray();
     }
 
-    public function origins(): Resource
+    public function origins(): array
     {
-        return $this->origins;
+        return $this->origins->toArray();
     }
 
     private function trackOrigins(Field $field): void

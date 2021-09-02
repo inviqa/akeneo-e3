@@ -10,15 +10,13 @@ use LogicException;
 /**
  * @internal
  */
-final class NonAuditableResource implements Resource
+final class NonAuditableResource
 {
     private PropertyValues $properties;
 
     private AttributeValues $attributes;
 
     private ResourceType $resourceType;
-
-    private bool $isChanged = false;
 
     private string $code;
 
@@ -72,10 +70,6 @@ final class NonAuditableResource implements Resource
      */
     public function set(Field $field, $newValue): void
     {
-        // @todo: check if new value and old value are different
-
-        $this->isChanged = true;
-
         if ($field instanceof Property) {
             $this->properties->set($field, $newValue);
         }
@@ -87,8 +81,6 @@ final class NonAuditableResource implements Resource
 
     public function addTo(Field $field, array $newValue): void
     {
-        $this->isChanged = true;
-
         if ($field instanceof Property) {
             $this->properties->addTo($field, $newValue);
         }
@@ -100,8 +92,6 @@ final class NonAuditableResource implements Resource
 
     public function removeFrom(Field $field, array $newValue): void
     {
-        $this->isChanged = true;
-
         if ($field instanceof Property) {
             $this->properties->removeFrom($field, $newValue);
         }
@@ -135,11 +125,6 @@ final class NonAuditableResource implements Resource
         $this->properties->set($codeField, $code);
     }
 
-    public function isChanged(): bool
-    {
-        return $this->isChanged;
-    }
-
     /**
      * @return Generator|Field[]
      */
@@ -154,7 +139,7 @@ final class NonAuditableResource implements Resource
         }
     }
 
-    public function toArray(bool $full): array
+    public function toArray(): array
     {
         $data = $this->properties->toArray();
 

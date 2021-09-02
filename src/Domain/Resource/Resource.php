@@ -17,5 +17,7 @@ interface Resource extends ImmutableResource
 
     public function setCode(string $code): void;
 
-    public function isChanged(): bool;
+    public function duplicate(array $includeFields, array $excludeFields): void;
+
+
 }

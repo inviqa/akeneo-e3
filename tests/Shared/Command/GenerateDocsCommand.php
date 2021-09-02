@@ -101,7 +101,7 @@ final class GenerateDocsCommand extends Command
         $results = [];
 
         foreach ($compareTable as $change) {
-            $fieldName = $change->getField()->getName();
+            $fieldName = $change->getField();
             $results[$fieldName] = [
                 'field' => $fieldName,
                 'before' => $change->getBefore(),

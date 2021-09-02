@@ -22,5 +22,11 @@ interface ImmutableResource
      */
     public function fields(): Generator;
 
-    public function toArray(bool $full): array;
+    public function toArray(): array;
+
+    public function isChanged(): bool;
+
+    public function changes(): array;
+
+    public function origins(): array;
 }

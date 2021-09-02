@@ -28,15 +28,15 @@ final class ResourceComparer
 
         $comparison = [];
 
-        foreach ($resource->changes()->fields() as $field) {
+        foreach ($resource->changes() as $field => $fieldValue) {
 
             // skip code
-            if ($field->getName() === $resource->getResourceType()->getCodeFieldName()) {
+            if ($field === $resource->getResourceType()->getCodeFieldName()) {
                 continue;
             }
 
-            $originalValue = $resource->origins()->has($field) ? $resource->origins()->get($field) : '';
-            $newValue = $resource->changes()->get($field);
+            $originalValue = $resource->origins()[$field] ?? '';
+            $newValue = $fieldValue;
 
             $comparison[] = DiffLine::create(
                 $resource->getCode() ?? '',
