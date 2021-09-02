@@ -9,12 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
 {
-    public const MODE_UPDATE = 'update';
-    public const MODE_DUPLICATE = 'duplicate';
-
     private bool $isDryRun;
-
-    private string $mode;
 
     private array $conditions;
 
@@ -30,7 +25,6 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
         $data = self::resolve($data);
 
         $this->isDryRun = ($data['upload-type'] ?? '') === 'dry-run';
-        $this->mode = $data['upload-mode'] ?? self::MODE_UPDATE;
         $this->conditions = $data['conditions'] ?? [];
         $this->actions = $data['actions'] ?? [];
     }
@@ -48,16 +42,6 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
     public function setDryRun(bool $value): void
     {
         $this->isDryRun = $value;
-    }
-
-    public function getUploadMode(): string
-    {
-        return $this->mode;
-    }
-
-    public function isDuplicateMode(): bool
-    {
-        return $this->mode === EtlProfile::MODE_DUPLICATE;
     }
 
     public function getConditions(): array
@@ -85,8 +69,6 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
         $resolver = new OptionsResolver();
 
         $resolver
-            ->setDefault('upload-mode', self::MODE_UPDATE)
-            ->setAllowedValues('upload-mode', [self::MODE_UPDATE, self::MODE_DUPLICATE])
             ->setDefault('upload-type', 'api')
             ->setAllowedValues('upload-type', ['api', 'dry-run'])
             ->setDefault('conditions', function (OptionsResolver $conditionResolver) {

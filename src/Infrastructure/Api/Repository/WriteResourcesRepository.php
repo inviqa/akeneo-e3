@@ -12,5 +12,5 @@ interface WriteResourcesRepository
     /**
      * @return iterable<WriteResult>
      */
-    public function write(ResourceCollection $resources, bool $patch = true): iterable;
+    public function write(ResourceCollection $resources): iterable;
 }

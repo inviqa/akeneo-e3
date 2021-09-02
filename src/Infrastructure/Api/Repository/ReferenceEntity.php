@@ -45,7 +45,7 @@ final class ReferenceEntity implements ReadResourcesRepository, WriteResourceRep
         }
     }
 
-    public function write(WritableResource $resource, bool $patch = true): WriteResult
+    public function write(WritableResource $resource): WriteResult
     {
         $entityCode = $resource->getCode();
 

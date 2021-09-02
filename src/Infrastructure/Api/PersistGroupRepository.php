@@ -24,24 +24,24 @@ class PersistGroupRepository implements PersistRepository
         $this->currentGroup = '';
     }
 
-    public function persist(WritableResource $resource, bool $patch): iterable
+    public function persist(WritableResource $resource): iterable
     {
         // If the new resource belongs to another group
         // e.g. an attribute option of attribute2
         // then flush options of attribute 1 from buffer
         if ($this->isGroupChanged($resource) === true) {
-            yield from $this->flush($patch);
+            yield from $this->flush();
         }
 
         // change group and persist new resource
         $this->currentGroup = $this->getGroup($resource);
 
-        yield from $this->repository->persist($resource, $patch);
+        yield from $this->repository->persist($resource);
     }
 
-    public function flush(bool $patch): iterable
+    public function flush(): iterable
     {
-        yield from $this->repository->flush($patch);
+        yield from $this->repository->flush();
     }
 
     private function getGroup(WritableResource $resource): string

@@ -9,5 +9,5 @@ use AkeneoE3\Domain\Result\Write\WriteResult;
 
 interface WriteResourceRepository
 {
-    public function write(WritableResource $resource, bool $patch = true): WriteResult;
+    public function write(WritableResource $resource): WriteResult;
 }

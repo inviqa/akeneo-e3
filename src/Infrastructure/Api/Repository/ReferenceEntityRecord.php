@@ -69,7 +69,7 @@ final class ReferenceEntityRecord implements ReadResourcesRepository, WriteResou
     /**
      * @return WriteResult[]
      */
-    public function write(ResourceCollection $resources, bool $patch = true): iterable
+    public function write(ResourceCollection $resources): iterable
     {
         if ($resources->count() === 0) {
             return [];

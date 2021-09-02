@@ -59,7 +59,7 @@ final class Asset implements ReadResourcesRepository, WriteResourcesRepository, 
         }
     }
 
-    public function write(ResourceCollection $resources, bool $patch = true): iterable
+    public function write(ResourceCollection $resources): iterable
     {
         if ($resources->count() === 0) {
             return [];

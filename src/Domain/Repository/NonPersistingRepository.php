@@ -10,12 +10,12 @@ use AkeneoE3\Domain\Result\Write\Skipped;
 
 final class NonPersistingRepository implements PersistRepository
 {
-    public function persist(WritableResource $resource, bool $patch): iterable
+    public function persist(WritableResource $resource): iterable
     {
         yield Skipped::create($resource);
     }
 
-    public function flush(bool $patch): iterable
+    public function flush(): iterable
     {
         return [];
     }

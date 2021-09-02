@@ -15,14 +15,14 @@ class PersistByOneRepository implements BasePersistRepository
         $this->connector = $connector;
     }
 
-    public function persist(WritableResource $resource, bool $patch): iterable
+    public function persist(WritableResource $resource): iterable
     {
-        $result = $this->connector->write($resource, $patch);
+        $result = $this->connector->write($resource);
 
         return [$result];
     }
 
-    public function flush(bool $patch): iterable
+    public function flush(): iterable
     {
         return [];
     }

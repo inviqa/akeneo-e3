@@ -19,14 +19,14 @@ class InMemoryLoader implements PersistRepository
         $this->result = null;
     }
 
-    public function persist(WritableResource $resource, bool $patch): iterable
+    public function persist(WritableResource $resource): iterable
     {
         $this->result = $resource;
 
         return [];
     }
 
-    public function flush(bool $patch): iterable
+    public function flush(): iterable
     {
         return [];
     }

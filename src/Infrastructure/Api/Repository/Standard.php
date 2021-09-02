@@ -65,7 +65,7 @@ final class Standard implements ReadResourcesRepository, WriteResourcesRepositor
     /**
      * @return iterable<WriteResult>
      */
-    public function write(ResourceCollection $resources, bool $patch = true): iterable
+    public function write(ResourceCollection $resources): iterable
     {
         if ($resources->count() === 0) {
             return [];

@@ -75,7 +75,7 @@ final class AttributeOption implements ReadResourcesRepository, WriteResourceRep
         }
     }
 
-    public function write(WritableResource $resource, bool $patch = true): WriteResult
+    public function write(WritableResource $resource): WriteResult
     {
         $familyCode = $resource->get(Property::create(ResourceType::ASSET_FAMILY_CODE_FIELD));
         $attributeCode = $resource->get(Property::create(ResourceType::ASSET_ATTRIBUTE_CODE_FIELD));

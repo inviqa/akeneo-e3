@@ -23,20 +23,20 @@ class PersistBatchRepository implements PersistRepository
         $this->buffer = new ResourceCollection();
     }
 
-    public function persist(WritableResource $resource, bool $patch): iterable
+    public function persist(WritableResource $resource): iterable
     {
         $this->buffer->add($resource);
 
         if ($this->buffer->count() === $this->batchSize) {
-            yield from $this->flush($patch);
+            yield from $this->flush();
         } else {
             return [];
         }
     }
 
-    public function flush(bool $patch): iterable
+    public function flush(): iterable
     {
-        yield from $this->connector->write($this->buffer, $patch);
+        yield from $this->connector->write($this->buffer);
 
         $this->buffer->clear();
     }

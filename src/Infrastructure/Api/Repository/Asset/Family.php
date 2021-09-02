@@ -47,7 +47,7 @@ final class Family implements ReadResourcesRepository, WriteResourceRepository
         }
     }
 
-    public function write(WritableResource $resource, bool $patch = true): WriteResult
+    public function write(WritableResource $resource): WriteResult
     {
         $assetFamilyCode = $resource->getCode();
 

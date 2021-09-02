@@ -8,7 +8,6 @@ use AkeneoE3\Domain\Result\Transform\TransformResult;
 use AkeneoE3\Domain\Result\Write\WriteResult;
 use AkeneoE3\Domain\Result\Write\Skipped;
 use AkeneoE3\Domain\Result\Write\TransformFailed;
-use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Profile\LoadProfile;
 use AkeneoE3\Domain\Repository\PersistRepository;
 use LogicException;
@@ -32,8 +31,6 @@ class Loader
      */
     public function load(iterable $transformResults): iterable
     {
-        $patch = !$this->profile->isDuplicateMode();
-
         foreach ($transformResults as $transformResult) {
             $resource = $transformResult->getResource();
 
@@ -53,9 +50,9 @@ class Loader
                 continue;
             }
 
-            yield from $this->repository->persist($resource, $patch);
+            yield from $this->repository->persist($resource);
         }
 
-        yield from $this->repository->flush($patch);
+        yield from $this->repository->flush();
     }
 }

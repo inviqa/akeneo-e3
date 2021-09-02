@@ -72,7 +72,7 @@ final class ReferenceEntityAttributeOption implements ReadResourcesRepository, W
         }
     }
 
-    public function write(WritableResource $resource, bool $patch = true): WriteResult
+    public function write(WritableResource $resource): WriteResult
     {
         $entityCode = $resource->get(Property::create(ResourceType::REFERENCE_ENTITY_CODE_FIELD));
         $attributeCode = $resource->get(Property::create(ResourceType::REFERENCE_ENTITY_ATTRIBUTE_CODE_FIELD));

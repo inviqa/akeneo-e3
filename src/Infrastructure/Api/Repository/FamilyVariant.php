@@ -57,7 +57,7 @@ final class FamilyVariant implements ReadResourcesRepository, WriteResourcesRepo
     /**
      * @return WriteResult[]
      */
-    public function write(ResourceCollection $resources, bool $patch = true): iterable
+    public function write(ResourceCollection $resources): iterable
     {
         if ($resources->count() === 0) {
             return [];
