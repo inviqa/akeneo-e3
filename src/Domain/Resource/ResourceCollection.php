@@ -31,6 +31,16 @@ class ResourceCollection
         ));
     }
 
+    public function changes(): array
+    {
+        return array_values(array_map(
+            function (Resource $resource) {
+                return $resource->changes();
+            },
+            $this->items
+        ));
+    }
+
     public function getResourceType(): ResourceType
     {
         $firstKey = array_key_first($this->items);
