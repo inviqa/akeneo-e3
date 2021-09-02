@@ -10,9 +10,6 @@ conditions:
         operator: 'IN'
         value: ['100000007']
 
-# Upload strategy?
-upload-mode: patch
-
 actions: []
 
 # (optional) API related? or also csv?
