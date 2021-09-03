@@ -60,14 +60,17 @@ final class ReferenceEntityAttribute implements ReadResourcesRepository, WriteRe
         $attributeCode = $resource->getCode();
 
         try {
+            $data = $resource->changes()->toArray();
 
-            // @todo: if attributeCode in code, label, image
-            // - unset all readonly fields
+            // fix empty labels from reader
+            if (count($data['labels']) === 0) {
+                unset($data['labels']);
+            }
 
             $this->attributeApi->upsert(
                 $entityCode,
                 $attributeCode,
-                $resource->changes()->toArray()
+                $data
             );
 
             return Loaded::create($resource);
