@@ -71,4 +71,39 @@ class ResourceTest extends TestCase
 
         Assert::assertTrue($resource->isChanged());
     }
+
+    public function test_duplicate_changes()
+    {
+        $resource = Resource::fromArray(TestData::getProduct(), ResourceType::create('product'));
+        $resource->duplicate([], []);
+
+        $this->assertEquals($resource->changes()->toArray(), $resource->toArray());
+    }
+
+    public function test_duplicate_changes_with_include_fields()
+    {
+        $resource = Resource::fromArray(TestData::getProduct(), ResourceType::create('product'));
+        $resource->duplicate(['family'], []);
+
+        $this->assertEquals($resource->changes()->toArray(), [
+            'identifier' => 'the-ziggy',
+            'family' => 'ziggy',
+        ]);
+    }
+
+    public function test_duplicate_changes_with_exclude_fields()
+    {
+        $resource = Resource::fromArray(TestData::getProduct(), ResourceType::create('product'));
+        $resource->duplicate([], ['family', 'name', 'description', 'colour']);
+
+        $this->assertEquals($resource->changes()->toArray(), [
+            'identifier' => 'the-ziggy',
+            'categories' => ['hydra', 'pim'],
+            'values' => [
+                'head_count' => [
+                    ['scope' => null, 'locale' => null, 'data' => 3]
+                ]
+            ]
+        ]);
+    }
 }

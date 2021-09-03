@@ -81,7 +81,11 @@ final class Resource implements WritableResource, TransformableResource
 
     public function duplicate(array $includeFields, array $excludeFields): void
     {
-        $this->changes = clone $this->resource;
+        foreach ($this->resource->fields() as $field) {
+            if ($this->shouldIncludeField($field->getName(), $includeFields, $excludeFields) === true) {
+                $this->changes->set($field, $this->resource->get($field));
+            }
+        }
 
         $this->isChanged = true;
     }
@@ -139,6 +143,15 @@ final class Resource implements WritableResource, TransformableResource
         if ($this->resource->has($field) === true) {
             $this->origins->set($field, $this->resource->get($field));
         }
+    }
+
+    private function shouldIncludeField(string $fieldName, array $includeFields, array $excludeFields): bool
+    {
+        if (count($includeFields) === 0) {
+            return in_array($fieldName, $excludeFields) === false;
+        }
+
+        return in_array($fieldName, $includeFields);
     }
 
     /**
