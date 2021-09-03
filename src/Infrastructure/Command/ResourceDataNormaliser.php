@@ -82,6 +82,12 @@ class ResourceDataNormaliser
     private function normaliseObjectRecursively(array $object, array &$data, string $masterKey): void
     {
         foreach ($object as $key => $item) {
+            if ($item === null) {
+                $data[$masterKey.'.'.$key] = '';
+
+                continue;
+            }
+
             if (is_scalar($item) || $this->isScalarOrSimpleArray($item)) {
                 $data[$masterKey.'.'.$key] = $this->normalise($item);
 
