@@ -102,7 +102,7 @@ class TransformOutput
         foreach ($comparison as $diff) {
             $this->style->definitionList(
                 ['Identifier' => $diff->getCode()],
-                ['Field' =>  $diff->getField()],
+                ['Field' =>  $diff->getField()->getName()],
                 ['Before' =>  $diff->getBefore()],
                 ['After' =>  $diff->getAfter()]
             );
