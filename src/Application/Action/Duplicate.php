@@ -7,15 +7,15 @@ use AkeneoE3\Domain\Resource\TransformableResource;
 
 class Duplicate implements Action
 {
-    private array $options;
+    private DuplicateOptions $options;
 
     public function __construct(array $options)
     {
-        $this->options = $options;
+        $this->options = DuplicateOptions::fromArray($options);
     }
 
     public function execute(TransformableResource $resource): void
     {
-        $resource->duplicate([], []);
+        $resource->duplicate($this->options->getIncludeFieldNames(), $this->options->getIncludeFieldNames());
     }
 }
