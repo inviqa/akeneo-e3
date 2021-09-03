@@ -1,6 +1,6 @@
-# How to install E3
+# How to install e3
 
-Akeneo E3 is a command line tool written in PHP.
+Akeneo e3 is a command line tool written in PHP.
 
 ## 1. Install PHP
 

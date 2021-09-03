@@ -1,6 +1,6 @@
-# How E3 is different from Akeneo Rules Engine
+# How e3 is different from Akeneo Rules Engine
 
-| Enhanced Enrichment Engine **(E3)** | Native Akeneo Rules Engine
+| Enhanced Enrichment Engine **(e3)** | Native Akeneo Rules Engine
 | ----------------------------------- | ----------------------------
 | Support only concatenation and simple calculations | :+1:  Supports expressions (e.g. to remove HTML tags, trim, replace)          
 | Works only with products and product models        | :+1:  Works with all data types: families, assets, reference entities, etc 

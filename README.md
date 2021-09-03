@@ -1,10 +1,10 @@
-# Enhanced Enrichment Engine (E3) for Akeneo PIM
+# Enhanced Enrichment Engine (e3) for Akeneo PIM
 
 Enhanced Enrichment Engine is a tool to manipulate product data in the Akeneo PIM using its REST API.
 
 It is similar and compatible with Akeneo Enrichment Rules but is more powerful. See how it is [different from Akeneo Rules](docs/compare-with-akeneo-rules.md).
 
-## When to use E3
+## When to use e3
 
 :star:&nbsp;**Data cleansing** e.g. 
 * [trim attribute values](docs/examples/trim.md)
@@ -25,9 +25,9 @@ It is similar and compatible with Akeneo Enrichment Rules but is more powerful. 
 :star:&nbsp;**Migration** e.g. 
 * copy a product range from UAT to production  
 
-## How to use E3
+## How to use e3
 
-**Step 0.** [Install the Akeneo E3 command line script](docs/install.md). 
+**Step 0.** [Install the Akeneo e3 command line script](docs/install.md). 
 
 **Step 1.** Create a connection in Akeneo or use one of existing connections.
 
