@@ -16,6 +16,9 @@ class Duplicate implements Action
 
     public function execute(TransformableResource $resource): void
     {
-        $resource->duplicate($this->options->getIncludeFieldNames(), $this->options->getIncludeFieldNames());
+        $resource->duplicate(
+            $this->options->getIncludeFieldNames(),
+            $this->options->getExcludeFieldNames()
+        );
     }
 }
