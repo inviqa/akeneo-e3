@@ -7,6 +7,7 @@ use AkeneoE3\Domain\Profile\ExtractProfile;
 use AkeneoE3\Domain\Repository\Query;
 use AkeneoE3\Domain\Resource\ResourceType;
 use LogicException;
+use Webmozart\Assert\Assert;
 
 class ApiQuery implements Query
 {
@@ -56,9 +57,7 @@ class ApiQuery implements Query
      */
     public function getValue(string $field)
     {
-        if ($this->hasValue($field) === false) {
-            throw new LogicException(sprintf('The field %s is not defined in conditions', $field));
-        }
+        Assert::true($this->hasValue($field), sprintf('The field %s is not defined in conditions', $field));
 
         return $this->indexedConditions[$field]['value'];
     }
@@ -74,5 +73,12 @@ class ApiQuery implements Query
     public function addFilter(string $field, string $operator, $value): void
     {
         $this->indexedConditions[$field] = ['operator' => $operator, 'value' => $value];
+    }
+
+    public function getOperator(string $field): string
+    {
+        Assert::true($this->hasValue($field), sprintf('The field %s is not defined in conditions', $field));
+
+        return $this->indexedConditions[$field]['operator'] ?? '';
     }
 }

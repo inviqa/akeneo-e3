@@ -90,11 +90,19 @@ class ApiQueryTest extends TestCase
 
         $expected = [
             'search' => [
-                'type'     => [['operator' => 'IN', 'value' => ['a', 'b']]],
+                'type' => [['operator' => 'IN', 'value' => ['a', 'b']]],
             ]
         ];
 
         $this->assertEquals($expected, $query->getSearchFilters([]));
+    }
+
+    public function test_return_a_filter_operator()
+    {
+        $query = new ApiQuery();
+        $query->addFilter('type', 'IN', '');
+
+        $this->assertEquals('IN', $query->getOperator('type'));
     }
 }
 
