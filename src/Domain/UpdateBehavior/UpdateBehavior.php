@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AkeneoE3\Domain\UpdateBehavior;
 
 use AkeneoE3\Domain\Exception\TransformException;
@@ -15,7 +17,7 @@ use AkeneoE3\Domain\Exception\TransformException;
  *      Rule 3: For non-scalar values (objects and arrays) data types must match.
  *      Rule 4: Any data in non specified properties will be left untouched.
  */
-class UpdateBehavior
+final class UpdateBehavior
 {
     private ArrayHelper $arrayHelper;
 
