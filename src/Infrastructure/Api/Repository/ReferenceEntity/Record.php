@@ -94,7 +94,7 @@ final class Record implements ReadResourcesRepository, WriteResourcesRepository,
             ] : $this->entityApi->all();
     }
 
-    private function fetchRecords($entityCode, ApiQuery $query): iterable
+    private function fetchRecords(string $entityCode, ApiQuery $query): iterable
     {
         return $this->recordApi->all(
             $entityCode,
