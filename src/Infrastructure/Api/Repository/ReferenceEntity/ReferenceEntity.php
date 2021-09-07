@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkeneoE3\Infrastructure\Api\Repository;
+namespace AkeneoE3\Infrastructure\Api\Repository\ReferenceEntity;
 
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityApiInterface;
@@ -14,6 +14,8 @@ use AkeneoE3\Domain\Result\Write\Failed;
 use AkeneoE3\Domain\Result\Write\Loaded;
 use AkeneoE3\Domain\Result\Write\WriteResult;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
+use AkeneoE3\Infrastructure\Api\Repository\ReadResourcesRepository;
+use AkeneoE3\Infrastructure\Api\Repository\WriteResourceRepository;
 use Exception;
 
 final class ReferenceEntity implements ReadResourcesRepository, WriteResourceRepository

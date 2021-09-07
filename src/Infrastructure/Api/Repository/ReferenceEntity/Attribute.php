@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkeneoE3\Infrastructure\Api\Repository;
+namespace AkeneoE3\Infrastructure\Api\Repository\ReferenceEntity;
 
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use Akeneo\PimEnterprise\ApiClient\Api\ReferenceEntityApiInterface;
@@ -16,9 +16,12 @@ use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\TransformableResource;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
+use AkeneoE3\Infrastructure\Api\Repository\DependantResourceApi;
+use AkeneoE3\Infrastructure\Api\Repository\ReadResourcesRepository;
+use AkeneoE3\Infrastructure\Api\Repository\WriteResourceRepository;
 use Exception;
 
-final class ReferenceEntityAttribute implements ReadResourcesRepository, WriteResourceRepository, DependantResourceApi
+final class Attribute implements ReadResourcesRepository, WriteResourceRepository, DependantResourceApi
 {
     private ReferenceEntityAttributeApiInterface $attributeApi;
 
@@ -35,7 +38,6 @@ final class ReferenceEntityAttribute implements ReadResourcesRepository, WriteRe
 
     public function count(ApiQuery $query): int
     {
-        // @todo: if all options requested - count in all attributes
         return -1;
     }
 
