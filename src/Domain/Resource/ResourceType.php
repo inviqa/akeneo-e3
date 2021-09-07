@@ -27,6 +27,11 @@ class ResourceType implements Stringable
         return new self($code);
     }
 
+    public static function referenceEntityAttribute(): self
+    {
+        return new self('reference-entity-attribute');
+    }
+
     public function __toString(): string
     {
         return $this->code;

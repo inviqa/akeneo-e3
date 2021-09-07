@@ -26,7 +26,6 @@ final class RepositoryFactory
 {
     public function createReadRepository(
         ResourceType $resourceType,
-        ExtractProfile $profile,
         AkeneoPimEnterpriseClientInterface $client
     ): BaseReadRepository {
         $api = $this->createRepository($resourceType, $client);

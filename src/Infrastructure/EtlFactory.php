@@ -7,6 +7,8 @@ namespace AkeneoE3\Infrastructure;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientBuilder;
 use Akeneo\PimEnterprise\ApiClient\AkeneoPimEnterpriseClientInterface;
 use AkeneoE3\Application\ActionFactory;
+use AkeneoE3\Application\Expression\E3ExpressionEvaluator;
+use AkeneoE3\Application\Expression\ExpressionObject;
 use AkeneoE3\Domain\Extractor;
 use AkeneoE3\Domain\Loader;
 use AkeneoE3\Domain\Transformer;
@@ -17,6 +19,7 @@ use AkeneoE3\Domain\EtlProcess;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Profile\TransformProfile;
 use AkeneoE3\Domain\Resource\ResourceType;
+use AkeneoE3\Infrastructure\Api\ExpressionObject\AkeneoObject;
 use AkeneoE3\Infrastructure\Api\Query\ApiQueryFactory;
 use AkeneoE3\Infrastructure\Api\RepositoryFactory;
 
@@ -24,15 +27,11 @@ final class EtlFactory
 {
     private array $clients = [];
 
-    private ActionFactory $actionFactory;
-
     private RepositoryFactory $repositoryFactory;
 
     public function __construct(
-        ActionFactory $actionFactory = null,
         RepositoryFactory $repositoryFactory = null
     ) {
-        $this->actionFactory = $actionFactory ?? new ActionFactory();
         $this->repositoryFactory = $repositoryFactory ?? new RepositoryFactory();
     }
 
@@ -48,8 +47,11 @@ final class EtlFactory
             $etlProfile
         );
 
+        $expressionObject = new AkeneoObject($this->repositoryFactory, $this->getClient($sourceConnectionProfile));
+
         $transformer = $this->createTransformer(
-            $etlProfile
+            $etlProfile,
+            $expressionObject
         );
 
         $loader = $this->createLoader(
@@ -72,7 +74,7 @@ final class EtlFactory
     ): Extractor {
         $client = $this->getClient($profile);
 
-        $repository = $this->repositoryFactory->createReadRepository($resourceType, $extractProfile, $client);
+        $repository = $this->repositoryFactory->createReadRepository($resourceType, $client);
 
         $queryFactory = new ApiQueryFactory();
         $query = $queryFactory->fromProfile($extractProfile, $resourceType);
@@ -80,9 +82,18 @@ final class EtlFactory
         return new Extractor($repository, $query);
     }
 
-    public function createTransformer(TransformProfile $transformProfile): Transformer
+    public function createActionFactory(ExpressionObject $expressionObject): ActionFactory
     {
-        $actions = $this->actionFactory->createActions($transformProfile);
+        $expressionLanguage = new E3ExpressionEvaluator($expressionObject);
+
+        return new ActionFactory($expressionLanguage);
+    }
+
+    public function createTransformer(TransformProfile $transformProfile, ExpressionObject $expressionObject): Transformer
+    {
+        $actionFactory = $this->createActionFactory($expressionObject);
+
+        $actions = $actionFactory->createActions($transformProfile);
 
         return new Transformer($actions);
     }

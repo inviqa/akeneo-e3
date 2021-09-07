@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AkeneoE3\Application\Action;
 
 use AkeneoE3\Application\Expression\ActionState;
-use AkeneoE3\Application\Expression\ExpressionLanguage;
+use AkeneoE3\Application\Expression\ExpressionEvaluator;
 use AkeneoE3\Domain\Action;
 use AkeneoE3\Domain\Exception\TransformException;
 use AkeneoE3\Domain\Resource\Field;
@@ -18,9 +18,9 @@ final class Add implements Action
 
     private AddRemoveOptions $options;
 
-    private ExpressionLanguage $expressionLanguage;
+    private ExpressionEvaluator $expressionLanguage;
 
-    public function __construct(ExpressionLanguage $expressionLanguage, array $options)
+    public function __construct(ExpressionEvaluator $expressionLanguage, array $options)
     {
         $this->expressionLanguage = $expressionLanguage;
         $this->field = FieldFactory::fromOptions($options);
