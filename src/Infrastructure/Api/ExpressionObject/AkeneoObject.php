@@ -8,6 +8,8 @@ use AkeneoE3\Domain\Resource\Property;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Api\Query\ApiQuery;
 use AkeneoE3\Infrastructure\Api\RepositoryFactory;
+use LogicException;
+use Traversable;
 
 class AkeneoObject implements ExpressionObject
 {
@@ -64,10 +66,21 @@ class AkeneoObject implements ExpressionObject
             $entityCode
         );
 
-        $attributes = iterator_to_array($repository->read($query));
+        $attributes = $this->convertIterableToArray($repository->read($query));
 
         $this->cache[__FUNCTION__][$entityCode] = $attributes;
 
         return $attributes;
+    }
+
+    private function convertIterableToArray(iterable $data): array
+    {
+        if (is_array($data) === true) {
+            return $data;
+        }
+
+        if ($data instanceof Traversable) {
+            return iterator_to_array($data);
+        }
     }
 }

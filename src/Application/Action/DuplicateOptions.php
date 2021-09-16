@@ -13,9 +13,9 @@ final class DuplicateOptions
 
     private array $excludeFieldNames;
 
-    private ?string $includeFieldNamesExpression;
+    private string $includeFieldNamesExpression;
 
-    private ?string $excludeFieldNamesExpression;
+    private string $excludeFieldNamesExpression;
 
     private function __construct(
         array $includeFieldNames,
@@ -64,12 +64,12 @@ final class DuplicateOptions
         return $this->excludeFieldNames;
     }
 
-    public function getIncludeFieldNamesExpression(): ?string
+    public function getIncludeFieldNamesExpression(): string
     {
         return $this->includeFieldNamesExpression;
     }
 
-    public function getExcludeFieldNamesExpression(): ?string
+    public function getExcludeFieldNamesExpression(): string
     {
         return $this->excludeFieldNamesExpression;
     }

@@ -132,6 +132,7 @@ class NonAuditableResourceTest extends TestCase
         $resource = NonAuditableResource::fromArray([
             'code' => 'ziggy',
             'labels' => ['de_DE' => 'Die Ziggy'],
+            '__ignoreA' => 'A',
             'values' => [
                 'name' => [['scope' => null, 'locale' => null, 'data' => 'Ziggy']]
             ],
@@ -140,6 +141,7 @@ class NonAuditableResourceTest extends TestCase
         $this->assertEquals([
             'code' => 'ziggy',
             'labels' => ['de_DE' => 'Die Ziggy'],
+            '__ignoreA' => 'A',
             'values' => [
                 'name' => [['scope' => null, 'locale' => null, 'data' => 'Ziggy']]
             ]
@@ -152,7 +154,6 @@ class NonAuditableResourceTest extends TestCase
         $resource = NonAuditableResource::fromArray([
             'code' => 'ziggy',
             '__ignoreA' => 'A',
-            '__ignoreB' => 'B',
             'values' => [
                 'name' => [['scope' => null, 'locale' => null, 'data' => 'Ziggy']]
             ],
@@ -163,6 +164,6 @@ class NonAuditableResourceTest extends TestCase
             'values' => [
                 'name' => [['scope' => null, 'locale' => null, 'data' => 'Ziggy']]
             ]
-        ], $resource->toArray(true));
+        ], $resource->toArray(false));
     }
 }
