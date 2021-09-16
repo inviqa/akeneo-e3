@@ -87,8 +87,12 @@ final class PropertyValues
         }
     }
 
-    public function toArray(): array
+    public function toArray(bool $includeSpecialFields = false): array
     {
+        if ($includeSpecialFields === true) {
+            return $this->values;
+        }
+
         return array_filter($this->values, function (string $field) {
             return strpos($field, '__') !== 0;
         }, ARRAY_FILTER_USE_KEY);

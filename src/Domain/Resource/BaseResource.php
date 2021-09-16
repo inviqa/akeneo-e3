@@ -22,5 +22,5 @@ interface BaseResource
      */
     public function fields(): Generator;
 
-    public function toArray(): array;
+    public function toArray(bool $includeSpecialFields = false): array;
 }

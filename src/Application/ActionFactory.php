@@ -32,7 +32,7 @@ final class ActionFactory
                 $action = new Actions\Remove($this->expressionLanguage, $options);
                 break;
             case 'duplicate':
-                $action = new Actions\Duplicate($options);
+                $action = new Actions\Duplicate($this->expressionLanguage, $options);
                 break;
             default:
                 throw new LogicException(sprintf('No registered action with the name %s', $type));

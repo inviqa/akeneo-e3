@@ -118,9 +118,9 @@ final class Resource implements WritableResource, TransformableResource
         return $this->resource->fields();
     }
 
-    public function toArray(): array
+    public function toArray(bool $includeSpecialFields = false): array
     {
-        return $this->resource->toArray();
+        return $this->resource->toArray($includeSpecialFields);
     }
 
     public function __clone()

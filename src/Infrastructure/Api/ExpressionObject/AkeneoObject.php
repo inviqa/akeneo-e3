@@ -15,6 +15,8 @@ class AkeneoObject implements ExpressionObject
 
     private AkeneoPimEnterpriseClientInterface $client;
 
+    private array $cache = [];
+
     public function __construct(
         RepositoryFactory $repositoryFactory,
         AkeneoPimEnterpriseClientInterface $client
@@ -30,14 +32,7 @@ class AkeneoObject implements ExpressionObject
 
     public function getReferenceEntityAttributeCodesByTypes(string $entityCode, array $types): array
     {
-        $repository = $this->repositoryFactory->createReadRepository(
-            ResourceType::referenceEntityAttribute(),
-            $this->client
-        );
-
-        $query = new ApiQuery();
-        $query->addFilter(ResourceType::REFERENCE_ENTITY_CODE_FIELD, '=', $entityCode);
-        $attributes = $repository->read($query);
+        $attributes = $this->fetchAttributes($entityCode);
 
         $codes = [];
 
@@ -49,5 +44,30 @@ class AkeneoObject implements ExpressionObject
         }
 
         return $codes;
+    }
+
+    private function fetchAttributes(string $entityCode): array
+    {
+        if (isset($this->cache[__FUNCTION__][$entityCode]) === true) {
+            return $this->cache[__FUNCTION__][$entityCode];
+        }
+
+        $repository = $this->repositoryFactory->createReadRepository(
+            ResourceType::referenceEntityAttribute(),
+            $this->client
+        );
+
+        $query = new ApiQuery();
+        $query->addFilter(
+            ResourceType::REFERENCE_ENTITY_CODE_FIELD,
+            '=',
+            $entityCode
+        );
+
+        $attributes = iterator_to_array($repository->read($query));
+
+        $this->cache[__FUNCTION__][$entityCode] = $attributes;
+
+        return $attributes;
     }
 }

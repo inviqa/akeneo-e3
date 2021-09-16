@@ -13,10 +13,20 @@ final class DuplicateOptions
 
     private array $excludeFieldNames;
 
-    private function __construct(array $includeFieldNames, array $excludeFieldNames)
-    {
+    private ?string $includeFieldNamesExpression;
+
+    private ?string $excludeFieldNamesExpression;
+
+    private function __construct(
+        array $includeFieldNames,
+        array $excludeFieldNames,
+        string $includeFieldNamesExpression,
+        string $excludeFieldNamesExpression
+    ) {
         $this->includeFieldNames = $includeFieldNames;
         $this->excludeFieldNames = $excludeFieldNames;
+        $this->includeFieldNamesExpression = $includeFieldNamesExpression;
+        $this->excludeFieldNamesExpression = $excludeFieldNamesExpression;
     }
 
     public static function fromArray(array $array): self
@@ -26,7 +36,11 @@ final class DuplicateOptions
         $array = $resolver
             ->setDefault('include_fields', [])
             ->setDefault('exclude_fields', [])
+            ->setDefault('include_fields_expression', '')
+            ->setDefault('exclude_fields_expression', '')
             ->setAllowedTypes('include_fields', ['array'])
+            ->setAllowedTypes('include_fields_expression', ['string', 'null'])
+            ->setAllowedTypes('exclude_fields_expression', ['string', 'null'])
             ->setAllowedTypes('exclude_fields', ['array'])
             ->resolve($array);
 
@@ -37,7 +51,7 @@ final class DuplicateOptions
             );
         }
 
-        return new self($array['include_fields'], $array['exclude_fields']);
+        return new self($array['include_fields'], $array['exclude_fields'], $array['include_fields_expression'], $array['exclude_fields_expression']);
     }
 
     public function getIncludeFieldNames(): array
@@ -48,5 +62,15 @@ final class DuplicateOptions
     public function getExcludeFieldNames(): array
     {
         return $this->excludeFieldNames;
+    }
+
+    public function getIncludeFieldNamesExpression(): ?string
+    {
+        return $this->includeFieldNamesExpression;
+    }
+
+    public function getExcludeFieldNamesExpression(): ?string
+    {
+        return $this->excludeFieldNamesExpression;
     }
 }

@@ -42,7 +42,7 @@ final class Add implements Action
 
         ActionState::setResourceAndField($resource, $this->field);
 
-        $expression = $this->options->getExpression() ?? '';
+        $expression = $this->options->getExpression();
         $result = $this->expressionLanguage->evaluate($expression, $resource->toArray());
 
         if (is_array($result) === false) {

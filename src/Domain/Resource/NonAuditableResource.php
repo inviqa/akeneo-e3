@@ -136,9 +136,9 @@ final class NonAuditableResource implements BaseResource
         }
     }
 
-    public function toArray(): array
+    public function toArray(bool $includeSpecialFields = false): array
     {
-        $data = $this->properties->toArray();
+        $data = $this->properties->toArray($includeSpecialFields);
 
         if ($this->attributes->count() > 0) {
             $data['values'] = $this->attributes->toArray();

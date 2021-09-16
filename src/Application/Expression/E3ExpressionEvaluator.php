@@ -27,6 +27,8 @@ final class E3ExpressionEvaluator implements ExpressionEvaluator
      */
     public function evaluate(string $expression, array $values = [])
     {
-        return $this->expressionLanguage->evaluate($expression, $values);
+        $expressionValues = array_merge($values, [$this->expressionObject->getName() => $this->expressionObject]);
+
+        return $this->expressionLanguage->evaluate($expression, $expressionValues);
     }
 }
