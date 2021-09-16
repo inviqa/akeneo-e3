@@ -4,10 +4,6 @@ paths:
 exclude_files:
     - '#.*test.*#'
 layers:
-    -   name: AkeneoApiClient
-        collectors:
-            -   type: directory
-                regex: vendor/akeneo/.*
     -   name: Domain
         collectors:
             -   type: directory
@@ -20,6 +16,10 @@ layers:
         collectors:
             -   type: directory
                 regex: src/Infrastructure/.*
+    -   name: AkeneoApiClient
+        collectors:
+            -   type: directory
+                regex: vendor/akeneo/.*
 ruleset:
     Domain: ~
     Application:
