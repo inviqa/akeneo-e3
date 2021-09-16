@@ -12,5 +12,4 @@ return $config->setRules([
             'array_syntax' => ['syntax' => 'short'],
         ]
     )
-//    ->setRiskyAllowed(false)
     ->setFinder($finder);;
