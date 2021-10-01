@@ -7,7 +7,6 @@ use AkeneoE3\Domain\Result\Write\Failed;
 use AkeneoE3\Domain\Result\Write\Loaded;
 use AkeneoE3\Domain\Result\Write\WriteResult;
 use AkeneoE3\Domain\Resource\ResourceCollection;
-use LogicException;
 
 class WriteResultFactory
 {
@@ -20,7 +19,11 @@ class WriteResultFactory
             // Akeneo PHP client returns a response with null
             // instead of throwing an HTTP exception.
             if ($line === null) {
-                throw new LogicException('Akeneo API error by PATCH: please check your rules.');
+                foreach ($resources->items() as $resource) {
+                    yield Failed::create($resource, 'Akeneo API error by PATCH: nullable response');
+                }
+
+                return [];
             }
 
             $code = $line[$codeFieldName];

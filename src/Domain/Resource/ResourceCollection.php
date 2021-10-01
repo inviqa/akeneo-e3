@@ -52,4 +52,12 @@ class ResourceCollection
     {
         $this->items = [];
     }
+
+    /**
+     * @return WritableResource[]
+     */
+    public function items(): array
+    {
+        return $this->items;
+    }
 }
