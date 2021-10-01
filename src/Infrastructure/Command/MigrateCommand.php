@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Infrastructure\Command;
 
+use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Infrastructure\EtlFactory;
+use AkeneoE3\Infrastructure\Request\RuleSetTransformRequest;
+use AkeneoE3\Infrastructure\Request\RuleSetTransformRequestFactory;
 use AkeneoE3\Infrastructure\Request\TransformRequest;
 use AkeneoE3\Infrastructure\Request\TransformRequestFactory;
 use Symfony\Component\Console\Command\Command;
@@ -12,19 +15,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-final class TransformCommand extends Command
+final class MigrateCommand extends Command
 {
     private EtlFactory $factory;
 
-    private TransformRequestFactory $requestFactory;
-
-    private TransformOutput $output;
-
-    private TransformRequest $request;
+    private RuleSetTransformRequestFactory $requestFactory;
 
     public function __construct(
         EtlFactory $factory,
-        TransformRequestFactory $requestFactory
+        RuleSetTransformRequestFactory $requestFactory
     ) {
         $this->factory = $factory;
         $this->requestFactory = $requestFactory;
@@ -35,8 +34,7 @@ final class TransformCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setName('transform')
-            ->addOption('resource-type', 't', InputOption::VALUE_REQUIRED)
+            ->setName('migrate')
             ->addOption('connection', 'c', InputOption::VALUE_REQUIRED)
             ->addOption(
                 'destination-connection',
@@ -51,34 +49,37 @@ final class TransformCommand extends Command
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
     {
-        $this->request = $this->requestFactory->createFromInput($input);
-
-        $this->output = new TransformOutput($input, $output);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $askToConnect = $this->output->askToConnect(
-            $this->request->destinationConnection->getHost(),
-            $this->request->ruleProfile->isDryRun()
+        $request = $this->requestFactory->createFromInput($input);
+
+        $askToConnect = (new TransformOutput($input, $output))->askToConnect(
+            $request->destinationConnection->getHost(),
+            $request->isDryRun
         );
 
         if ($askToConnect === false) {
             return Command::SUCCESS;
         }
 
-        $etl = $this->factory->createEtlProcess(
-            $this->request->ruleProfile->getResourceType(),
-            $this->request->sourceConnection,
-            $this->request->destinationConnection,
-            $this->request->ruleProfile
-        );
+        foreach ($request->ruleSet as $ruleProfile) {
+            $consoleOutput = new TransformOutput($input, $output);
 
-        $total = $etl->total();
-        $results = $etl->execute();
+            $etl = $this->factory->createEtlProcess(
+                $ruleProfile->getResourceType(),
+                $request->sourceConnection,
+                $request->destinationConnection,
+                $ruleProfile
+            );
 
-        foreach ($results as $result) {
-            $this->output->render($result, $total);
+            $total = $etl->total();
+            $results = $etl->execute();
+
+            foreach ($results as $result) {
+                $consoleOutput->render($result, $total);
+            }
         }
 
         return Command::SUCCESS;

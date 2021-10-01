@@ -1,41 +1,33 @@
 <?php
 
-namespace AkeneoE3\Infrastructure\TransformRequest;
+namespace AkeneoE3\Infrastructure\Request;
 
 use AkeneoE3\Domain\Profile\ConnectionProfile;
 use AkeneoE3\Domain\Profile\EtlProfile;
 use AkeneoE3\Domain\Resource\ResourceType;
 use AkeneoE3\Infrastructure\Profile\ConnectionProfileFactory;
-use AkeneoE3\Infrastructure\Profile\EtlProfileFactory;
 use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Yaml\Yaml;
 
-class TransformRequestFromInputFactory
+class RuleSetTransformRequestFactory
 {
     private ConnectionProfileFactory $connectionProfileFactory;
 
-    private EtlProfileFactory $etlProfileFactory;
-
     public function __construct(
-        ConnectionProfileFactory $connectionProfileFactory,
-        EtlProfileFactory $etlProfileFactory
+        ConnectionProfileFactory $connectionProfileFactory
     ) {
         $this->connectionProfileFactory = $connectionProfileFactory;
-        $this->etlProfileFactory = $etlProfileFactory;
     }
 
-    public function createFromInput(InputInterface $input): TransformRequest
+    public function createFromInput(InputInterface $input): RuleSetTransformRequest
     {
-        $request = new TransformRequest();
+        $request = new RuleSetTransformRequest();
 
         $request->sourceConnection = $this->getConnectionProfile($input);
         $request->destinationConnection = $this->getDestinationConnectionProfile($input) ?? $request->sourceConnection;
-
-        $request->ruleProfile = $this->getEtlProfile($input);
-        $request->ruleProfile->setDryRun($this->isDryRun($input));
-        $request->ruleProfile->setDryRunCodes($this->getDryRunCodes($input));
-
-        $request->resourceType = ResourceType::create((string)$input->getOption('resource-type'));
+        $request->ruleSet = $this->getRuleSetProfile($input);
+        $request->isDryRun = $this->isDryRun($input);
 
         return $request;
     }
@@ -64,30 +56,41 @@ class TransformRequestFromInputFactory
         return $this->connectionProfileFactory->fromFile($profileFileName);
     }
 
-    private function getEtlProfile(InputInterface $input): EtlProfile
+    /**
+     * @return EtlProfile[]
+     */
+    private function getRuleSetProfile(InputInterface $input): array
     {
         $profileFileName = (string)$input->getOption('rules');
 
         if ($profileFileName === '') {
-            throw new LogicException('--rules option is required.');
+            throw new LogicException('rules option is required.');
         }
 
-        return $this->etlProfileFactory->fromFile($profileFileName);
+        $dryRun = $this->isDryRun($input);
+
+        $ruleSetData = Yaml::parseFile($profileFileName);
+
+        $ruleSet = [];
+        foreach ($ruleSetData as $ruleData) {
+            $resourceType = $ruleData['resource'];
+            unset($ruleData['resource']);
+
+            $ruleProfile = EtlProfile::fromConfiguration(
+                ResourceType::create($resourceType),
+                $ruleData
+            );
+
+            $ruleProfile->setDryRun($dryRun);
+
+            $ruleSet[] = $ruleProfile;
+        }
+
+        return $ruleSet;
     }
 
     private function isDryRun(InputInterface $input): bool
     {
         return $input->getOption('dry-run') !== '';
-    }
-
-    private function getDryRunCodes(InputInterface $input): array
-    {
-        $dryRunOption = (string)$input->getOption('dry-run');
-
-        if ($dryRunOption === '') {
-            return [];
-        }
-
-        return explode(',', $dryRunOption);
     }
 }

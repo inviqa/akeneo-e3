@@ -84,7 +84,7 @@ class TransformContext implements Context
         $config = Yaml::parse($string);
 
         $factory = new EtlFactory();
-        $this->profile = EtlProfile::fromArray($config);
+        $this->profile = EtlProfile::fromConfiguration($this->resourceType, $config);
 
         $this->transformer = $factory->createTransformer($this->profile, new EmptyExpressionObject());
     }

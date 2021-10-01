@@ -3,12 +3,13 @@
 namespace AkeneoE3\Tests\Unit\Domain\Profile;
 
 use AkeneoE3\Domain\Profile\EtlProfile;
+use AkeneoE3\Domain\Resource\ResourceType;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 
 class EtlProfileTest extends TestCase
 {
-    public function test_it_can_be_created_from_array()
+    public function test_it_can_be_created_from_resource_and_configuration()
     {
         $condition = [
             'field' => 'name',
@@ -22,11 +23,14 @@ class EtlProfileTest extends TestCase
             'value' => 'pet',
         ];
 
-        $profile = EtlProfile::fromArray([
-            'upload-type' => 'dry-run',
-            'conditions' => [$condition],
-            'actions' => [$action]
-        ]);
+        $profile = EtlProfile::fromConfiguration(
+            ResourceType::create('product'),
+            [
+                'upload-type' => 'dry-run',
+                'conditions' => [$condition],
+                'actions' => [$action]
+            ]
+        );
 
         $this->assertEquals(true, $profile->isDryRun());
         $this->assertEquals([$condition], $profile->getConditions());
@@ -37,10 +41,13 @@ class EtlProfileTest extends TestCase
     {
         $this->expectException(LogicException::class);
 
-        EtlProfile::fromArray([
-            'type' => 'run',
-            'unknown' => [],
-        ]);
+        EtlProfile::fromConfiguration(
+            ResourceType::create('product'),
+            [
+                'type' => 'run',
+                'unknown' => [],
+            ]
+        );
     }
 
     public function test_it_allows_to_dynamically_set_dry_run_list_of_codes()
@@ -57,10 +64,13 @@ class EtlProfileTest extends TestCase
             'value' => 'pet',
         ];
 
-        $profile = EtlProfile::fromArray([
-            'conditions' => [$condition],
-            'actions' => [$action]
-        ]);
+        $profile = EtlProfile::fromConfiguration(
+            ResourceType::create('product'),
+            [
+                'conditions' => [$condition],
+                'actions' => [$action]
+            ]
+        );
 
         $profile->setDryRunCodes(['123', '456', 'abc']);
 

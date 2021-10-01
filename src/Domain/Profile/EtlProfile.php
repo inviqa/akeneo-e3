@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Domain\Profile;
 
+use AkeneoE3\Domain\Resource\ResourceType;
 use LogicException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
 {
+    private ResourceType $resourceType;
+
     private bool $isDryRun;
 
     private array $conditions;
@@ -20,18 +23,19 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
      */
     private array $dryRunCodes = [];
 
-    public function __construct(array $data)
+    public function __construct(ResourceType $resourceType, array $data)
     {
         $data = self::resolve($data);
 
+        $this->resourceType = $resourceType;
         $this->isDryRun = ($data['upload-type'] ?? '') === 'dry-run';
         $this->conditions = $data['conditions'] ?? [];
         $this->actions = $data['actions'] ?? [];
     }
 
-    public static function fromArray(array $data): self
+    public static function fromConfiguration(ResourceType $resourceType, array $data): self
     {
-        return new self($data);
+        return new self($resourceType, $data);
     }
 
     public function isDryRun(): bool
@@ -95,5 +99,10 @@ final class EtlProfile implements LoadProfile, TransformProfile, ExtractProfile
     public function getBatchSize(): int
     {
         return 100;
+    }
+
+    public function getResourceType(): ResourceType
+    {
+        return $this->resourceType;
     }
 }

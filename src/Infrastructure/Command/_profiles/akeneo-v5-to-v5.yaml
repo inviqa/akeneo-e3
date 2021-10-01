@@ -1,0 +1,21 @@
+copy.yaml -t category -o
+copy.yaml -t channel -o
+
+copy-codes.yaml -t asset-family -o
+
+copy-exclude-attributes.yaml -t attribute-group -o
+copy.yaml -t attribute -o
+copy.yaml -t attribute-group -o
+copy.yaml -t attribute-option -o
+copy.yaml -t association-type -o
+
+copy.yaml -t family -o
+copy.yaml -t family-variant -o
+
+copy.yaml -t asset-attribute -o
+copy.yaml -t asset-family -o
+copy.yaml -t asset-attribute-option -o
+copy.yaml -t asset -o
+
+copy.yaml -t product
+

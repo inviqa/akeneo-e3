@@ -6,17 +6,23 @@ require __DIR__.'/../vendor/autoload.php';
 use AkeneoE3\Infrastructure\Command;
 use AkeneoE3\Infrastructure\EtlFactory;
 use AkeneoE3\Infrastructure\Profile\ConnectionProfileFactory;
-use AkeneoE3\Infrastructure\Profile\EtlProfileFactory;
-use AkeneoE3\Infrastructure\TransformRequest\TransformRequestFromInputFactory;
+use AkeneoE3\Infrastructure\Request\RuleSetTransformRequestFactory;
+use AkeneoE3\Infrastructure\Request\TransformRequestFactory;
 use Symfony\Component\Console\Application;
 
 $etlFactory = new EtlFactory();
 
-$requestFactory = new TransformRequestFromInputFactory(
+$transformRequestFactory = new TransformRequestFactory(
     new ConnectionProfileFactory(),
-    new EtlProfileFactory()
 );
 
+$ruleSetTransformRequestFactory = new RuleSetTransformRequestFactory(
+    new ConnectionProfileFactory(),
+);
+
+
 $application = new Application('AkeneoE3', '@package_version@');
-$application->add(new Command\TransformCommand($etlFactory, $requestFactory));
+$application->add(new Command\TransformCommand($etlFactory, $transformRequestFactory));
+$application->add(new Command\MigrateCommand($etlFactory, $ruleSetTransformRequestFactory));
+
 $application->run();

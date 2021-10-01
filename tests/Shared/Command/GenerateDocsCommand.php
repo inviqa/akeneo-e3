@@ -144,8 +144,8 @@ final class GenerateDocsCommand extends Command
             foreach ($example['tasks'] as $taskCode => &$task) {
                 $profileData = $task['profile'];
 
-                $profile = EtlProfile::fromArray($profileData);
                 $resourceType = ResourceType::create($task['resource-type'] ?? 'product');
+                $profile = EtlProfile::fromConfiguration($resourceType, $profileData);
                 $resource = Resource::fromArray($task['resource'], $resourceType);
 
                 $task['results'] = $this->getTransformationResults(
