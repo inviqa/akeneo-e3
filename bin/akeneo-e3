@@ -7,13 +7,16 @@ use AkeneoE3\Infrastructure\Command;
 use AkeneoE3\Infrastructure\EtlFactory;
 use AkeneoE3\Infrastructure\Profile\ConnectionProfileFactory;
 use AkeneoE3\Infrastructure\Profile\EtlProfileFactory;
+use AkeneoE3\Infrastructure\TransformRequest\TransformRequestFromInputFactory;
 use Symfony\Component\Console\Application;
 
-
 $etlFactory = new EtlFactory();
-$connectionProfileFactory = new ConnectionProfileFactory();
-$etlProfileFactory = new EtlProfileFactory();
+
+$requestFactory = new TransformRequestFromInputFactory(
+    new ConnectionProfileFactory(),
+    new EtlProfileFactory()
+);
 
 $application = new Application('AkeneoE3', '@package_version@');
-$application->add(new Command\TransformCommand($etlFactory, $connectionProfileFactory, $etlProfileFactory));
+$application->add(new Command\TransformCommand($etlFactory, $requestFactory));
 $application->run();
