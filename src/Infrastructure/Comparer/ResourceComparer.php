@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace AkeneoE3\Infrastructure\Comparer;
 
-use AkeneoE3\Domain\Resource\Resource;
 use AkeneoE3\Domain\Resource\WritableResource;
-use AkeneoE3\Infrastructure\Command\ResourceDataNormaliser;
 
 final class ResourceComparer
 {

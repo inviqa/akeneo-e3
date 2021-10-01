@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AkeneoE3\Infrastructure\Command;
+namespace AkeneoE3\Infrastructure\Comparer;
 
 class ResourceDataNormaliser
 {
